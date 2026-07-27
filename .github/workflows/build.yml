@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,5 +22,21 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Validate resources and documentation
+        run: python -m unittest discover -s tests -p 'test_*.py' -v
+
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew build --stacktrace
+
+      - name: Run NeoForge GameTests
+        run: ./gradlew runGameTestServer --stacktrace
+
+      - name: Upload GameTest diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gametest-diagnostics
+          if-no-files-found: ignore
+          path: |
+            run-gameTestServer/logs/
+            run-gameTestServer/tests/

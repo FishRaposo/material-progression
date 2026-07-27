@@ -142,11 +142,20 @@ recipes:
 
 > **Tool + material -> processed output**
 
-The first candidate operations are:
+The first operations to test are:
 
-- Saw + log -> bonus planks or wooden components
+- Knife + loose rock -> improved flint-shard yield
 - Knife + suitable plants -> improved fiber yield
-- Hammer + workable material -> plates or other shaped components
+- Hammer + stone -> gravel
+- Hammer + gravel -> sand
+- Hammer + ore or raw metal -> two dust at a high durability cost
+- Saw + log -> more than four planks
+- Saw + planks -> improved stick yield
+
+The tools must also remain usable in the field: the knife as a lightweight
+weapon and plant harvester, the hammer as a pickaxe alternative, and the saw as
+an axe alternative. The workshop remains their intended use. Testing should
+preserve the rule that field use harvests while workshop use processes.
 
 The experiment should compare a compact stonecutter-like interface with any
 simpler interaction that preserves the same fantasy. It must make the installed
@@ -159,14 +168,23 @@ The workshop should answer:
 - Does the installed tool clearly determine the recipe family?
 - Can the block support several hand tools without becoming a universal
   machine?
+- Do field drops remain predictable instead of changing merely because a hammer
+  or saw broke the block?
+- Are baseline plant fiber and the first flint-shard equivalent still available
+  without a workshop?
 - Do tool materials create meaningful durability or speed trade-offs?
+- Is the manual ore-crushing durability cost high enough to keep the
+  fuel-burning crusher valuable?
 - Should any tool material affect yield, or is yield principally determined by
   the operation?
 - Where should automation stop so the block remains manual bench work?
 
-Crushing, heating, alloying, passive cultivation, and item transport remain
-outside the workshop. The experiment succeeds only if those boundaries remain
-obvious in play.
+Manual and machine ore processing must both turn one ore or raw metal into two
+dust. The hammer spends substantial durability without tier-gating recipes; the
+crusher spends fuel, preserves tools, and supports scaling or automation.
+Heating, alloying, passive cultivation, and item transport remain outside the
+workshop. The experiment succeeds only if those boundaries remain obvious in
+play.
 
 ## Candidate experiment: bonsai resource support
 
@@ -191,15 +209,16 @@ The experiment should determine:
 
 ## Candidate experiment: saws and wood efficiency
 
-Test whether saws create a satisfying active wood-processing role:
+Test whether saws create a satisfying active wood-processing role while
+remaining usable as an axe alternative in the field:
 
 > Harvest logs -> install a saw in the workshop -> process logs -> receive
 > better yield
 
-The first comparison should preserve vanilla baseline plank output and treat the
-saw as a bonus. Baseline output reductions should only be tested if the bonus
-model cannot create a meaningful reward. The experiment should keep axes,
-saws, and bonsai distinct: harvesting speed, active yield, and passive supply.
+Preserve vanilla's four-plank baseline and treat the saw as a bonus. Test both
+log-to-plank and plank-to-stick improvement. The experiment should keep axes,
+saws, and bonsai distinct: primary harvesting, alternate field use plus active
+yield, and passive supply.
 Saw durability should be consumed through the workshop operation rather than a
 hidden reusable-tool crafting recipe.
 
@@ -216,3 +235,24 @@ This may remain in the core mod or become a separate compatible module.
 No release scope is currently frozen. A future MVP should be declared only after
 the relevant experiments demonstrate a coherent, enjoyable loop. The existing
 bronze content is a starting test bed, not that declaration.
+
+## Automated acceptance coverage
+
+Every implemented deterministic mechanic should gain an automated acceptance
+test with the production change. The current harness has two layers:
+
+- Repository contract tests validate JSON resources, recipe outputs, material
+  flow, translations, models, tags, loot, world-generation wiring, internal
+  documentation links, and whitespace.
+- NeoForge GameTests load the real mod and validate crusher processing, fuel
+  requirements, sided inventory, block drops, tool durability, repair materials,
+  mining requirements, and enchantability tags.
+
+The Gradle build and GameTest server are separate CI gates. Future loose-rock,
+tree-punching, workshop, hammer, knife, saw, bonsai, logistics, and geology
+implementations should extend the live suite when they are introduced. Tests
+must not pretend that a documented but unimplemented feature exists.
+
+Human playtesting remains responsible for whether the opening is satisfying,
+durability costs feel fair, terrain creates interesting routes, and interfaces
+communicate the intended physical fantasy.

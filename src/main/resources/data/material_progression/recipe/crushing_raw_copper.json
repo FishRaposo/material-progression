@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.0,
-  "ingredient": {
-    "item": "minecraft:raw_copper"
-  },
+  "ingredient": "minecraft:raw_copper",
   "result": {
     "count": 2,
     "id": "material_progression:copper_dust"

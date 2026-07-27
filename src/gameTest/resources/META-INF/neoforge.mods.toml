@@ -1,0 +1,35 @@
+license="MIT"
+
+[[mods]]
+modId="material_progression_gametests"
+version="1"
+displayName="Material Progression GameTests"
+description="Development-only behavioral tests for Material Progression."
+
+[[dependencies.material_progression_gametests]]
+modId="neoforge"
+type="required"
+versionRange="[26.2.0.35-beta,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.material_progression_gametests]]
+modId="minecraft"
+type="required"
+versionRange="[26.2]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.material_progression_gametests]]
+modId="material_progression"
+type="required"
+versionRange="[0.1.0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.material_progression_gametests]]
+modId="testframework"
+type="required"
+versionRange="[26.2.0.35-beta,)"
+ordering="AFTER"
+side="BOTH"

@@ -40,10 +40,13 @@ instead of the optimal move five minutes into a world.
 - **Materials form a network, not a disposable ladder.** Mundane metals, alloy
   ingredients, specialist materials, and capstones can remain relevant for
   different reasons.
-- **Infrastructure gives materials work beyond equipment.** A manual workshop
-  uses installed knives, saws, and hammers for tool-assisted processing, while
-  pots, hoppers, ducts, crushers, furnaces, and storage turn metallurgical
-  progress into a more capable base.
+- **Infrastructure gives materials work beyond equipment.** Knives, hammers,
+  and saws remain usable in the field but perform their intended processing
+  roles when installed in a manual workshop. Pots, hoppers, ducts, crushers,
+  furnaces, and storage turn metallurgical progress into a more capable base.
+- **Manual and machine processing can be equally productive.** A workshop
+  hammer and a fuel-burning crusher both turn one ore into two dust. The choice
+  is whether to spend substantial tool durability or fuel.
 - **Automation remains physical and Minecraft-shaped.** The intended vocabulary
   is blocks, inventories, gravity, fuel, growth, and item movement—not an
   obligatory electrical grid.
@@ -96,14 +99,33 @@ Build and run:
 ./gradlew runClient
 ```
 
+Run the full automated test suite:
+
+```bash
+python -m unittest discover -s tests -p 'test_*.py' -v
+./gradlew build
+./gradlew runGameTestServer
+```
+
+The Python contracts validate resources, recipes, translations, world-generation
+wiring, and documentation links. The GameTest server loads the real mod and
+exercises crusher processing, fuel requirements, sided inventory, block drops,
+tool durability, and gameplay tags. GameTest code is development-only and is
+not packaged in the production mod JAR.
+
 On Windows:
 
 ```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
 ./gradlew.bat build
+./gradlew.bat runGameTestServer
 ./gradlew.bat runClient
 ```
 
 The built mod JAR appears in `build/libs`.
+
+Automated checks establish deterministic correctness. Progression feel,
+interface clarity, and balance still require human playtesting.
 
 ## Project status
 

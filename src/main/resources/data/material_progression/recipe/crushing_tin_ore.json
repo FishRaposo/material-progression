@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.0,
-  "ingredient": {
-    "tag": "material_progression:tin_ores"
-  },
+  "ingredient": "#material_progression:tin_ores",
   "result": {
     "count": 2,
     "id": "material_progression:tin_dust"

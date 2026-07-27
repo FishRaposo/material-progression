@@ -30,7 +30,7 @@ A material can fill one or more roles:
 - Processing, storage, transport, or collection infrastructure
 - Ingredient that keeps an earlier resource relevant
 - Lightweight cutting or resource-efficiency tool
-- Manual shaping tool used at a workshop
+- Manual processing tool used at a workshop
 
 This allows parallel and intersecting paths instead of a universal sequence.
 
@@ -92,9 +92,20 @@ The dust can be smelted into two ingots or used in an alloy recipe. The machine
 therefore creates two concrete forms of value: increased yield and access to
 alloying.
 
+The workshop hammer is an equal-yield manual route:
+
+> **1 ore or raw metal + substantial hammer durability -> 2 dust**
+
+Both routes deliberately produce the same output. Manual crushing avoids fuel
+but is expensive in tool durability. The crusher uses fuel like a furnace,
+spares the player's tools, and can become the scalable automation route. Hammer
+tier does not gate which ores can be crushed; a better hammer buys longevity,
+not exclusive recipes.
+
 The intended fantasy is primitive metallurgy, not an energy system. Faster
-upgrades, alternative crushers, automation, and later processing stages are open
-questions. None are required merely because an inspiration mod included them.
+upgrades, alternative crushers, automation, and later processing stages are
+open questions. None are required merely because an inspiration mod included
+them.
 
 ## Candidate progression relationship
 
@@ -115,8 +126,8 @@ created by geology; "iron stats but brown" is not enough by itself.
 The metallurgical graph should not terminate at pickaxes, armor, and swords.
 Materials can remain useful by becoming parts of the workshop:
 
-- Knives, saws, and hammers can be installed in a manual workshop to select
-  cutting, wood-processing, and shaping operations.
+- Knives, hammers, and saws can be installed in a manual workshop to select
+  separation, manual crushing, and efficient wood-processing operations.
 - A hopper can plausibly be fabricated from more than iron.
 - Different workable metals may provide equivalent hopper recipes or distinct
   hopper tiers.
@@ -125,8 +136,9 @@ Materials can remain useful by becoming parts of the workshop:
   demand for base metals.
 - Knives and possible saws can make a material useful for plant harvesting,
   crafting, or wood efficiency even when its mining tools are obsolete.
-- Hammers can give workable metals a shaping role when plates or other formed
-  components justify one.
+- Hammers can perform deliberate stone-to-gravel and gravel-to-sand processing,
+  crush ores into two dust by paying a high durability cost, then gain a shaping
+  role when plates or other formed components justify one.
 
 Whether alternative hoppers are equivalent, tiered, or specialized is
 undecided. The principle is narrower: an item funnel has no strong fantasy that
