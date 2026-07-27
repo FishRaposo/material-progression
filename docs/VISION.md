@@ -89,9 +89,11 @@ opening should remain unmistakably Minecraft.
 The current primitive-resource direction is deliberately simple:
 
 - Loose rocks provide guaranteed sharp stone without random flint drops.
-- One loose rock is equivalent to one flint; four form one cobblestone.
+- One loose rock is equivalent to one flint shard.
+- One flint produces two shards; any four rocks or shards form cobblestone.
 - A configurable rule can prevent logs from being harvested by hand.
-- A flint hatchet then becomes the first goal and earns access to wood.
+- A flint hatchet, made with either a rock or shard, then becomes the first goal
+  and earns access to wood.
 - Lush caves are excellent sources of clay for pottery and later bonsai.
 - Other wet caves may contain smaller clay pockets.
 - Cave gravel provides flint in bulk after loose rocks guarantee the bootstrap.
@@ -106,9 +108,9 @@ survival ceremony is not. Flint already communicates "sharp stone" in
 Minecraft, so it can become a knife directly instead of requiring knapping.
 
 The same rule removes No Tree Punching's first-flint problem. Loose rocks do not
-need a flint knife before they become useful; they are immediately equivalent to
-flint. The opening still asks the player to gather materials, but it cannot be
-invalidated by gravel placement or flint-drop luck.
+need a flint knife before they become useful; they already occupy the same
+recipe role as flint shards. The opening still asks the player to gather
+materials, but it cannot be invalidated by gravel placement or flint-drop luck.
 
 Saws remain more provisional. They could let copper, bronze, or later metals
 improve the output of active forestry. The preferred first experiment is to
@@ -117,14 +119,28 @@ baseline output and force the player to recover it.
 
 This gives the opening several connected but distinct tools:
 
-- Stone provides dependable primitive impact and excavation.
-- Loose rocks guarantee the first sharp tools and can form cobblestone.
+- Stone provides dependable primitive impact and excavation, then returns loose
+  rocks instead of ready-made cobblestone.
+- Loose rocks and flint shards guarantee the first sharp tools and can be
+  recombined into cobblestone.
 - Flint provides sharp, disposable performance.
 - Hatchets earn access to wood when tree punching is disabled.
 - Knives turn vegetation into fiber and string.
 - Axes accelerate forestry.
 - Saws may improve active wood efficiency.
 - Bonsai may provide slow passive tree products.
+
+The first hatchet uses an upside-down-L recipe in the 2x2 inventory grid: one
+loose rock or flint shard beside the upper stick, and a second stick directly
+beneath that stick. It is the axe silhouette with its top row removed. It does
+not require string; plant fiber and string are unlocked by the knife rather than
+used to gate the first wood-access tool.
+
+These are examples of a broader tool rule: tools grant interactions with
+materials. Hatchets grant wood access, knives turn plants into fiber, saws may
+improve wood yield, and picks gradually turn resistant geology from an obstacle
+into excavatable terrain. Material statistics express how well a tool performs
+those jobs, but progression should not collapse into recolored stat ladders.
 
 See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the complete
 living design.

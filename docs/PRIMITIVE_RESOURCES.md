@@ -34,22 +34,28 @@ still requires actual flint. Only after obtaining that knife can the player cut
 loose rocks into flint shards. This leaves the first tool dependent on finding
 gravel and receiving a random drop before the player has meaningful agency.
 
-This project removes that circular gate entirely:
+This project removes that circular gate entirely. A loose rock occupies the
+same recipe role as a flint shard:
 
-> **1 loose rock -> 1 flint**
+> **1 loose rock = 1 flint shard**
 >
-> **4 loose rocks -> 1 cobblestone**
+> **1 flint -> 2 flint shards**
+>
+> **Any 4 loose rocks or flint shards -> 1 cobblestone**
 
-A loose rock is already suitable sharp stone. Primitive recipes should treat
-one loose rock as one flint, whether that is implemented through recipe
-substitution or a one-for-one conversion. No special knife is required to make
-the rock useful.
+A loose rock is already a suitable piece of sharp stone. Primitive recipes
+should accept one loose rock wherever they accept one flint shard; converting
+the rock first is unnecessary. A full flint item is a compact source of two
+shards, while four usable pieces can be consolidated into cobblestone. No
+special knife is required to make a rock useful.
 
 This creates two complementary sources:
 
 - Loose rocks are a distributed, deterministic bootstrap resource.
-- Gravel is a concentrated source for replacement tools and sustained flint
-  demand.
+- Gravel is a concentrated source of flint, with every flint supplying two
+  shards for replacement tools and sustained demand.
+- Mined stone can drop loose rocks instead of ready-made cobblestone, completing
+  the same material loop underground.
 
 Sticks must be similarly obtainable before wood processing, through leaves,
 shrubs, ground vegetation, world objects, or another legible source. Exact
@@ -75,11 +81,26 @@ ordinary wood crafting begins.
 
 The rule is not intended to make the opening punitive:
 
-- A flint hatchet must fit in the 2x2 inventory crafting grid.
+- The first hatchet must fit in the 2x2 inventory crafting grid.
 - Its ingredients must be obtainable without first harvesting logs.
 - No knapping station or crafting minigame is required.
 - Failure to find random flint must never halt progression.
 - Once the player has the hatchet, ordinary wood output need not be reduced.
+
+The current hatchet recipe is Minecraft's axe silhouette with the top row
+removed:
+
+```text
+R S
+  S
+```
+
+`R` is one loose rock or flint shard. The two `S` positions are sticks. The
+sharp piece sits beside the upper stick, with the other stick directly beneath
+that stick: an upside-down L in the 2x2 inventory grid. String is deliberately
+absent. Ordinary Minecraft tools do not require a binding material, and the
+first wood-access tool should not be gated behind the later knife, plant-fiber,
+and string loop.
 
 The toggle's exact default, block-breaking feedback, interaction with modded
 logs, and whether bare hands produce no drop or cannot meaningfully damage logs
@@ -125,7 +146,9 @@ Fortune remain open design questions.
 ## Flint as premium primitive material
 
 Flint is a special stone: sharper and more performance-oriented than ordinary
-rock, but less suitable for sustained work.
+cobblestone, but less suitable for sustained work. Loose rocks and flint shards
+share this primitive sharp-edge role; cobblestone represents several pieces
+consolidated into a durable general-purpose material.
 
 A candidate tool profile is:
 
@@ -150,14 +173,40 @@ not from tool statistics in isolation.
 The exact tool roster is undecided. Flint pickaxes, axes, shovels, hoes, swords,
 and knives are candidates, not a commitment to reproduce every vanilla tool.
 
+## Tools grant material interactions
+
+Tools should be defined first by what they let the player do to materials, not
+only by a harvest tier and a column of statistics.
+
+- A hatchet grants the first access to logs when tree punching is disabled.
+- A knife turns suitable vegetation into plant fiber.
+- An axe accelerates active forestry.
+- A saw may improve the yield of processed wood.
+- A pick determines which geology can be exploited and whether sustained
+  excavation is economical.
+- Hoppers and ducts turn workable metals into collection and movement.
+- Bonsai converts pottery, planting material, time, and collection
+  infrastructure into supplemental tree products.
+
+Statistics still express material identity. Flint may be faster and hit harder
+than stone while breaking sooner. Bronze may offer an accessible manufactured
+route into more serious excavation. Iron may make sustained digging practical.
+Those profiles support the verbs; they are not a substitute for them.
+
+This also explains why tool families need not be exhaustive. A material should
+receive a knife, saw, pick, or other tool when that combination creates a useful
+interaction or trade-off—not merely because every material is expected to
+receive a recolored copy of every vanilla tool.
+
 ## Knives
 
 Knives are the strongest candidate borrowed from No Tree Punching. They fit
 Minecraft without importing that mod's complete survival premise.
 
-The primitive version should be direct:
+The primitive version should be direct, accepting either form of usable sharp
+stone:
 
-> **Flint + stick -> flint knife**
+> **Loose rock or flint shard + stick -> flint knife**
 
 There is no required knapping system. Knapping can be enjoyable in a mod built
 around primitive survival, but here it would add ceremony between finding flint
@@ -230,7 +279,7 @@ Strong candidates:
 
 - Configurably preventing logs from being harvested by hand
 - A flint hatchet as the first wood-harvesting tool
-- Loose rocks as direct substitutes for flint
+- Loose rocks as direct substitutes for flint shards
 - Knives
 - Plant fiber
 - Craftable string from plants
@@ -244,10 +293,10 @@ Ideas requiring stronger justification:
 - Extra crafting stations or multi-stage rituals for their own sake
 
 The key departure from No Tree Punching is the first-flint gate. Requiring a
-flint knife to turn a loose rock into usable flint preserves random gravel drops
-as a prerequisite. Here the loose rock is immediately usable, so disabling tree
-punching creates deterministic progression rather than a potentially impossible
-spawn.
+flint knife to turn a loose rock into a usable shard preserves random gravel
+drops as a prerequisite. Here the loose rock already counts as a shard, so
+disabling tree punching creates deterministic progression rather than a
+potentially impossible spawn.
 
 The filter is the same one used throughout the project: a step belongs when it
 creates a capability, choice, or meaningful efficiency gain. It does not belong
@@ -258,15 +307,18 @@ merely because it makes the opening longer.
 Primitive resources connect the two main systems before the first alloy exists:
 
 1. Loose rocks and vegetation guarantee access to the first primitive tools.
-2. A flint hatchet earns access to wood when tree punching is disabled.
+2. A flint hatchet, made with either a rock or shard, earns access to wood when
+   tree punching is disabled.
 3. Knives turn plants into fiber and string.
-4. Gravel provides flint in bulk for continued primitive-tool use.
+4. Gravel provides flint in bulk, with each flint yielding two shards.
 5. Cave shape and biome determine which larger deposits are naturally exposed.
 6. Wet and lush caves provide clay for pottery.
-7. These resources support exploration and the first workshop.
-8. Copper, tin, and bronze then expand the player's authority over harder
+7. Mined stone returns loose rocks that can be used directly or recombined into
+   cobblestone.
+8. These resources support exploration and the first workshop.
+9. Copper, tin, and bronze then expand the player's authority over harder
    geology and more capable tools.
-9. Saws, bonsai, hoppers, and ducts eventually turn material access into
+10. Saws, bonsai, hoppers, and ducts eventually turn material access into
    resource efficiency and automation.
 
 No Tree Punching-style resource logic and Divergent Underground-style geology

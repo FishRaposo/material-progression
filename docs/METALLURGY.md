@@ -33,11 +33,18 @@ A material can fill one or more roles:
 
 This allows parallel and intersecting paths instead of a universal sequence.
 
-The graph begins before metal. Stone and flint establish the first trade-off:
-ordinary stone is the primitive workhorse, while flint may provide faster,
-sharper, less durable tools at the same harvest capability. Metal knives and
-saws can later extend those cutting and efficiency roles instead of every
-material existing only as another pickaxe set.
+The graph begins before metal. Mined stone can return loose rocks, four rocks or
+flint shards can form cobblestone, and one flint can supply two shards. Stone
+and flint then establish the first trade-off: ordinary stone is the primitive
+workhorse, while flint may provide faster, sharper, less durable tools at the
+same harvest capability.
+
+This is also the first example of the wider tool philosophy. Materials do not
+need complete recolored equipment sets merely to occupy the graph. A tool
+belongs when it grants a useful interaction or trade-off: knives cut plants
+into fiber, saws may improve wood efficiency, and picks expand geological
+access. Metal knives and saws can later extend those cutting and efficiency
+roles without making every metal another full vanilla tool set.
 
 ## Mundane metals are allowed to be mundane
 

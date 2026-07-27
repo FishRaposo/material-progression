@@ -30,6 +30,13 @@ Geology also includes exposed, non-metal resources. Clay and gravel should not
 be distributed independently of the spaces around them. Cave biome, moisture,
 water, and exposure can give them recognizable environmental homes.
 
+Ordinary stone should participate in the primitive material loop as well.
+Rather than dropping a ready-made cobblestone block, mined stone can drop loose
+rocks. One rock can substitute directly for one flint shard in primitive tool
+recipes, while any four rocks or shards can be consolidated into cobblestone.
+This connects the loose rocks gathered on the surface to the stone the player
+later excavates instead of treating them as a disposable starting currency.
+
 ## Cave biomes as resource biomes
 
 The shape of a cave matters, but its ecological identity should matter too.

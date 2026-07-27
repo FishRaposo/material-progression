@@ -36,10 +36,15 @@ being harvested by hand. It should test that state as a candidate default while
 preserving ordinary tree punching as a compatibility and player-preference
 option.
 
-Loose rocks must remove the random first-flint gate. The candidate conversion
-is one loose rock to one flint and four loose rocks to one cobblestone. No knife,
-knapping station, or lucky gravel drop may be required before the first hatchet
-or knife.
+Loose rocks must remove the random first-flint gate. One loose rock should fill
+the recipe role of one flint shard, one flint should produce two shards, and any
+four rocks or shards should form one cobblestone. Mined stone should return
+loose rocks instead of ready-made cobblestone. No knife, knapping station, or
+lucky gravel drop may be required before the first hatchet or knife.
+
+The first hatchet recipe should be tested in its intended 2x2 upside-down-L
+shape: one rock or shard beside the upper stick and one stick directly below the
+first. String must not be required for this tool.
 
 The experiment should compare stone and flint tool profiles, with flint
 currently expected to trade durability for speed or damage. It must test both
@@ -52,6 +57,10 @@ The experiment must validate spawn viability, early stick access, 2x2 recipes,
 modded-log behavior, and feedback when a player tries to harvest a log by hand.
 Knapping is not part of the current candidate. The goal is a brief, useful
 primitive phase, not a longer ritual before ordinary play.
+
+The same experiment should validate the broader tool rule: each included tool
+must grant a material interaction or a meaningful trade-off, rather than exist
+only to complete a recolored equipment set.
 
 ## Candidate experiment: cave-biome resources
 

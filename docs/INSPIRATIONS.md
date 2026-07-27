@@ -85,9 +85,9 @@ The strongest ideas for this project are:
 
 The important departure is the first-flint gate. In No Tree Punching, loose
 rocks can support later flint tools, but a player still needs randomly obtained
-flint to make the first knife that processes them. This project removes that
-dependency: one loose rock can act as one flint immediately, while four can form
-cobblestone.
+flint to make the first knife that cuts them into shards. This project removes
+that dependency: one loose rock already fills the role of one flint shard, one
+flint produces two shards, and any four rocks or shards can form cobblestone.
 
 That deterministic bootstrap makes configurable tree-punching prevention much
 more attractive. The player must gather a sharp stone and a stick before
@@ -95,9 +95,17 @@ harvesting the first tree, but world generation and flint-drop luck cannot make
 the run impossible. Knapping, aggressive baseline wood nerfs, and additional
 crafting rituals still require separate justification.
 
+The first hatchet is correspondingly direct: one rock or shard beside a
+two-stick handle in an upside-down L in the 2x2 crafting grid. It is an axe
+recipe with the top row removed, not a bound survival tool, so string is not
+required before the knife can make plant fiber.
+
 The useful lesson is that simple tools can give familiar resources meaningful
 jobs. The project keeps that progression while removing ceremony and blockers
-that exist before the player has agency.
+that exist before the player has agency. Divergent Underground's loose-rock
+stone drops complete the same loop from the opposite direction: wood requires a
+cutting tool, while stone yields pieces that must be accumulated or used as
+primitive edges.
 
 ## Synthesis
 

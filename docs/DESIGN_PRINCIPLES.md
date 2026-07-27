@@ -69,19 +69,36 @@ layer a real job. Requiring random flint before any tool can be made cannot: it
 adds a blocker before the player has agency. The primitive phase should be brief,
 deterministic, and physically legible.
 
-## 9. Basic metallurgy stays basic
+The first hatchet therefore uses one loose rock or flint shard and two sticks in
+an upside-down L inside the 2x2 inventory grid. It does not require string:
+binding would move the knife-and-fiber loop in front of the tool needed to
+access wood without adding a meaningful decision.
+
+## 9. Tools should grant material interactions
+
+A tool tier should not be only a repeated equipment set with larger numbers.
+Tools give the player verbs: hatchets access wood, knives extract plant fiber,
+saws may improve wood yield, and picks determine which geology can be exploited
+economically.
+
+Statistics remain useful for differentiating materials—flint can be faster and
+more damaging but less durable than stone—but those profiles should support a
+material role. A material does not need every vanilla tool unless each
+combination contributes a real capability or trade-off.
+
+## 10. Basic metallurgy stays basic
 
 Bronze is copper and tin. It does not require invented mysticism to justify
 itself. Mundane, legible processes establish the design language that later
 systems can elaborate.
 
-## 10. Old materials retain uses
+## 11. Old materials retain uses
 
 Progression should create new demand for earlier resources through alloys,
 infrastructure, finishing, or specialist equipment. Finding a better pickaxe
 should not make every material below it permanently irrelevant.
 
-## 11. Materials should build the workshop
+## 12. Materials should build the workshop
 
 Metals should matter outside equipment slots. Processing blocks, storage,
 transport, collection, and other modest infrastructure can preserve demand for
@@ -92,7 +109,7 @@ Hoppers are item funnels, not intrinsically iron objects; copper is a natural
 candidate for ducts because it already reads as a workable conduit material.
 Exact recipes and material equivalences remain design questions.
 
-## 12. Automation is earned relief
+## 13. Automation is earned relief
 
 Automation should convert resources, space, construction, and time into freedom
 from repetitive work. It should neither be free at the beginning nor require a
@@ -102,7 +119,7 @@ A bonsai that slowly supplies tree drops is valuable because the player first
 obtains clay, fabricates a pot, supplies collection infrastructure, and waits.
 The reward is a workshop that becomes increasingly self-sustaining.
 
-## 13. Active play and passive supply should complement each other
+## 14. Active play and passive supply should complement each other
 
 Efficiency tools and automation should solve different problems. A saw may
 increase the yield of active forestry, while a bonsai slowly supports the
@@ -114,28 +131,28 @@ rewards. Making a saw useful by improving wood yield is preferable to making
 ordinary crafting feel deliberately broken unless testing demonstrates that a
 lower baseline improves the entire progression.
 
-## 14. Trade-offs beat universal best-in-slot
+## 15. Trade-offs beat universal best-in-slot
 
 Where practical, materials should occupy different profiles: accessibility,
 durability, speed, harvest capability, enchantability, repair economy, or
 specialized use. Capstones may be intentionally extreme, but reaching one should
 not flatten every other decision by accident.
 
-## 15. Physical rules should be legible
+## 16. Physical rules should be legible
 
 Players should learn by interacting with blocks and tools. A cave wall being
 easier to exploit than fully enclosed stone is more Minecraft-shaped than a
 hidden character level. Recipes and material properties should teach the system
 without requiring a wiki open at all times.
 
-## 16. Player construction should not be punished
+## 17. Player construction should not be punished
 
 Natural geology may have progression-sensitive hardness. Blocks placed for
 building should remain reasonable to remove. The system exists to make
 exploration and excavation meaningful, not to make correcting a misplaced block
 tedious.
 
-## 17. The design remains revisable
+## 18. The design remains revisable
 
 Implementation proves feasibility, not correctness. Current content may be
 deleted, reordered, or rebuilt if it fails the principles above during
