@@ -1,0 +1,28 @@
+license="${mod_license}"
+issueTrackerURL="https://github.com/FishRaposo/minecraft-progression/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL="https://github.com/FishRaposo/minecraft-progression"
+authors="Vinicius Pereira Raposo"
+description='''
+A vanilla-style rework of Minecraft's material progression.
+
+The first release focuses on primitive ore processing, tin, and bronze.
+'''
+
+[[dependencies.${mod_id}]]
+modId="neoforge"
+type="required"
+versionRange="[${neo_version},)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+type="required"
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"

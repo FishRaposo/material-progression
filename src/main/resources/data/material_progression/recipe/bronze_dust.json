@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "material_progression:copper_dust",
+    "material_progression:copper_dust",
+    "material_progression:copper_dust",
+    "material_progression:tin_dust"
+  ],
+  "result": {
+    "count": 4,
+    "id": "material_progression:bronze_dust"
+  }
+}

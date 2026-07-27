@@ -1,0 +1,10 @@
+{
+  "values": [
+    "minecraft:raw_copper",
+    "minecraft:copper_ore",
+    "minecraft:deepslate_copper_ore",
+    "material_progression:raw_tin",
+    "material_progression:tin_ore",
+    "material_progression:deepslate_tin_ore"
+  ]
+}

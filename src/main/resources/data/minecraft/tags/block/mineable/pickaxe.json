@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "material_progression:crusher",
+    "material_progression:tin_ore",
+    "material_progression:deepslate_tin_ore"
+  ]
+}

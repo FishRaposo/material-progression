@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "material_progression:tin_sword",
+    "material_progression:tin_axe",
+    "material_progression:bronze_sword",
+    "material_progression:bronze_axe"
+  ]
+}
