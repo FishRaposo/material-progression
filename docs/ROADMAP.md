@@ -25,11 +25,21 @@ Nothing about this experiment is protected from replacement.
 
 ## Candidate experiment: primitive resources
 
-Test the smallest opening loop that gives gravel, flint, plants, and string
-distinct roles:
+Test the smallest deterministic opening loop that gives loose rocks, flint,
+wood, plants, and string distinct roles:
 
-> Find exposed gravel -> obtain flint -> craft a knife -> cut plants -> make
-> plant fiber -> craft string
+> Gather loose rocks and sticks -> craft a flint hatchet or knife -> harvest
+> wood and plants -> make plant fiber -> craft string
+
+The experiment should include a configuration toggle that prevents logs from
+being harvested by hand. It should test that state as a candidate default while
+preserving ordinary tree punching as a compatibility and player-preference
+option.
+
+Loose rocks must remove the random first-flint gate. The candidate conversion
+is one loose rock to one flint and four loose rocks to one cobblestone. No knife,
+knapping station, or lucky gravel drop may be required before the first hatchet
+or knife.
 
 The experiment should compare stone and flint tool profiles, with flint
 currently expected to trade durability for speed or damage. It must test both
@@ -38,8 +48,10 @@ capability for flint. It should also determine which plants produce fiber,
 whether knives continue through metal families, and whether the loop is
 understandable without a guide.
 
-Knapping is not part of the current candidate. The goal is useful primitive
-resources, not a longer ritual before ordinary play.
+The experiment must validate spawn viability, early stick access, 2x2 recipes,
+modded-log behavior, and feedback when a player tries to harvest a log by hand.
+Knapping is not part of the current candidate. The goal is a brief, useful
+primitive phase, not a longer ritual before ordinary play.
 
 ## Candidate experiment: cave-biome resources
 
@@ -47,12 +59,13 @@ Test clay and gravel distribution as parts of cave ecology:
 
 - Abundant, reliable clay in lush caves
 - Smaller clay pockets in other wet caves
-- Exposed gravel deposits that make flint discoverable
+- Exposed gravel deposits that make bulk flint discoverable
 - Little or no equivalent clay in environments where it does not visually fit
 
 The experiment should answer whether cave identity changes route choice and
 whether lush-cave clay makes pottery infrastructure accessible without making
-clay globally uniform.
+clay globally uniform. Gravel must remain valuable without being required to
+make the first tool.
 
 ## Candidate experiment: meaningful geology
 

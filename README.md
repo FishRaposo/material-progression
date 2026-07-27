@@ -24,9 +24,12 @@ instead of the optimal move five minutes into a world.
 
 - **The underground participates in progression.** Solid geology resists early
   tools, while caves and structures provide natural routes through it.
-- **Primitive resources matter before metallurgy.** Cave-biome clay, gravel,
-  flint, knives, plant fiber, and possible saws give wood, stone, and plants
-  useful roles without requiring survival-simulation ceremony.
+- **Primitive resources matter before metallurgy.** Loose rocks, flint tools,
+  knives, plant fiber, cave-biome clay and gravel, and possible saws give wood,
+  stone, and plants useful roles without allowing spawn RNG to halt progression.
+- **Natural openings matter until tools create new ones.** A configurable
+  tree-punching rule can make forests physical obstacles, while resistant
+  geology makes mountains expensive to tunnel through.
 - **Tool tiers change player agency.** A better pickaxe does not merely unlock a
   colored ore; it changes what parts of the world can be reached and reshaped
   economically.

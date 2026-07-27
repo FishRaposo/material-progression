@@ -26,17 +26,19 @@ materials, which enable new forms of processing and equipment.
 
 The intended rhythm is approximately:
 
-1. Explore natural openings and exposed geology.
-2. Read cave biomes as sources of clay, gravel, and exposed materials.
-3. Use stone, flint, knives, plants, and wood to establish primitive capability.
-4. Improve yield through simple processing.
-5. Combine modest metals into useful alloys.
-6. Use better equipment to penetrate and reshape harder geology.
-7. Develop from opportunistic cave mining into sustained excavation.
-8. Earn efficient strip mining as a late capability.
-9. Turn clay, wood, and metals into workshop infrastructure that automates
+1. Gather loose rocks and sticks to establish deterministic primitive
+   capability.
+2. Make the first cutting tools and, when configured, earn access to wood.
+3. Follow natural openings through forests and geology.
+4. Read cave biomes as sources of clay, gravel, and exposed materials.
+5. Improve yield through simple processing.
+6. Combine modest metals into useful alloys.
+7. Use better equipment to penetrate and reshape harder geology.
+8. Develop from opportunistic cave mining into sustained excavation.
+9. Earn efficient strip mining as a late capability.
+10. Turn clay, wood, and metals into workshop infrastructure that automates
    repetitive supply and item handling.
-10. Continue material progression through specialization and magical metallurgy,
+11. Continue material progression through specialization and magical metallurgy,
    not only larger durability and mining-speed numbers.
 
 This is not intended to prohibit sequence breaking with invisible rules. A
@@ -49,8 +51,8 @@ Knowledge remains useful, but coordinates alone should not erase progression.
 - A progression rework expressed through Minecraft's physical systems
 - A broad metallurgical vocabulary of ores, metals, dusts, alloys, and tools
 - An underground whose shape and composition affect how the player advances
-- A primitive resource layer in which clay, gravel, flint, plants, and wood
-  create useful choices before metallurgy
+- A deterministic primitive layer in which loose rocks, flint, plants, wood,
+  clay, and gravel create useful choices before metallurgy
 - A material graph with overlapping paths and long-lived ingredients
 - A modest workshop progression of pots, hoppers, ducts, processors, storage,
   and physical automation
@@ -86,9 +88,13 @@ opening should remain unmistakably Minecraft.
 
 The current primitive-resource direction is deliberately simple:
 
+- Loose rocks provide guaranteed sharp stone without random flint drops.
+- One loose rock is equivalent to one flint; four form one cobblestone.
+- A configurable rule can prevent logs from being harvested by hand.
+- A flint hatchet then becomes the first goal and earns access to wood.
 - Lush caves are excellent sources of clay for pottery and later bonsai.
 - Other wet caves may contain smaller clay pockets.
-- Cave gravel provides flint.
+- Cave gravel provides flint in bulk after loose rocks guarantee the bootstrap.
 - Flint may support sharper, faster, less durable tools at stone harvest level.
 - A flint knife cuts plants into fiber.
 - Plant fiber provides a crafting route to string.
@@ -99,6 +105,11 @@ The knife is the clearest idea borrowed from No Tree Punching. The broader
 survival ceremony is not. Flint already communicates "sharp stone" in
 Minecraft, so it can become a knife directly instead of requiring knapping.
 
+The same rule removes No Tree Punching's first-flint problem. Loose rocks do not
+need a flint knife before they become useful; they are immediately equivalent to
+flint. The opening still asks the player to gather materials, but it cannot be
+invalidated by gravel placement or flint-drop luck.
+
 Saws remain more provisional. They could let copper, bronze, or later metals
 improve the output of active forestry. The preferred first experiment is to
 preserve vanilla wood output and make sawing a bonus, rather than reduce
@@ -107,7 +118,9 @@ baseline output and force the player to recover it.
 This gives the opening several connected but distinct tools:
 
 - Stone provides dependable primitive impact and excavation.
+- Loose rocks guarantee the first sharp tools and can form cobblestone.
 - Flint provides sharp, disposable performance.
+- Hatchets earn access to wood when tree punching is disabled.
 - Knives turn vegetation into fiber and string.
 - Axes accelerate forestry.
 - Saws may improve active wood efficiency.
@@ -147,6 +160,17 @@ the player free wood. The player acquires clay, makes the pot, provides a tree
 or sapling, spends metal on collection, allocates space, and waits. In exchange,
 the workshop gains a slow background stream of common biological materials.
 Progress turns recurring manual labor into infrastructure.
+
+Both the primitive and geological progressions express the same world-shape
+principle:
+
+> **The player initially follows natural openings, then earns the ability to
+> create new ones.**
+
+A forest cannot be punched through and a mountain cannot be strip-mined with
+primitive tools. Clearings, cave mouths, ravines, and structures determine
+early routes. Hatchets, axes, saws, and stronger picks gradually turn those
+obstacles into resources.
 
 The exact stones, strata, metals, recipes, tiers, dimensions, and pacing remain
 open design questions. The same is true of bonsai, hopper variants, ducts, and

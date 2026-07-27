@@ -55,10 +55,12 @@ loops these deposits support.
 ## Terrain as progression
 
 The important distinction is between following existing space and creating new
-space.
+space. This principle applies above ground as well as below it.
 
 Early in progression:
 
+- Forest edges and clearings provide routes around wood the player cannot yet
+  harvest efficiently.
 - Exposed deposits are more valuable than buried ones.
 - Caves provide access through rock that is expensive to excavate in bulk.
 - Cave biomes provide recognizable concentrations of clay, gravel, and other
@@ -69,6 +71,8 @@ Early in progression:
 
 Later in progression:
 
+- Flint hatchets, axes, and possible saws turn forests from obstacles into
+  increasingly efficient resources.
 - Better tools make sustained excavation economical.
 - The player becomes less dependent on natural openings.
 - Strip mining changes from technically possible but foolish to a competitive
@@ -77,6 +81,14 @@ Later in progression:
   workshop that reduces repetitive labor.
 - Mastery feels like increased control over the same world that constrained the
   player earlier.
+
+The shared rule is:
+
+> **Natural openings matter until technology lets the player create new ones.**
+
+A forest cannot simply be punched through before the first cutting tool. A
+mountain cannot simply be strip-mined with primitive excavation tools. The
+player initially works around both, then earns the ability to reshape them.
 
 This relationship is important even for seemingly modest infrastructure. A
 bonsai pot may ask for clay, while automatic collection may ask for a hopper or

@@ -74,17 +74,30 @@ participate in the opening rather than becoming disposable scenery.
 
 The strongest ideas for this project are:
 
+- Preventing logs from being harvested by hand as a configurable rule
+- A flint hatchet as the first route into wood
+- Loose rocks as a world-space primitive resource
 - Knives as a persistent lightweight tool category
 - Flint knives as an immediate use for gravel
 - Cutting plants into fiber
 - Crafting string from plant fiber
 - Saws as a possible way to improve wood yield
 
-The full primitive-survival premise is not the target. Knapping, forbidding
-ordinary tree punching, aggressive baseline wood nerfs, and additional crafting
-rituals require separate justification. The useful lesson is that simple tools
-can give familiar resources meaningful jobs—not that the player must complete a
-ceremony before Minecraft begins.
+The important departure is the first-flint gate. In No Tree Punching, loose
+rocks can support later flint tools, but a player still needs randomly obtained
+flint to make the first knife that processes them. This project removes that
+dependency: one loose rock can act as one flint immediately, while four can form
+cobblestone.
+
+That deterministic bootstrap makes configurable tree-punching prevention much
+more attractive. The player must gather a sharp stone and a stick before
+harvesting the first tree, but world generation and flint-drop luck cannot make
+the run impossible. Knapping, aggressive baseline wood nerfs, and additional
+crafting rituals still require separate justification.
+
+The useful lesson is that simple tools can give familiar resources meaningful
+jobs. The project keeps that progression while removing ceremony and blockers
+that exist before the player has agency.
 
 ## Synthesis
 
