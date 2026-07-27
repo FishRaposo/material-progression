@@ -110,6 +110,13 @@ process materials manually. The tool determines the available operation and
 loses durability through that work. This is more legible than hiding reusable
 tool wear inside an ordinary crafting recipe.
 
+Manual processing and machine processing do not need different output ladders
+to coexist. Ore crushed with a workshop hammer and ore crushed in the
+fuel-burning crusher should both produce two dust. The manual route pays a
+deliberately high durability cost; the machine route pays fuel and preserves
+tools. Hammer material changes how long the tool lasts, not which ores the
+player is permitted to process.
+
 These tools should remain usable outside the workshop: a knife as a weapon and
 plant harvester, a hammer as an alternative pick, and a saw as an alternative
 axe. Their intended identity, however, is processing rather than replacing the

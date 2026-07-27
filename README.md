@@ -44,6 +44,9 @@ instead of the optimal move five minutes into a world.
   and saws remain usable in the field but perform their intended processing
   roles when installed in a manual workshop. Pots, hoppers, ducts, crushers,
   furnaces, and storage turn metallurgical progress into a more capable base.
+- **Manual and machine processing can be equally productive.** A workshop
+  hammer and a fuel-burning crusher both turn one ore into two dust. The choice
+  is whether to spend substantial tool durability or fuel.
 - **Automation remains physical and Minecraft-shaped.** The intended vocabulary
   is blocks, inventories, gravity, fuel, growth, and item movement—not an
   obligatory electrical grid.

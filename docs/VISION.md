@@ -181,6 +181,7 @@ The workshop's core rule is **tool + material -> processed output**:
 - A knife extracts more plant fiber from plants and more flint shards from
   loose rocks.
 - A hammer turns stone into gravel and gravel into sand.
+- A hammer crushes ore into two dust at a deliberately high durability cost.
 - A saw turns logs into more than the default four planks and planks into more
   sticks than ordinary crafting.
 
@@ -195,10 +196,12 @@ machine.
 
 This gives reusable tools a physical, legible home. Durability is spent by
 performing workshop operations instead of through special crafting recipes that
-silently damage an ingredient. Manual material reduction belongs to the
-workshop hammer, while bulk crushing and ore processing remain in the crusher.
-Heating remains in furnaces, alloying remains in its own metallurgical process,
-and passive cultivation remains in bonsai.
+silently damage an ingredient. Manual ore crushing and the fuel-burning crusher
+both produce two dust per ore: the hammer consumes substantial durability,
+while the crusher consumes fuel and preserves tools. No hammer tier gates ore
+processing; better hammers simply survive more work. Heating remains in
+furnaces, alloying remains in its own metallurgical process, and passive
+cultivation remains in bonsai.
 
 None of those implementations is fixed. Bonsai output may be manual before a
 hopper is added; hoppers may be equivalent across materials or divided into

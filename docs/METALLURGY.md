@@ -92,9 +92,20 @@ The dust can be smelted into two ingots or used in an alloy recipe. The machine
 therefore creates two concrete forms of value: increased yield and access to
 alloying.
 
+The workshop hammer is an equal-yield manual route:
+
+> **1 ore or raw metal + substantial hammer durability -> 2 dust**
+
+Both routes deliberately produce the same output. Manual crushing avoids fuel
+but is expensive in tool durability. The crusher uses fuel like a furnace,
+spares the player's tools, and can become the scalable automation route. Hammer
+tier does not gate which ores can be crushed; a better hammer buys longevity,
+not exclusive recipes.
+
 The intended fantasy is primitive metallurgy, not an energy system. Faster
-upgrades, alternative crushers, automation, and later processing stages are open
-questions. None are required merely because an inspiration mod included them.
+upgrades, alternative crushers, automation, and later processing stages are
+open questions. None are required merely because an inspiration mod included
+them.
 
 ## Candidate progression relationship
 
@@ -126,7 +137,8 @@ Materials can remain useful by becoming parts of the workshop:
 - Knives and possible saws can make a material useful for plant harvesting,
   crafting, or wood efficiency even when its mining tools are obsolete.
 - Hammers can perform deliberate stone-to-gravel and gravel-to-sand processing,
-  then gain a shaping role when plates or other formed components justify one.
+  crush ores into two dust by paying a high durability cost, then gain a shaping
+  role when plates or other formed components justify one.
 
 Whether alternative hoppers are equivalent, tiered, or specialized is
 undecided. The principle is narrower: an item funnel has no strong fantasy that

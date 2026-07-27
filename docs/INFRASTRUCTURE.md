@@ -42,6 +42,7 @@ The initial operation families are:
 - **Knife + suitable plants -> more plant fiber than field harvesting**
 - **Hammer + stone -> gravel**
 - **Hammer + gravel -> sand**
+- **Hammer + ore or raw metal -> 2 dust at a high durability cost**
 - **Saw + log -> more than the default four planks**
 - **Saw + planks -> more sticks than ordinary crafting**
 
@@ -100,9 +101,9 @@ The workshop handles hand-tool operations:
 
 It does not absorb every processing system:
 
-- Bulk crushing and ore processing remain in the crusher; the hammer handles
-  deliberate manual transformations such as stone into gravel and gravel into
-  sand.
+- The workshop hammer and the crusher can both process ores into two dust.
+  Manual crushing consumes substantial hammer durability; machine crushing
+  consumes fuel and preserves tools.
 - Heating and smelting remain in furnaces.
 - Alloying remains in its appropriate metallurgical process.
 - Passive cultivation remains in bonsai.
@@ -118,6 +119,11 @@ material can affect durability and working speed. The workshop operation itself
 can improve yield over direct field use or ordinary crafting; upgrading the
 tool's material should not automatically require a ladder of further arbitrary
 output multipliers.
+
+Ore crushing has no hammer-tier gate. A primitive hammer and a later metal
+hammer can perform the same ore operation and recover the same two dust; the
+primitive tool simply wears out much faster. This keeps the rule simple and
+makes durability the cost of choosing manual processing.
 
 The workshop gives knives, saws, hammers, and future hand tools a continuing
 role without requiring every material to receive every tool. A tool-material
@@ -265,6 +271,15 @@ bonsai, and storage while giving copper a durable infrastructure role.
 The current stone crusher is a fuel-burning furnace analogue:
 
 > **1 ore or raw metal -> 2 dust**
+
+The workshop hammer provides an equal-yield manual alternative:
+
+> **1 ore or raw metal + substantial hammer durability -> 2 dust**
+
+Neither route is intended as a superior yield tier. The hammer avoids fuel but
+rapidly consumes tools. The crusher consumes fuel, preserves tool durability,
+and is the natural target for automation. This separation gives both processing
+routes a permanent reason to exist without restricting ores by hammer material.
 
 It should be possible to evaluate ordinary Minecraft automation around it:
 

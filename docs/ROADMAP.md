@@ -148,6 +148,7 @@ The first operations to test are:
 - Knife + suitable plants -> improved fiber yield
 - Hammer + stone -> gravel
 - Hammer + gravel -> sand
+- Hammer + ore or raw metal -> two dust at a high durability cost
 - Saw + log -> more than four planks
 - Saw + planks -> improved stick yield
 
@@ -172,13 +173,18 @@ The workshop should answer:
 - Are baseline plant fiber and the first flint-shard equivalent still available
   without a workshop?
 - Do tool materials create meaningful durability or speed trade-offs?
+- Is the manual ore-crushing durability cost high enough to keep the
+  fuel-burning crusher valuable?
 - Should any tool material affect yield, or is yield principally determined by
   the operation?
 - Where should automation stop so the block remains manual bench work?
 
-Bulk crushing and ore processing remain in the crusher. Heating, alloying,
-passive cultivation, and item transport remain outside the workshop. The
-experiment succeeds only if those boundaries remain obvious in play.
+Manual and machine ore processing must both turn one ore or raw metal into two
+dust. The hammer spends substantial durability without tier-gating recipes; the
+crusher spends fuel, preserves tools, and supports scaling or automation.
+Heating, alloying, passive cultivation, and item transport remain outside the
+workshop. The experiment succeeds only if those boundaries remain obvious in
+play.
 
 ## Candidate experiment: bonsai resource support
 
