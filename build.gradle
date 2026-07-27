@@ -28,8 +28,12 @@ sourceSets.main.resources {
 
 sourceSets {
     gameTest {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
+        // NeoForge ModDev supplies the transformed Minecraft/NeoForge classpath
+        // directly to main instead of through the ordinary implementation
+        // configuration. Reuse that complete classpath for the isolated
+        // GameTest source set as well as the compiled production classes.
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
     }
 }
 
