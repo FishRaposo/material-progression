@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.7,
-  "ingredient": {
-    "item": "material_progression:bronze_dust"
-  },
+  "ingredient": "material_progression:bronze_dust",
   "result": {
     "id": "material_progression:bronze_ingot"
   }

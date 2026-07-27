@@ -63,9 +63,12 @@ def load_json(path: Path):
 
 def ingredient_id(recipe: dict) -> str:
     ingredient = recipe["ingredient"]
-    if "tag" in ingredient:
-        return f"#{ingredient['tag']}"
-    return ingredient["item"]
+    if not isinstance(ingredient, str):
+        raise AssertionError(
+            "Minecraft 26.2 ingredients must use the string form, "
+            f"got {ingredient!r}"
+        )
+    return ingredient
 
 
 class ResourceContractTests(unittest.TestCase):
@@ -210,4 +213,3 @@ class ResourceContractTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
