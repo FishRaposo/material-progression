@@ -1,35 +1,76 @@
 # Material Progression
 
-An open-source NeoForge mod for Minecraft 26.2 that rebuilds material progression
-around useful metals, alloys, processing, and meaningful equipment choices.
+> **Early design prototype:** the name, mod ID, loader, target version, current
+> vertical slice, recipes, values, and every future system described here are
+> provisional.
 
-`Material Progression` is a working title. The stable internal mod ID is
-`material_progression`.
+Material Progression is an open-source experiment in rebuilding Minecraft's
+progression around the thing its name promises: mining a world whose shape
+matters, processing what you can reach, and crafting materials that gradually
+increase your ability to control that world.
 
-## MVP: Bronze
+The central question is:
 
-The first vertical slice implements:
+> What if Minecraft genuinely committed to mining and crafting as its
+> progression system?
 
-- Tin ore generation and raw tin
+The intended answer is not a quest book, character levels, a research tree, or
+industrial bureaucracy. Caves, ravines, mineshafts, stone hardness, tool
+materials, ore processing, alloys, and enchantability should form one coherent
+system. Strip mining remains possible, but becomes a capability the player earns
+instead of the optimal move five minutes into a world.
+
+## The vision
+
+- **The underground participates in progression.** Solid geology resists early
+  tools, while caves and structures provide natural routes through it.
+- **Tool tiers change player agency.** A better pickaxe does not merely unlock a
+  colored ore; it changes what parts of the world can be reached and reshaped
+  economically.
+- **Materials form a network, not a disposable ladder.** Mundane metals, alloy
+  ingredients, specialist materials, and capstones can remain relevant for
+  different reasons.
+- **Processing must pay for itself.** A step should improve yield, create a new
+  material, or unlock a new capability—not exist merely to waste time.
+- **The result should still feel like Minecraft.** Progress happens through
+  blocks, tools, terrain, recipes, and player decisions.
+
+Read the complete living design:
+
+- [Vision](docs/VISION.md)
+- [Design principles](docs/DESIGN_PRINCIPLES.md)
+- [Underground and geology](docs/GEOLOGY.md)
+- [Metallurgy and material families](docs/METALLURGY.md)
+- [Enchantability and magical metallurgy](docs/ENCHANTING.md)
+- [Development directions](docs/ROADMAP.md)
+- [Inspirations](docs/INSPIRATIONS.md)
+
+## Current prototype
+
+The repository currently targets Minecraft 26.2 with NeoForge and Java 25. Its
+first implemented vertical slice contains:
+
+- Tin ore, raw tin, ingots, dust, and tools
+- Copper dust
+- Bronze dust, ingots, and tools
 - A fuel-burning stone crusher
-- `1 raw metal / ore -> 2 dust`
-- Copper, tin, and bronze dust
-- `3 copper dust + 1 tin dust -> 4 bronze dust`
-- Smelting dust into ingots
-- Tin and bronze tool sets
+- Ore and raw-metal crushing into two dust
+- A provisional `3 copper dust + 1 tin dust -> 4 bronze dust` recipe
+- Dust smelting
 
-The current item visuals deliberately reuse vanilla textures. They are development
-placeholders, not final art.
-
-## Requirements
-
-- Minecraft 26.2
-- NeoForge 26.2.0.35-beta or newer compatible 26.2 build
-- Java 25
+This is a test bed, not a promised MVP. The current content, balance, art,
+architecture, and even its place in the eventual progression may be replaced.
+Item visuals currently reuse vanilla textures as development placeholders.
 
 ## Development
 
-Clone the repository and run:
+Current toolchain:
+
+- Minecraft 26.2
+- NeoForge 26.2.0.35-beta
+- Java 25
+
+Build and run:
 
 ```bash
 ./gradlew build
@@ -45,11 +86,11 @@ On Windows:
 
 The built mod JAR appears in `build/libs`.
 
-## Provisional balance
+## Project status
 
-Tin is currently weaker than stone (`96` durability, `3.5` mining speed). Bronze
-is currently an iron-like manufactured material (`325` durability, `6.5` mining
-speed). These values are explicit MVP tuning points, not settled design.
+There is no frozen release scope yet. Documentation records the current design
+conversation so it can be tested and revised deliberately. An idea appearing in
+the repository does not make it a commitment.
 
 ## License
 
