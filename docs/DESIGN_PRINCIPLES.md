@@ -110,6 +110,13 @@ process materials manually. The tool determines the available operation and
 loses durability through that work. This is more legible than hiding reusable
 tool wear inside an ordinary crafting recipe.
 
+These tools should remain usable outside the workshop: a knife as a weapon and
+plant harvester, a hammer as an alternative pick, and a saw as an alternative
+axe. Their intended identity, however, is processing rather than replacing the
+ordinary combat and harvesting tools. The governing distinction is:
+
+> **Outside the workshop, tools harvest. Inside the workshop, tools process.**
+
 An infrastructure recipe should follow the physical fantasy of the block.
 Hoppers are item funnels, not intrinsically iron objects; copper is a natural
 candidate for ducts because it already reads as a workable conduit material.

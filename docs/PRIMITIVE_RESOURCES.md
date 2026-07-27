@@ -170,8 +170,10 @@ generic cobble. Whether flint is premium performance within the stone tier or a
 narrow intermediate tier of its own must be decided through the geology model,
 not from tool statistics in isolation.
 
-The exact tool roster is undecided. Flint pickaxes, axes, shovels, hoes, swords,
-and knives are candidates, not a commitment to reproduce every vanilla tool.
+The exact conventional flint-tool roster is undecided. Flint pickaxes, axes,
+shovels, hoes, and swords are candidates, not a commitment to reproduce every
+vanilla tool. The knife, hammer, and saw belong to the current workshop
+direction even though their exact material families remain open.
 
 ## Tools grant material interactions
 
@@ -181,8 +183,12 @@ only by a harvest tier and a column of statistics.
 - A hatchet grants the first access to logs when tree punching is disabled.
 - A knife turns suitable vegetation into plant fiber.
 - An axe accelerates active forestry.
-- A saw may improve the yield of wood processed at a workshop.
-- A hammer may shape appropriate materials at a workshop.
+- A knife installed in a workshop extracts more fiber from plants and more
+  shards from loose rocks.
+- A saw harvests like an alternative axe in the field and improves the yield of
+  wood processed at a workshop.
+- A hammer mines like an alternative pick in the field and deliberately reduces
+  stone to gravel and gravel to sand at a workshop.
 - A pick determines which geology can be exploited and whether sustained
   excavation is economical.
 - Hoppers and ducts turn workable metals into collection and movement.
@@ -218,8 +224,15 @@ A knife can:
 - Harvest grass, tall grass, ferns, vines, leaves, and other suitable plants.
 - Produce plant fiber from those materials.
 - Act as a reusable cutting ingredient in appropriate recipes.
-- Improve plant-fiber yield when installed in a workshop.
-- Serve as a weak, lightweight weapon if that role survives testing.
+- Extract more plant fiber from plants when installed in a workshop.
+- Extract more flint shards from loose rocks when installed in a workshop.
+- Serve as a lightweight alternative to the sword.
+
+The field interaction remains important: plants can still be broken with a
+knife to obtain fiber. Workshop processing is the higher-yield version and
+replaces No Tree Punching-like right-click knife recipes; it does not gate the
+basic resource. Likewise, a loose rock remains directly usable as one shard, so
+the first hatchet never requires a workshop or a knife.
 
 Knives may continue through copper, tin, bronze, iron, silver, and other
 materials. Better knife materials could change durability, cutting speed, fiber
@@ -252,9 +265,8 @@ undecided.
 
 ## Saws and active wood efficiency
 
-Saws are a plausible second idea from No Tree Punching, but less settled than
-knives. Their useful role would be improving the yield of actively harvested
-wood.
+Saws carry No Tree Punching's wood-efficiency idea into the workshop model.
+Their defining role is improving the yield of actively harvested wood.
 
 One candidate relationship is:
 
@@ -264,20 +276,36 @@ One candidate relationship is:
 - Hoppers and ducts collect and route those products.
 
 Those are complementary tools rather than replacements for one another. A saw
-rewards active forestry through manual workshop processing; a bonsai supports
-the workshop passively.
+can harvest like an axe in the field and rewards active forestry through
+higher-yield workshop processing; a bonsai supports the workshop passively.
 
-The current preference is to test bonus saw output before reducing vanilla's
-baseline log-to-plank yield. Preserving ordinary output and making saws an
-efficiency reward is less likely to make the opening feel arbitrarily stingy.
-However, baseline wood output, saw recipes, valid materials, durability,
-processing interface, and exact bonuses all remain unresolved.
+The current direction preserves vanilla's four-plank baseline. A workshop saw
+turns each log into more than four planks and turns planks into more sticks than
+ordinary crafting. Exact bonus yields, saw recipes, valid materials, and
+durability remain unresolved.
 
 The preferred interface is the workshop block rather than a crafting recipe
 that silently damages a reusable saw. The player installs the saw, supplies the
 log, selects a valid output if necessary, and spends durability through the
 visible processing operation. The same interaction can support knives and
 hammers without turning the ordinary crafting grid into a hidden tool machine.
+
+## The three workshop tools
+
+The initial tool set follows one shared rule:
+
+> **Outside the workshop, tools harvest. Inside the workshop, tools process.**
+
+| Tool | Field role | Workshop role |
+| --- | --- | --- |
+| Knife | Weapon; plant harvesting | More fiber and flint shards |
+| Hammer | Pickaxe alternative | Stone to gravel; gravel to sand |
+| Saw | Axe alternative | Better plank and stick yield |
+
+The field roles make each item independently usable. The workshop roles are
+their intended identities: controlled transformations and better recovery from
+materials already gathered. Tool material can change durability and speed, but
+does not need an arbitrary yield multiplier for every tier.
 
 ## Selective influence from No Tree Punching
 

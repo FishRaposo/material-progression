@@ -30,18 +30,50 @@ core interaction is:
 
 > **Installed hand tool + material -> processed output**
 
-The tool selects the recipe family. A saw exposes wood-processing operations, a
-knife exposes plant-cutting operations, and a hammer exposes shaping operations.
-The workshop is therefore not an arbitrary universal machine; every recipe
-should describe work a person could plausibly perform at a bench with the
-installed tool.
+The tool selects the recipe family. A knife exposes cutting and separation
+operations, a hammer exposes deliberate manual crushing and shaping operations,
+and a saw exposes efficient wood subdivision. The workshop is therefore not an
+arbitrary universal machine; every recipe should describe work a person could
+plausibly perform at a bench with the installed tool.
 
-Candidate operations include:
+The initial operation families are:
 
-- **Saw + log -> increased plank or wooden-component yield**
-- **Knife + suitable plants -> increased plant-fiber yield**
-- **Hammer + workable material -> plates, shaped pieces, or other hammered
-  components**
+- **Knife + loose rock -> more flint shards than direct use of the rock**
+- **Knife + suitable plants -> more plant fiber than field harvesting**
+- **Hammer + stone -> gravel**
+- **Hammer + gravel -> sand**
+- **Saw + log -> more than the default four planks**
+- **Saw + planks -> more sticks than ordinary crafting**
+
+Plates, shaped pieces, and other hammered components remain possible later
+operations when metallurgy justifies them.
+
+Basic access does not depend on workshop efficiency. A loose rock is still
+directly usable as one flint-shard equivalent, and plants can still be harvested
+with a knife in the world for fiber. The workshop replaces No Tree Punching-like
+right-click processing recipes with a visible place for careful, higher-yield
+work.
+
+### Field use and intended use
+
+Workshop tools remain real tools outside the block:
+
+- A **knife** is a lightweight alternative to a sword and can harvest plants
+  for fiber.
+- A **hammer** is an alternative to a pickaxe.
+- A **saw** is an alternative to an axe.
+
+Those field roles prevent the tools from becoming inert crafting ingredients,
+but they are not the primary reason the tools exist. Their intended use is the
+workshop:
+
+> **Outside the workshop, tools harvest. Inside the workshop, tools process.**
+
+Breaking stone with a hammer should not automatically turn the drop into gravel,
+and harvesting a log with a saw should not silently apply the workshop yield
+bonus. The player chooses the transformation by bringing the material to the
+workshop. This keeps ordinary block drops predictable and makes processing
+intentional.
 
 The exact interface remains provisional, but the conceptual slots are simply a
 tool, an input material, and an output. The installed tool remains visible and
@@ -62,12 +94,15 @@ The workshop handles hand-tool operations:
 - Cutting
 - Carving
 - Sawing
+- Manual crushing
 - Hammering and shaping
 - Other direct bench work justified by an installed tool
 
 It does not absorb every processing system:
 
-- Crushing remains in the crusher.
+- Bulk crushing and ore processing remain in the crusher; the hammer handles
+  deliberate manual transformations such as stone into gravel and gravel into
+  sand.
 - Heating and smelting remain in furnaces.
 - Alloying remains in its appropriate metallurgical process.
 - Passive cultivation remains in bonsai.
@@ -79,9 +114,10 @@ workshop from becoming a universal recipe menu.
 ### Tool progression inside the workshop
 
 Workshop tools extend the rule that tools grant material interactions. Their
-material can affect durability and working speed. Yield should change with tool
-material only when it creates a clear and worthwhile distinction; upgrading a
-tool should not automatically require a ladder of arbitrary output multipliers.
+material can affect durability and working speed. The workshop operation itself
+can improve yield over direct field use or ordinary crafting; upgrading the
+tool's material should not automatically require a ladder of further arbitrary
+output multipliers.
 
 The workshop gives knives, saws, hammers, and future hand tools a continuing
 role without requiring every material to receive every tool. A tool-material
@@ -157,9 +193,9 @@ The following remain undecided:
 
 ## Active forestry and saws
 
-A saw is a provisional way for metallurgy to improve active wood processing.
-Rather than merely harvesting trees faster, it could produce more planks or
-wooden components from each log when installed in the workshop.
+A saw is the active wood-efficiency tool. Outside the workshop it can act as an
+alternative axe. Installed in the workshop, it turns logs into more than the
+default four planks and planks into more sticks than ordinary crafting.
 
 The desired distinction is:
 
@@ -168,11 +204,10 @@ The desired distinction is:
 - A bonsai supplies slow background drops.
 - Hoppers and ducts automate collection and movement.
 
-The current preference is to test bonus saw output before nerfing vanilla's
-baseline wood output. An optional efficiency reward is more likely to feel like
-progress than restoring output that was removed at the beginning. Exact saw
-materials, recipes, yields, durability, and even inclusion remain undecided;
-the workshop is the preferred interface for testing this role.
+The current preference is to preserve vanilla's baseline wood output. Workshop
+sawing is an optional efficiency reward, not the restoration of output removed
+at the beginning. Exact saw materials, recipes, yields, and durability remain
+undecided.
 
 See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the larger
 relationship between wood, flint, knives, plant fiber, and metallurgy.
@@ -248,9 +283,12 @@ Infrastructure gives materials verbs beyond combat and mining:
 
 - Copper can **conduct or route**.
 - Clay can **cultivate or contain**.
-- Flint can **cut**.
+- Flint can **cut and separate**.
 - Plants can **supply fiber**.
-- Hand tools can **process and shape at the workshop**.
+- Knives can **extract more fiber and shards at the workshop**.
+- Hammers can **mine in the field and crush deliberately at the workshop**.
+- Saws can **harvest in the field and subdivide wood efficiently at the
+  workshop**.
 - Workable metals can **collect and transfer**.
 - Stone can **process**.
 - Wood can **store, structure, and support**.

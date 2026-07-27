@@ -102,7 +102,11 @@ The current primitive-resource direction is deliberately simple:
 - A flint knife cuts plants into fiber.
 - Plant fiber provides a crafting route to string.
 - Metal knives may extend the cutting-tool family.
-- Saws may later improve active wood yield at a workshop.
+- Workshop knives extract more fiber from plants and more shards from rocks.
+- Hammers mine like alternative picks, then reduce stone to gravel and gravel to
+  sand at a workshop.
+- Saws harvest like alternative axes, then improve plank and stick yield at a
+  workshop.
 
 The knife is the clearest idea borrowed from No Tree Punching. The broader
 survival ceremony is not. Flint already communicates "sharp stone" in
@@ -138,11 +142,11 @@ not require string; plant fiber and string are unlocked by the knife rather than
 used to gate the first wood-access tool.
 
 These are examples of a broader tool rule: tools grant interactions with
-materials. Hatchets grant wood access, knives turn plants into fiber, saws may
-improve wood yield, hammers may shape workable materials, and picks gradually
-turn resistant geology from an obstacle into excavatable terrain. Material
-statistics express how well a tool performs those jobs, but progression should
-not collapse into recolored stat ladders.
+materials. Hatchets grant wood access, knives cut plants and separate useful
+material, hammers mine or crush, saws harvest or subdivide wood efficiently, and
+picks gradually turn resistant geology from an obstacle into excavatable
+terrain. Material statistics express how well a tool performs those jobs, but
+progression should not collapse into recolored stat ladders.
 
 See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the complete
 living design.
@@ -156,8 +160,9 @@ The current direction uses deliberately ordinary Minecraft objects:
 
 - **A workshop block** holds an installed hand tool and uses it to process an
   input material.
-- **Knives, saws, and hammers** select cutting, wood-processing, and shaping
-  operations while losing durability through visible use.
+- **Knives, hammers, and saws** remain usable as alternatives to swords, picks,
+  and axes in the field, but select their intended processing operations at the
+  workshop while losing durability through visible use.
 - **Bonsai pots** slowly produce tree drops, especially the sticks demanded by
   an expanded metallurgical workshop.
 - **Clay** gives the pot a physical construction cost tied to exploration and
@@ -171,17 +176,29 @@ The current direction uses deliberately ordinary Minecraft objects:
 - **Crushers and furnaces** remain fuel-burning processing blocks rather than
   excuses to introduce electricity.
 
-The workshop's core rule is **tool + material -> processed output**. A saw with
-a log can improve plank yield, a knife with plants can improve fiber yield, and
-a hammer with a workable material can create plates or other shaped components.
+The workshop's core rule is **tool + material -> processed output**:
+
+- A knife extracts more plant fiber from plants and more flint shards from
+  loose rocks.
+- A hammer turns stone into gravel and gravel into sand.
+- A saw turns logs into more than the default four planks and planks into more
+  sticks than ordinary crafting.
+
+Outside the workshop, the knife is a weapon and plant harvester, the hammer is a
+pickaxe alternative, and the saw is an axe alternative. Inside it, they perform
+their intended processing roles:
+
+> **Outside the workshop, tools harvest. Inside the workshop, tools process.**
+
 The installed tool determines the operation; the block is not a universal
 machine.
 
 This gives reusable tools a physical, legible home. Durability is spent by
 performing workshop operations instead of through special crafting recipes that
-silently damage an ingredient. Crushing remains in the crusher, heating remains
-in furnaces, alloying remains in its own metallurgical process, and passive
-cultivation remains in bonsai.
+silently damage an ingredient. Manual material reduction belongs to the
+workshop hammer, while bulk crushing and ore processing remain in the crusher.
+Heating remains in furnaces, alloying remains in its own metallurgical process,
+and passive cultivation remains in bonsai.
 
 None of those implementations is fixed. Bonsai output may be manual before a
 hopper is added; hoppers may be equivalent across materials or divided into

@@ -40,10 +40,10 @@ instead of the optimal move five minutes into a world.
 - **Materials form a network, not a disposable ladder.** Mundane metals, alloy
   ingredients, specialist materials, and capstones can remain relevant for
   different reasons.
-- **Infrastructure gives materials work beyond equipment.** A manual workshop
-  uses installed knives, saws, and hammers for tool-assisted processing, while
-  pots, hoppers, ducts, crushers, furnaces, and storage turn metallurgical
-  progress into a more capable base.
+- **Infrastructure gives materials work beyond equipment.** Knives, hammers,
+  and saws remain usable in the field but perform their intended processing
+  roles when installed in a manual workshop. Pots, hoppers, ducts, crushers,
+  furnaces, and storage turn metallurgical progress into a more capable base.
 - **Automation remains physical and Minecraft-shaped.** The intended vocabulary
   is blocks, inventories, gravity, fuel, growth, and item movement—not an
   obligatory electrical grid.
