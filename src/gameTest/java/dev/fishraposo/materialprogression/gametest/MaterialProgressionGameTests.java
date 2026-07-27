@@ -144,11 +144,11 @@ public final class MaterialProgressionGameTests {
         );
         helper.assertTrue(
                 !crusher.canPlaceItemThroughFace(
-                        0,
-                        Items.COBBLESTONE.getDefaultInstance(),
-                        Direction.UP
+                        2,
+                        ModItems.TIN_DUST.get().getDefaultInstance(),
+                        Direction.DOWN
                 ),
-                "Crusher accepted a non-crushable input"
+                "Crusher accepted insertion into its output slot"
         );
         helper.assertTrue(
                 crusher.canPlaceItemThroughFace(
@@ -167,6 +167,38 @@ public final class MaterialProgressionGameTests {
                 "Crusher accepted a non-fuel item in its fuel slot"
         );
         helper.succeed();
+    }
+
+    @GameTest(timeoutTicks = 260)
+    @EmptyTemplate(value = "3x3x3", floor = true)
+    @TestHolder(description = "The crusher leaves non-recipe inputs untouched")
+    static void crusherIgnoresNonRecipeInputs(ExtendedGameTestHelper helper) {
+        helper.setBlock(CRUSHER_POS, ModBlocks.CRUSHER.get());
+        CrusherBlockEntity crusher = crusher(helper);
+        crusher.setItem(0, Items.COBBLESTONE.getDefaultInstance());
+        crusher.setItem(1, Items.COAL.getDefaultInstance());
+
+        helper.startSequence()
+                .thenIdle(220)
+                .thenExecute(() -> {
+                    helper.assertTrue(
+                            crusher.getItem(0).is(Items.COBBLESTONE),
+                            "Crusher consumed a non-recipe input"
+                    );
+                    helper.assertTrue(
+                            crusher.getItem(0).getCount() == 1,
+                            "Crusher changed a non-recipe input count"
+                    );
+                    helper.assertTrue(
+                            crusher.getItem(1).is(Items.COAL),
+                            "Crusher consumed fuel for a non-recipe input"
+                    );
+                    helper.assertTrue(
+                            crusher.getItem(2).isEmpty(),
+                            "Crusher created output from a non-recipe input"
+                    );
+                })
+                .thenSucceed();
     }
 
     @GameTest
