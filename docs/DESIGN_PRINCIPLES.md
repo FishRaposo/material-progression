@@ -104,6 +104,12 @@ Metals should matter outside equipment slots. Processing blocks, storage,
 transport, collection, and other modest infrastructure can preserve demand for
 materials after their tools have been superseded.
 
+The workshop should also give hand tools a physical place in the base. A player
+can install a knife, saw, hammer, or another appropriate tool and use it to
+process materials manually. The tool determines the available operation and
+loses durability through that work. This is more legible than hiding reusable
+tool wear inside an ordinary crafting recipe.
+
 An infrastructure recipe should follow the physical fantasy of the block.
 Hoppers are item funnels, not intrinsically iron objects; copper is a natural
 candidate for ducts because it already reads as a workable conduit material.
@@ -122,9 +128,9 @@ The reward is a workshop that becomes increasingly self-sustaining.
 ## 14. Active play and passive supply should complement each other
 
 Efficiency tools and automation should solve different problems. A saw may
-increase the yield of active forestry, while a bonsai slowly supports the
-workshop in the background. Neither should make the other—or the generated
-world—irrelevant.
+increase the yield of active forestry when used at a workshop, while a bonsai
+slowly supports the base in the background. Neither should make the other—or
+the generated world—irrelevant.
 
 Baseline resource nerfs require stronger justification than optional efficiency
 rewards. Making a saw useful by improving wood yield is preferable to making

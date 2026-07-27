@@ -23,6 +23,71 @@ vocabulary is recognizably Minecraft:
 
 No electrical grid is required to justify these systems.
 
+## The workshop block
+
+The workshop is the proposed home for manual, tool-assisted processing. Its
+core interaction is:
+
+> **Installed hand tool + material -> processed output**
+
+The tool selects the recipe family. A saw exposes wood-processing operations, a
+knife exposes plant-cutting operations, and a hammer exposes shaping operations.
+The workshop is therefore not an arbitrary universal machine; every recipe
+should describe work a person could plausibly perform at a bench with the
+installed tool.
+
+Candidate operations include:
+
+- **Saw + log -> increased plank or wooden-component yield**
+- **Knife + suitable plants -> increased plant-fiber yield**
+- **Hammer + workable material -> plates, shaped pieces, or other hammered
+  components**
+
+The exact interface remains provisional, but the conceptual slots are simply a
+tool, an input material, and an output. The installed tool remains visible and
+persists between operations. Its durability is consumed when processing occurs,
+instead of placing a reusable tool in an ordinary crafting recipe and relying
+on hidden recipe-specific damage behavior.
+
+The interaction should resemble Minecraft's existing workstation language more
+than an industrial machine. A stonecutter-like selection interface is one
+candidate when a tool and material combination has several valid outputs.
+Processing speed, whether output is taken immediately, tool replacement,
+automation, and redstone behavior remain open implementation questions.
+
+### Boundaries
+
+The workshop handles hand-tool operations:
+
+- Cutting
+- Carving
+- Sawing
+- Hammering and shaping
+- Other direct bench work justified by an installed tool
+
+It does not absorb every processing system:
+
+- Crushing remains in the crusher.
+- Heating and smelting remain in furnaces.
+- Alloying remains in its appropriate metallurgical process.
+- Passive cultivation remains in bonsai.
+- Item movement remains the job of hoppers, ducts, and inventories.
+
+These boundaries preserve the physical fantasy of each block and prevent the
+workshop from becoming a universal recipe menu.
+
+### Tool progression inside the workshop
+
+Workshop tools extend the rule that tools grant material interactions. Their
+material can affect durability and working speed. Yield should change with tool
+material only when it creates a clear and worthwhile distinction; upgrading a
+tool should not automatically require a ladder of arbitrary output multipliers.
+
+The workshop gives knives, saws, hammers, and future hand tools a continuing
+role without requiring every material to receive every tool. A tool-material
+combination belongs when it adds a useful operation, trade-off, or economic
+path.
+
 ## Automation as a progression reward
 
 Automation should be earned through the same world-facing loop as better tools:
@@ -94,7 +159,7 @@ The following remain undecided:
 
 A saw is a provisional way for metallurgy to improve active wood processing.
 Rather than merely harvesting trees faster, it could produce more planks or
-wooden components from each log.
+wooden components from each log when installed in the workshop.
 
 The desired distinction is:
 
@@ -106,8 +171,8 @@ The desired distinction is:
 The current preference is to test bonus saw output before nerfing vanilla's
 baseline wood output. An optional efficiency reward is more likely to feel like
 progress than restoring output that was removed at the beginning. Exact saw
-materials, recipes, interfaces, yields, durability, and even inclusion remain
-undecided.
+materials, recipes, yields, durability, and even inclusion remain undecided;
+the workshop is the preferred interface for testing this role.
 
 See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the larger
 relationship between wood, flint, knives, plant fiber, and metallurgy.
@@ -185,6 +250,7 @@ Infrastructure gives materials verbs beyond combat and mining:
 - Clay can **cultivate or contain**.
 - Flint can **cut**.
 - Plants can **supply fiber**.
+- Hand tools can **process and shape at the workshop**.
 - Workable metals can **collect and transfer**.
 - Stone can **process**.
 - Wood can **store, structure, and support**.
@@ -207,15 +273,18 @@ Before an infrastructure feature becomes committed content, ask:
    reason?
 8. Would a simpler pot, hopper, duct, furnace, or redstone interaction solve the
    same problem?
+9. If it belongs in the workshop, can the operation be explained by the
+   installed hand tool?
 
 ## Current candidate loop
 
 One possible workshop arc is:
 
-> Cave exploration -> clay and accessible metals -> crusher and furnace ->
-> bronze tools -> more capable excavation -> multi-metal hoppers and copper
-> ducts -> automated processing and bonsai collection -> a workshop that
-> supplies common inputs while the player pursues deeper materials
+> Cave exploration -> clay and accessible metals -> crusher, furnace, and
+> manual workshop -> knives, saws, hammers, and bronze tools -> more capable
+> processing and excavation -> multi-metal hoppers and copper ducts -> automated
+> processing and bonsai collection -> a base that supplies common inputs while
+> the player pursues deeper materials
 
 This is not a roadmap commitment. It is a compact expression of how geology,
 metallurgy, logistics, and resource support could become one continuous

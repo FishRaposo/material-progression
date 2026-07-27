@@ -36,8 +36,9 @@ The intended rhythm is approximately:
 7. Use better equipment to penetrate and reshape harder geology.
 8. Develop from opportunistic cave mining into sustained excavation.
 9. Earn efficient strip mining as a late capability.
-10. Turn clay, wood, and metals into workshop infrastructure that automates
-   repetitive supply and item handling.
+10. Turn clay, wood, and metals into a workshop that supports manual
+   tool-assisted processing before automating repetitive supply and item
+   handling.
 11. Continue material progression through specialization and magical metallurgy,
    not only larger durability and mining-speed numbers.
 
@@ -54,8 +55,8 @@ Knowledge remains useful, but coordinates alone should not erase progression.
 - A deterministic primitive layer in which loose rocks, flint, plants, wood,
   clay, and gravel create useful choices before metallurgy
 - A material graph with overlapping paths and long-lived ingredients
-- A modest workshop progression of pots, hoppers, ducts, processors, storage,
-  and physical automation
+- A modest workshop progression of hand tools, pots, hoppers, ducts, processors,
+  storage, and physical automation
 - A bridge from mundane metallurgy to enchantability and artifact crafting
 
 ## What the mod is not trying to become
@@ -101,7 +102,7 @@ The current primitive-resource direction is deliberately simple:
 - A flint knife cuts plants into fiber.
 - Plant fiber provides a crafting route to string.
 - Metal knives may extend the cutting-tool family.
-- Saws may later improve active wood yield.
+- Saws may later improve active wood yield at a workshop.
 
 The knife is the clearest idea borrowed from No Tree Punching. The broader
 survival ceremony is not. Flint already communicates "sharp stone" in
@@ -138,9 +139,10 @@ used to gate the first wood-access tool.
 
 These are examples of a broader tool rule: tools grant interactions with
 materials. Hatchets grant wood access, knives turn plants into fiber, saws may
-improve wood yield, and picks gradually turn resistant geology from an obstacle
-into excavatable terrain. Material statistics express how well a tool performs
-those jobs, but progression should not collapse into recolored stat ladders.
+improve wood yield, hammers may shape workable materials, and picks gradually
+turn resistant geology from an obstacle into excavatable terrain. Material
+statistics express how well a tool performs those jobs, but progression should
+not collapse into recolored stat ladders.
 
 See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the complete
 living design.
@@ -152,6 +154,10 @@ slot. It should change what their base can do.
 
 The current direction uses deliberately ordinary Minecraft objects:
 
+- **A workshop block** holds an installed hand tool and uses it to process an
+  input material.
+- **Knives, saws, and hammers** select cutting, wood-processing, and shaping
+  operations while losing durability through visible use.
 - **Bonsai pots** slowly produce tree drops, especially the sticks demanded by
   an expanded metallurgical workshop.
 - **Clay** gives the pot a physical construction cost tied to exploration and
@@ -164,6 +170,18 @@ The current direction uses deliberately ordinary Minecraft objects:
   fantasy already fits a conduit.
 - **Crushers and furnaces** remain fuel-burning processing blocks rather than
   excuses to introduce electricity.
+
+The workshop's core rule is **tool + material -> processed output**. A saw with
+a log can improve plank yield, a knife with plants can improve fiber yield, and
+a hammer with a workable material can create plates or other shaped components.
+The installed tool determines the operation; the block is not a universal
+machine.
+
+This gives reusable tools a physical, legible home. Durability is spent by
+performing workshop operations instead of through special crafting recipes that
+silently damage an ingredient. Crushing remains in the crusher, heating remains
+in furnaces, alloying remains in its own metallurgical process, and passive
+cultivation remains in bonsai.
 
 None of those implementations is fixed. Bonsai output may be manual before a
 hopper is added; hoppers may be equivalent across materials or divided into

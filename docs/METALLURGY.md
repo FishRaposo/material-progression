@@ -30,6 +30,7 @@ A material can fill one or more roles:
 - Processing, storage, transport, or collection infrastructure
 - Ingredient that keeps an earlier resource relevant
 - Lightweight cutting or resource-efficiency tool
+- Manual shaping tool used at a workshop
 
 This allows parallel and intersecting paths instead of a universal sequence.
 
@@ -114,6 +115,8 @@ created by geology; "iron stats but brown" is not enough by itself.
 The metallurgical graph should not terminate at pickaxes, armor, and swords.
 Materials can remain useful by becoming parts of the workshop:
 
+- Knives, saws, and hammers can be installed in a manual workshop to select
+  cutting, wood-processing, and shaping operations.
 - A hopper can plausibly be fabricated from more than iron.
 - Different workable metals may provide equivalent hopper recipes or distinct
   hopper tiers.
@@ -122,6 +125,8 @@ Materials can remain useful by becoming parts of the workshop:
   demand for base metals.
 - Knives and possible saws can make a material useful for plant harvesting,
   crafting, or wood efficiency even when its mining tools are obsolete.
+- Hammers can give workable metals a shaping role when plates or other formed
+  components justify one.
 
 Whether alternative hoppers are equivalent, tiered, or specialized is
 undecided. The principle is narrower: an item funnel has no strong fantasy that

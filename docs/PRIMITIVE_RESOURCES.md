@@ -181,7 +181,8 @@ only by a harvest tier and a column of statistics.
 - A hatchet grants the first access to logs when tree punching is disabled.
 - A knife turns suitable vegetation into plant fiber.
 - An axe accelerates active forestry.
-- A saw may improve the yield of processed wood.
+- A saw may improve the yield of wood processed at a workshop.
+- A hammer may shape appropriate materials at a workshop.
 - A pick determines which geology can be exploited and whether sustained
   excavation is economical.
 - Hoppers and ducts turn workable metals into collection and movement.
@@ -217,6 +218,7 @@ A knife can:
 - Harvest grass, tall grass, ferns, vines, leaves, and other suitable plants.
 - Produce plant fiber from those materials.
 - Act as a reusable cutting ingredient in appropriate recipes.
+- Improve plant-fiber yield when installed in a workshop.
 - Serve as a weak, lightweight weapon if that role survives testing.
 
 Knives may continue through copper, tin, bronze, iron, silver, and other
@@ -262,13 +264,20 @@ One candidate relationship is:
 - Hoppers and ducts collect and route those products.
 
 Those are complementary tools rather than replacements for one another. A saw
-rewards active forestry; a bonsai supports the workshop passively.
+rewards active forestry through manual workshop processing; a bonsai supports
+the workshop passively.
 
 The current preference is to test bonus saw output before reducing vanilla's
 baseline log-to-plank yield. Preserving ordinary output and making saws an
 efficiency reward is less likely to make the opening feel arbitrarily stingy.
 However, baseline wood output, saw recipes, valid materials, durability,
 processing interface, and exact bonuses all remain unresolved.
+
+The preferred interface is the workshop block rather than a crafting recipe
+that silently damages a reusable saw. The player installs the saw, supplies the
+log, selects a valid output if necessary, and spends durability through the
+visible processing operation. The same interaction can support knives and
+hammers without turning the ordinary crafting grid into a hidden tool machine.
 
 ## Selective influence from No Tree Punching
 

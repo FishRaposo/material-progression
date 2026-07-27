@@ -135,6 +135,39 @@ infrastructure role. Current candidates include:
 The experiment should answer whether these blocks make a workshop more capable
 without beginning an electrical or industrial-tech progression.
 
+## Candidate experiment: manual workshop
+
+Test one workstation whose installed hand tool selects the available processing
+recipes:
+
+> **Tool + material -> processed output**
+
+The first candidate operations are:
+
+- Saw + log -> bonus planks or wooden components
+- Knife + suitable plants -> improved fiber yield
+- Hammer + workable material -> plates or other shaped components
+
+The experiment should compare a compact stonecutter-like interface with any
+simpler interaction that preserves the same fantasy. It must make the installed
+tool, valid inputs, produced output, and durability cost legible.
+
+The workshop should answer:
+
+- Does visible tool installation feel more natural than damaging tools in
+  crafting recipes?
+- Does the installed tool clearly determine the recipe family?
+- Can the block support several hand tools without becoming a universal
+  machine?
+- Do tool materials create meaningful durability or speed trade-offs?
+- Should any tool material affect yield, or is yield principally determined by
+  the operation?
+- Where should automation stop so the block remains manual bench work?
+
+Crushing, heating, alloying, passive cultivation, and item transport remain
+outside the workshop. The experiment succeeds only if those boundaries remain
+obvious in play.
+
 ## Candidate experiment: bonsai resource support
 
 Test a small bonsai loop inspired by the Bonsai Trees mod:
@@ -160,12 +193,15 @@ The experiment should determine:
 
 Test whether saws create a satisfying active wood-processing role:
 
-> Harvest logs -> process them with a saw -> receive better yield
+> Harvest logs -> install a saw in the workshop -> process logs -> receive
+> better yield
 
 The first comparison should preserve vanilla baseline plank output and treat the
 saw as a bonus. Baseline output reductions should only be tested if the bonus
 model cannot create a meaningful reward. The experiment should keep axes,
 saws, and bonsai distinct: harvesting speed, active yield, and passive supply.
+Saw durability should be consumed through the workshop operation rather than a
+hidden reusable-tool crafting recipe.
 
 ## Candidate experiment: magical metallurgy
 
