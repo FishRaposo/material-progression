@@ -1,7 +1,6 @@
 package dev.fishraposo.materialprogression.world.inventory;
 
 import dev.fishraposo.materialprogression.registry.ModMenus;
-import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.registry.ModTags;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -15,7 +14,6 @@ public final class CrusherMenu extends AbstractFurnaceMenu {
     public CrusherMenu(int containerId, Inventory inventory) {
         super(
                 ModMenus.CRUSHER.get(),
-                ModRecipes.CRUSHING.get(),
                 RecipePropertySet.FURNACE_INPUT,
                 RecipeBookType.FURNACE,
                 containerId,
@@ -31,7 +29,6 @@ public final class CrusherMenu extends AbstractFurnaceMenu {
     ) {
         super(
                 ModMenus.CRUSHER.get(),
-                ModRecipes.CRUSHING.get(),
                 RecipePropertySet.FURNACE_INPUT,
                 RecipeBookType.FURNACE,
                 containerId,
