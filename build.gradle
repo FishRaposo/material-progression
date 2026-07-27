@@ -28,12 +28,8 @@ sourceSets.main.resources {
 
 sourceSets {
     gameTest {
-        // NeoForge ModDev supplies the transformed Minecraft/NeoForge classpath
-        // directly to main instead of through the ordinary implementation
-        // configuration. Reuse that complete classpath for the isolated
-        // GameTest source set as well as the compiled production classes.
-        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
-        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
     }
 }
 
@@ -51,6 +47,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 neoForge {
     // Specify the version of NeoForge to use.
     version = project.neo_version
+    addModdingDependenciesTo sourceSets.gameTest
 
     // This line is optional. Access Transformers are automatically detected
     // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
@@ -76,6 +73,7 @@ neoForge {
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             type = "gameTestServer"
+            sourceSet = sourceSets.gameTest
             systemProperty 'neoforge.enabledGameTestNamespaces', "${project.mod_id}_gametests"
         }
 
