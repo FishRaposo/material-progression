@@ -33,7 +33,9 @@ The intended rhythm is approximately:
 5. Use better equipment to penetrate and reshape harder geology.
 6. Develop from opportunistic cave mining into sustained excavation.
 7. Earn efficient strip mining as a late capability.
-8. Continue material progression through specialization and magical metallurgy,
+8. Turn clay, wood, and metals into workshop infrastructure that automates
+   repetitive supply and item handling.
+9. Continue material progression through specialization and magical metallurgy,
    not only larger durability and mining-speed numbers.
 
 This is not intended to prohibit sequence breaking with invisible rules. A
@@ -47,6 +49,8 @@ Knowledge remains useful, but coordinates alone should not erase progression.
 - A broad metallurgical vocabulary of ores, metals, dusts, alloys, and tools
 - An underground whose shape and composition affect how the player advances
 - A material graph with overlapping paths and long-lived ingredients
+- A modest workshop progression of pots, hoppers, ducts, processors, storage,
+  and physical automation
 - A bridge from mundane metallurgy to enchantability and artifact crafting
 
 ## What the mod is not trying to become
@@ -54,6 +58,8 @@ Knowledge remains useful, but coordinates alone should not erase progression.
 - A linear RPG or mandatory quest-book pack
 - A research-menu progression gate
 - A large energy network disguised as early metallurgy
+- An electrical technology mod in which every convenience requires generators,
+  cables, and machine tiers
 - A machine chain where every operation exists solely to add waiting
 - A collection of ores whose only identity is a higher tool statistic
 - A punishment mod that makes ordinary building stone irritating after placement
@@ -65,10 +71,44 @@ The foundational loop is:
 > **Explore -> extract -> process -> combine -> craft -> gain agency**
 
 Geology supplies the pressure that makes metallurgy necessary. Metallurgy
-supplies the capabilities that let the player overcome geology. Later material
-properties, finishing processes, and enchantability extend the same loop beyond
-basic mining.
+supplies the capabilities that let the player overcome geology. Infrastructure
+then converts the resources the player earned into a workshop that handles more
+of its own repetitive labor. Later material properties, finishing processes,
+and enchantability extend the same loop beyond basic mining.
+
+## The workshop grows with the player
+
+Progression should not only improve what the player can hold in an equipment
+slot. It should change what their base can do.
+
+The current direction uses deliberately ordinary Minecraft objects:
+
+- **Bonsai pots** slowly produce tree drops, especially the sticks demanded by
+  an expanded metallurgical workshop.
+- **Clay** gives the pot a physical construction cost tied to exploration and
+  excavation.
+- **Hoppers** automate collection once the player can afford the additional
+  metal infrastructure.
+- **Alternative-metal hoppers** question vanilla's arbitrary iron exclusivity
+  and give workable metals another continuing use.
+- **Copper ducts** extend item movement through a material whose physical
+  fantasy already fits a conduit.
+- **Crushers and furnaces** remain fuel-burning processing blocks rather than
+  excuses to introduce electricity.
+
+None of those implementations is fixed. Bonsai output may be manual before a
+hopper is added; hoppers may be equivalent across materials or divided into
+tiers; ducts may be limited or omitted after testing. The durable idea is that
+automation should be assembled from resources the player physically earned and
+should remain legible as Minecraft machinery.
+
+The bonsai illustrates the intended economy particularly well. It does not give
+the player free wood. The player acquires clay, makes the pot, provides a tree
+or sapling, spends metal on collection, allocates space, and waits. In exchange,
+the workshop gains a slow background stream of common biological materials.
+Progress turns recurring manual labor into infrastructure.
 
 The exact stones, strata, metals, recipes, tiers, dimensions, and pacing remain
-open design questions. Even the currently implemented bronze slice is an
+open design questions. The same is true of bonsai, hopper variants, ducts, and
+all automation details. Even the currently implemented bronze slice is an
 experiment used to learn what the final loop should be.

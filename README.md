@@ -30,6 +30,12 @@ instead of the optimal move five minutes into a world.
 - **Materials form a network, not a disposable ladder.** Mundane metals, alloy
   ingredients, specialist materials, and capstones can remain relevant for
   different reasons.
+- **Infrastructure gives materials work beyond equipment.** Pots, hoppers,
+  ducts, crushers, furnaces, and storage should turn metallurgical progress
+  into a more capable workshop.
+- **Automation remains physical and Minecraft-shaped.** The intended vocabulary
+  is blocks, inventories, gravity, fuel, growth, and item movement—not an
+  obligatory electrical grid.
 - **Processing must pay for itself.** A step should improve yield, create a new
   material, or unlock a new capability—not exist merely to waste time.
 - **The result should still feel like Minecraft.** Progress happens through
@@ -41,6 +47,7 @@ Read the complete living design:
 - [Design principles](docs/DESIGN_PRINCIPLES.md)
 - [Underground and geology](docs/GEOLOGY.md)
 - [Metallurgy and material families](docs/METALLURGY.md)
+- [Workshop infrastructure and automation](docs/INFRASTRUCTURE.md)
 - [Enchantability and magical metallurgy](docs/ENCHANTING.md)
 - [Development directions](docs/ROADMAP.md)
 - [Inspirations](docs/INSPIRATIONS.md)

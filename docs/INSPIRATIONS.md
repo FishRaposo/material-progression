@@ -54,6 +54,19 @@ SimpleOres is another reference for a compact, self-contained mineral expansion.
 Its Fusion add-on demonstrates how a simple ore vocabulary can grow through
 alloys without immediately becoming an industrial technology mod.
 
+## Bonsai Trees
+
+The Bonsai Trees concept is a reference for compact, slow, background production
+of tree resources. Its relevance is not the exact interface, timings, recipes,
+or drop tables. The useful fantasy is a tiny cultivated tree that produces
+ordinary tree drops over time and can feed them into collection infrastructure.
+
+For this project, bonsai can answer a practical consequence of expanded
+metallurgy: a larger workshop and equipment roster creates persistent demand for
+sticks and other tree products. A bonsai does not need to replace forests or
+make wood acquisition trivial. It can turn clay, metal, space, and time into a
+supplemental supply.
+
 ## Synthesis
 
 The intended synthesis is:
@@ -62,6 +75,8 @@ The intended synthesis is:
 - **Older Metallurgy** expands that vocabulary into an interconnected ecosystem.
 - **Divergent Underground** makes access to that ecosystem a physical
   progression.
+- **Bonsai Trees** supplies a reference for small-scale, physical resource
+  automation.
 - **Material Progression** tests how those ideas can become one deliberate,
   vanilla-shaped system.
 

@@ -27,6 +27,7 @@ A material can fill one or more roles:
 - Highly enchantable equipment
 - Magical conductor or finishing material
 - Dimension-specific progression
+- Processing, storage, transport, or collection infrastructure
 - Ingredient that keeps an earlier resource relevant
 
 This allows parallel and intersecting paths instead of a universal sequence.
@@ -37,7 +38,8 @@ The roster can contain materials whose primary value is relational:
 
 - **Tin** may be a modest early material and an ingredient in bronze.
 - **Copper** may be accessible early, support infrastructure, and remain useful
-  through several alloys.
+  through several alloys. Copper ducts are one candidate expression of that
+  infrastructure role.
 - **Zinc** may principally justify itself through brass.
 - **Nickel** or **manganese** may principally exist to open later alloy paths.
 
@@ -93,6 +95,27 @@ One current hypothesis is:
 This relationship needs playtesting. In particular, bronze must have a real job
 created by geology; "iron stats but brown" is not enough by itself.
 
+## Materials beyond tool sets
+
+The metallurgical graph should not terminate at pickaxes, armor, and swords.
+Materials can remain useful by becoming parts of the workshop:
+
+- A hopper can plausibly be fabricated from more than iron.
+- Different workable metals may provide equivalent hopper recipes or distinct
+  hopper tiers.
+- Copper ducts may provide simple item transport.
+- Crushers, furnaces, storage, and collection blocks can create continuing
+  demand for base metals.
+
+Whether alternative hoppers are equivalent, tiered, or specialized is
+undecided. The principle is narrower: an item funnel has no strong fantasy that
+makes iron its only reasonable material, so iron exclusivity should not be
+preserved by inertia.
+
+The same test applies to every infrastructure block: material flexibility
+should make physical and progression sense. The goal is not to manufacture
+dozens of recolored machines solely to consume every ingot.
+
 ## Evaluation questions for every material
 
 Before a material becomes committed content, ask:
@@ -103,4 +126,5 @@ Before a material becomes committed content, ask:
 4. What capability or choice does it create?
 5. Which earlier resources does it preserve or revive?
 6. What prevents it from collapsing another material's role?
-7. Does it make the world more interesting, or only the item registry larger?
+7. Can it serve infrastructure after its equipment tier is obsolete?
+8. Does it make the world more interesting, or only the item registry larger?

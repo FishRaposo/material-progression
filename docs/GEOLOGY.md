@@ -45,8 +45,16 @@ Later in progression:
 - The player becomes less dependent on natural openings.
 - Strip mining changes from technically possible but foolish to a competitive
   strategy.
+- Clay, stone, metals, and other construction resources become inputs to a
+  workshop that reduces repetitive labor.
 - Mastery feels like increased control over the same world that constrained the
   player earlier.
+
+This relationship is important even for seemingly modest infrastructure. A
+bonsai pot may ask for clay, while automatic collection may ask for a hopper or
+another metal component. If obtaining those ingredients requires meaningful
+exploration and excavation, the resulting automation is a consequence of
+geological progress rather than a free convenience recipe.
 
 ## Air exposure and enclosure
 

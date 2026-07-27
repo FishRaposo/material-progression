@@ -57,28 +57,49 @@ Progression should create new demand for earlier resources through alloys,
 infrastructure, finishing, or specialist equipment. Finding a better pickaxe
 should not make every material below it permanently irrelevant.
 
-## 9. Trade-offs beat universal best-in-slot
+## 9. Materials should build the workshop
+
+Metals should matter outside equipment slots. Processing blocks, storage,
+transport, collection, and other modest infrastructure can preserve demand for
+materials after their tools have been superseded.
+
+An infrastructure recipe should follow the physical fantasy of the block.
+Hoppers are item funnels, not intrinsically iron objects; copper is a natural
+candidate for ducts because it already reads as a workable conduit material.
+Exact recipes and material equivalences remain design questions.
+
+## 10. Automation is earned relief
+
+Automation should convert resources, space, construction, and time into freedom
+from repetitive work. It should neither be free at the beginning nor require a
+detour into an unrelated industrial power system.
+
+A bonsai that slowly supplies tree drops is valuable because the player first
+obtains clay, fabricates a pot, supplies collection infrastructure, and waits.
+The reward is a workshop that becomes increasingly self-sustaining.
+
+## 11. Trade-offs beat universal best-in-slot
 
 Where practical, materials should occupy different profiles: accessibility,
 durability, speed, harvest capability, enchantability, repair economy, or
 specialized use. Capstones may be intentionally extreme, but reaching one should
 not flatten every other decision by accident.
 
-## 10. Physical rules should be legible
+## 12. Physical rules should be legible
 
 Players should learn by interacting with blocks and tools. A cave wall being
 easier to exploit than fully enclosed stone is more Minecraft-shaped than a
 hidden character level. Recipes and material properties should teach the system
 without requiring a wiki open at all times.
 
-## 11. Player construction should not be punished
+## 13. Player construction should not be punished
 
 Natural geology may have progression-sensitive hardness. Blocks placed for
 building should remain reasonable to remove. The system exists to make
 exploration and excavation meaningful, not to make correcting a misplaced block
 tedious.
 
-## 12. The design remains revisable
+## 14. The design remains revisable
 
 Implementation proves feasibility, not correctness. Current content may be
 deleted, reordered, or rebuilt if it fails the principles above during

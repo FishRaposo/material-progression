@@ -69,6 +69,40 @@ Test equipment profiles that differ across:
 The goal is to determine where branching choices work and where a clear upgrade
 is healthier.
 
+## Candidate experiment: workshop logistics
+
+Test the smallest physical item-transport system that gives base metals an
+infrastructure role. Current candidates include:
+
+- Hoppers craftable from multiple workable metals
+- Equivalent versus tiered behavior for alternative hoppers
+- Copper ducts for simple item movement
+- Crusher input and output automation
+
+The experiment should answer whether these blocks make a workshop more capable
+without beginning an electrical or industrial-tech progression.
+
+## Candidate experiment: bonsai resource support
+
+Test a small bonsai loop inspired by the Bonsai Trees mod:
+
+> Obtain clay -> make a pot -> cultivate a tiny tree -> receive slow tree drops
+> -> add a hopper or related component for automatic collection
+
+The intended role is supplemental, background production—especially sticks and
+other tree products consumed by a growing workshop. Drop tables, growth time,
+soil rules, valid trees, manual collection, hopper requirements, and
+compatibility with modded trees are all undecided.
+
+The experiment should determine:
+
+- Whether the construction cost makes the convenience feel earned
+- Whether output supplements forestry without replacing it
+- Whether automatic collection creates a satisfying infrastructure milestone
+- Whether the loop remains legible without a power system or complex interface
+- Whether its output meaningfully supports metallurgy rather than existing as
+  unrelated convenience content
+
 ## Candidate experiment: magical metallurgy
 
 Prototype enchantability tiers, gold-derived materials, silver finishing, rose
