@@ -4,6 +4,10 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/**/build/
 
+### Python ###
+__pycache__/
+*.py[cod]
+
 ### IntelliJ IDEA ###
 .idea/
 *.iws

@@ -235,3 +235,24 @@ This may remain in the core mod or become a separate compatible module.
 No release scope is currently frozen. A future MVP should be declared only after
 the relevant experiments demonstrate a coherent, enjoyable loop. The existing
 bronze content is a starting test bed, not that declaration.
+
+## Automated acceptance coverage
+
+Every implemented deterministic mechanic should gain an automated acceptance
+test with the production change. The current harness has two layers:
+
+- Repository contract tests validate JSON resources, recipe outputs, material
+  flow, translations, models, tags, loot, world-generation wiring, internal
+  documentation links, and whitespace.
+- NeoForge GameTests load the real mod and validate crusher processing, fuel
+  requirements, sided inventory, block drops, tool durability, repair materials,
+  mining requirements, and enchantability tags.
+
+The Gradle build and GameTest server are separate CI gates. Future loose-rock,
+tree-punching, workshop, hammer, knife, saw, bonsai, logistics, and geology
+implementations should extend the live suite when they are introduced. Tests
+must not pretend that a documented but unimplemented feature exists.
+
+Human playtesting remains responsible for whether the opening is satisfying,
+durability costs feel fair, terrain creates interesting routes, and interfaces
+communicate the intended physical fantasy.

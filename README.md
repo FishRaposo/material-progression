@@ -99,14 +99,33 @@ Build and run:
 ./gradlew runClient
 ```
 
+Run the full automated test suite:
+
+```bash
+python -m unittest discover -s tests -p 'test_*.py' -v
+./gradlew build
+./gradlew runGameTestServer
+```
+
+The Python contracts validate resources, recipes, translations, world-generation
+wiring, and documentation links. The GameTest server loads the real mod and
+exercises crusher processing, fuel requirements, sided inventory, block drops,
+tool durability, and gameplay tags. GameTest code is development-only and is
+not packaged in the production mod JAR.
+
 On Windows:
 
 ```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
 ./gradlew.bat build
+./gradlew.bat runGameTestServer
 ./gradlew.bat runClient
 ```
 
 The built mod JAR appears in `build/libs`.
+
+Automated checks establish deterministic correctness. Progression feel,
+interface clarity, and balance still require human playtesting.
 
 ## Project status
 
