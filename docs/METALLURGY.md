@@ -29,8 +29,15 @@ A material can fill one or more roles:
 - Dimension-specific progression
 - Processing, storage, transport, or collection infrastructure
 - Ingredient that keeps an earlier resource relevant
+- Lightweight cutting or resource-efficiency tool
 
 This allows parallel and intersecting paths instead of a universal sequence.
+
+The graph begins before metal. Stone and flint establish the first trade-off:
+ordinary stone is the primitive workhorse, while flint may provide faster,
+sharper, less durable tools at the same harvest capability. Metal knives and
+saws can later extend those cutting and efficiency roles instead of every
+material existing only as another pickaxe set.
 
 ## Mundane metals are allowed to be mundane
 
@@ -106,6 +113,8 @@ Materials can remain useful by becoming parts of the workshop:
 - Copper ducts may provide simple item transport.
 - Crushers, furnaces, storage, and collection blocks can create continuing
   demand for base metals.
+- Knives and possible saws can make a material useful for plant harvesting,
+  crafting, or wood efficiency even when its mining tools are obsolete.
 
 Whether alternative hoppers are equivalent, tiered, or specialized is
 undecided. The principle is narrower: an item funnel has no strong fantasy that

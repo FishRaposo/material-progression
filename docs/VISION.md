@@ -27,15 +27,16 @@ materials, which enable new forms of processing and equipment.
 The intended rhythm is approximately:
 
 1. Explore natural openings and exposed geology.
-2. Exploit materials reachable with primitive tools.
-3. Improve yield through simple processing.
-4. Combine modest metals into useful alloys.
-5. Use better equipment to penetrate and reshape harder geology.
-6. Develop from opportunistic cave mining into sustained excavation.
-7. Earn efficient strip mining as a late capability.
-8. Turn clay, wood, and metals into workshop infrastructure that automates
+2. Read cave biomes as sources of clay, gravel, and exposed materials.
+3. Use stone, flint, knives, plants, and wood to establish primitive capability.
+4. Improve yield through simple processing.
+5. Combine modest metals into useful alloys.
+6. Use better equipment to penetrate and reshape harder geology.
+7. Develop from opportunistic cave mining into sustained excavation.
+8. Earn efficient strip mining as a late capability.
+9. Turn clay, wood, and metals into workshop infrastructure that automates
    repetitive supply and item handling.
-9. Continue material progression through specialization and magical metallurgy,
+10. Continue material progression through specialization and magical metallurgy,
    not only larger durability and mining-speed numbers.
 
 This is not intended to prohibit sequence breaking with invisible rules. A
@@ -48,6 +49,8 @@ Knowledge remains useful, but coordinates alone should not erase progression.
 - A progression rework expressed through Minecraft's physical systems
 - A broad metallurgical vocabulary of ores, metals, dusts, alloys, and tools
 - An underground whose shape and composition affect how the player advances
+- A primitive resource layer in which clay, gravel, flint, plants, and wood
+  create useful choices before metallurgy
 - A material graph with overlapping paths and long-lived ingredients
 - A modest workshop progression of pots, hoppers, ducts, processors, storage,
   and physical automation
@@ -75,6 +78,43 @@ supplies the capabilities that let the player overcome geology. Infrastructure
 then converts the resources the player earned into a workshop that handles more
 of its own repetitive labor. Later material properties, finishing processes,
 and enchantability extend the same loop beyond basic mining.
+
+## Progression begins before metal
+
+Wood and stone should matter for longer than the first few minutes, but the
+opening should remain unmistakably Minecraft.
+
+The current primitive-resource direction is deliberately simple:
+
+- Lush caves are excellent sources of clay for pottery and later bonsai.
+- Other wet caves may contain smaller clay pockets.
+- Cave gravel provides flint.
+- Flint may support sharper, faster, less durable tools at stone harvest level.
+- A flint knife cuts plants into fiber.
+- Plant fiber provides a crafting route to string.
+- Metal knives may extend the cutting-tool family.
+- Saws may later improve active wood yield.
+
+The knife is the clearest idea borrowed from No Tree Punching. The broader
+survival ceremony is not. Flint already communicates "sharp stone" in
+Minecraft, so it can become a knife directly instead of requiring knapping.
+
+Saws remain more provisional. They could let copper, bronze, or later metals
+improve the output of active forestry. The preferred first experiment is to
+preserve vanilla wood output and make sawing a bonus, rather than reduce
+baseline output and force the player to recover it.
+
+This gives the opening several connected but distinct tools:
+
+- Stone provides dependable primitive impact and excavation.
+- Flint provides sharp, disposable performance.
+- Knives turn vegetation into fiber and string.
+- Axes accelerate forestry.
+- Saws may improve active wood efficiency.
+- Bonsai may provide slow passive tree products.
+
+See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the complete
+living design.
 
 ## The workshop grows with the player
 

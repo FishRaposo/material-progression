@@ -26,6 +26,32 @@ Natural underground blocks may differ by:
 
 Exact formulas and layer counts are deliberately undecided.
 
+Geology also includes exposed, non-metal resources. Clay and gravel should not
+be distributed independently of the spaces around them. Cave biome, moisture,
+water, and exposure can give them recognizable environmental homes.
+
+## Cave biomes as resource biomes
+
+The shape of a cave matters, but its ecological identity should matter too.
+
+Lush caves should be the premier underground clay source. Vanilla already gives
+them wet floors, pools, and clay as part of their visual language; the intended
+change is to make that supply abundant and reliable enough to support pottery
+and bonsai infrastructure. Discovering a lush cave should plausibly mean
+"pottery is solved."
+
+Other wet caves may contain smaller clay pockets around cave floors and
+underground water. Dry caves should not receive equivalent deposits merely for
+uniformity. The world should communicate where a resource belongs.
+
+Gravel should receive similar treatment. Exposed cave deposits can become
+recognizable sources of flint and therefore primitive tools, knives, plant
+fiber, and string. Exact biome associations, frequencies, and deposit shapes
+remain undecided.
+
+See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the resource
+loops these deposits support.
+
 ## Terrain as progression
 
 The important distinction is between following existing space and creating new
@@ -35,6 +61,8 @@ Early in progression:
 
 - Exposed deposits are more valuable than buried ones.
 - Caves provide access through rock that is expensive to excavate in bulk.
+- Cave biomes provide recognizable concentrations of clay, gravel, and other
+  non-metal resources.
 - Ravines create vertical routes across geological layers.
 - Mineshafts and underground structures provide pre-cut infrastructure.
 - Route finding and prospecting outperform coordinate-driven tunnelling.

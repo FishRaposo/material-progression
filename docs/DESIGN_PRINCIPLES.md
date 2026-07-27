@@ -45,19 +45,26 @@ Every additional step must answer at least one of these questions:
 
 If the only answer is "it takes longer," the step should not exist.
 
-## 7. Basic metallurgy stays basic
+## 7. Primitive does not mean ceremonial
+
+Early resources should create decisions before metallurgy, but the opening
+should not become a ritualized survival checklist. Flint can already represent
+a prepared sharp edge; a knife can be crafted and used directly without a
+knapping minigame unless that interaction proves independently valuable.
+
+## 8. Basic metallurgy stays basic
 
 Bronze is copper and tin. It does not require invented mysticism to justify
 itself. Mundane, legible processes establish the design language that later
 systems can elaborate.
 
-## 8. Old materials retain uses
+## 9. Old materials retain uses
 
 Progression should create new demand for earlier resources through alloys,
 infrastructure, finishing, or specialist equipment. Finding a better pickaxe
 should not make every material below it permanently irrelevant.
 
-## 9. Materials should build the workshop
+## 10. Materials should build the workshop
 
 Metals should matter outside equipment slots. Processing blocks, storage,
 transport, collection, and other modest infrastructure can preserve demand for
@@ -68,7 +75,7 @@ Hoppers are item funnels, not intrinsically iron objects; copper is a natural
 candidate for ducts because it already reads as a workable conduit material.
 Exact recipes and material equivalences remain design questions.
 
-## 10. Automation is earned relief
+## 11. Automation is earned relief
 
 Automation should convert resources, space, construction, and time into freedom
 from repetitive work. It should neither be free at the beginning nor require a
@@ -78,28 +85,40 @@ A bonsai that slowly supplies tree drops is valuable because the player first
 obtains clay, fabricates a pot, supplies collection infrastructure, and waits.
 The reward is a workshop that becomes increasingly self-sustaining.
 
-## 11. Trade-offs beat universal best-in-slot
+## 12. Active play and passive supply should complement each other
+
+Efficiency tools and automation should solve different problems. A saw may
+increase the yield of active forestry, while a bonsai slowly supports the
+workshop in the background. Neither should make the other—or the generated
+world—irrelevant.
+
+Baseline resource nerfs require stronger justification than optional efficiency
+rewards. Making a saw useful by improving wood yield is preferable to making
+ordinary crafting feel deliberately broken unless testing demonstrates that a
+lower baseline improves the entire progression.
+
+## 13. Trade-offs beat universal best-in-slot
 
 Where practical, materials should occupy different profiles: accessibility,
 durability, speed, harvest capability, enchantability, repair economy, or
 specialized use. Capstones may be intentionally extreme, but reaching one should
 not flatten every other decision by accident.
 
-## 12. Physical rules should be legible
+## 14. Physical rules should be legible
 
 Players should learn by interacting with blocks and tools. A cave wall being
 easier to exploit than fully enclosed stone is more Minecraft-shaped than a
 hidden character level. Recipes and material properties should teach the system
 without requiring a wiki open at all times.
 
-## 13. Player construction should not be punished
+## 15. Player construction should not be punished
 
 Natural geology may have progression-sensitive hardness. Blocks placed for
 building should remain reasonable to remove. The system exists to make
 exploration and excavation meaningful, not to make correcting a misplaced block
 tedious.
 
-## 14. The design remains revisable
+## 16. The design remains revisable
 
 Implementation proves feasibility, not correctness. Current content may be
 deleted, reordered, or rebuilt if it fails the principles above during

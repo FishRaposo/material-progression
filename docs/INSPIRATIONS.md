@@ -67,6 +67,25 @@ sticks and other tree products. A bonsai does not need to replace forests or
 make wood acquisition trivial. It can turn clay, metal, space, and time into a
 supplemental supply.
 
+## No Tree Punching
+
+No Tree Punching is a reference for making wood, plants, gravel, and flint
+participate in the opening rather than becoming disposable scenery.
+
+The strongest ideas for this project are:
+
+- Knives as a persistent lightweight tool category
+- Flint knives as an immediate use for gravel
+- Cutting plants into fiber
+- Crafting string from plant fiber
+- Saws as a possible way to improve wood yield
+
+The full primitive-survival premise is not the target. Knapping, forbidding
+ordinary tree punching, aggressive baseline wood nerfs, and additional crafting
+rituals require separate justification. The useful lesson is that simple tools
+can give familiar resources meaningful jobs—not that the player must complete a
+ceremony before Minecraft begins.
+
 ## Synthesis
 
 The intended synthesis is:
@@ -75,6 +94,8 @@ The intended synthesis is:
 - **Older Metallurgy** expands that vocabulary into an interconnected ecosystem.
 - **Divergent Underground** makes access to that ecosystem a physical
   progression.
+- **No Tree Punching** supplies selective primitive resource logic for flint,
+  plants, string, and wood processing.
 - **Bonsai Trees** supplies a reference for small-scale, physical resource
   automation.
 - **Material Progression** tests how those ideas can become one deliberate,

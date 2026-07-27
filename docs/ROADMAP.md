@@ -23,6 +23,37 @@ Questions it should answer:
 
 Nothing about this experiment is protected from replacement.
 
+## Candidate experiment: primitive resources
+
+Test the smallest opening loop that gives gravel, flint, plants, and string
+distinct roles:
+
+> Find exposed gravel -> obtain flint -> craft a knife -> cut plants -> make
+> plant fiber -> craft string
+
+The experiment should compare stone and flint tool profiles, with flint
+currently expected to trade durability for speed or damage. It must test both
+premium performance at the stone harvest tier and a narrow intermediate harvest
+capability for flint. It should also determine which plants produce fiber,
+whether knives continue through metal families, and whether the loop is
+understandable without a guide.
+
+Knapping is not part of the current candidate. The goal is useful primitive
+resources, not a longer ritual before ordinary play.
+
+## Candidate experiment: cave-biome resources
+
+Test clay and gravel distribution as parts of cave ecology:
+
+- Abundant, reliable clay in lush caves
+- Smaller clay pockets in other wet caves
+- Exposed gravel deposits that make flint discoverable
+- Little or no equivalent clay in environments where it does not visually fit
+
+The experiment should answer whether cave identity changes route choice and
+whether lush-cave clay makes pottery infrastructure accessible without making
+clay globally uniform.
+
 ## Candidate experiment: meaningful geology
 
 Build the smallest possible geology prototype capable of comparing:
@@ -102,6 +133,17 @@ The experiment should determine:
 - Whether the loop remains legible without a power system or complex interface
 - Whether its output meaningfully supports metallurgy rather than existing as
   unrelated convenience content
+
+## Candidate experiment: saws and wood efficiency
+
+Test whether saws create a satisfying active wood-processing role:
+
+> Harvest logs -> process them with a saw -> receive better yield
+
+The first comparison should preserve vanilla baseline plank output and treat the
+saw as a bonus. Baseline output reductions should only be tested if the bonus
+model cannot create a meaningful reward. The experiment should keep axes,
+saws, and bonsai distinct: harvesting speed, active yield, and passive supply.
 
 ## Candidate experiment: magical metallurgy
 
