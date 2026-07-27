@@ -67,6 +67,46 @@ sticks and other tree products. A bonsai does not need to replace forests or
 make wood acquisition trivial. It can turn clay, metal, space, and time into a
 supplemental supply.
 
+## No Tree Punching
+
+No Tree Punching is a reference for making wood, plants, gravel, and flint
+participate in the opening rather than becoming disposable scenery.
+
+The strongest ideas for this project are:
+
+- Preventing logs from being harvested by hand as a configurable rule
+- A flint hatchet as the first route into wood
+- Loose rocks as a world-space primitive resource
+- Knives as a persistent lightweight tool category
+- Flint knives as an immediate use for gravel
+- Cutting plants into fiber
+- Crafting string from plant fiber
+- Saws as a possible way to improve wood yield
+
+The important departure is the first-flint gate. In No Tree Punching, loose
+rocks can support later flint tools, but a player still needs randomly obtained
+flint to make the first knife that cuts them into shards. This project removes
+that dependency: one loose rock already fills the role of one flint shard, one
+flint produces two shards, and any four rocks or shards can form cobblestone.
+
+That deterministic bootstrap makes configurable tree-punching prevention much
+more attractive. The player must gather a sharp stone and a stick before
+harvesting the first tree, but world generation and flint-drop luck cannot make
+the run impossible. Knapping, aggressive baseline wood nerfs, and additional
+crafting rituals still require separate justification.
+
+The first hatchet is correspondingly direct: one rock or shard beside a
+two-stick handle in an upside-down L in the 2x2 crafting grid. It is an axe
+recipe with the top row removed, not a bound survival tool, so string is not
+required before the knife can make plant fiber.
+
+The useful lesson is that simple tools can give familiar resources meaningful
+jobs. The project keeps that progression while removing ceremony and blockers
+that exist before the player has agency. Divergent Underground's loose-rock
+stone drops complete the same loop from the opposite direction: wood requires a
+cutting tool, while stone yields pieces that must be accumulated or used as
+primitive edges.
+
 ## Synthesis
 
 The intended synthesis is:
@@ -75,6 +115,8 @@ The intended synthesis is:
 - **Older Metallurgy** expands that vocabulary into an interconnected ecosystem.
 - **Divergent Underground** makes access to that ecosystem a physical
   progression.
+- **No Tree Punching** supplies selective primitive resource logic for flint,
+  plants, string, and wood processing.
 - **Bonsai Trees** supplies a reference for small-scale, physical resource
   automation.
 - **Material Progression** tests how those ideas can become one deliberate,

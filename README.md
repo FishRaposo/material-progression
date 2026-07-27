@@ -24,9 +24,19 @@ instead of the optimal move five minutes into a world.
 
 - **The underground participates in progression.** Solid geology resists early
   tools, while caves and structures provide natural routes through it.
+- **Primitive resources matter before metallurgy.** Loose rocks and flint
+  shards bootstrap tools deterministically; knives, plant fiber, cave-biome clay
+  and gravel, and possible saws give wood, stone, and plants useful roles.
+- **Natural openings matter until tools create new ones.** A configurable
+  tree-punching rule can make forests physical obstacles, while resistant
+  geology makes mountains expensive to tunnel through.
 - **Tool tiers change player agency.** A better pickaxe does not merely unlock a
   colored ore; it changes what parts of the world can be reached and reshaped
   economically.
+- **Tools grant material interactions.** Hatchets access wood, knives turn
+  plants into fiber, saws may improve wood yield, and picks progressively
+  overcome geology instead of merely repeating the same tool with larger
+  numbers.
 - **Materials form a network, not a disposable ladder.** Mundane metals, alloy
   ingredients, specialist materials, and capstones can remain relevant for
   different reasons.
@@ -46,6 +56,7 @@ Read the complete living design:
 - [Vision](docs/VISION.md)
 - [Design principles](docs/DESIGN_PRINCIPLES.md)
 - [Underground and geology](docs/GEOLOGY.md)
+- [Primitive resources and tools](docs/PRIMITIVE_RESOURCES.md)
 - [Metallurgy and material families](docs/METALLURGY.md)
 - [Workshop infrastructure and automation](docs/INFRASTRUCTURE.md)
 - [Enchantability and magical metallurgy](docs/ENCHANTING.md)

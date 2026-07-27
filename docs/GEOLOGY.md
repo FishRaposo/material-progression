@@ -26,21 +26,60 @@ Natural underground blocks may differ by:
 
 Exact formulas and layer counts are deliberately undecided.
 
+Geology also includes exposed, non-metal resources. Clay and gravel should not
+be distributed independently of the spaces around them. Cave biome, moisture,
+water, and exposure can give them recognizable environmental homes.
+
+Ordinary stone should participate in the primitive material loop as well.
+Rather than dropping a ready-made cobblestone block, mined stone can drop loose
+rocks. One rock can substitute directly for one flint shard in primitive tool
+recipes, while any four rocks or shards can be consolidated into cobblestone.
+This connects the loose rocks gathered on the surface to the stone the player
+later excavates instead of treating them as a disposable starting currency.
+
+## Cave biomes as resource biomes
+
+The shape of a cave matters, but its ecological identity should matter too.
+
+Lush caves should be the premier underground clay source. Vanilla already gives
+them wet floors, pools, and clay as part of their visual language; the intended
+change is to make that supply abundant and reliable enough to support pottery
+and bonsai infrastructure. Discovering a lush cave should plausibly mean
+"pottery is solved."
+
+Other wet caves may contain smaller clay pockets around cave floors and
+underground water. Dry caves should not receive equivalent deposits merely for
+uniformity. The world should communicate where a resource belongs.
+
+Gravel should receive similar treatment. Exposed cave deposits can become
+recognizable sources of flint and therefore primitive tools, knives, plant
+fiber, and string. Exact biome associations, frequencies, and deposit shapes
+remain undecided.
+
+See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the resource
+loops these deposits support.
+
 ## Terrain as progression
 
 The important distinction is between following existing space and creating new
-space.
+space. This principle applies above ground as well as below it.
 
 Early in progression:
 
+- Forest edges and clearings provide routes around wood the player cannot yet
+  harvest efficiently.
 - Exposed deposits are more valuable than buried ones.
 - Caves provide access through rock that is expensive to excavate in bulk.
+- Cave biomes provide recognizable concentrations of clay, gravel, and other
+  non-metal resources.
 - Ravines create vertical routes across geological layers.
 - Mineshafts and underground structures provide pre-cut infrastructure.
 - Route finding and prospecting outperform coordinate-driven tunnelling.
 
 Later in progression:
 
+- Flint hatchets, axes, and possible saws turn forests from obstacles into
+  increasingly efficient resources.
 - Better tools make sustained excavation economical.
 - The player becomes less dependent on natural openings.
 - Strip mining changes from technically possible but foolish to a competitive
@@ -49,6 +88,14 @@ Later in progression:
   workshop that reduces repetitive labor.
 - Mastery feels like increased control over the same world that constrained the
   player earlier.
+
+The shared rule is:
+
+> **Natural openings matter until technology lets the player create new ones.**
+
+A forest cannot simply be punched through before the first cutting tool. A
+mountain cannot simply be strip-mined with primitive excavation tools. The
+player initially works around both, then earns the ability to reshape them.
 
 This relationship is important even for seemingly modest infrastructure. A
 bonsai pot may ask for clay, while automatic collection may ask for a hopper or

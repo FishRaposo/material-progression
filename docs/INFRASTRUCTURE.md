@@ -58,6 +58,11 @@ The bonsai should not trivialize forestry. Its production can be slow enough
 that forests and ordinary tree farms remain valuable, especially when the
 player needs bulk wood. It is background support, not a wooden singularity.
 
+Clay sourcing is part of this loop. Lush caves should be excellent and reliable
+clay sources, while other wet caves may contain smaller deposits. This makes the
+bonsai pot easier to pursue through exploration without reducing it to a free
+opening recipe.
+
 ### Candidate construction and use
 
 A possible progression is:
@@ -84,6 +89,28 @@ The following remain undecided:
 - How modded trees participate
 - Inventory size and overflow behavior
 - Whether a hopper is mandatory or merely one automation option
+
+## Active forestry and saws
+
+A saw is a provisional way for metallurgy to improve active wood processing.
+Rather than merely harvesting trees faster, it could produce more planks or
+wooden components from each log.
+
+The desired distinction is:
+
+- An axe improves harvesting speed.
+- A saw improves active processing yield.
+- A bonsai supplies slow background drops.
+- Hoppers and ducts automate collection and movement.
+
+The current preference is to test bonus saw output before nerfing vanilla's
+baseline wood output. An optional efficiency reward is more likely to feel like
+progress than restoring output that was removed at the beginning. Exact saw
+materials, recipes, interfaces, yields, durability, and even inclusion remain
+undecided.
+
+See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the larger
+relationship between wood, flint, knives, plant fiber, and metallurgy.
 
 ## Hoppers made from multiple metals
 
@@ -156,9 +183,11 @@ Infrastructure gives materials verbs beyond combat and mining:
 
 - Copper can **conduct or route**.
 - Clay can **cultivate or contain**.
+- Flint can **cut**.
+- Plants can **supply fiber**.
 - Workable metals can **collect and transfer**.
 - Stone can **process**.
-- Wood can **store and structure**.
+- Wood can **store, structure, and support**.
 
 These identities do not require every material to have a unique supernatural
 ability. They arise from recipes, physical associations, and positions in the
