@@ -129,11 +129,60 @@ infrastructure role. Current candidates include:
 
 - Hoppers craftable from multiple workable metals
 - Equivalent versus tiered behavior for alternative hoppers
-- Copper ducts for simple item movement
+- Convenient hopper variants for filtering, direction, or throughput
+- Larger chest variants
 - Crusher input and output automation
 
 The experiment should answer whether these blocks make a workshop more capable
-without beginning an electrical or industrial-tech progression.
+without beginning an electrical, industrial-tech, or abstract storage-network
+progression.
+
+## Candidate experiment: bulk-crafting table
+
+Test a stationary alternative to the ordinary crafting table that removes
+recipe-grid conflicts and intermediate-crafting repetition:
+
+> **Select output and quantity -> plan recipe chain -> consume local materials
+> -> return output and surplus**
+
+The first implementation should:
+
+- Treat shaped recipes as ingredient multisets after the player explicitly
+  selects the desired output.
+- Read the player's inventory, an internal buffer, and directly adjacent
+  inventories.
+- Refuse to search recursively through hopper chains or remote storage.
+- Calculate intermediate recipes so logs can satisfy plank or stick costs.
+- Consume existing finished ingredients and partial intermediates before making
+  more.
+- Respect recipe batch sizes and preserve surplus intermediates.
+- Show total material cost, missing requirements, and maximum craftable amount.
+- Execute the full plan transactionally.
+- Choose valid tag materials and alternative recipes automatically.
+- Detect cycles and preserve container remainders.
+- Accept a fixed number of tiered upgrade modules.
+
+Initial upgrade candidates are storage, filtering, material or inventory
+priority, reserved quantities, and saved crafting jobs. Quantity-based upgrades
+may stack, especially storage, while the fixed slot count prevents indefinite
+expansion. Higher tiers should provide more effect per occupied slot.
+
+The experiment should answer:
+
+- Can recursive recipe planning remain predictable across vanilla and modded
+  recipes?
+- Is the planned material preview sufficient before automatic selection?
+- Which inventory should be consumed first by default?
+- How large should the base buffer and fixed upgrade-slot budget be?
+- Which modules stack, and how should tier compression work?
+- Can hoppers supply ingredients and extract output without turning the table
+  into an autonomous factory?
+- Does the traditional crafting table remain preferable for quick portable
+  work?
+
+The bulk-crafting table must remain separate from the manual workshop, furnaces,
+crushers, and bonsai. It automates ordinary crafting decisions and repetition;
+it does not become a universal processing machine.
 
 ## Candidate experiment: manual workshop
 
@@ -249,9 +298,10 @@ test with the production change. The current harness has two layers:
   mining requirements, and enchantability tags.
 
 The Gradle build and GameTest server are separate CI gates. Future loose-rock,
-tree-punching, workshop, hammer, knife, saw, bonsai, logistics, and geology
-implementations should extend the live suite when they are introduced. Tests
-must not pretend that a documented but unimplemented feature exists.
+tree-punching, workshop, hammer, knife, saw, bonsai, logistics, bulk-crafting,
+and geology implementations should extend the live suite when they are
+introduced. Tests must not pretend that a documented but unimplemented feature
+exists.
 
 Human playtesting remains responsible for whether the opening is satisfying,
 durability costs feel fair, terrain creates interesting routes, and interfaces

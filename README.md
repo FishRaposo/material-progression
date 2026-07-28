@@ -42,14 +42,15 @@ instead of the optimal move five minutes into a world.
   different reasons.
 - **Infrastructure gives materials work beyond equipment.** Knives, hammers,
   and saws remain usable in the field but perform their intended processing
-  roles when installed in a manual workshop. Pots, hoppers, ducts, crushers,
-  furnaces, and storage turn metallurgical progress into a more capable base.
+  roles when installed in a manual workshop. Pots, hoppers, hopper variants,
+  crushers, furnaces, storage, and a bulk-crafting table turn metallurgical
+  progress into a more capable base.
 - **Manual and machine processing can be equally productive.** A workshop
   hammer and a fuel-burning crusher both turn one ore into two dust. The choice
   is whether to spend substantial tool durability or fuel.
 - **Automation remains physical and Minecraft-shaped.** The intended vocabulary
-  is blocks, inventories, gravity, fuel, growth, and item movement—not an
-  obligatory electrical grid.
+  is blocks, adjacent inventories, hoppers, gravity, fuel, growth, and item
+  movement—not an obligatory electrical grid or invisible storage network.
 - **Processing must pay for itself.** A step should improve yield, create a new
   material, or unlock a new capability—not exist merely to waste time.
 - **The result should still feel like Minecraft.** Progress happens through
@@ -65,6 +66,7 @@ Read the complete living design:
 - [Workshop infrastructure and automation](docs/INFRASTRUCTURE.md)
 - [Enchantability and magical metallurgy](docs/ENCHANTING.md)
 - [Development directions](docs/ROADMAP.md)
+- [Testing toolkit](docs/TESTING.md)
 - [Inspirations](docs/INSPIRATIONS.md)
 
 ## Current prototype
@@ -102,23 +104,21 @@ Build and run:
 Run the full automated test suite:
 
 ```bash
-python -m unittest discover -s tests -p 'test_*.py' -v
-./gradlew build
-./gradlew runGameTestServer
+./gradlew headlessTest
 ```
 
 The Python contracts validate resources, recipes, translations, world-generation
 wiring, and documentation links. The GameTest server loads the real mod and
 exercises crusher processing, fuel requirements, sided inventory, block drops,
 tool durability, and gameplay tags. GameTest code is development-only and is
-not packaged in the production mod JAR.
+not packaged in the production mod JAR. See the
+[testing toolkit guide](docs/TESTING.md) for the reusable fixtures, content
+catalog, focused commands, and extension conventions.
 
 On Windows:
 
 ```powershell
-python -m unittest discover -s tests -p "test_*.py" -v
-./gradlew.bat build
-./gradlew.bat runGameTestServer
+./gradlew.bat headlessTest
 ./gradlew.bat runClient
 ```
 

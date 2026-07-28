@@ -191,7 +191,8 @@ only by a harvest tier and a column of statistics.
   stone to gravel and gravel to sand at a workshop.
 - A pick determines which geology can be exploited and whether sustained
   excavation is economical.
-- Hoppers and ducts turn workable metals into collection and movement.
+- Hoppers and hopper variants turn workable metals into collection and
+  movement.
 - Bonsai converts pottery, planting material, time, and collection
   infrastructure into supplemental tree products.
 
@@ -273,7 +274,7 @@ One candidate relationship is:
 - Axes make tree harvesting faster.
 - Saws produce more planks or components from each log.
 - Bonsai provide a slow background supply of tree drops.
-- Hoppers and ducts collect and route those products.
+- Hoppers and hopper variants collect and route those products.
 
 Those are complementary tools rather than replacements for one another. A saw
 can harvest like an axe in the field and rewards active forestry through
@@ -355,8 +356,8 @@ Primitive resources connect the two main systems before the first alloy exists:
 8. These resources support exploration and the first workshop.
 9. Copper, tin, and bronze then expand the player's authority over harder
    geology and more capable tools.
-10. Saws, bonsai, hoppers, and ducts eventually turn material access into
-   resource efficiency and automation.
+10. Saws, bonsai, hoppers, hopper variants, and local bulk crafting eventually
+   turn material access into resource efficiency and automation.
 
 No Tree Punching-style resource logic and Divergent Underground-style geology
 therefore reinforce each other. A player cannot punch through a forest or strip

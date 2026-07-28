@@ -53,8 +53,7 @@ The roster can contain materials whose primary value is relational:
 
 - **Tin** may be a modest early material and an ingredient in bronze.
 - **Copper** may be accessible early, support infrastructure, and remain useful
-  through several alloys. Copper ducts are one candidate expression of that
-  infrastructure role.
+  through several alloys.
 - **Zinc** may principally justify itself through brass.
 - **Nickel** or **manganese** may principally exist to open later alloy paths.
 
@@ -131,9 +130,8 @@ Materials can remain useful by becoming parts of the workshop:
 - A hopper can plausibly be fabricated from more than iron.
 - Different workable metals may provide equivalent hopper recipes or distinct
   hopper tiers.
-- Copper ducts may provide simple item transport.
-- Crushers, furnaces, storage, and collection blocks can create continuing
-  demand for base metals.
+- Crushers, furnaces, storage, collection blocks, hopper variants, and
+  bulk-crafting upgrades can create continuing demand for base metals.
 - Knives and possible saws can make a material useful for plant harvesting,
   crafting, or wood efficiency even when its mining tools are obsolete.
 - Hammers can perform deliberate stone-to-gravel and gravel-to-sand processing,

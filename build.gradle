@@ -156,6 +156,29 @@ tasks.named('check').configure {
     dependsOn tasks.named('gameTestClasses')
 }
 
+def contractTest = tasks.register('contractTest', Exec) {
+    group = 'verification'
+    description = 'Runs the fast resource and documentation contracts.'
+    commandLine 'python', '-m', 'unittest', 'discover',
+            '-s', 'tests', '-p', 'test_*.py', '-v'
+}
+
+tasks.register('headlessTest') {
+    group = 'verification'
+    description = 'Runs contracts, the complete build, and live NeoForge GameTests.'
+    dependsOn contractTest
+    dependsOn tasks.named('build')
+    dependsOn tasks.named('runGameTestServer')
+}
+
+tasks.named('build').configure {
+    mustRunAfter contractTest
+}
+
+tasks.named('runGameTestServer').configure {
+    mustRunAfter tasks.named('build')
+}
+
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

@@ -46,6 +46,11 @@ observable data-pack and resource-pack contracts without booting Minecraft:
 These tests use hand-written expected values for progression rules. They do not
 derive expected values from the files being tested.
 
+The expected content lives in a declarative catalog, while shared resource
+loading and path handling live in test-support utilities. Adding another item
+or recipe should usually add a catalog entry rather than duplicate assertion
+logic.
+
 ### NeoForge integration tests
 
 The NeoForge Test Framework runs inside the GameTest server. Tests use the real
@@ -65,11 +70,19 @@ The GameTest server also provides a full mod-loading and data-pack-loading smoke
 test. A malformed registry, recipe, tag, loot table, or world-generation file
 fails before behavioral assertions run.
 
+GameTests are split by gameplay system. Shared assertions and block-entity
+placement live in generic support, while repeated system setup lives in a small
+fixture owned by that system. New features add focused test classes and
+fixtures rather than extending one monolithic suite.
+
 ### Build verification
 
 The existing Gradle build remains mandatory. It proves Java compilation,
 resource processing, packaging, and metadata expansion. It does not replace the
 resource or in-game tests.
+
+One `headlessTest` task composes contracts, the build, and the live GameTest
+server. Each layer remains independently runnable for fast iteration.
 
 ## CI
 
@@ -94,4 +107,3 @@ playtesting questions:
 - Whether interfaces communicate the intended physical fantasy
 
 The roadmap should record these separately from automated acceptance criteria.
-

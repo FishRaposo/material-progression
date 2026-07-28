@@ -1,74 +1,21 @@
-import json
 import unittest
 from pathlib import Path
 
+from content_contracts import (
+    CRUSHING_RECIPES,
+    SHIPPED_BLOCKS,
+    SHIPPED_ITEMS,
+    SMELTING_RECIPES,
+    TOOL_FAMILIES,
+)
+from support.resources import RecipeContract, ResourceTree
+
 
 ROOT = Path(__file__).resolve().parents[1]
-RESOURCES = ROOT / "src" / "main" / "resources"
-DATA = RESOURCES / "data" / "material_progression"
-ASSETS = RESOURCES / "assets" / "material_progression"
-
-SHIPPED_ITEMS = {
-    "bronze_axe",
-    "bronze_dust",
-    "bronze_hoe",
-    "bronze_ingot",
-    "bronze_pickaxe",
-    "bronze_shovel",
-    "bronze_sword",
-    "copper_dust",
-    "crusher",
-    "deepslate_tin_ore",
-    "raw_tin",
-    "tin_axe",
-    "tin_dust",
-    "tin_hoe",
-    "tin_ingot",
-    "tin_ore",
-    "tin_pickaxe",
-    "tin_shovel",
-    "tin_sword",
-}
-
-SHIPPED_BLOCKS = {"crusher", "deepslate_tin_ore", "tin_ore"}
-
-CRUSHING_CONTRACTS = {
-    "crushing_copper_ore": ("#minecraft:copper_ores", "copper_dust"),
-    "crushing_raw_copper": ("minecraft:raw_copper", "copper_dust"),
-    "crushing_raw_tin": ("material_progression:raw_tin", "tin_dust"),
-    "crushing_tin_ore": ("#material_progression:tin_ores", "tin_dust"),
-}
-
-SMELTING_CONTRACTS = {
-    "smelting_bronze_dust": ("material_progression:bronze_dust", "material_progression:bronze_ingot"),
-    "smelting_copper_dust": ("material_progression:copper_dust", "minecraft:copper_ingot"),
-    "smelting_raw_tin": ("material_progression:raw_tin", "material_progression:tin_ingot"),
-    "smelting_tin_dust": ("material_progression:tin_dust", "material_progression:tin_ingot"),
-}
-
-TIN_TOOLS = {"tin_sword", "tin_pickaxe", "tin_axe", "tin_shovel", "tin_hoe"}
-BRONZE_TOOLS = {
-    "bronze_sword",
-    "bronze_pickaxe",
-    "bronze_axe",
-    "bronze_shovel",
-    "bronze_hoe",
-}
-
-
-def load_json(path: Path):
-    with path.open(encoding="utf-8") as source:
-        return json.load(source)
-
-
-def ingredient_id(recipe: dict) -> str:
-    ingredient = recipe["ingredient"]
-    if not isinstance(ingredient, str):
-        raise AssertionError(
-            "Minecraft 26.2 ingredients must use the string form, "
-            f"got {ingredient!r}"
-        )
-    return ingredient
+TREE = ResourceTree(ROOT, "material_progression")
+RESOURCES = TREE.resources
+DATA = TREE.data
+ASSETS = TREE.assets
 
 
 class ResourceContractTests(unittest.TestCase):
@@ -78,11 +25,13 @@ class ResourceContractTests(unittest.TestCase):
 
         for path in json_files:
             with self.subTest(path=path.relative_to(ROOT)):
-                load_json(path)
+                TREE.load_json(path)
 
     def test_every_shipped_item_has_models_and_translations(self):
-        english = load_json(ASSETS / "lang" / "en_us.json")
-        portuguese = load_json(ASSETS / "lang" / "pt_br.json")
+        english = TREE.load_json(ASSETS / "lang" / "en_us.json")
+        portuguese = TREE.load_json(ASSETS / "lang" / "pt_br.json")
+        item_models = TREE.names_matching(ASSETS / "items", "*.json")
+        self.assertEqual(SHIPPED_ITEMS, item_models)
 
         for item in SHIPPED_ITEMS:
             with self.subTest(item=item):
@@ -95,44 +44,36 @@ class ResourceContractTests(unittest.TestCase):
                 self.assertTrue(portuguese[translation_key].strip())
 
     def test_every_shipped_block_has_blockstate_and_loot(self):
+        blockstates = TREE.names_matching(ASSETS / "blockstates", "*.json")
+        self.assertEqual(SHIPPED_BLOCKS, blockstates)
+
         for block in SHIPPED_BLOCKS:
             with self.subTest(block=block):
                 self.assertTrue((ASSETS / "blockstates" / f"{block}.json").is_file())
-                loot = load_json(DATA / "loot_table" / "blocks" / f"{block}.json")
+                loot = TREE.load_json(
+                    DATA / "loot_table" / "blocks" / f"{block}.json"
+                )
                 self.assertEqual("minecraft:block", loot["type"])
 
     def test_crushing_recipes_match_two_dust_contract(self):
         recipe_dir = DATA / "recipe"
-        actual_names = {
-            path.stem for path in recipe_dir.glob("crushing_*.json")
-        }
-        self.assertEqual(set(CRUSHING_CONTRACTS), actual_names)
+        actual_names = TREE.names_matching(recipe_dir, "crushing_*.json")
+        self.assertEqual(set(CRUSHING_RECIPES), actual_names)
 
-        for name, (expected_input, expected_output) in CRUSHING_CONTRACTS.items():
+        for name, contract in CRUSHING_RECIPES.items():
             with self.subTest(recipe=name):
-                recipe = load_json(recipe_dir / f"{name}.json")
-                self.assertEqual("material_progression:crushing", recipe["type"])
-                self.assertEqual(expected_input, ingredient_id(recipe))
-                self.assertEqual(
-                    {
-                        "count": 2,
-                        "id": f"material_progression:{expected_output}",
-                    },
-                    recipe["result"],
-                )
-                self.assertEqual(200, recipe["cookingtime"])
+                self.assert_recipe_matches(name, contract)
 
     def test_smelting_recipes_preserve_material_flow(self):
-        recipe_dir = DATA / "recipe"
-        for name, (expected_input, expected_output) in SMELTING_CONTRACTS.items():
+        actual_names = TREE.names_matching(DATA / "recipe", "smelting_*.json")
+        self.assertEqual(set(SMELTING_RECIPES), actual_names)
+
+        for name, contract in SMELTING_RECIPES.items():
             with self.subTest(recipe=name):
-                recipe = load_json(recipe_dir / f"{name}.json")
-                self.assertEqual("minecraft:smelting", recipe["type"])
-                self.assertEqual(expected_input, ingredient_id(recipe))
-                self.assertEqual({"id": expected_output}, recipe["result"])
+                self.assert_recipe_matches(name, contract)
 
     def test_bronze_alloy_recipe_preserves_three_to_one_ratio(self):
-        recipe = load_json(DATA / "recipe" / "bronze_dust.json")
+        recipe = TREE.recipe("bronze_dust")
         self.assertEqual("minecraft:crafting_shapeless", recipe["type"])
         self.assertEqual(
             [
@@ -149,8 +90,10 @@ class ResourceContractTests(unittest.TestCase):
         )
 
     def test_tool_repair_and_enchantment_tags_cover_every_tool(self):
-        tin_repairs = load_json(DATA / "tags" / "item" / "repairs_tin_tools.json")
-        bronze_repairs = load_json(
+        tin_repairs = TREE.load_json(
+            DATA / "tags" / "item" / "repairs_tin_tools.json"
+        )
+        bronze_repairs = TREE.load_json(
             DATA / "tags" / "item" / "repairs_bronze_tools.json"
         )
         self.assertEqual(["material_progression:tin_ingot"], tin_repairs["values"])
@@ -159,25 +102,30 @@ class ResourceContractTests(unittest.TestCase):
         )
 
         minecraft_tags = RESOURCES / "data" / "minecraft" / "tags" / "item"
-        durability = load_json(minecraft_tags / "enchantable" / "durability.json")
+        durability = TREE.load_json(
+            minecraft_tags / "enchantable" / "durability.json"
+        )
         tagged_tools = {
             value.removeprefix("material_progression:")
             for value in durability["values"]
         }
-        self.assertEqual(TIN_TOOLS | BRONZE_TOOLS, tagged_tools)
+        all_tools = set().union(*TOOL_FAMILIES.values())
+        self.assertEqual(all_tools, tagged_tools)
 
-        mining = load_json(minecraft_tags / "enchantable" / "mining.json")
+        mining = TREE.load_json(minecraft_tags / "enchantable" / "mining.json")
         mining_tools = {
             value.removeprefix("material_progression:")
             for value in mining["values"]
         }
         self.assertEqual(
-            (TIN_TOOLS | BRONZE_TOOLS) - {"tin_sword", "bronze_sword"},
+            all_tools - {"tin_sword", "bronze_sword"},
             mining_tools,
         )
 
     def test_crusher_inputs_tag_matches_crushing_recipe_inputs(self):
-        crusher_inputs = load_json(DATA / "tags" / "item" / "crusher_inputs.json")
+        crusher_inputs = TREE.load_json(
+            DATA / "tags" / "item" / "crusher_inputs.json"
+        )
         self.assertEqual(
             {
                 "minecraft:raw_copper",
@@ -191,9 +139,15 @@ class ResourceContractTests(unittest.TestCase):
         )
 
     def test_tin_worldgen_resources_form_a_complete_chain(self):
-        configured = load_json(DATA / "worldgen" / "configured_feature" / "tin_ore.json")
-        placed = load_json(DATA / "worldgen" / "placed_feature" / "tin_ore.json")
-        modifier = load_json(DATA / "neoforge" / "biome_modifier" / "add_tin_ore.json")
+        configured = TREE.load_json(
+            DATA / "worldgen" / "configured_feature" / "tin_ore.json"
+        )
+        placed = TREE.load_json(
+            DATA / "worldgen" / "placed_feature" / "tin_ore.json"
+        )
+        modifier = TREE.load_json(
+            DATA / "neoforge" / "biome_modifier" / "add_tin_ore.json"
+        )
 
         target_blocks = {
             target["state"]["Name"] for target in configured["config"]["targets"]
@@ -209,6 +163,21 @@ class ResourceContractTests(unittest.TestCase):
         self.assertEqual("material_progression:tin_ore", modifier["features"])
         self.assertEqual("#minecraft:is_overworld", modifier["biomes"])
         self.assertEqual("underground_ores", modifier["step"])
+
+    def assert_recipe_matches(
+        self, name: str, contract: RecipeContract
+    ) -> None:
+        recipe = TREE.recipe(name)
+        self.assertEqual(contract.recipe_type, recipe["type"])
+        self.assertEqual(contract.ingredient, TREE.ingredient_id(recipe))
+
+        expected_result = {"id": contract.result}
+        if contract.count != 1:
+            expected_result["count"] = contract.count
+        self.assertEqual(expected_result, recipe["result"])
+
+        if contract.cooking_time is not None:
+            self.assertEqual(contract.cooking_time, recipe["cookingtime"])
 
 
 if __name__ == "__main__":

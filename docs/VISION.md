@@ -37,8 +37,8 @@ The intended rhythm is approximately:
 8. Develop from opportunistic cave mining into sustained excavation.
 9. Earn efficient strip mining as a late capability.
 10. Turn clay, wood, and metals into a workshop that supports manual
-   tool-assisted processing before automating repetitive supply and item
-   handling.
+   tool-assisted processing before automating repetitive supply, item handling,
+   and bulk crafting.
 11. Continue material progression through specialization and magical metallurgy,
    not only larger durability and mining-speed numbers.
 
@@ -55,8 +55,8 @@ Knowledge remains useful, but coordinates alone should not erase progression.
 - A deterministic primitive layer in which loose rocks, flint, plants, wood,
   clay, and gravel create useful choices before metallurgy
 - A material graph with overlapping paths and long-lived ingredients
-- A modest workshop progression of hand tools, pots, hoppers, ducts, processors,
-  storage, and physical automation
+- A modest workshop progression of hand tools, pots, hoppers, processors,
+  storage, a bulk-crafting table, and physical automation
 - A bridge from mundane metallurgy to enchantability and artifact crafting
 
 ## What the mod is not trying to become
@@ -171,8 +171,11 @@ The current direction uses deliberately ordinary Minecraft objects:
   metal infrastructure.
 - **Alternative-metal hoppers** question vanilla's arbitrary iron exclusivity
   and give workable metals another continuing use.
-- **Copper ducts** extend item movement through a material whose physical
-  fantasy already fits a conduit.
+- **Hopper variants and larger chests** improve local storage and movement
+  without creating an abstract logistics network.
+- **A bulk-crafting table** selects recipes explicitly, plans intermediate
+  crafts, and consumes materials from the player, its own buffer, and directly
+  adjacent inventories.
 - **Crushers and furnaces** remain fuel-burning processing blocks rather than
   excuses to introduce electricity.
 
@@ -205,9 +208,19 @@ cultivation remains in bonsai.
 
 None of those implementations is fixed. Bonsai output may be manual before a
 hopper is added; hoppers may be equivalent across materials or divided into
-tiers; ducts may be limited or omitted after testing. The durable idea is that
+variants; and bulk-crafting upgrades require testing. The durable idea is that
 automation should be assembled from resources the player physically earned and
-should remain legible as Minecraft machinery.
+should remain legible as Minecraft machinery rather than becoming a remote
+storage network.
+
+The bulk-crafting table is distinct from the manual workshop. It handles
+ordinary recipes by explicit output selection, so recipe-shape conflicts cannot
+make the wrong item. For bulk jobs it recursively resolves intermediate recipes:
+logs can satisfy a request for sticks by becoming planks first. Its reach stops
+at the player's inventory, its internal buffer, and directly adjacent
+inventories. Fixed upgrade slots accept tiered modules for storage, filtering,
+priority, reservation, and recipe memory, allowing specialization without
+unbounded capacity.
 
 The bonsai illustrates the intended economy particularly well. It does not give
 the player free wood. The player acquires clay, makes the pot, provides a tree
@@ -227,6 +240,7 @@ early routes. Hatchets, axes, saws, and stronger picks gradually turn those
 obstacles into resources.
 
 The exact stones, strata, metals, recipes, tiers, dimensions, and pacing remain
-open design questions. The same is true of bonsai, hopper variants, ducts, and
-all automation details. Even the currently implemented bronze slice is an
-experiment used to learn what the final loop should be.
+open design questions. The same is true of bonsai, hopper variants, larger
+chests, bulk-crafting upgrades, and other automation details. Even the currently
+implemented bronze slice is an experiment used to learn what the final loop
+should be.

@@ -125,9 +125,8 @@ ordinary combat and harvesting tools. The governing distinction is:
 > **Outside the workshop, tools harvest. Inside the workshop, tools process.**
 
 An infrastructure recipe should follow the physical fantasy of the block.
-Hoppers are item funnels, not intrinsically iron objects; copper is a natural
-candidate for ducts because it already reads as a workable conduit material.
-Exact recipes and material equivalences remain design questions.
+Hoppers are item funnels, not intrinsically iron objects. Exact recipes,
+material equivalences, and useful hopper variants remain design questions.
 
 ## 13. Automation is earned relief
 
@@ -151,28 +150,43 @@ rewards. Making a saw useful by improving wood yield is preferable to making
 ordinary crafting feel deliberately broken unless testing demonstrates that a
 lower baseline improves the entire progression.
 
-## 15. Trade-offs beat universal best-in-slot
+## 15. Bulk crafting should remove repetition, not logistics
+
+The bulk-crafting table should replace recipe-grid busywork with explicit
+intent. The player selects an output and quantity; the table plans the required
+recipe chain, counts ingredients in its own buffer, the player's inventory, and
+directly adjacent inventories, then performs the craft as one transaction.
+Explicit output selection resolves shaped-recipe conflicts without changing the
+recipes themselves.
+
+The table should not become an abstract storage network. Chests make materials
+locally available, while hoppers and hopper variants move them into that local
+workspace. Upgrade modules can expand capacity and control automatic material
+selection, but fixed upgrade slots impose a hard limit and force trade-offs
+between storage and intelligence.
+
+## 16. Trade-offs beat universal best-in-slot
 
 Where practical, materials should occupy different profiles: accessibility,
 durability, speed, harvest capability, enchantability, repair economy, or
 specialized use. Capstones may be intentionally extreme, but reaching one should
 not flatten every other decision by accident.
 
-## 16. Physical rules should be legible
+## 17. Physical rules should be legible
 
 Players should learn by interacting with blocks and tools. A cave wall being
 easier to exploit than fully enclosed stone is more Minecraft-shaped than a
 hidden character level. Recipes and material properties should teach the system
 without requiring a wiki open at all times.
 
-## 17. Player construction should not be punished
+## 18. Player construction should not be punished
 
 Natural geology may have progression-sensitive hardness. Blocks placed for
 building should remain reasonable to remove. The system exists to make
 exploration and excavation meaningful, not to make correcting a misplaced block
 tedious.
 
-## 18. The design remains revisable
+## 19. The design remains revisable
 
 Implementation proves feasibility, not correctness. Current content may be
 deleted, reordered, or rebuilt if it fails the principles above during

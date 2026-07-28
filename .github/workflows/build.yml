@@ -23,7 +23,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Validate resources and documentation
-        run: python -m unittest discover -s tests -p 'test_*.py' -v
+        run: ./gradlew contractTest --stacktrace
 
       - name: Build with Gradle
         run: ./gradlew build --stacktrace

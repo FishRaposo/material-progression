@@ -16,12 +16,15 @@ vocabulary is recognizably Minecraft:
 - Pots
 - Saplings and soils
 - Chests and other inventories
-- Hoppers and funnels
-- Ducts or chutes
+- Hoppers and convenient hopper variants
 - Crushers and furnaces
+- A local bulk-crafting table
 - Fuel, gravity, growth, and elapsed time
 
-No electrical grid is required to justify these systems.
+No electrical grid, recursive pipe network, or abstract storage system is
+required to justify these systems. Logistics should remain shallow: inventories
+store items, adjacent blocks can use them, and hoppers physically move items
+where they need to go.
 
 ## The workshop block
 
@@ -107,7 +110,9 @@ It does not absorb every processing system:
 - Heating and smelting remain in furnaces.
 - Alloying remains in its appropriate metallurgical process.
 - Passive cultivation remains in bonsai.
-- Item movement remains the job of hoppers, ducts, and inventories.
+- Item movement remains the job of hoppers and inventories.
+- Ordinary recipe planning and bulk production remain the job of the
+  bulk-crafting table.
 
 These boundaries preserve the physical fantasy of each block and prevent the
 workshop from becoming a universal recipe menu.
@@ -147,6 +152,126 @@ Automation should:
 - Produce understandable inputs and outputs.
 - Remain useful without becoming the only rational way to obtain a resource.
 - Connect to the workshop rather than exist as an isolated convenience menu.
+
+## Bulk-crafting table
+
+The bulk-crafting table is an alternative interface for ordinary crafting. It
+does not replace the player's 2x2 grid or the traditional crafting table.
+Instead, it removes two forms of friction when the player deliberately builds a
+permanent crafting station:
+
+- Recipe conflicts caused by different shaped recipes using the same materials
+- Repetitive intermediate crafting when producing items in bulk
+
+The player selects the desired output and quantity. The table treats a shaped
+recipe as a multiset of ingredients rather than asking the player to position
+those ingredients in a grid. Because the output is selected explicitly, two
+recipes can require the same ingredient totals without ambiguity.
+
+### Local inventory boundary
+
+The table can source materials from:
+
+- The player's inventory
+- Its internal working inventory
+- Directly adjacent chests and other supported inventories
+
+It does not recursively search through hopper chains, remote containers, or an
+abstract storage network. A chest touching the table is available; a distant
+chest must feed the local workspace through hoppers or hopper variants. Hoppers
+can keep the table supplied and extract completed products.
+
+This boundary makes larger chests and improved item movement useful without
+turning the table into an Applied Energistics-like terminal. The local setup
+remains visible and understandable from the blocks involved.
+
+### Recursive recipe planning
+
+The table resolves craftable intermediates automatically. If the requested
+output requires sticks and the available storage contains logs, it can plan:
+
+> **Logs -> planks -> sticks -> requested output**
+
+Existing finished ingredients are consumed before making more intermediates.
+Existing partial intermediates, such as planks, should also reduce the remaining
+base-material cost. Recipe batch sizes are respected; unavoidable surplus
+intermediates return to the internal inventory rather than disappearing.
+
+Before execution, the interface should show:
+
+- The selected output and requested quantity
+- Total required materials after recursive expansion
+- Which requirements are already available
+- The maximum currently craftable quantity
+- Any missing ingredient or blocked intermediate
+
+The entire plan should execute transactionally. If the complete craft cannot be
+performed, the table must not consume a partial chain and leave the player with
+an unexpected half-crafted result.
+
+Recipes can contain tags, alternative ingredients, multiple ways to make the
+same intermediate, container remainders, and cycles introduced by other mods.
+The planner must choose a valid available route, preserve remainder items, and
+reject cycles rather than recurse forever.
+
+### Automatic material choice
+
+The base table automatically chooses valid materials from its accessible
+inventories. This is essential to its bulk-crafting role: ordinary recipes using
+the plank or log tags should not require the player to select every conversion
+manually.
+
+Automatic choice should remain predictable. A stable default ordering and a
+preview of the planned consumption allow the player to understand what will be
+used. More precise control is provided through upgrades rather than required
+for basic operation.
+
+### Upgrade modules
+
+The table has a fixed number of dedicated upgrade slots. Craftable modules have
+types and tiers, allowing some effects to stack while preventing unlimited
+expansion. The table itself has no material tier ladder; installed modules
+determine what kind of bulk-crafting station it becomes.
+
+Candidate module families are:
+
+- **Storage:** expands the internal ingredient and surplus buffer.
+- **Filter:** adds ingredient whitelists and blacklists.
+- **Priority:** controls which valid materials or accessible inventories are
+  consumed first.
+- **Reservation:** protects configured items or minimum retained quantities.
+- **Memory:** adds saved or favorited bulk-crafting jobs.
+
+Effects with meaningful quantities can stack. Storage is the clearest example:
+players may fill most or all upgrade slots with storage modules to build a large,
+simple bulk crafter. Higher module tiers provide more effect per slot, allowing
+several capabilities to fit within the same hard slot limit. Binary capabilities
+should not gain meaningless duplicate effects.
+
+The fixed slot count creates deliberate specialization:
+
+- A large, mostly automatic material buffer
+- A smaller table with strict filters and reservations
+- A balanced general-purpose station
+
+Exact slot count, module tiers, recipes, effects, and whether higher-tier modules
+are crafted from lower-tier modules remain implementation questions.
+
+### Crafting-table boundaries
+
+The bulk-crafting table handles ordinary recipes and their craftable
+intermediates. It does not absorb every workstation:
+
+- Manual knife, hammer, and saw processing remains in the workshop.
+- Crushing remains in the workshop or crusher.
+- Heating and smelting remain in furnaces.
+- Passive cultivation remains in bonsai.
+- Item movement remains physical through inventories and hoppers.
+
+The traditional crafting table remains the cheap, immediate, portable option.
+The bulk-crafting table earns its place when explicit recipe selection, adjacent
+storage, recursive planning, upgrades, or mass production are worth building
+around.
 
 ## Bonsai
 
@@ -208,7 +333,7 @@ The desired distinction is:
 - An axe improves harvesting speed.
 - A saw improves active processing yield.
 - A bonsai supplies slow background drops.
-- Hoppers and ducts automate collection and movement.
+- Hoppers and hopper variants automate collection and movement.
 
 The current preference is to preserve vanilla's baseline wood output. Workshop
 sawing is an optional efficiency reward, not the restoration of output removed
@@ -244,27 +369,17 @@ Alternative hoppers can:
 - Let regional ore availability produce different but viable workshop paths.
 - Connect early metallurgy directly to storage and processing.
 
-## Copper ducts
+## Shallow logistics
 
-Copper is a natural candidate for basic item ducts. It is workable, visually
-legible, already associated with conduits, and available early enough to support
-a modest logistics system.
+The intended logistics layer is vanilla-scale rather than a duct network.
+Chests, larger chest variants, ordinary hoppers, and useful hopper variants
+should be sufficient to connect storage, processors, bonsai, and the
+bulk-crafting table.
 
-A duct system could move items between inventories without introducing power.
-Its exact behavior is open:
-
-- Directional versus omnidirectional movement
-- Push, pull, or passive routing
-- Transfer speed
-- Filtering
-- Interaction with hoppers
-- Vertical movement
-- Redstone control
-- Whether ducts form networks or operate one block at a time
-
-The system should remain smaller and easier to understand than a full logistics
-network mod. Copper ducts are justified if they help connect crushers, furnaces,
-bonsai, and storage while giving copper a durable infrastructure role.
+Possible hopper improvements include filtering, directionality, throughput, or
+other legible conveniences. Each variant should remain a physical item mover
+with an understandable source and destination. It should not recursively expose
+every connected inventory as one giant storage system.
 
 ## Processing automation
 
@@ -283,7 +398,7 @@ routes a permanent reason to exist without restricting ores by hammer material.
 
 It should be possible to evaluate ordinary Minecraft automation around it:
 
-- A hopper or duct supplies crushable material.
+- A hopper supplies crushable material.
 - Another inventory supplies fuel if the final interface supports it.
 - Output is routed toward alloying, smelting, or storage.
 
@@ -296,7 +411,6 @@ of replacing them with powered machines from an unrelated technology tier.
 
 Infrastructure gives materials verbs beyond combat and mining:
 
-- Copper can **conduct or route**.
 - Clay can **cultivate or contain**.
 - Flint can **cut and separate**.
 - Plants can **supply fiber**.
@@ -324,7 +438,7 @@ Before an infrastructure feature becomes committed content, ask:
 6. Does it supplement active play without making the world irrelevant?
 7. Does it require electricity or machine bureaucracy without a compelling
    reason?
-8. Would a simpler pot, hopper, duct, furnace, or redstone interaction solve the
+8. Would a simpler pot, hopper, chest, furnace, or redstone interaction solve the
    same problem?
 9. If it belongs in the workshop, can the operation be explained by the
    installed hand tool?
@@ -335,9 +449,10 @@ One possible workshop arc is:
 
 > Cave exploration -> clay and accessible metals -> crusher, furnace, and
 > manual workshop -> knives, saws, hammers, and bronze tools -> more capable
-> processing and excavation -> multi-metal hoppers and copper ducts -> automated
-> processing and bonsai collection -> a base that supplies common inputs while
-> the player pursues deeper materials
+> processing and excavation -> larger chests, improved hoppers, and a
+> bulk-crafting table -> automated processing and bonsai collection -> a base
+> that supplies and combines common inputs while the player pursues deeper
+> materials
 
 This is not a roadmap commitment. It is a compact expression of how geology,
 metallurgy, logistics, and resource support could become one continuous
