@@ -6,7 +6,7 @@ on:
       - agent/document-settled-design
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   export:
@@ -27,8 +27,11 @@ jobs:
       - name: Build synchronized distribution JAR
         run: ./gradlew syncDistributionJar --stacktrace
 
-      - name: Upload synchronized JAR
-        uses: actions/upload-artifact@v4
-        with:
-          name: material-progression-synchronized
-          path: dist/material-progression-0.1.0.jar
+      - name: Commit synchronized JAR and remove exporter
+        run: |
+          rm .github/workflows/export-built-jar.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add dist/material-progression-0.1.0.jar .github/workflows/export-built-jar.yml
+          git commit -m "build: synchronize primitive distribution jar"
+          git push origin HEAD:agent/document-settled-design
