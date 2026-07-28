@@ -184,12 +184,13 @@ tasks.named('build').configure {
 def distributionJar = layout.projectDirectory.file(
         "dist/material-progression-${mod_version}.jar"
 )
+def builtJar = tasks.named('jar').flatMap { it.archiveFile }
 
 tasks.register('syncDistributionJar', Sync) {
     group = 'distribution'
     description = 'Builds and refreshes the installable mod JAR tracked in dist/.'
     dependsOn tasks.named('jar')
-    from tasks.named('jar').flatMap { it.archiveFile }
+    from builtJar
     into distributionJar.asFile.parentFile
     rename { distributionJar.asFile.name }
 }
@@ -198,14 +199,14 @@ tasks.register('verifyDistributionJar') {
     group = 'verification'
     description = 'Verifies that dist/ contains the exact current production mod JAR.'
     dependsOn tasks.named('jar')
-    inputs.file tasks.named('jar').flatMap { it.archiveFile }
+    inputs.file builtJar
     inputs.file distributionJar
 
     doLast {
         def expected = distributionJar.asFile
-        def jars = fileTree(expected.parentFile) {
-            include '*.jar'
-        }.files
+        def jars = expected.parentFile.listFiles()
+                .findAll { it.name.endsWith('.jar') }
+                .toSet()
 
         if (jars != [expected] as Set) {
             throw new GradleException(
@@ -213,7 +214,7 @@ tasks.register('verifyDistributionJar') {
             )
         }
 
-        def built = tasks.named('jar').get().archiveFile.get().asFile
+        def built = builtJar.get().asFile
         if (java.nio.file.Files.mismatch(built.toPath(), expected.toPath()) != -1L) {
             throw new GradleException(
                     "${expected.name} is stale; run ./gradlew syncDistributionJar"
