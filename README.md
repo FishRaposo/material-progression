@@ -86,6 +86,21 @@ This is a test bed, not a promised MVP. The current content, balance, art,
 architecture, and even its place in the eventual progression may be replaced.
 Item visuals currently reuse vanilla textures as development placeholders.
 
+## Install
+
+Download [Material Progression 0.1.0](dist/material-progression-0.1.0.jar) and
+place it in the `mods` directory of a Minecraft 26.2 NeoForge instance.
+
+This prototype currently requires:
+
+- Minecraft 26.2
+- NeoForge 26.2.0.35-beta or a compatible 26.2 build
+
+The installable JAR is committed alongside the source and documentation so the
+current prototype can be installed without building it locally. CI also exposes
+the same JAR as the `material-progression-0.1.0` artifact on every successful
+workflow run.
+
 ## Development
 
 Current toolchain:
@@ -122,7 +137,16 @@ On Windows:
 ./gradlew.bat runClient
 ```
 
-The built mod JAR appears in `build/libs`.
+The development build appears in `build/libs`. Maintainers can refresh the
+tracked installable copy after changing the project version or production
+sources with:
+
+```bash
+./gradlew syncDistributionJar
+```
+
+`./gradlew verifyDistributionJar` rejects missing, incorrectly named, or stale
+tracked JARs.
 
 Automated checks establish deterministic correctness. Progression feel,
 interface clarity, and balance still require human playtesting.

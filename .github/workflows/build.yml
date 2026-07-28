@@ -28,8 +28,18 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build --stacktrace
 
+      - name: Verify installable mod JAR
+        run: ./gradlew verifyDistributionJar --stacktrace
+
       - name: Run NeoForge GameTests
         run: ./gradlew runGameTestServer --stacktrace
+
+      - name: Upload installable mod JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: material-progression-0.1.0
+          if-no-files-found: error
+          path: dist/material-progression-0.1.0.jar
 
       - name: Upload GameTest diagnostics
         if: always()
