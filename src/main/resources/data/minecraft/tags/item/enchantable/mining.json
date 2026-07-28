@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "material_progression:flint_hatchet",
     "material_progression:tin_pickaxe",
     "material_progression:tin_axe",
     "material_progression:tin_shovel",

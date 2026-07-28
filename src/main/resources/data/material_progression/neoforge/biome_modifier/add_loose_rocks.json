@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "material_progression:loose_rocks",
+  "step": "vegetal_decoration"
+}

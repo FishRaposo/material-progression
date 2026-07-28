@@ -1,0 +1,25 @@
+{
+  "textures": {
+    "particle": "minecraft:block/oak_log",
+    "stick": "minecraft:block/oak_log"
+  },
+  "elements": [
+    {
+      "from": [2, 0, 7],
+      "to": [14, 2, 9],
+      "rotation": {
+        "origin": [8, 1, 8],
+        "axis": "y",
+        "angle": 22.5
+      },
+      "faces": {
+        "up": {"texture": "#stick"},
+        "down": {"texture": "#stick"},
+        "north": {"texture": "#stick"},
+        "south": {"texture": "#stick"},
+        "west": {"texture": "#stick"},
+        "east": {"texture": "#stick"}
+      }
+    }
+  ]
+}

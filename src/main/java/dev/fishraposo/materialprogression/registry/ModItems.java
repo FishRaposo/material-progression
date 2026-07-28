@@ -21,6 +21,15 @@ public final class ModItems {
             DeferredRegister.create(net.minecraft.core.registries.Registries.CREATIVE_MODE_TAB, MaterialProgression.MOD_ID);
 
     // Provisional MVP balance: tin is deliberately below stone; bronze is an iron-like upgrade.
+    public static final ToolMaterial FLINT = new ToolMaterial(
+            ModTags.INCORRECT_FOR_FLINT_TOOL,
+            64,
+            5.0F,
+            1.5F,
+            5,
+            ModTags.FLINT_SHARDS
+    );
+
     public static final ToolMaterial TIN = new ToolMaterial(
             ModTags.INCORRECT_FOR_TIN_TOOL,
             96,
@@ -45,6 +54,12 @@ public final class ModItems {
     public static final DeferredItem<Item> COPPER_DUST = ITEMS.registerSimpleItem("copper_dust");
     public static final DeferredItem<Item> BRONZE_DUST = ITEMS.registerSimpleItem("bronze_dust");
     public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
+    public static final DeferredItem<Item> ROCK = ITEMS.registerSimpleItem("rock");
+    public static final DeferredItem<Item> FLINT_SHARD = ITEMS.registerSimpleItem("flint_shard");
+
+    public static final DeferredItem<AxeItem> FLINT_HATCHET = ITEMS.registerItem(
+            "flint_hatchet", properties -> new AxeItem(FLINT, 5.0F, -3.2F, properties)
+    );
 
     public static final DeferredItem<Item> TIN_SWORD = ITEMS.registerItem(
             "tin_sword", properties -> new Item(properties.sword(TIN, 3.0F, -2.4F))
@@ -85,6 +100,7 @@ public final class ModItems {
 
     private static final List<DeferredItem<? extends Item>> MATERIAL_ITEMS = List.of(
             RAW_TIN, TIN_INGOT, TIN_DUST, COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,
+            ROCK, FLINT_SHARD, FLINT_HATCHET,
             TIN_SWORD, TIN_PICKAXE, TIN_AXE, TIN_SHOVEL, TIN_HOE,
             BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE
     );

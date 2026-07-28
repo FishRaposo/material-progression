@@ -1,12 +1,16 @@
+import json
 import unittest
 from pathlib import Path
 
 from content_contracts import (
     CRUSHING_RECIPES,
+    PRIMITIVE_RECIPES,
     SHIPPED_BLOCKS,
     SHIPPED_ITEMS,
     SMELTING_RECIPES,
+    SURFACE_WORLDGEN_FEATURES,
     TOOL_FAMILIES,
+    WORLD_ONLY_BLOCKS,
 )
 from support.resources import RecipeContract, ResourceTree
 
@@ -24,11 +28,13 @@ COMMON_ITEM_TAGS = {
     "dusts/tin": ["material_progression:tin_dust"],
     "ingots/bronze": ["material_progression:bronze_ingot"],
     "ingots/tin": ["material_progression:tin_ingot"],
+    "flint_shards": ["material_progression:flint_shard"],
     "ores/tin": [
         "material_progression:tin_ore",
         "material_progression:deepslate_tin_ore",
     ],
     "raw_materials/tin": ["material_progression:raw_tin"],
+    "rocks": ["material_progression:rock"],
 }
 
 COMMON_BLOCK_TAGS = {
@@ -65,6 +71,8 @@ class ResourceContractTests(unittest.TestCase):
                 self.assertTrue(portuguese[translation_key].strip())
 
     def test_every_shipped_block_has_blockstate_and_loot(self):
+        english = TREE.load_json(ASSETS / "lang" / "en_us.json")
+        portuguese = TREE.load_json(ASSETS / "lang" / "pt_br.json")
         blockstates = TREE.names_matching(ASSETS / "blockstates", "*.json")
         self.assertEqual(SHIPPED_BLOCKS, blockstates)
 
@@ -75,6 +83,43 @@ class ResourceContractTests(unittest.TestCase):
                     DATA / "loot_table" / "blocks" / f"{block}.json"
                 )
                 self.assertEqual("minecraft:block", loot["type"])
+                translation_key = f"block.material_progression.{block}"
+                self.assertIn(translation_key, english)
+                self.assertIn(translation_key, portuguese)
+
+    def test_world_only_blocks_have_no_inventory_form(self):
+        item_models = TREE.names_matching(ASSETS / "items", "*.json")
+        self.assertTrue(WORLD_ONLY_BLOCKS.isdisjoint(item_models))
+
+    def test_primitive_recipes_preserve_the_bootstrap(self):
+        for name, expected in PRIMITIVE_RECIPES.items():
+            with self.subTest(recipe=name):
+                self.assertEqual(expected, TREE.recipe(name))
+
+    def test_surface_resources_have_complete_worldgen_chains(self):
+        for name, block_id in SURFACE_WORLDGEN_FEATURES.items():
+            with self.subTest(feature=name):
+                configured = TREE.load_json(
+                    DATA / "worldgen" / "configured_feature" / f"{name}.json"
+                )
+                placed = TREE.load_json(
+                    DATA / "worldgen" / "placed_feature" / f"{name}.json"
+                )
+                modifier = TREE.load_json(
+                    DATA / "neoforge" / "biome_modifier" / f"add_{name}.json"
+                )
+                self.assertEqual("minecraft:random_patch", configured["type"])
+                encoded = json.dumps(configured, sort_keys=True)
+                self.assertIn(block_id, encoded)
+                self.assertEqual(
+                    f"material_progression:{name}",
+                    placed["feature"],
+                )
+                self.assertEqual(
+                    f"material_progression:{name}",
+                    modifier["features"],
+                )
+                self.assertEqual("vegetal_decoration", modifier["step"])
 
     def test_crushing_recipes_match_two_dust_contract(self):
         recipe_dir = DATA / "recipe"
@@ -133,7 +178,7 @@ class ResourceContractTests(unittest.TestCase):
         )
 
         expected_by_type = {
-            "axes": {"tin_axe", "bronze_axe"},
+            "axes": {"flint_hatchet", "tin_axe", "bronze_axe"},
             "hoes": {"tin_hoe", "bronze_hoe"},
             "pickaxes": {"tin_pickaxe", "bronze_pickaxe"},
             "shovels": {"tin_shovel", "bronze_shovel"},

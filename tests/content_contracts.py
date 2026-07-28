@@ -12,7 +12,10 @@ SHIPPED_ITEMS = {
     "copper_dust",
     "crusher",
     "deepslate_tin_ore",
+    "flint_hatchet",
+    "flint_shard",
     "raw_tin",
+    "rock",
     "tin_axe",
     "tin_dust",
     "tin_hoe",
@@ -23,7 +26,44 @@ SHIPPED_ITEMS = {
     "tin_sword",
 }
 
-SHIPPED_BLOCKS = {"crusher", "deepslate_tin_ore", "tin_ore"}
+SHIPPED_BLOCKS = {
+    "crusher",
+    "deepslate_tin_ore",
+    "ground_stick",
+    "loose_rocks",
+    "tin_ore",
+}
+
+WORLD_ONLY_BLOCKS = {"ground_stick", "loose_rocks"}
+
+PRIMITIVE_RECIPES = {
+    "cobblestone_from_rocks": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": ["#c:rocks"] * 4,
+        "result": {"id": "minecraft:cobblestone"},
+    },
+    "flint_hatchet": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["RS", " S"],
+        "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_hatchet"},
+    },
+    "flint_shard_from_flint": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": ["minecraft:flint"],
+        "result": {"count": 2, "id": "material_progression:flint_shard"},
+    },
+    "flint_shard_from_rock": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": ["#c:rocks"],
+        "result": {"id": "material_progression:flint_shard"},
+    },
+}
+
+SURFACE_WORLDGEN_FEATURES = {
+    "ground_stick": "material_progression:ground_stick",
+    "loose_rocks": "material_progression:loose_rocks",
+}
 
 CRUSHING_RECIPES = {
     "crushing_copper_ore": RecipeContract(
@@ -80,6 +120,9 @@ SMELTING_RECIPES = {
 }
 
 TOOL_FAMILIES = {
+    "flint": {
+        "flint_hatchet",
+    },
     "tin": {
         "tin_sword",
         "tin_pickaxe",

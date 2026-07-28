@@ -1,9 +1,10 @@
 # Primitive Resources and Tools
 
-> **Status: designed, not implemented.** Rock and stick roles, the three opening
-> conversions, and the first-tool dependency are current decisions. World
-> generation density, yields beyond those conversions, statistics, and the
-> complete tool roster remain subject to implementation and playtesting.
+> **Status: designed, not implemented.** Rock and stick roles, ground-block
+> behavior, the three opening conversions, the first-tool dependency, and the
+> default log-only harvest rule are current decisions. World generation
+> density, yields beyond those conversions, statistics, and the complete tool
+> roster remain subject to implementation and playtesting.
 
 ## Purpose
 
@@ -71,15 +72,25 @@ Material Progression stick item. Leaves remain a renewable fallback through
 their existing stick drops, and dead bushes remain the dry-biome source.
 
 Ground sticks provide the deterministic opening while leaf drops provide
-continued availability. Exact placement density, pickup interaction, visual
-form, and regeneration remain implementation questions, but the role is
-settled: a reasonable spawn must offer a clear finite route to two sticks
-without asking the player to break leaves repeatedly and wait for random drops.
+continued availability. Loose rocks and ground sticks are low-profile,
+non-colliding ground blocks, similar to tall grass as world objects and vines in
+hand-breaking effort. They persist until collected, have several natural visual
+variants, and exist only as world blocks rather than separate inventory items.
+Loose rocks drop one Rock; ground sticks drop one vanilla stick. A reasonable
+spawn must offer a clear finite route to one Rock and two sticks without asking
+the player to break leaves repeatedly and wait for random drops.
+
+Loose rocks generate broadly on valid solid overworld ground. Ground sticks
+retain a sparse broad distribution so the bootstrap is not biome-gated, with
+patch placement and later biome-density tuning concentrating them beneath trees
+and around shrubs. Both use the reusable surface-resource placement design
+recorded in
+[the ground-resource design](superpowers/specs/2026-07-28-ground-resources-design.md).
 
 ## Configurable tree punching
 
-Preventing logs from being harvested by hand is a strong candidate for the
-default experience, with a configuration toggle for compatibility and player
+Logs require an axe or hatchet by default, with a world/server configuration
+toggle that restores vanilla harvesting for compatibility and player
 preference.
 
 When enabled, the first concrete goal becomes:
@@ -115,9 +126,20 @@ Ordinary Minecraft tools do not require a binding material, and the first
 wood-access tool should not be gated behind the later knife, plant-fiber, and
 string loop.
 
-The toggle's exact default, block-breaking feedback, interaction with modded
-logs, and whether bare hands produce no drop or cannot meaningfully damage logs
-remain implementation and playtesting questions.
+The rule applies exclusively to blocks in `#minecraft:logs`. Blocks are
+identified through that vanilla tag so correctly tagged modded logs participate
+without compatibility patches. Valid tools are identified through the standard
+vanilla `#minecraft:axes` item tag; hatchets belong to that tag and are
+therefore a kind of axe for harvesting purposes.
+
+With the rule enabled, breaking a log without a valid tool behaves like
+breaking stone without a pickaxe: the block can be broken but produces no
+drop. A valid axe or hatchet leaves the ordinary log loot table unchanged.
+Leaves, planks, crafting tables, and other wooden blocks remain vanilla unless
+they are deliberately members of `#minecraft:logs`.
+
+The exact implementation boundary and required GameTests are recorded in
+[the configurable log harvest rule design](superpowers/specs/2026-07-28-log-harvest-rule-design.md).
 
 ## Cave-biome resources
 
