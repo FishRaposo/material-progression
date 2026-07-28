@@ -13,10 +13,10 @@ public final class ModTags {
     public static final TagKey<Block> INCORRECT_FOR_BRONZE_TOOL =
             blockTag("incorrect_for_bronze_tool");
 
-    public static final TagKey<Item> REPAIRS_TIN_TOOLS =
-            itemTag("repairs_tin_tools");
-    public static final TagKey<Item> REPAIRS_BRONZE_TOOLS =
-            itemTag("repairs_bronze_tools");
+    public static final TagKey<Item> INGOTS_TIN =
+            commonItemTag("ingots/tin");
+    public static final TagKey<Item> INGOTS_BRONZE =
+            commonItemTag("ingots/bronze");
     public static final TagKey<Item> CRUSHER_INPUTS =
             itemTag("crusher_inputs");
 
@@ -34,6 +34,13 @@ public final class ModTags {
         return TagKey.create(
                 Registries.ITEM,
                 Identifier.fromNamespaceAndPath(MaterialProgression.MOD_ID, path)
+        );
+    }
+
+    private static TagKey<Item> commonItemTag(String path) {
+        return TagKey.create(
+                Registries.ITEM,
+                Identifier.fromNamespaceAndPath("c", path)
         );
     }
 }

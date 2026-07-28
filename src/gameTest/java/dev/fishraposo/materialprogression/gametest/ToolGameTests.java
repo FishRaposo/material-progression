@@ -30,11 +30,11 @@ public final class ToolGameTests {
         helper.assertTrue(tinPickaxe.getMaxDamage() == 96, "Tin durability changed");
         helper.assertTrue(bronzePickaxe.getMaxDamage() == 325, "Bronze durability changed");
         helper.assertTrue(
-                ModItems.TIN_INGOT.get().getDefaultInstance().is(ModTags.REPAIRS_TIN_TOOLS),
+                ModItems.TIN_INGOT.get().getDefaultInstance().is(ModTags.INGOTS_TIN),
                 "Tin ingots do not repair tin tools"
         );
         helper.assertTrue(
-                ModItems.BRONZE_INGOT.get().getDefaultInstance().is(ModTags.REPAIRS_BRONZE_TOOLS),
+                ModItems.BRONZE_INGOT.get().getDefaultInstance().is(ModTags.INGOTS_BRONZE),
                 "Bronze ingots do not repair bronze tools"
         );
         helper.assertTrue(

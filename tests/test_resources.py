@@ -16,6 +16,27 @@ TREE = ResourceTree(ROOT, "material_progression")
 RESOURCES = TREE.resources
 DATA = TREE.data
 ASSETS = TREE.assets
+COMMON_DATA = RESOURCES / "data" / "c"
+
+COMMON_ITEM_TAGS = {
+    "dusts/bronze": ["material_progression:bronze_dust"],
+    "dusts/copper": ["material_progression:copper_dust"],
+    "dusts/tin": ["material_progression:tin_dust"],
+    "ingots/bronze": ["material_progression:bronze_ingot"],
+    "ingots/tin": ["material_progression:tin_ingot"],
+    "ores/tin": [
+        "material_progression:tin_ore",
+        "material_progression:deepslate_tin_ore",
+    ],
+    "raw_materials/tin": ["material_progression:raw_tin"],
+}
+
+COMMON_BLOCK_TAGS = {
+    "ores/tin": [
+        "material_progression:tin_ore",
+        "material_progression:deepslate_tin_ore",
+    ],
+}
 
 
 class ResourceContractTests(unittest.TestCase):
@@ -77,10 +98,10 @@ class ResourceContractTests(unittest.TestCase):
         self.assertEqual("minecraft:crafting_shapeless", recipe["type"])
         self.assertEqual(
             [
-                "material_progression:copper_dust",
-                "material_progression:copper_dust",
-                "material_progression:copper_dust",
-                "material_progression:tin_dust",
+                "#c:dusts/copper",
+                "#c:dusts/copper",
+                "#c:dusts/copper",
+                "#c:dusts/tin",
             ],
             recipe["ingredients"],
         )
@@ -89,18 +110,7 @@ class ResourceContractTests(unittest.TestCase):
             recipe["result"],
         )
 
-    def test_tool_repair_and_enchantment_tags_cover_every_tool(self):
-        tin_repairs = TREE.load_json(
-            DATA / "tags" / "item" / "repairs_tin_tools.json"
-        )
-        bronze_repairs = TREE.load_json(
-            DATA / "tags" / "item" / "repairs_bronze_tools.json"
-        )
-        self.assertEqual(["material_progression:tin_ingot"], tin_repairs["values"])
-        self.assertEqual(
-            ["material_progression:bronze_ingot"], bronze_repairs["values"]
-        )
-
+    def test_tool_enchantment_tags_cover_every_tool(self):
         minecraft_tags = RESOURCES / "data" / "minecraft" / "tags" / "item"
         durability = TREE.load_json(
             minecraft_tags / "enchantable" / "durability.json"
@@ -122,21 +132,108 @@ class ResourceContractTests(unittest.TestCase):
             mining_tools,
         )
 
+        expected_by_type = {
+            "axes": {"tin_axe", "bronze_axe"},
+            "hoes": {"tin_hoe", "bronze_hoe"},
+            "pickaxes": {"tin_pickaxe", "bronze_pickaxe"},
+            "shovels": {"tin_shovel", "bronze_shovel"},
+            "swords": {"tin_sword", "bronze_sword"},
+        }
+        for tag, expected_tools in expected_by_type.items():
+            with self.subTest(tag=tag):
+                payload = TREE.load_json(minecraft_tags / f"{tag}.json")
+                actual_tools = {
+                    value.removeprefix("material_progression:")
+                    for value in payload["values"]
+                }
+                self.assertEqual(expected_tools, actual_tools)
+
     def test_crusher_inputs_tag_matches_crushing_recipe_inputs(self):
         crusher_inputs = TREE.load_json(
             DATA / "tags" / "item" / "crusher_inputs.json"
         )
         self.assertEqual(
             {
-                "minecraft:raw_copper",
-                "minecraft:copper_ore",
-                "minecraft:deepslate_copper_ore",
-                "material_progression:raw_tin",
-                "material_progression:tin_ore",
-                "material_progression:deepslate_tin_ore",
+                "#c:ores/copper",
+                "#c:ores/tin",
+                "#c:raw_materials/copper",
+                "#c:raw_materials/tin",
             },
             set(crusher_inputs["values"]),
         )
+
+    def test_materials_are_published_under_common_tags(self):
+        for tag, values in COMMON_ITEM_TAGS.items():
+            with self.subTest(registry="item", tag=tag):
+                payload = TREE.load_json(
+                    COMMON_DATA / "tags" / "item" / f"{tag}.json"
+                )
+                self.assertEqual(values, payload["values"])
+
+        for tag, values in COMMON_BLOCK_TAGS.items():
+            with self.subTest(registry="block", tag=tag):
+                payload = TREE.load_json(
+                    COMMON_DATA / "tags" / "block" / f"{tag}.json"
+                )
+                self.assertEqual(values, payload["values"])
+
+    def test_common_material_roots_include_material_subtags(self):
+        expected_roots = {
+            "dusts": {
+                "#c:dusts/bronze",
+                "#c:dusts/copper",
+                "#c:dusts/tin",
+            },
+            "ingots": {"#c:ingots/bronze", "#c:ingots/tin"},
+            "ores": {"#c:ores/tin"},
+            "raw_materials": {"#c:raw_materials/tin"},
+        }
+
+        for root_tag, expected_values in expected_roots.items():
+            with self.subTest(registry="item", tag=root_tag):
+                payload = TREE.load_json(
+                    COMMON_DATA / "tags" / "item" / f"{root_tag}.json"
+                )
+                self.assertEqual(expected_values, set(payload["values"]))
+
+        block_ores = TREE.load_json(
+            COMMON_DATA / "tags" / "block" / "ores.json"
+        )
+        self.assertEqual({"#c:ores/tin"}, set(block_ores["values"]))
+
+    def test_recipe_material_inputs_use_common_tags(self):
+        direct_material_inputs = {
+            "material_progression:bronze_dust",
+            "material_progression:bronze_ingot",
+            "material_progression:copper_dust",
+            "material_progression:raw_tin",
+            "material_progression:tin_dust",
+            "material_progression:tin_ingot",
+            "material_progression:tin_ore",
+            "material_progression:deepslate_tin_ore",
+            "minecraft:raw_copper",
+        }
+
+        for recipe_path in sorted((DATA / "recipe").glob("*.json")):
+            recipe = TREE.load_json(recipe_path)
+            ingredients = []
+            if "ingredient" in recipe:
+                ingredients.append(recipe["ingredient"])
+            ingredients.extend(recipe.get("ingredients", []))
+            ingredients.extend(recipe.get("key", {}).values())
+
+            for ingredient in ingredients:
+                with self.subTest(
+                    recipe=recipe_path.stem,
+                    ingredient=ingredient,
+                ):
+                    self.assertNotIn(ingredient, direct_material_inputs)
+
+    def test_private_tags_are_reserved_for_private_behavior(self):
+        private_item_tags = TREE.names_matching(
+            DATA / "tags" / "item", "*.json"
+        )
+        self.assertEqual({"crusher_inputs"}, private_item_tags)
 
     def test_tin_worldgen_resources_form_a_complete_chain(self):
         configured = TREE.load_json(

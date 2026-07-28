@@ -67,7 +67,8 @@ Read the complete living design:
 - [Enchantability and magical metallurgy](docs/ENCHANTING.md)
 - [Development directions](docs/ROADMAP.md)
 - [Testing toolkit](docs/TESTING.md)
-- [Inspirations](docs/INSPIRATIONS.md)
+- [Compatibility policy](docs/COMPATIBILITY.md)
+- [Reference mods, source links, and credits](docs/INSPIRATIONS.md)
 
 ## Current prototype
 

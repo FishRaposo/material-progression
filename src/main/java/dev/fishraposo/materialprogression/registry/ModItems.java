@@ -27,7 +27,7 @@ public final class ModItems {
             3.5F,
             0.5F,
             8,
-            ModTags.REPAIRS_TIN_TOOLS
+            ModTags.INGOTS_TIN
     );
 
     public static final ToolMaterial BRONZE = new ToolMaterial(
@@ -36,7 +36,7 @@ public final class ModItems {
             6.5F,
             2.0F,
             12,
-            ModTags.REPAIRS_BRONZE_TOOLS
+            ModTags.INGOTS_BRONZE
     );
 
     public static final DeferredItem<Item> RAW_TIN = ITEMS.registerSimpleItem("raw_tin");

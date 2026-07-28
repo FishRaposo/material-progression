@@ -28,28 +28,28 @@ SHIPPED_BLOCKS = {"crusher", "deepslate_tin_ore", "tin_ore"}
 CRUSHING_RECIPES = {
     "crushing_copper_ore": RecipeContract(
         "material_progression:crushing",
-        "#minecraft:copper_ores",
+        "#c:ores/copper",
         "material_progression:copper_dust",
         count=2,
         cooking_time=200,
     ),
     "crushing_raw_copper": RecipeContract(
         "material_progression:crushing",
-        "minecraft:raw_copper",
+        "#c:raw_materials/copper",
         "material_progression:copper_dust",
         count=2,
         cooking_time=200,
     ),
     "crushing_raw_tin": RecipeContract(
         "material_progression:crushing",
-        "material_progression:raw_tin",
+        "#c:raw_materials/tin",
         "material_progression:tin_dust",
         count=2,
         cooking_time=200,
     ),
     "crushing_tin_ore": RecipeContract(
         "material_progression:crushing",
-        "#material_progression:tin_ores",
+        "#c:ores/tin",
         "material_progression:tin_dust",
         count=2,
         cooking_time=200,
@@ -59,22 +59,22 @@ CRUSHING_RECIPES = {
 SMELTING_RECIPES = {
     "smelting_bronze_dust": RecipeContract(
         "minecraft:smelting",
-        "material_progression:bronze_dust",
+        "#c:dusts/bronze",
         "material_progression:bronze_ingot",
     ),
     "smelting_copper_dust": RecipeContract(
         "minecraft:smelting",
-        "material_progression:copper_dust",
+        "#c:dusts/copper",
         "minecraft:copper_ingot",
     ),
     "smelting_raw_tin": RecipeContract(
         "minecraft:smelting",
-        "material_progression:raw_tin",
+        "#c:raw_materials/tin",
         "material_progression:tin_ingot",
     ),
     "smelting_tin_dust": RecipeContract(
         "minecraft:smelting",
-        "material_progression:tin_dust",
+        "#c:dusts/tin",
         "material_progression:tin_ingot",
     ),
 }

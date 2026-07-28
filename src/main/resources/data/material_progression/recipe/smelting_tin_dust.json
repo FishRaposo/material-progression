@@ -3,7 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.7,
-  "ingredient": "material_progression:tin_dust",
+  "ingredient": "#c:dusts/tin",
   "result": {
     "id": "material_progression:tin_ingot"
   }

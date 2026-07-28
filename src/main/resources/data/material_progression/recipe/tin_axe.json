@@ -2,8 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": "minecraft:stick",
-    "X": "material_progression:tin_ingot"
+    "#": "#c:rods/wooden",
+    "X": "#c:ingots/tin"
   },
   "pattern": [
     "XX",
