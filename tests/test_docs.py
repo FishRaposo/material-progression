@@ -19,6 +19,86 @@ def repository_files():
 
 
 class DocumentationContractTests(unittest.TestCase):
+    def test_project_name_is_recorded_as_settled(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        normalized_readme = " ".join(readme.split())
+
+        self.assertIn(
+            "The name **Material Progression** is settled.", normalized_readme
+        )
+        self.assertIn("materials define progression", normalized_readme)
+        self.assertNotIn("the name, mod ID", readme)
+
+    def test_bulk_crafter_records_settled_module_upgrade_rules(self):
+        infrastructure = (ROOT / "docs" / "INFRASTRUCTURE.md").read_text(
+            encoding="utf-8"
+        )
+        normalized = " ".join(infrastructure.split())
+
+        self.assertIn(
+            "Higher-tier modules are crafted by upgrading their lower-tier "
+            "predecessors",
+            normalized,
+        )
+        self.assertIn("Binary capabilities do not stack", normalized)
+        self.assertIn("Quantity-based capabilities can stack", normalized)
+        self.assertNotIn(
+            "whether higher-tier modules are crafted from lower-tier modules",
+            normalized,
+        )
+
+    def test_primitive_opening_records_settled_rock_and_stick_rules(self):
+        primitive = (ROOT / "docs" / "PRIMITIVE_RESOURCES.md").read_text(
+            encoding="utf-8"
+        )
+        normalized_primitive = " ".join(primitive.split())
+        compatibility = (ROOT / "docs" / "COMPATIBILITY.md").read_text(
+            encoding="utf-8"
+        )
+        living_design = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in (
+                ROOT / "README.md",
+                ROOT / "AGENTS.md",
+                ROOT / "docs" / "DESIGN_PRINCIPLES.md",
+                ROOT / "docs" / "GEOLOGY.md",
+                ROOT / "docs" / "INFRASTRUCTURE.md",
+                ROOT / "docs" / "INSPIRATIONS.md",
+                ROOT / "docs" / "METALLURGY.md",
+                ROOT / "docs" / "PRIMITIVE_RESOURCES.md",
+                ROOT / "docs" / "ROADMAP.md",
+                ROOT / "docs" / "VISION.md",
+            )
+        )
+
+        for decision in (
+            "1 Rock -> 1 flint shard",
+            "1 flint -> 2 flint shards",
+            "4 Rocks -> 1 cobblestone",
+            "shapeless",
+            "2x2",
+            "ordinary vanilla stick",
+            "persistent ground objects",
+            "Leaves remain a renewable fallback",
+        ):
+            with self.subTest(decision=decision):
+                self.assertIn(decision, primitive)
+
+        self.assertIn("The item is **Rock**", primitive)
+        self.assertIn("world feature is **loose rocks**", normalized_primitive)
+        self.assertIn("`#c:rocks`", compatibility)
+
+        for stale_rule in (
+            "loose rock or flint shard",
+            "rocks or shards",
+            "rock or shard",
+            "directly usable as one shard",
+            "same recipe role as a flint shard",
+            "flint-shard equivalent",
+        ):
+            with self.subTest(stale_rule=stale_rule):
+                self.assertNotIn(stale_rule, living_design.lower())
+
     def test_agent_handbook_and_project_skills_use_plural_directory(self):
         handbook = ROOT / "AGENTS.md"
         compatibility = ROOT / "docs" / "COMPATIBILITY.md"

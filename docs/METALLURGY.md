@@ -34,11 +34,11 @@ A material can fill one or more roles:
 
 This allows parallel and intersecting paths instead of a universal sequence.
 
-The graph begins before metal. Mined stone can return loose rocks, four rocks or
-flint shards can form cobblestone, and one flint can supply two shards. Stone
-and flint then establish the first trade-off: ordinary stone is the primitive
-workhorse, while flint may provide faster, sharper, less durable tools at the
-same harvest capability.
+The graph begins before metal. Mined stone can return Rocks, four Rocks can form
+cobblestone, one Rock can be sharpened into one flint shard, and one flint can
+supply two shards. Stone and flint then establish the first trade-off: ordinary
+stone is the primitive workhorse, while flint may provide faster, sharper, less
+durable tools at the same harvest capability.
 
 This is also the first example of the wider tool philosophy. Materials do not
 need complete recolored equipment sets merely to occupy the graph. A tool

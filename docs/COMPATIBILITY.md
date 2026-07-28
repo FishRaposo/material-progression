@@ -33,6 +33,19 @@ Material tags use plural folders and material subtags:
 - `#c:rods/wooden`
 - `#c:rocks` for the planned Rock item
 
+Rock recipes must consume `#c:rocks`, not
+`material_progression:rock`. Ground Rock world generation may place the
+concrete Material Progression object because world placement creates a specific
+block or entity, but its pickup item is published as interchangeable material.
+The primitive sharpening and cobblestone recipes therefore accept compatible
+Rocks supplied by other mods. Flint shards must likewise use the established
+shared tag available in the target NeoForge common-tag vocabulary; verify the
+exact 26.2 tag rather than inventing a private substitute during implementation.
+
+Ground sticks yield the ordinary vanilla stick rather than a new mod item.
+Recipes use the established wooden-stick category, currently
+`#c:rods/wooden`, so compatible sticks remain interchangeable.
+
 When introducing a new subtype, publish it through the parent tag as well. For
 example, `#c:ingots/tin` is also included by `#c:ingots`.
 

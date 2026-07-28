@@ -28,22 +28,27 @@ Nothing about this experiment is protected from replacement.
 Test the smallest deterministic opening loop that gives loose rocks, flint,
 wood, plants, and string distinct roles:
 
-> Gather loose rocks and sticks -> craft a flint hatchet or knife -> harvest
-> wood and plants -> make plant fiber -> craft string
+> Gather ground Rocks and sticks -> sharpen a Rock -> craft a flint hatchet or
+> knife -> harvest wood and plants -> make plant fiber -> craft string
 
 The experiment should include a configuration toggle that prevents logs from
 being harvested by hand. It should test that state as a candidate default while
 preserving ordinary tree punching as a compatibility and player-preference
 option.
 
-Loose rocks must remove the random first-flint gate. One loose rock should fill
-the recipe role of one flint shard, one flint should produce two shards, and any
-four rocks or shards should form one cobblestone. Mined stone should return
-loose rocks instead of ready-made cobblestone. No knife, knapping station, or
+Loose rocks must remove the random first-flint gate. One Rock should sharpen
+into one flint shard through a shapeless 2x2 recipe, one flint should produce
+two shards, and four Rocks should form one cobblestone. Mined stone should
+return Rocks instead of ready-made cobblestone. No knife, knapping station, or
 lucky gravel drop may be required before the first hatchet or knife.
 
+Ground sticks should be persistent visible objects beneath trees and around
+shrubs, yielding ordinary vanilla sticks. Leaves remain the renewable fallback
+and dead bushes the dry-biome source. The experiment must determine placement
+density and pickup behavior without making random leaf drops the bootstrap.
+
 The first hatchet recipe should be tested in its intended 2x2 upside-down-L
-shape: one rock or shard beside the upper stick and one stick directly below the
+shape: one flint shard beside the upper stick and one stick directly below the
 first. String must not be required for this tool.
 
 The experiment should compare stone and flint tool profiles, with flint
@@ -53,10 +58,11 @@ capability for flint. It should also determine which plants produce fiber,
 whether knives continue through metal families, and whether the loop is
 understandable without a guide.
 
-The experiment must validate spawn viability, early stick access, 2x2 recipes,
-modded-log behavior, and feedback when a player tries to harvest a log by hand.
-Knapping is not part of the current candidate. The goal is a brief, useful
-primitive phase, not a longer ritual before ordinary play.
+The experiment must validate spawn viability, ground Rock and stick
+distribution, the shapeless sharpening and cobblestone recipes, the shaped
+hatchet recipe, modded-log behavior, and feedback when a player tries to harvest
+a log by hand. Knapping is not part of the current candidate. The goal is a
+brief, useful primitive phase, not a longer ritual before ordinary play.
 
 The same experiment should validate the broader tool rule: each included tool
 must grant a material interaction or a meaningful trade-off, rather than exist
@@ -162,10 +168,12 @@ The first implementation should:
 - Detect cycles and preserve container remainders.
 - Accept a fixed number of tiered upgrade modules.
 
-Initial upgrade candidates are storage, filtering, material or inventory
-priority, reserved quantities, and saved crafting jobs. Quantity-based upgrades
-may stack, especially storage, while the fixed slot count prevents indefinite
-expansion. Higher tiers should provide more effect per occupied slot.
+Initial upgrade families are storage, filtering, material or inventory priority,
+reserved quantities, and saved crafting jobs. Quantity-based upgrades
+can stack, especially storage, memory capacity, filter capacity, and reservation
+capacity, while binary capabilities do not stack. The fixed slot count prevents
+indefinite expansion. Higher tiers provide more effect per occupied slot and
+are crafted by upgrading lower-tier modules so previous investment is retained.
 
 The experiment should answer:
 
@@ -174,7 +182,7 @@ The experiment should answer:
 - Is the planned material preview sufficient before automatic selection?
 - Which inventory should be consumed first by default?
 - How large should the base buffer and fixed upgrade-slot budget be?
-- Which modules stack, and how should tier compression work?
+- How large should each stackable capacity increase be at each tier?
 - Can hoppers supply ingredients and extract output without turning the table
   into an autonomous factory?
 - Does the traditional crafting table remain preferable for quick portable
@@ -219,8 +227,8 @@ The workshop should answer:
   machine?
 - Do field drops remain predictable instead of changing merely because a hammer
   or saw broke the block?
-- Are baseline plant fiber and the first flint-shard equivalent still available
-  without a workshop?
+- Are baseline plant fiber and the shapeless Rock-to-shard recipe still
+  available without a workshop?
 - Do tool materials create meaningful durability or speed trade-offs?
 - Is the manual ore-crushing durability cost high enough to keep the
   fuel-burning crusher valuable?

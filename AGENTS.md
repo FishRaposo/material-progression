@@ -64,10 +64,11 @@ Code currently implements:
 - Reusable Python resource contracts and NeoForge GameTests
 - A reproducible installable JAR under `dist/`
 
-Loose rocks and sticks, flint shards, the primitive hatchet and knife, plant
-fiber, tree-punching rules, the manual workshop, geology progression, expanded
-storage and hoppers, and the bulk-crafting table are documented designs, not
-implemented features. Do not describe planned behavior as shipped behavior.
+Rock and ground-stick world features, flint shards, the primitive hatchet and
+knife, plant fiber, tree-punching rules, the manual workshop, geology
+progression, expanded storage and hoppers, and the bulk-crafting table are
+documented designs, not implemented features. Do not describe planned behavior
+as shipped behavior.
 
 The current dependency order is:
 

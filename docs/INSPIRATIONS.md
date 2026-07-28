@@ -141,8 +141,8 @@ The strongest ideas for this project are:
 The important departure is the first-flint gate. In No Tree Punching, loose
 rocks can support later flint tools, but a player still needs randomly obtained
 flint to make the first knife that cuts them into shards. This project removes
-that dependency: one loose rock already fills the role of one flint shard, one
-flint produces two shards, and any four rocks or shards can form cobblestone.
+that dependency: one Rock sharpens into one flint shard through a shapeless 2x2
+recipe, one flint produces two shards, and four Rocks form cobblestone.
 
 That deterministic bootstrap makes configurable tree-punching prevention much
 more attractive. The player must gather a sharp stone and a stick before
@@ -150,10 +150,10 @@ harvesting the first tree, but world generation and flint-drop luck cannot make
 the run impossible. Knapping, aggressive baseline wood nerfs, and additional
 crafting rituals still require separate justification.
 
-The first hatchet is correspondingly direct: one rock or shard beside a
-two-stick handle in an upside-down L in the 2x2 crafting grid. It is an axe
-recipe with the top row removed, not a bound survival tool, so string is not
-required before the knife can make plant fiber.
+The first hatchet is correspondingly direct: one flint shard beside a two-stick
+handle in an upside-down L in the 2x2 crafting grid. It is an axe recipe with
+the top row removed, not a bound survival tool, so string is not required before
+the knife can make plant fiber.
 
 The useful lesson is that simple tools can give familiar resources meaningful
 jobs. The project keeps that progression while removing ceremony and blockers

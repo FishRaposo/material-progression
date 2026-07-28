@@ -69,10 +69,12 @@ layer a real job. Requiring random flint before any tool can be made cannot: it
 adds a blocker before the player has agency. The primitive phase should be brief,
 deterministic, and physically legible.
 
-The first hatchet therefore uses one loose rock or flint shard and two sticks in
-an upside-down L inside the 2x2 inventory grid. It does not require string:
-binding would move the knife-and-fiber loop in front of the tool needed to
-access wood without adding a meaningful decision.
+The first hatchet therefore uses one flint shard and two sticks in an
+upside-down L inside the 2x2 inventory grid. The shard comes from a shapeless
+one-Rock recipe, so the tool remains deterministic without accepting a blunt
+Rock directly. It does not require string: binding would move the
+knife-and-fiber loop in front of the tool needed to access wood without adding
+a meaningful decision.
 
 ## 9. Tools should grant material interactions
 

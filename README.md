@@ -1,13 +1,19 @@
 # Material Progression
 
-> **Early design prototype:** the name, mod ID, loader, target version, current
-> vertical slice, recipes, values, and every future system described here are
+> **Early design prototype:** the current vertical slice, recipes, values,
+> loader, target version, and every future system described here remain
 > provisional.
 
 Material Progression is an open-source experiment in rebuilding Minecraft's
 progression around the thing its name promises: mining a world whose shape
 matters, processing what you can reach, and crafting materials that gradually
 increase your ability to control that world.
+
+The name **Material Progression** is settled. Its two halves are the project's
+two halves: materials are the physical vocabulary, and progression is the
+agency those materials unlock. In Material Progression, materials define
+progression. That thesis is broad enough to include the first Rock, geology,
+metallurgy, workshops, storage, and bulk crafting.
 
 The central question is:
 
@@ -24,9 +30,10 @@ instead of the optimal move five minutes into a world.
 
 - **The underground participates in progression.** Solid geology resists early
   tools, while caves and structures provide natural routes through it.
-- **Primitive resources matter before metallurgy.** Loose rocks and flint
-  shards bootstrap tools deterministically; knives, plant fiber, cave-biome clay
-  and gravel, and possible saws give wood, stone, and plants useful roles.
+- **Primitive resources matter before metallurgy.** Ground Rocks and sticks
+  bootstrap flint shards and tools deterministically; knives, plant fiber,
+  cave-biome clay and gravel, and possible saws give wood, stone, and plants
+  useful roles.
 - **Natural openings matter until tools create new ones.** A configurable
   tree-punching rule can make forests physical obstacles, while resistant
   geology makes mountains expensive to tunnel through.

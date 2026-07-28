@@ -1,7 +1,9 @@
 # Workshop Infrastructure and Automation
 
-> **Status: provisional.** Every block, recipe, material choice, output rate,
-> and progression position in this document is a design candidate.
+> **Status: designed, not implemented.** The system boundaries and settled
+> bulk-crafter behaviors are current decisions. Exact blocks, recipes, slot
+> counts, numerical effects, output rates, and progression positions remain
+> subject to implementation and playtesting.
 
 ## Purpose
 
@@ -41,7 +43,7 @@ plausibly perform at a bench with the installed tool.
 
 The initial operation families are:
 
-- **Knife + loose rock -> more flint shards than direct use of the rock**
+- **Knife + Rock -> more flint shards than shapeless sharpening**
 - **Knife + suitable plants -> more plant fiber than field harvesting**
 - **Hammer + stone -> gravel**
 - **Hammer + gravel -> sand**
@@ -52,11 +54,11 @@ The initial operation families are:
 Plates, shaped pieces, and other hammered components remain possible later
 operations when metallurgy justifies them.
 
-Basic access does not depend on workshop efficiency. A loose rock is still
-directly usable as one flint-shard equivalent, and plants can still be harvested
-with a knife in the world for fiber. The workshop replaces No Tree Punching-like
-right-click processing recipes with a visible place for careful, higher-yield
-work.
+Basic access does not depend on workshop efficiency. A Rock can still be
+sharpened into one flint shard through the shapeless 2x2 recipe, and plants can
+still be harvested with a knife in the world for fiber. The workshop replaces
+No Tree Punching-like right-click processing recipes with a visible place for
+careful, higher-yield work.
 
 ### Field use and intended use
 
@@ -233,7 +235,7 @@ types and tiers, allowing some effects to stack while preventing unlimited
 expansion. The table itself has no material tier ladder; installed modules
 determine what kind of bulk-crafting station it becomes.
 
-Candidate module families are:
+Initial module families are:
 
 - **Storage:** expands the internal ingredient and surplus buffer.
 - **Filter:** adds ingredient whitelists and blacklists.
@@ -242,11 +244,17 @@ Candidate module families are:
 - **Reservation:** protects configured items or minimum retained quantities.
 - **Memory:** adds saved or favorited bulk-crafting jobs.
 
-Effects with meaningful quantities can stack. Storage is the clearest example:
-players may fill most or all upgrade slots with storage modules to build a large,
-simple bulk crafter. Higher module tiers provide more effect per slot, allowing
-several capabilities to fit within the same hard slot limit. Binary capabilities
-should not gain meaningless duplicate effects.
+Quantity-based capabilities can stack. Storage is the clearest example, while
+memory capacity, filter capacity, and reservation capacity can also gain
+meaningful quantity. Players may fill most or all upgrade slots with storage
+modules to build a large, simple bulk crafter. Binary capabilities do not stack;
+installing a duplicate must not create a meaningless second copy of the same
+ability.
+
+Higher module tiers provide more effect per slot, allowing several capabilities
+to fit within the same hard slot limit. Higher-tier modules are crafted by
+upgrading their lower-tier predecessors so earlier material investment is
+preserved rather than discarded.
 
 The fixed slot count creates deliberate specialization:
 
@@ -254,8 +262,8 @@ The fixed slot count creates deliberate specialization:
 - A smaller table with strict filters and reservations
 - A balanced general-purpose station
 
-Exact slot count, module tiers, recipes, effects, and whether higher-tier modules
-are crafted from lower-tier modules remain implementation questions.
+Exact slot count, tier count, recipes, and numerical effects remain
+implementation questions.
 
 ### Crafting-table boundaries
 
