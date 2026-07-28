@@ -1,6 +1,5 @@
 package dev.fishraposo.materialprogression.gametest;
 
-import dev.fishraposo.materialprogression.config.ConfigFixture;
 import dev.fishraposo.materialprogression.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
