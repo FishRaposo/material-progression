@@ -20,7 +20,7 @@ public final class GroundResourceBlock extends BushBlock {
     }
 
     @Override
-    protected MapCodec<GroundResourceBlock> codec() {
+    public MapCodec<GroundResourceBlock> codec() {
         return CODEC;
     }
 

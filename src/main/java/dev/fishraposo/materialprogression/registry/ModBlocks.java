@@ -49,7 +49,7 @@ public final class ModBlocks {
                     properties -> properties
                             .mapColor(MapColor.STONE)
                             .replaceable()
-                            .noCollission()
+                            .noCollision()
                             .strength(0.2F)
                             .sound(SoundType.STONE)
                             .pushReaction(PushReaction.DESTROY)
@@ -63,7 +63,7 @@ public final class ModBlocks {
                     properties -> properties
                             .mapColor(MapColor.WOOD)
                             .replaceable()
-                            .noCollission()
+                            .noCollision()
                             .strength(0.2F)
                             .sound(SoundType.WOOD)
                             .pushReaction(PushReaction.DESTROY)
