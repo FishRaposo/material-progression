@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - agent/common-tags-jar-bootstrap
+  pull_request:
 
 jobs:
   build-jar:
