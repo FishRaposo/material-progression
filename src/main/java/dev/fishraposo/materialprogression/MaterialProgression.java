@@ -1,5 +1,7 @@
 package dev.fishraposo.materialprogression;
 
+import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
+import dev.fishraposo.materialprogression.progression.HarvestRuleEvents;
 import dev.fishraposo.materialprogression.registry.ModBlockEntities;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
 import dev.fishraposo.materialprogression.registry.ModItems;
@@ -27,5 +29,3 @@ public final class MaterialProgression {
         HarvestRuleEvents.register();
     }
 }
-import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
-import dev.fishraposo.materialprogression.progression.HarvestRuleEvents;
