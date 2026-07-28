@@ -1,10 +1,11 @@
 # Primitive Resources and Tools
 
-> **Status: designed, not implemented.** Rock and stick roles, ground-block
-> behavior, the three opening conversions, the first-tool dependency, and the
-> default log-only harvest rule are current decisions. World generation
-> density, yields beyond those conversions, statistics, and the complete tool
-> roster remain subject to implementation and playtesting.
+> **Status: partially implemented.** Loose rocks, ground sticks, Rock and flint
+> shard conversions, the flint hatchet, and the default-enabled log-only axe
+> requirement now ship. The knife, plant fiber, stone-drop replacement,
+> tree-adjacent density tuning, yields beyond the opening conversions, and the
+> complete primitive tool roster remain subject to implementation and
+> playtesting.
 
 ## Purpose
 

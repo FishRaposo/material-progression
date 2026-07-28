@@ -23,18 +23,20 @@ Questions it should answer:
 
 Nothing about this experiment is protected from replacement.
 
-## Candidate experiment: primitive resources
+## Implemented primitive foundation
 
-Test the smallest deterministic opening loop that gives loose rocks, flint,
-wood, plants, and string distinct roles:
+The first primitive slice now implements this deterministic opening:
 
-> Gather ground Rocks and sticks -> sharpen a Rock -> craft a flint hatchet or
-> knife -> harvest wood and plants -> make plant fiber -> craft string
+> Gather ground Rocks and sticks -> sharpen a Rock -> craft a flint hatchet ->
+> harvest logs
 
-The experiment should include a configuration toggle that prevents logs from
-being harvested by hand. It should test that state as a candidate default while
-preserving ordinary tree punching as a compatibility and player-preference
-option.
+The log-only axe requirement is enabled by default and has a server
+configuration opt-out. Loose rocks and ground sticks generate as persistent,
+easy hand-breakable surface blocks. Rock and flint recipes guarantee the first
+hatchet without gravel luck.
+
+The next primitive experiment should add the knife, plant fiber, craftable
+string, mined-stone Rock drops, and density tuning around trees and shrubs.
 
 Loose rocks must remove the random first-flint gate. One Rock should sharpen
 into one flint shard through a shapeless 2x2 recipe, one flint should produce

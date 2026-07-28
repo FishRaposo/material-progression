@@ -99,6 +99,29 @@ class DocumentationContractTests(unittest.TestCase):
             with self.subTest(stale_rule=stale_rule):
                 self.assertNotIn(stale_rule, living_design.lower())
 
+    def test_primitive_foundations_are_marked_implemented(self):
+        handbook = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        primitive = (ROOT / "docs" / "PRIMITIVE_RESOURCES.md").read_text(
+            encoding="utf-8"
+        )
+        roadmap = (ROOT / "docs" / "ROADMAP.md").read_text(encoding="utf-8")
+        testing = (ROOT / "docs" / "TESTING.md").read_text(encoding="utf-8")
+
+        for shipped_feature in (
+            "Loose-rock and ground-stick world generation",
+            "Rock, flint shards, and the flint hatchet",
+            "default-enabled log-only axe requirement",
+        ):
+            with self.subTest(shipped_feature=shipped_feature):
+                self.assertIn(shipped_feature, handbook)
+                self.assertIn(shipped_feature, readme)
+
+        self.assertIn("**Status: partially implemented.**", primitive)
+        self.assertIn("Implemented primitive foundation", roadmap)
+        self.assertIn("PrimitiveGameTests", testing)
+        self.assertIn("LogHarvestGameTests", testing)
+
     def test_agent_handbook_and_project_skills_use_plural_directory(self):
         handbook = ROOT / "AGENTS.md"
         compatibility = ROOT / "docs" / "COMPATIBILITY.md"

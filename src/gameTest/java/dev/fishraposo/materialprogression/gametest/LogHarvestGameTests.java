@@ -2,12 +2,13 @@ package dev.fishraposo.materialprogression.gametest;
 
 import dev.fishraposo.materialprogression.registry.ModItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.GameType;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -102,7 +103,10 @@ public final class LogHarvestGameTests {
             ItemStack tool
     ) {
         helper.setBlock(BLOCK_POS, block);
-        Player player = helper.makeMockPlayer();
-        helper.breakBlock(BLOCK_POS, tool, player);
+        var player = helper.makeTickingMockServerPlayerInLevel(
+                GameType.SURVIVAL
+        );
+        player.setItemInHand(InteractionHand.MAIN_HAND, tool);
+        player.gameMode.destroyBlock(helper.absolutePos(BLOCK_POS));
     }
 }

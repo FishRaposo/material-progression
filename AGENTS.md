@@ -61,14 +61,16 @@ Code currently implements:
 - Fuel-burning stone crusher with sided inventory
 - Ore and raw-metal crushing into two dust
 - Dust smelting and provisional bronze alloy crafting
+- Loose-rock and ground-stick world generation
+- Rock, flint shards, and the flint hatchet
+- A default-enabled log-only axe requirement with a server opt-out
 - Reusable Python resource contracts and NeoForge GameTests
 - A reproducible installable JAR under `dist/`
 
-Rock and ground-stick world features, flint shards, the primitive hatchet and
-knife, plant fiber, tree-punching rules, the manual workshop, geology
-progression, expanded storage and hoppers, and the bulk-crafting table are
-documented designs, not implemented features. Do not describe planned behavior
-as shipped behavior.
+The flint knife, plant fiber, stone-drop replacement, tuned tree-adjacent stick
+density, the manual workshop, geology progression, expanded storage and
+hoppers, and the bulk-crafting table remain documented designs, not implemented
+features. Do not describe planned behavior as shipped behavior.
 
 The current dependency order is:
 

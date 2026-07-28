@@ -89,6 +89,9 @@ first implemented vertical slice contains:
 - Ore and raw-metal crushing into two dust
 - A provisional `3 copper dust + 1 tin dust -> 4 bronze dust` recipe
 - Dust smelting
+- Loose-rock and ground-stick world generation
+- Rock, flint shards, and the flint hatchet
+- A default-enabled log-only axe requirement with a server opt-out
 
 This is a test bed, not a promised MVP. The current content, balance, art,
 architecture, and even its place in the eventual progression may be replaced.

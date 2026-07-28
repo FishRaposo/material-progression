@@ -49,6 +49,9 @@ GameTests are grouped by gameplay system under
   tests for one system.
 - `ToolGameTests` demonstrates a separate domain that shares the same runner
   without sharing irrelevant setup.
+- `PrimitiveGameTests` verifies ground-resource drops and support behavior.
+- `LogHarvestGameTests` verifies the config toggle and the log-only axe
+  boundary through real block breaking.
 
 New systems should follow the same shape. For example, workshop behavior should
 live in `WorkshopGameTests` with a `WorkshopFixture` once the workshop exists.
