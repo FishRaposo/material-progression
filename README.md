@@ -98,7 +98,7 @@ This prototype currently requires:
 
 The installable JAR is committed alongside the source and documentation so the
 current prototype can be installed without building it locally. CI also exposes
-the same JAR as the `material-progression-0.1.0` artifact on every successful
+the same JAR as the `material-progression` artifact on every successful
 workflow run.
 
 ## Development

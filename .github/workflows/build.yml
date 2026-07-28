@@ -37,9 +37,9 @@ jobs:
       - name: Upload installable mod JAR
         uses: actions/upload-artifact@v4
         with:
-          name: material-progression-0.1.0
+          name: material-progression
           if-no-files-found: error
-          path: dist/material-progression-0.1.0.jar
+          path: dist/*.jar
 
       - name: Upload GameTest diagnostics
         if: always()
