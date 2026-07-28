@@ -28,11 +28,11 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build --stacktrace
 
-      - name: Verify installable mod JAR
-        run: ./gradlew verifyDistributionJar --stacktrace
-
       - name: Run NeoForge GameTests
         run: ./gradlew runGameTestServer --stacktrace
+
+      - name: Verify installable mod JAR
+        run: ./gradlew verifyDistributionJar --stacktrace
 
       - name: Upload installable mod JAR
         uses: actions/upload-artifact@v4

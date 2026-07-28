@@ -108,9 +108,18 @@ class ResourceContractTests(unittest.TestCase):
                 modifier = TREE.load_json(
                     DATA / "neoforge" / "biome_modifier" / f"add_{name}.json"
                 )
-                self.assertEqual("minecraft:random_patch", configured["type"])
+                self.assertEqual("minecraft:simple_block", configured["type"])
                 encoded = json.dumps(configured, sort_keys=True)
                 self.assertIn(block_id, encoded)
+                placement_types = [
+                    placement["type"]
+                    for placement in placed["placement"]
+                ]
+                self.assertIn("minecraft:random_offset", placement_types)
+                self.assertIn(
+                    "minecraft:block_predicate_filter",
+                    placement_types,
+                )
                 self.assertEqual(
                     f"material_progression:{name}",
                     placed["feature"],
