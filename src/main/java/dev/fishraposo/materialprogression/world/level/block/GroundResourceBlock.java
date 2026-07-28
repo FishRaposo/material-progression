@@ -11,7 +11,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public final class GroundResourceBlock extends BushBlock {
-    public static final MapCodec<GroundResourceBlock> CODEC =
+    public static final MapCodec<BushBlock> CODEC =
             simpleCodec(GroundResourceBlock::new);
     private static final VoxelShape SHAPE = box(2.0, 0.0, 2.0, 14.0, 3.0, 14.0);
 
@@ -20,7 +20,7 @@ public final class GroundResourceBlock extends BushBlock {
     }
 
     @Override
-    public MapCodec<GroundResourceBlock> codec() {
+    public MapCodec<BushBlock> codec() {
         return CODEC;
     }
 
