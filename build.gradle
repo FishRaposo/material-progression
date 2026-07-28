@@ -41,6 +41,11 @@ base {
     archivesName = mod_id
 }
 
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
 // Mojang ships Java 25 to end users in 26.2, so mods should target Java 25.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
@@ -168,6 +173,7 @@ tasks.register('headlessTest') {
     description = 'Runs contracts, the complete build, and live NeoForge GameTests.'
     dependsOn contractTest
     dependsOn tasks.named('build')
+    dependsOn 'verifyDistributionJar'
     dependsOn tasks.named('runGameTestServer')
 }
 
@@ -175,8 +181,53 @@ tasks.named('build').configure {
     mustRunAfter contractTest
 }
 
-tasks.named('runGameTestServer').configure {
+def distributionJar = layout.projectDirectory.file(
+        "dist/material-progression-${mod_version}.jar"
+)
+
+tasks.register('syncDistributionJar', Sync) {
+    group = 'distribution'
+    description = 'Builds and refreshes the installable mod JAR tracked in dist/.'
+    dependsOn tasks.named('jar')
+    from tasks.named('jar').flatMap { it.archiveFile }
+    into distributionJar.asFile.parentFile
+    rename { distributionJar.asFile.name }
+}
+
+tasks.register('verifyDistributionJar') {
+    group = 'verification'
+    description = 'Verifies that dist/ contains the exact current production mod JAR.'
+    dependsOn tasks.named('jar')
+    inputs.file tasks.named('jar').flatMap { it.archiveFile }
+    inputs.file distributionJar
+
+    doLast {
+        def expected = distributionJar.asFile
+        def jars = fileTree(expected.parentFile) {
+            include '*.jar'
+        }.files
+
+        if (jars != [expected] as Set) {
+            throw new GradleException(
+                    "dist/ must contain only ${expected.name}; run ./gradlew syncDistributionJar"
+            )
+        }
+
+        def built = tasks.named('jar').get().archiveFile.get().asFile
+        if (java.nio.file.Files.mismatch(built.toPath(), expected.toPath()) != -1L) {
+            throw new GradleException(
+                    "${expected.name} is stale; run ./gradlew syncDistributionJar"
+            )
+        }
+    }
+}
+
+tasks.named('verifyDistributionJar').configure {
     mustRunAfter tasks.named('build')
+}
+
+tasks.named('runGameTestServer').configure {
+    mustRunAfter tasks.named('verifyDistributionJar')
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
