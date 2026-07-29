@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 
 /** Simulates one manual-processing operation and commits it only when unchanged. */
 public final class ItemTransaction {
@@ -53,12 +54,12 @@ public final class ItemTransaction {
             return Preview.rejected(inventory.revision(), before, "insufficient_durability");
         }
 
-        ItemStack remainder = input.getCraftingRemainingItem();
+        ItemStackTemplate remainder = input.getCraftingRemainder();
         tool.setDamageValue(tool.getDamageValue() + recipe.durabilityCost());
         input.shrink(1);
 
         if (!insert(after, recipe.resultStack())
-                || !insert(after, remainder)) {
+                || !insert(after, remainder != null ? remainder.create() : ItemStack.EMPTY)) {
             return Preview.rejected(inventory.revision(), before, "insufficient_output_capacity");
         }
         if (!canStoreAllChanges(before, after)) {
