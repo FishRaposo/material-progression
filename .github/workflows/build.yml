@@ -28,6 +28,15 @@ jobs:
       - name: Verify deterministic data generation
         run: ./scripts/verify-datagen.sh
 
+      - name: Upload generated-resource diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-resources-diagnostics
+          if-no-files-found: error
+          include-hidden-files: true
+          path: src/generated/resources/
+
       - name: Build with Gradle
         run: ./gradlew build --stacktrace
 
