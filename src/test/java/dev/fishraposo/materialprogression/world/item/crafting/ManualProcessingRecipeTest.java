@@ -8,6 +8,7 @@ import com.mojang.serialization.JsonOps;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
@@ -69,14 +70,14 @@ class ManualProcessingRecipeTest {
     @Test
     void matchesItemsThroughTagIngredients() {
         ManualProcessingRecipe recipe = new ManualProcessingRecipe(
-                Ingredient.of(TagKey.create(
+                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(TagKey.create(
                         Registries.ITEM,
                         Identifier.fromNamespaceAndPath("minecraft", "swords")
-                )),
-                Ingredient.of(TagKey.create(
+                ))),
+                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(TagKey.create(
                         Registries.ITEM,
                         Identifier.fromNamespaceAndPath("minecraft", "logs")
-                )),
+                ))),
                 new ItemStack(Items.STICK),
                 1,
                 20
@@ -140,7 +141,9 @@ class ManualProcessingRecipeTest {
                 20
         );
         RegistryFriendlyByteBuf buffer = new RegistryFriendlyByteBuf(
-                Unpooled.buffer(), RegistryAccess.BUILTIN.get(), ConnectionType.NEOFORGE
+                Unpooled.buffer(),
+                RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY),
+                ConnectionType.NEOFORGE
         );
         try {
             ManualProcessingRecipe.STREAM_CODEC.encode(buffer, original);
