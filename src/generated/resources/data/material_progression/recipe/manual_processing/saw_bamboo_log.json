@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_processing",
+  "tool": "#c:tools/saws",
+  "input": "minecraft:bamboo_block",
+  "result": {
+    "count": 6,
+    "id": "minecraft:bamboo_planks"
+  },
+  "durability_cost": 2,
+  "operation_time": 40
+}

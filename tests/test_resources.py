@@ -5,6 +5,7 @@ from pathlib import Path
 from content_contracts import (
     CREATIVE_TAB_ITEMS,
     CRUSHING_RECIPES,
+    MANUAL_PROCESSING_RECIPES,
     MATERIAL_FAMILIES,
     PRIMITIVE_RECIPES,
     SHIPPED_BLOCKS,
@@ -276,6 +277,23 @@ class ResourceContractTests(unittest.TestCase):
         for name, contract in CRUSHING_RECIPES.items():
             with self.subTest(recipe=name):
                 self.assert_recipe_matches(name, contract)
+
+    def test_manual_processing_recipes_keep_tool_tags_and_material_flow(self):
+        recipe_dir = DATA / "recipe" / "manual_processing"
+        actual_names = TREE.names_matching(recipe_dir, "*.json")
+        self.assertEqual(set(MANUAL_PROCESSING_RECIPES), actual_names)
+
+        for name, expected in MANUAL_PROCESSING_RECIPES.items():
+            with self.subTest(recipe=name):
+                recipe = TREE.load_json(recipe_dir / f"{name}.json")
+                self.assertEqual("material_progression:manual_processing", recipe["type"])
+                self.assertEqual(expected, {
+                    "tool": recipe["tool"],
+                    "input": recipe["input"],
+                    "result": recipe["result"],
+                    "durability_cost": recipe["durability_cost"],
+                    "operation_time": recipe["operation_time"],
+                })
 
     def test_smelting_recipes_preserve_material_flow(self):
         actual_names = TREE.names_matching(DATA / "recipe", "smelting_*.json")

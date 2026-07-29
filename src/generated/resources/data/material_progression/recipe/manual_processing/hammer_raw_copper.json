@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_processing",
+  "tool": "#c:tools/hammers",
+  "input": "#c:raw_materials/copper",
+  "result": {
+    "count": 2,
+    "id": "material_progression:copper_dust"
+  },
+  "durability_cost": 12,
+  "operation_time": 100
+}

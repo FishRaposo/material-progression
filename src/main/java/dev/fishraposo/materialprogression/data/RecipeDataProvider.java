@@ -142,6 +142,93 @@ final class RecipeDataProvider extends GeneratedResourceProvider {
         );
 
         resources.put(
+                "recipe/manual_processing/knife_rock.json",
+                manualProcessing(
+                        "#c:tools/knives", "#c:rocks",
+                        "material_progression:flint_shard", 2, 1, 20
+                )
+        );
+        resources.put(
+                "recipe/manual_processing/knife_leaves.json",
+                manualProcessing(
+                        "#c:tools/knives", "#minecraft:leaves",
+                        "material_progression:plant_fiber", 2, 1, 20
+                )
+        );
+        resources.put(
+                "recipe/manual_processing/hammer_stone.json",
+                manualProcessing(
+                        "#c:tools/hammers", "minecraft:stone",
+                        "minecraft:gravel", 1, 2, 40
+                )
+        );
+        resources.put(
+                "recipe/manual_processing/hammer_gravel.json",
+                manualProcessing(
+                        "#c:tools/hammers", "minecraft:gravel",
+                        "minecraft:sand", 1, 2, 40
+                )
+        );
+        resources.put(
+                "recipe/manual_processing/hammer_copper_ore.json",
+                manualProcessing(
+                        "#c:tools/hammers", "#c:ores/copper",
+                        "material_progression:copper_dust", 2, 12, 100
+                )
+        );
+        resources.put(
+                "recipe/manual_processing/hammer_raw_copper.json",
+                manualProcessing(
+                        "#c:tools/hammers", "#c:raw_materials/copper",
+                        "material_progression:copper_dust", 2, 12, 100
+                )
+        );
+        resources.put(
+                "recipe/manual_processing/hammer_tin_ore.json",
+                manualProcessing(
+                        "#c:tools/hammers", "#c:ores/tin",
+                        "material_progression:tin_dust", 2, 12, 100
+                )
+        );
+        resources.put(
+                "recipe/manual_processing/hammer_raw_tin.json",
+                manualProcessing(
+                        "#c:tools/hammers", "#c:raw_materials/tin",
+                        "material_progression:tin_dust", 2, 12, 100
+                )
+        );
+
+        for (String[] wood : new String[][]{
+                {"oak", "oak_log"},
+                {"spruce", "spruce_log"},
+                {"birch", "birch_log"},
+                {"jungle", "jungle_log"},
+                {"acacia", "acacia_log"},
+                {"dark_oak", "dark_oak_log"},
+                {"mangrove", "mangrove_log"},
+                {"cherry", "cherry_log"},
+                {"pale_oak", "pale_oak_log"},
+                {"bamboo", "bamboo_block"},
+                {"crimson", "crimson_stem"},
+                {"warped", "warped_stem"}
+        }) {
+            resources.put(
+                    "recipe/manual_processing/saw_" + wood[0] + "_log.json",
+                    manualProcessing(
+                            "#c:tools/saws", "minecraft:" + wood[1],
+                            "minecraft:" + wood[0] + "_planks", 6, 2, 40
+                    )
+            );
+            resources.put(
+                    "recipe/manual_processing/saw_" + wood[0] + "_planks.json",
+                    manualProcessing(
+                            "#c:tools/saws", "minecraft:" + wood[0] + "_planks",
+                            "minecraft:stick", 3, 1, 20
+                    )
+            );
+        }
+
+        resources.put(
                 "recipe/smelting_bronze_dust.json",
                 smelting(
                         commonTag("dusts", MaterialFamilies.BRONZE),
@@ -229,6 +316,24 @@ final class RecipeDataProvider extends GeneratedResourceProvider {
                 "experience", 0.7F,
                 "ingredient", ingredient,
                 "result", result(output, 1)
+        );
+    }
+
+    private static JsonObject manualProcessing(
+            String tool,
+            String input,
+            String output,
+            int count,
+            int durabilityCost,
+            int operationTime
+    ) {
+        return DataJson.object(
+                "type", "material_progression:manual_processing",
+                "tool", tool,
+                "input", input,
+                "result", result(output, count),
+                "durability_cost", durabilityCost,
+                "operation_time", operationTime
         );
     }
 

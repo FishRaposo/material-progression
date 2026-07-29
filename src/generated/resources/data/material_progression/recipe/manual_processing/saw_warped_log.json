@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_processing",
+  "tool": "#c:tools/saws",
+  "input": "minecraft:warped_stem",
+  "result": {
+    "count": 6,
+    "id": "minecraft:warped_planks"
+  },
+  "durability_cost": 2,
+  "operation_time": 40
+}

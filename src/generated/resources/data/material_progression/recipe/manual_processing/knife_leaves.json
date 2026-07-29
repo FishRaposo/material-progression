@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_processing",
+  "tool": "#c:tools/knives",
+  "input": "#minecraft:leaves",
+  "result": {
+    "count": 2,
+    "id": "material_progression:plant_fiber"
+  },
+  "durability_cost": 1,
+  "operation_time": 20
+}

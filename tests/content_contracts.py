@@ -192,6 +192,94 @@ SMELTING_RECIPES = {
     ),
 }
 
+MANUAL_PROCESSING_RECIPES = {
+    "knife_rock": {
+        "tool": "#c:tools/knives",
+        "input": "#c:rocks",
+        "result": {"count": 2, "id": "material_progression:flint_shard"},
+        "durability_cost": 1,
+        "operation_time": 20,
+    },
+    "knife_leaves": {
+        "tool": "#c:tools/knives",
+        "input": "#minecraft:leaves",
+        "result": {"count": 2, "id": "material_progression:plant_fiber"},
+        "durability_cost": 1,
+        "operation_time": 20,
+    },
+    "hammer_stone": {
+        "tool": "#c:tools/hammers",
+        "input": "minecraft:stone",
+        "result": {"id": "minecraft:gravel"},
+        "durability_cost": 2,
+        "operation_time": 40,
+    },
+    "hammer_gravel": {
+        "tool": "#c:tools/hammers",
+        "input": "minecraft:gravel",
+        "result": {"id": "minecraft:sand"},
+        "durability_cost": 2,
+        "operation_time": 40,
+    },
+    "hammer_copper_ore": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:ores/copper",
+        "result": {"count": 2, "id": "material_progression:copper_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+    "hammer_raw_copper": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:raw_materials/copper",
+        "result": {"count": 2, "id": "material_progression:copper_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+    "hammer_tin_ore": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:ores/tin",
+        "result": {"count": 2, "id": "material_progression:tin_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+    "hammer_raw_tin": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:raw_materials/tin",
+        "result": {"count": 2, "id": "material_progression:tin_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+}
+
+for wood, log in {
+    "oak": "oak_log",
+    "spruce": "spruce_log",
+    "birch": "birch_log",
+    "jungle": "jungle_log",
+    "acacia": "acacia_log",
+    "dark_oak": "dark_oak_log",
+    "mangrove": "mangrove_log",
+    "cherry": "cherry_log",
+    "pale_oak": "pale_oak_log",
+    "bamboo": "bamboo_block",
+    "crimson": "crimson_stem",
+    "warped": "warped_stem",
+}.items():
+    MANUAL_PROCESSING_RECIPES[f"saw_{wood}_log"] = {
+        "tool": "#c:tools/saws",
+        "input": f"minecraft:{log}",
+        "result": {"count": 6, "id": f"minecraft:{wood}_planks"},
+        "durability_cost": 2,
+        "operation_time": 40,
+    }
+    MANUAL_PROCESSING_RECIPES[f"saw_{wood}_planks"] = {
+        "tool": "#c:tools/saws",
+        "input": f"minecraft:{wood}_planks",
+        "result": {"count": 3, "id": "minecraft:stick"},
+        "durability_cost": 1,
+        "operation_time": 20,
+    }
+
 TOOL_FAMILIES = {
     "flint": {
         "flint_hatchet",
