@@ -1,28 +1,28 @@
 {
   "families": {
+    "bronze": {
+      "attack_bonus": 2.0,
+      "durability": 325,
+      "enchantment_value": 12,
+      "incorrect_blocks_tag": "material_progression:incorrect_for_bronze_tool",
+      "repair_tag": "c:ingots/bronze",
+      "speed": 6.5
+    },
     "flint": {
-      "durability": 64,
-      "speed": 5.0,
       "attack_bonus": 1.5,
+      "durability": 64,
       "enchantment_value": 5,
+      "incorrect_blocks_tag": "material_progression:incorrect_for_flint_tool",
       "repair_tag": "c:flint_shards",
-      "incorrect_blocks_tag": "material_progression:incorrect_for_flint_tool"
+      "speed": 5.0
     },
     "tin": {
-      "durability": 96,
-      "speed": 3.5,
       "attack_bonus": 0.5,
+      "durability": 96,
       "enchantment_value": 8,
+      "incorrect_blocks_tag": "material_progression:incorrect_for_tin_tool",
       "repair_tag": "c:ingots/tin",
-      "incorrect_blocks_tag": "material_progression:incorrect_for_tin_tool"
-    },
-    "bronze": {
-      "durability": 325,
-      "speed": 6.5,
-      "attack_bonus": 2.0,
-      "enchantment_value": 12,
-      "repair_tag": "c:ingots/bronze",
-      "incorrect_blocks_tag": "material_progression:incorrect_for_bronze_tool"
+      "speed": 3.5
     }
   }
 }
