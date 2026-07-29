@@ -2,13 +2,16 @@ package dev.fishraposo.materialprogression;
 
 import dev.fishraposo.materialprogression.client.CrusherScreen;
 import dev.fishraposo.materialprogression.client.ClientManualRecipes;
+import dev.fishraposo.materialprogression.client.ClientWorkshopPreviews;
 import dev.fishraposo.materialprogression.client.WorkshopScreen;
+import dev.fishraposo.materialprogression.network.WorkshopPreviewPayload;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
+import net.neoforged.neoforge.client.event.RegisterClientPayloadHandlersEvent;
 import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 
@@ -29,5 +32,17 @@ public final class MaterialProgressionClient {
     @SubscribeEvent
     static void clearRecipes(ClientPlayerNetworkEvent.LoggingOut event) {
         ClientManualRecipes.clear();
+        ClientWorkshopPreviews.clear();
+    }
+
+    @SubscribeEvent
+    static void registerClientPayloads(
+            RegisterClientPayloadHandlersEvent event
+    ) {
+        event.register(
+                WorkshopPreviewPayload.TYPE,
+                (payload, context) ->
+                        ClientWorkshopPreviews.accept(payload)
+        );
     }
 }

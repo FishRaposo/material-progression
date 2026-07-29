@@ -2,12 +2,15 @@ package dev.fishraposo.materialprogression.gametest;
 
 import dev.fishraposo.materialprogression.registry.ModBlocks;
 import dev.fishraposo.materialprogression.registry.ModItems;
+import dev.fishraposo.materialprogression.transaction.OperationPreview;
+import dev.fishraposo.materialprogression.world.inventory.WorkshopMenu;
 import dev.fishraposo.materialprogression.world.level.block.entity.WorkshopBlockEntity;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -152,6 +155,181 @@ public final class WorkshopGameTests {
         helper.assertTrue(
                 knife.getDamageValue() == 0,
                 "Stale selection damaged the installed tool"
+        );
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "3x3x3", floor = true)
+    @TestHolder(description = "Workshop batches execute exactly or consume nothing")
+    static void batchesAreRevisionedAndAtomic(
+            ExtendedGameTestHelper helper
+    ) {
+        WorkshopBlockEntity workshop = GameTestSupport.placeBlockEntity(
+                helper,
+                GameTestSupport.DEFAULT_BLOCK_POS,
+                ModBlocks.WORKSHOP.get(),
+                WorkshopBlockEntity.class
+        );
+        workshop.setItem(
+                WorkshopBlockEntity.TOOL_SLOT,
+                ModItems.FLINT_KNIFE.get().getDefaultInstance()
+        );
+        workshop.setItem(
+                WorkshopBlockEntity.INPUT_SLOT,
+                new ItemStack(ModItems.ROCK.get(), 4)
+        );
+        var recipeId = workshop.matchingRecipes()
+                .getFirst()
+                .id()
+                .identifier();
+        OperationPreview exact = workshop.preview(recipeId, 4);
+        helper.assertTrue(exact != null, "Batch preview was absent");
+        helper.assertTrue(
+                exact.executable() == 4,
+                "Expected four executable operations"
+        );
+        helper.assertTrue(
+                workshop.execute(recipeId, 4, exact.revision()),
+                "Exact four-operation batch did not commit"
+        );
+        GameTestSupport.assertEmpty(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.INPUT_SLOT),
+                "Batch input"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.OUTPUT_SLOT),
+                ModItems.FLINT_SHARD.get(),
+                8,
+                "Batch output"
+        );
+        helper.assertTrue(
+                workshop.getItem(WorkshopBlockEntity.TOOL_SLOT)
+                        .getDamageValue() == 4,
+                "Batch did not spend exactly four durability"
+        );
+
+        workshop.setItem(
+                WorkshopBlockEntity.INPUT_SLOT,
+                new ItemStack(ModItems.ROCK.get(), 2)
+        );
+        OperationPreview stale = workshop.preview(recipeId, 2);
+        helper.assertTrue(stale != null, "Stale preview was absent");
+        workshop.setItem(
+                WorkshopBlockEntity.INPUT_SLOT,
+                ModItems.ROCK.get().getDefaultInstance()
+        );
+        helper.assertFalse(
+                workshop.execute(recipeId, 2, stale.revision()),
+                "A stale two-operation batch committed"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.INPUT_SLOT),
+                ModItems.ROCK.get(),
+                1,
+                "Stale batch input"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.OUTPUT_SLOT),
+                ModItems.FLINT_SHARD.get(),
+                8,
+                "Stale batch output"
+        );
+        helper.assertTrue(
+                workshop.getItem(WorkshopBlockEntity.TOOL_SLOT)
+                        .getDamageValue() == 4,
+                "Stale batch spent durability"
+        );
+
+        OperationPreview limited = workshop.preview(recipeId, 2);
+        helper.assertTrue(
+                limited != null && limited.executable() == 1,
+                "Limited batch did not report one executable operation"
+        );
+        helper.assertFalse(
+                workshop.execute(recipeId, 2, limited.revision()),
+                "A partially executable batch committed"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.INPUT_SLOT),
+                ModItems.ROCK.get(),
+                1,
+                "Limited batch input"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.OUTPUT_SLOT),
+                ModItems.FLINT_SHARD.get(),
+                8,
+                "Limited batch output"
+        );
+
+        workshop.setItem(
+                WorkshopBlockEntity.OUTPUT_SLOT,
+                new ItemStack(Items.DIRT, 64)
+        );
+        OperationPreview full = workshop.preview(recipeId, 1);
+        helper.assertTrue(
+                full != null && full.executable() == 0,
+                "Full output did not reject the preview"
+        );
+        helper.assertFalse(
+                workshop.execute(recipeId, 1, full.revision()),
+                "Batch committed into a full output"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.INPUT_SLOT),
+                ModItems.ROCK.get(),
+                1,
+                "Full-output batch input"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.OUTPUT_SLOT),
+                Items.DIRT,
+                64,
+                "Full-output batch output"
+        );
+
+        workshop.setItem(
+                WorkshopBlockEntity.OUTPUT_SLOT,
+                ItemStack.EMPTY
+        );
+        var player = helper.makeTickingMockServerPlayerInLevel(
+                GameType.SURVIVAL
+        );
+        WorkshopMenu reopened = new WorkshopMenu(
+                91,
+                player.getInventory(),
+                workshop
+        );
+        helper.assertFalse(
+                reopened.executeBatch(
+                        player,
+                        recipeId,
+                        1,
+                        workshop.inventoryRevision(),
+                        1
+                ),
+                "A preview sequence from a closed menu committed after reopen"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.INPUT_SLOT),
+                ModItems.ROCK.get(),
+                1,
+                "Reopened-menu input"
+        );
+        GameTestSupport.assertEmpty(
+                helper,
+                workshop.getItem(WorkshopBlockEntity.OUTPUT_SLOT),
+                "Reopened-menu output"
         );
         helper.succeed();
     }

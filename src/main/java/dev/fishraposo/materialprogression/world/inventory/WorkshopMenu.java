@@ -1,8 +1,10 @@
 package dev.fishraposo.materialprogression.world.inventory;
 
+import dev.fishraposo.materialprogression.network.WorkshopPreviewPayload;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.registry.ModTags;
+import dev.fishraposo.materialprogression.transaction.OperationPreview;
 import dev.fishraposo.materialprogression.world.item.crafting.ManualProcessingRecipe;
 import dev.fishraposo.materialprogression.world.level.block.entity.WorkshopBlockEntity;
 import java.util.Comparator;
@@ -18,12 +20,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public final class WorkshopMenu extends AbstractContainerMenu {
     private static final int PLAYER_SLOT_START =
             WorkshopBlockEntity.SLOT_COUNT;
     private final Container container;
     private final Level level;
+    private long previewSequence;
 
     public WorkshopMenu(int containerId, Inventory inventory) {
         this(containerId, inventory, new SimpleContainer(
@@ -101,6 +106,73 @@ public final class WorkshopMenu extends AbstractContainerMenu {
 
     public ItemStack inputStack() {
         return container.getItem(WorkshopBlockEntity.INPUT_SLOT);
+    }
+
+    public void sendPreview(
+            Player player,
+            Identifier recipeId,
+            int requested
+    ) {
+        if (!(player instanceof ServerPlayer serverPlayer)
+                || !(container instanceof WorkshopBlockEntity workshop)) {
+            return;
+        }
+        previewSequence++;
+        if (requested <= 0 || requested > 64) {
+            PacketDistributor.sendToPlayer(
+                    serverPlayer,
+                    WorkshopPreviewPayload.rejected(
+                            containerId,
+                            previewSequence,
+                            recipeId,
+                            requested,
+                            workshop.inventoryRevision(),
+                            "invalid_quantity"
+                    )
+            );
+            return;
+        }
+        OperationPreview preview = workshop.preview(recipeId, requested);
+        PacketDistributor.sendToPlayer(
+                serverPlayer,
+                preview == null
+                        ? WorkshopPreviewPayload.rejected(
+                                containerId,
+                                previewSequence,
+                                recipeId,
+                                requested,
+                                workshop.inventoryRevision(),
+                                "invalid_recipe"
+                        )
+                        : WorkshopPreviewPayload.from(
+                                containerId,
+                                previewSequence,
+                                recipeId,
+                                preview
+                        )
+        );
+    }
+
+    public boolean executeBatch(
+            Player player,
+            Identifier recipeId,
+            int requested,
+            long revision,
+            long sequence
+    ) {
+        if (!(container instanceof WorkshopBlockEntity workshop)
+                || sequence != previewSequence
+                || requested <= 0
+                || requested > 64) {
+            return false;
+        }
+        boolean committed = workshop.execute(
+                recipeId,
+                requested,
+                revision
+        );
+        sendPreview(player, recipeId, requested);
+        return committed;
     }
 
     @Override

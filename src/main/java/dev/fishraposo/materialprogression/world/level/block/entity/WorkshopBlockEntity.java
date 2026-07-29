@@ -5,6 +5,7 @@ import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.registry.ModTags;
 import dev.fishraposo.materialprogression.transaction.InventoryView;
 import dev.fishraposo.materialprogression.transaction.ItemTransaction;
+import dev.fishraposo.materialprogression.transaction.OperationPreview;
 import dev.fishraposo.materialprogression.world.inventory.WorkshopMenu;
 import dev.fishraposo.materialprogression.world.item.crafting.ManualProcessingRecipe;
 import java.util.Comparator;
@@ -37,6 +38,38 @@ public final class WorkshopBlockEntity extends BaseContainerBlockEntity {
     private NonNullList<ItemStack> items =
             NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
     private @Nullable Identifier selectedRecipeId;
+    private long inventoryRevision;
+    private final InventoryView transactionInventory = new InventoryView() {
+        @Override
+        public ItemStack getItem(int slot) {
+            return WorkshopBlockEntity.this.getItem(slot);
+        }
+
+        @Override
+        public int size() {
+            return SLOT_COUNT;
+        }
+
+        @Override
+        public long revision() {
+            return inventoryRevision;
+        }
+
+        @Override
+        public boolean canStore(int slot, ItemStack stack) {
+            return stack.isEmpty() || ((slot == OUTPUT_SLOT
+                    || WorkshopBlockEntity.this.canPlaceItem(slot, stack))
+                    && stack.getCount() <= Math.min(
+                            WorkshopBlockEntity.this.getMaxStackSize(),
+                            stack.getMaxStackSize()
+                    ));
+        }
+
+        @Override
+        public void setItem(int slot, ItemStack stack) {
+            WorkshopBlockEntity.this.setItem(slot, stack);
+        }
+    };
 
     public WorkshopBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.WORKSHOP.get(), pos, state);
@@ -111,24 +144,56 @@ public final class WorkshopBlockEntity extends BaseContainerBlockEntity {
         if (selectedRecipeId == null) {
             return false;
         }
-        ManualProcessingRecipe recipe = matchingRecipes().stream()
-                .filter(holder ->
-                        holder.id().identifier().equals(selectedRecipeId))
-                .map(RecipeHolder::value)
-                .findFirst()
-                .orElse(null);
-        if (recipe == null) {
-            return false;
-        }
+        OperationPreview preview = preview(
+                selectedRecipeId,
+                1
+        );
+        return preview != null
+                && execute(
+                        selectedRecipeId,
+                        1,
+                        preview.revision()
+                );
+    }
 
+    public @Nullable OperationPreview preview(
+            Identifier recipeId,
+            int requested
+    ) {
+        ManualProcessingRecipe recipe = resolveRecipe(recipeId);
+        if (recipe == null) {
+            return null;
+        }
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                InventoryView.of(this, slot -> slot == OUTPUT_SLOT),
+                transactionInventory,
                 recipe,
                 TOOL_SLOT,
                 INPUT_SLOT,
                 List.of(OUTPUT_SLOT)
         );
-        ItemTransaction.Preview preview = transaction.simulate();
+        return transaction.simulateBatch(requested);
+    }
+
+    public boolean execute(
+            Identifier recipeId,
+            int requested,
+            long expectedRevision
+    ) {
+        ManualProcessingRecipe recipe = resolveRecipe(recipeId);
+        if (recipe == null || inventoryRevision != expectedRevision) {
+            return false;
+        }
+        ItemTransaction transaction = ItemTransaction.manualProcessing(
+                transactionInventory,
+                recipe,
+                TOOL_SLOT,
+                INPUT_SLOT,
+                List.of(OUTPUT_SLOT)
+        );
+        OperationPreview preview = transaction.simulateBatch(requested);
+        if (preview.revision() != expectedRevision) {
+            return false;
+        }
         boolean committed = transaction.commit(preview);
         if (committed) {
             setChanged();
@@ -140,11 +205,49 @@ public final class WorkshopBlockEntity extends BaseContainerBlockEntity {
         return selectedRecipeId;
     }
 
+    public long inventoryRevision() {
+        return inventoryRevision;
+    }
+
+    @Override
+    public void setItem(int slot, ItemStack stack) {
+        super.setItem(slot, stack);
+        inventoryRevision++;
+    }
+
+    @Override
+    public ItemStack removeItem(int slot, int amount) {
+        ItemStack removed = super.removeItem(slot, amount);
+        if (!removed.isEmpty()) {
+            inventoryRevision++;
+        }
+        return removed;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int slot) {
+        ItemStack removed = super.removeItemNoUpdate(slot);
+        if (!removed.isEmpty()) {
+            inventoryRevision++;
+        }
+        return removed;
+    }
+
+    @Override
+    public void clearContent() {
+        boolean hadItems = items.stream().anyMatch(stack -> !stack.isEmpty());
+        super.clearContent();
+        if (hadItems) {
+            inventoryRevision++;
+        }
+    }
+
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
         ContainerHelper.loadAllItems(input, items);
+        inventoryRevision = 0;
         String selected = input.getStringOr("SelectedRecipe", "");
         selectedRecipeId = selected.isEmpty() ? null : Identifier.tryParse(selected);
     }
@@ -163,5 +266,16 @@ public final class WorkshopBlockEntity extends BaseContainerBlockEntity {
         return stack.is(ModTags.KNIVES)
                 || stack.is(ModTags.HAMMERS)
                 || stack.is(ModTags.SAWS);
+    }
+
+    private @Nullable ManualProcessingRecipe resolveRecipe(
+            Identifier recipeId
+    ) {
+        return matchingRecipes().stream()
+                .filter(holder ->
+                        holder.id().identifier().equals(recipeId))
+                .map(RecipeHolder::value)
+                .findFirst()
+                .orElse(null);
     }
 }

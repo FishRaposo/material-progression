@@ -41,31 +41,90 @@ public final class ItemTransaction {
     }
 
     public Preview simulate() {
+        return simulateBatch(1).transactionPreview();
+    }
+
+    public OperationPreview simulateBatch(int requested) {
+        if (requested <= 0 || requested > 64) {
+            throw new IllegalArgumentException(
+                    "Manual-processing batch size must be between 1 and 64"
+            );
+        }
         List<ItemStack> before = snapshot();
         List<ItemStack> after = copyStacks(before);
-        ItemStack tool = after.get(toolSlot);
-        ItemStack input = after.get(inputSlot);
+        ItemStack originalInput = before.get(inputSlot);
+        int executable = 0;
+        String failure = "";
+        ItemStackTemplate remainderTemplate = originalInput.getCraftingRemainder();
 
-        if (!recipe.matches(tool, input)) {
-            return Preview.rejected(inventory.revision(), before, "tool_or_input_mismatch");
-        }
-        if (!tool.isDamageableItem()
-                || tool.getMaxDamage() - tool.getDamageValue() <= recipe.durabilityCost()) {
-            return Preview.rejected(inventory.revision(), before, "insufficient_durability");
+        while (executable < requested) {
+            List<ItemStack> candidate = copyStacks(after);
+            ItemStack tool = candidate.get(toolSlot);
+            ItemStack input = candidate.get(inputSlot);
+            if (!recipe.matches(tool, input)) {
+                failure = "tool_or_input_mismatch";
+                break;
+            }
+            if (!tool.isDamageableItem()
+                    || tool.getMaxDamage() - tool.getDamageValue()
+                    <= recipe.durabilityCost()) {
+                failure = "insufficient_durability";
+                break;
+            }
+
+            tool.setDamageValue(
+                    tool.getDamageValue() + recipe.durabilityCost()
+            );
+            input.shrink(1);
+            if (!insert(candidate, recipe.resultStack())
+                    || !insert(
+                            candidate,
+                            remainderTemplate != null
+                                    ? remainderTemplate.create()
+                                    : ItemStack.EMPTY
+                    )
+                    || !canStoreAllChanges(before, candidate)) {
+                failure = "insufficient_output_capacity";
+                break;
+            }
+            after = candidate;
+            executable++;
         }
 
-        ItemStackTemplate remainder = input.getCraftingRemainder();
-        tool.setDamageValue(tool.getDamageValue() + recipe.durabilityCost());
-        input.shrink(1);
-
-        if (!insert(after, recipe.resultStack())
-                || !insert(after, remainder != null ? remainder.create() : ItemStack.EMPTY)) {
-            return Preview.rejected(inventory.revision(), before, "insufficient_output_capacity");
+        Preview transactionPreview = executable == 0
+                ? Preview.rejected(
+                        inventory.revision(),
+                        before,
+                        failure
+                )
+                : Preview.accepted(inventory.revision(), before, after);
+        ItemStack consumed = executable == 0
+                ? ItemStack.EMPTY
+                : originalInput.copyWithCount(executable);
+        ItemStack result = recipe.resultStack();
+        ItemStack produced = executable == 0
+                ? ItemStack.EMPTY
+                : result.copyWithCount(result.getCount() * executable);
+        List<ItemStack> remainders;
+        if (remainderTemplate == null || executable == 0) {
+            remainders = List.of();
+        } else {
+            ItemStack remainder = remainderTemplate.create();
+            remainders = List.of(remainder.copyWithCount(
+                    remainder.getCount() * executable
+            ));
         }
-        if (!canStoreAllChanges(before, after)) {
-            return Preview.rejected(inventory.revision(), before, "insufficient_output_capacity");
-        }
-        return Preview.accepted(inventory.revision(), before, after);
+        return new OperationPreview(
+                requested,
+                executable,
+                consumed,
+                produced,
+                recipe.durabilityCost() * executable,
+                remainders,
+                inventory.revision(),
+                failure,
+                transactionPreview
+        );
     }
 
     public boolean commit(Preview preview) {
@@ -100,6 +159,13 @@ public final class ItemTransaction {
             }
             return false;
         }
+    }
+
+    /**
+     * Commits only when every requested operation was simulated successfully.
+     */
+    public boolean commit(OperationPreview preview) {
+        return preview.exact() && commit(preview.transactionPreview());
     }
 
     private boolean insert(List<ItemStack> stacks, ItemStack incoming) {

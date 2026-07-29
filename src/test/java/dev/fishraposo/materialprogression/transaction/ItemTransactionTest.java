@@ -257,6 +257,59 @@ class ItemTransactionTest {
         assertThrows(UnsupportedOperationException.class, () -> preview.slotDeltas().clear());
     }
 
+    @Test
+    void batchPreviewReportsTheMaximumWithoutCommittingAPartialRequest() {
+        TestInventory inventory = new TestInventory(
+                new ItemStack(Items.WOODEN_SWORD),
+                new ItemStack(Items.HONEY_BOTTLE, 5),
+                ItemStack.EMPTY,
+                ItemStack.EMPTY
+        );
+        ItemTransaction transaction = ItemTransaction.manualProcessing(
+                inventory, processingRecipe, 0, 1, List.of(2, 3)
+        );
+
+        OperationPreview limited = transaction.simulateBatch(10);
+
+        assertEquals(10, limited.requested());
+        assertEquals(5, limited.executable());
+        assertEquals(5, limited.consumed().getCount());
+        assertEquals(10, limited.produced().getCount());
+        assertEquals(5, limited.durabilityCost());
+        assertEquals(5, limited.remainders().getFirst().getCount());
+        assertFalse(transaction.commit(limited));
+        assertEquals(5, inventory.getItem(1).getCount());
+        assertTrue(inventory.getItem(2).isEmpty());
+
+        OperationPreview exact = transaction.simulateBatch(5);
+
+        assertTrue(transaction.commit(exact));
+        assertTrue(inventory.getItem(1).isEmpty());
+        assertEquals(5, inventory.getItem(0).getDamageValue());
+        assertEquals(10, inventory.getItem(2).getCount());
+        assertEquals(5, inventory.getItem(3).getCount());
+    }
+
+    @Test
+    void staleBatchPreviewConsumesNothing() {
+        TestInventory inventory = new TestInventory(
+                new ItemStack(Items.WOODEN_SWORD),
+                new ItemStack(Items.HONEY_BOTTLE, 2),
+                ItemStack.EMPTY,
+                ItemStack.EMPTY
+        );
+        ItemTransaction transaction = ItemTransaction.manualProcessing(
+                inventory, processingRecipe, 0, 1, List.of(2, 3)
+        );
+        OperationPreview preview = transaction.simulateBatch(2);
+        inventory.setItem(2, new ItemStack(Items.DIRT));
+
+        assertFalse(transaction.commit(preview));
+        assertEquals(2, inventory.getItem(1).getCount());
+        assertEquals(0, inventory.getItem(0).getDamageValue());
+        assertTrue(inventory.getItem(2).is(Items.DIRT));
+    }
+
     private static class TestInventory implements InventoryView {
         private final ItemStack[] items;
         private long revision;
