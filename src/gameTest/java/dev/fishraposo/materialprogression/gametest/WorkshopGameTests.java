@@ -69,8 +69,11 @@ public final class WorkshopGameTests {
                     operation.name() + " output"
             );
             helper.assertTrue(
-                    tool.getDamageValue() == operation.durabilityCost(),
-                    operation.name() + " spent " + tool.getDamageValue()
+                    workshop.getItem(WorkshopBlockEntity.TOOL_SLOT)
+                            .getDamageValue() == operation.durabilityCost(),
+                    operation.name() + " spent "
+                            + workshop.getItem(WorkshopBlockEntity.TOOL_SLOT)
+                            .getDamageValue()
                             + " durability instead of "
                             + operation.durabilityCost()
             );

@@ -150,6 +150,7 @@ class ItemTransactionTest {
         assertTrue(preview.accepted());
         assertTrue(transaction.commit(preview));
         assertFalse(container.canPlaceItem(2, new ItemStack(Items.STICK)));
+        assertEquals(1, container.getItem(0).getDamageValue());
         assertTrue(container.getItem(2).is(Items.STICK));
         assertEquals(2, container.getItem(2).getCount());
     }
