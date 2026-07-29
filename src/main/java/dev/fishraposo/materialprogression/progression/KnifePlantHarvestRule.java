@@ -15,5 +15,6 @@ public final class KnifePlantHarvestRule implements HarvestRule {
             return;
         }
         context.replaceDrops(new ItemStack(ModItems.PLANT_FIBER.get()));
+        context.damageMainHandTool(1);
     }
 }

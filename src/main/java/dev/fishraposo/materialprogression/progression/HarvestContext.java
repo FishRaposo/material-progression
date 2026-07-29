@@ -4,6 +4,8 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
@@ -93,6 +95,26 @@ public final class HarvestContext {
 
     public void denyHarvest() {
         canHarvest = false;
+    }
+
+    public void damageMainHandTool(int amount) {
+        if (level == null) {
+            throw new IllegalStateException(
+                    "Permission checks cannot damage harvest tools"
+            );
+        }
+        if (!(breaker instanceof LivingEntity livingBreaker)) {
+            return;
+        }
+        livingBreaker.getMainHandItem().hurtAndBreak(
+                amount,
+                level,
+                livingBreaker,
+                brokenItem -> livingBreaker.onEquippedItemBroken(
+                        brokenItem,
+                        EquipmentSlot.MAINHAND
+                )
+        );
     }
 
     public void replaceDrops(ItemStack replacement) {
