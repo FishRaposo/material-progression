@@ -7,6 +7,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -53,5 +55,10 @@ public final class ModRecipes {
     public static void register(IEventBus modBus) {
         RECIPE_TYPES.register(modBus);
         RECIPE_SERIALIZERS.register(modBus);
+        NeoForge.EVENT_BUS.addListener(ModRecipes::syncManualRecipes);
+    }
+
+    private static void syncManualRecipes(OnDatapackSyncEvent event) {
+        event.sendRecipes(MANUAL_PROCESSING.get());
     }
 }

@@ -7,7 +7,7 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import dev.fishraposo.materialprogression.world.item.crafting.ManualProcessingRecipe;
@@ -80,7 +80,7 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
     ) {
         super.extractLabels(graphics, mouseX, mouseY);
         List<RecipeHolder<ManualProcessingRecipe>> recipes =
-                menu.matchingRecipes();
+                matchingRecipes();
         Component selection = recipes.isEmpty()
                 ? Component.translatable(
                         "gui.material_progression.workshop.no_recipe"
@@ -112,7 +112,7 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
 
     private void selectRelative(int offset) {
         List<RecipeHolder<ManualProcessingRecipe>> recipes =
-                menu.matchingRecipes();
+                matchingRecipes();
         if (recipes.isEmpty()) {
             selectedIndex = 0;
             return;
@@ -123,15 +123,22 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
 
     private void selectCurrent() {
         List<RecipeHolder<ManualProcessingRecipe>> recipes =
-                menu.matchingRecipes();
+                matchingRecipes();
         if (recipes.isEmpty()) {
             return;
         }
         selectedIndex = Math.floorMod(selectedIndex, recipes.size());
-        PacketDistributor.sendToServer(
+        ClientPacketDistributor.sendToServer(
                 new SelectWorkshopRecipePayload(
                         recipes.get(selectedIndex).id().identifier()
                 )
+        );
+    }
+
+    private List<RecipeHolder<ManualProcessingRecipe>> matchingRecipes() {
+        return ClientManualRecipes.matching(
+                menu.toolStack(),
+                menu.inputStack()
         );
     }
 }
