@@ -16,6 +16,7 @@ class JavaSourceContractTests(unittest.TestCase):
         self.assertIn("unitTest {", build_script)
         self.assertIn("enable()", build_script)
         self.assertIn("testedMod = mods.getByName(project.mod_id)", build_script)
+        self.assertIn("loadedMods = [testedMod]", build_script)
         self.assertIn(
             "testRuntimeOnly 'org.junit.platform:junit-platform-launcher'",
             build_script,
