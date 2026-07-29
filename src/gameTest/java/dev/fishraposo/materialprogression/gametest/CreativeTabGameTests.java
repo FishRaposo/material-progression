@@ -71,7 +71,7 @@ public final class CreativeTabGameTests {
         RecipeSerializer<?> registeredSerializer =
                 BuiltInRegistries.RECIPE_SERIALIZER.getValue(id);
         Collection<RecipeHolder<ManualProcessingRecipe>> recipes = helper.getLevel()
-                .getRecipeManager()
+                .recipeAccess()
                 .recipeMap()
                 .byType(ModRecipes.MANUAL_PROCESSING.get());
 
