@@ -32,8 +32,14 @@ public final class MinecraftTestBootstrap {
             field.setAccessible(true);
             DataComponentInitializers initializers =
                     (DataComponentInitializers) field.get(null);
-            initializers.build(VanillaRegistries.createLookup())
-                    .forEach(DataComponentInitializers.PendingComponents::apply);
+            boolean runningInIde = SharedConstants.IS_RUNNING_IN_IDE;
+            try {
+                SharedConstants.IS_RUNNING_IN_IDE = false;
+                initializers.build(VanillaRegistries.createLookup())
+                        .forEach(DataComponentInitializers.PendingComponents::apply);
+            } finally {
+                SharedConstants.IS_RUNNING_IN_IDE = runningInIde;
+            }
         } catch (ReflectiveOperationException exception) {
             throw new IllegalStateException(
                     "Could not bind Minecraft default data components for JVM tests",

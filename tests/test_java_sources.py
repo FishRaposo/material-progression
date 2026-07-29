@@ -40,6 +40,10 @@ class JavaSourceContractTests(unittest.TestCase):
         self.assertIn("Bootstrap.bootStrap();", bootstrap)
         self.assertIn("initializers.build(VanillaRegistries.createLookup())", bootstrap)
         self.assertIn(
+            "SharedConstants.IS_RUNNING_IN_IDE = runningInIde;",
+            bootstrap,
+        )
+        self.assertIn(
             "--add-opens=minecraft/net.minecraft.core.registries=material_progression",
             BUILD_GRADLE.read_text(encoding="utf-8"),
         )
