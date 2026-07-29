@@ -170,6 +170,12 @@ dependencies {
 
 tasks.named('test').configure {
     useJUnitPlatform()
+    testLogging {
+        events 'failed'
+        exceptionFormat = 'full'
+        showCauses = true
+        showStackTraces = true
+    }
 }
 
 tasks.named('check').configure {
