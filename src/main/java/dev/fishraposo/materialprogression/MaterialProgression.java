@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression;
 
 import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
+import dev.fishraposo.materialprogression.data.MaterialProgressionData;
 import dev.fishraposo.materialprogression.progression.HarvestRuleEvents;
 import dev.fishraposo.materialprogression.registry.ModBlockEntities;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
@@ -22,6 +23,7 @@ public final class MaterialProgression {
         ModBlockEntities.register(modBus);
         ModMenus.register(modBus);
         ModRecipes.register(modBus);
+        modBus.addListener(MaterialProgressionData::gatherData);
         container.registerConfig(
                 ModConfig.Type.SERVER,
                 MaterialProgressionConfig.SPEC

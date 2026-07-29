@@ -14,6 +14,8 @@ SHIPPED_ITEMS = {
     "deepslate_tin_ore",
     "flint_hatchet",
     "flint_shard",
+    "ground_stick",
+    "loose_rocks",
     "raw_tin",
     "rock",
     "tin_axe",
@@ -34,7 +36,32 @@ SHIPPED_BLOCKS = {
     "tin_ore",
 }
 
-WORLD_ONLY_BLOCKS = {"ground_stick", "loose_rocks"}
+MATERIAL_FAMILIES = {
+    "flint": {
+        "durability": 64,
+        "speed": 5.0,
+        "attack_bonus": 1.5,
+        "enchantment_value": 5,
+        "repair_tag": "c:flint_shards",
+        "incorrect_blocks_tag": "material_progression:incorrect_for_flint_tool",
+    },
+    "tin": {
+        "durability": 96,
+        "speed": 3.5,
+        "attack_bonus": 0.5,
+        "enchantment_value": 8,
+        "repair_tag": "c:ingots/tin",
+        "incorrect_blocks_tag": "material_progression:incorrect_for_tin_tool",
+    },
+    "bronze": {
+        "durability": 325,
+        "speed": 6.5,
+        "attack_bonus": 2.0,
+        "enchantment_value": 12,
+        "repair_tag": "c:ingots/bronze",
+        "incorrect_blocks_tag": "material_progression:incorrect_for_bronze_tool",
+    },
+}
 
 PRIMITIVE_RECIPES = {
     "cobblestone_from_rocks": {

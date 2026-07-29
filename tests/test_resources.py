@@ -4,13 +4,13 @@ from pathlib import Path
 
 from content_contracts import (
     CRUSHING_RECIPES,
+    MATERIAL_FAMILIES,
     PRIMITIVE_RECIPES,
     SHIPPED_BLOCKS,
     SHIPPED_ITEMS,
     SMELTING_RECIPES,
     SURFACE_WORLDGEN_FEATURES,
     TOOL_FAMILIES,
-    WORLD_ONLY_BLOCKS,
 )
 from support.resources import RecipeContract, ResourceTree
 
@@ -87,9 +87,16 @@ class ResourceContractTests(unittest.TestCase):
                 self.assertIn(translation_key, english)
                 self.assertIn(translation_key, portuguese)
 
-    def test_world_only_blocks_have_no_inventory_form(self):
-        item_models = TREE.names_matching(ASSETS / "items", "*.json")
-        self.assertTrue(WORLD_ONLY_BLOCKS.isdisjoint(item_models))
+    def test_declarative_material_catalog_preserves_tool_balance(self):
+        generated_catalog = (
+            ROOT
+            / "src/generated/resources/data/material_progression/material_family/catalog.json"
+        )
+
+        self.assertEqual(
+            MATERIAL_FAMILIES,
+            TREE.load_json(generated_catalog)["families"],
+        )
 
     def test_primitive_recipes_preserve_the_bootstrap(self):
         for name, expected in PRIMITIVE_RECIPES.items():
