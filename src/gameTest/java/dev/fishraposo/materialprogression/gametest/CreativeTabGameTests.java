@@ -11,6 +11,8 @@ import java.util.Set;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -93,6 +95,13 @@ public final class CreativeTabGameTests {
                                 && recipe.value().getSerializer() == registeredSerializer
                 ),
                 "Decoded manual-processing recipe used the wrong production registration"
+        );
+        helper.assertTrue(
+                recipes.stream().anyMatch(recipe -> recipe.value().matches(
+                        new ItemStack(ModItems.FLINT_KNIFE.get()),
+                        new ItemStack(Items.OAK_LEAVES)
+                )),
+                "Loaded item tags did not match the knife-and-leaves manual recipe"
         );
         helper.succeed();
     }

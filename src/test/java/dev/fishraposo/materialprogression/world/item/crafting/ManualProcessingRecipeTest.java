@@ -10,10 +10,7 @@ import dev.fishraposo.materialprogression.testsupport.MinecraftTestBootstrap;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.resources.Identifier;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -72,28 +69,6 @@ class ManualProcessingRecipeTest {
         assertEquals("", recipe.group());
         assertFalse(recipe.showNotification());
         assertTrue(recipe.display().isEmpty());
-    }
-
-    @Test
-    void matchesItemsThroughTagIngredients() {
-        ManualProcessingRecipe recipe = new ManualProcessingRecipe(
-                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(TagKey.create(
-                        Registries.ITEM,
-                        Identifier.fromNamespaceAndPath("minecraft", "swords")
-                ))),
-                Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(TagKey.create(
-                        Registries.ITEM,
-                        Identifier.fromNamespaceAndPath("minecraft", "logs")
-                ))),
-                new ItemStack(Items.STICK),
-                1,
-                20
-        );
-
-        assertTrue(recipe.matches(
-                new ItemStack(Items.WOODEN_SWORD),
-                new ItemStack(Items.OAK_LOG)
-        ));
     }
 
     @Test

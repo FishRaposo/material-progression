@@ -170,6 +170,7 @@ dependencies {
 
 tasks.named('test').configure {
     useJUnitPlatform()
+    jvmArgs '--add-opens=minecraft/net.minecraft.core.registries=material_progression'
     testLogging {
         events 'failed'
         exceptionFormat = 'full'

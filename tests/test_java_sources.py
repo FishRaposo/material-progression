@@ -38,6 +38,11 @@ class JavaSourceContractTests(unittest.TestCase):
 
         self.assertIn("SharedConstants.tryDetectVersion();", bootstrap)
         self.assertIn("Bootstrap.bootStrap();", bootstrap)
+        self.assertIn("initializers.build(VanillaRegistries.createLookup())", bootstrap)
+        self.assertIn(
+            "--add-opens=minecraft/net.minecraft.core.registries=material_progression",
+            BUILD_GRADLE.read_text(encoding="utf-8"),
+        )
 
         expected_users = (
             UNIT_TEST_JAVA_ROOT
