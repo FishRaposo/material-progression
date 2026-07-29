@@ -1,10 +1,10 @@
 {
   "type": "material_progression:manual_processing",
-  "tool": "#c:tools/hammers",
+  "durability_cost": 2,
   "input": "minecraft:gravel",
+  "operation_time": 40,
   "result": {
     "id": "minecraft:sand"
   },
-  "durability_cost": 2,
-  "operation_time": 40
+  "tool": "#c:tools/hammers"
 }

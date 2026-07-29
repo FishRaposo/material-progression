@@ -1,11 +1,11 @@
 {
   "type": "material_progression:manual_processing",
-  "tool": "#c:tools/saws",
+  "durability_cost": 2,
   "input": "minecraft:jungle_log",
+  "operation_time": 40,
   "result": {
     "count": 6,
     "id": "minecraft:jungle_planks"
   },
-  "durability_cost": 2,
-  "operation_time": 40
+  "tool": "#c:tools/saws"
 }

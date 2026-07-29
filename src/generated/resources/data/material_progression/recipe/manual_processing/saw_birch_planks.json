@@ -1,11 +1,11 @@
 {
   "type": "material_progression:manual_processing",
-  "tool": "#c:tools/saws",
+  "durability_cost": 1,
   "input": "minecraft:birch_planks",
+  "operation_time": 20,
   "result": {
     "count": 3,
     "id": "minecraft:stick"
   },
-  "durability_cost": 1,
-  "operation_time": 20
+  "tool": "#c:tools/saws"
 }
