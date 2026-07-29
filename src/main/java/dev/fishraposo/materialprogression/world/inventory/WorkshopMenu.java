@@ -17,6 +17,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 
 public final class WorkshopMenu extends AbstractContainerMenu {
     private static final int PLAYER_SLOT_START =
@@ -73,9 +74,12 @@ public final class WorkshopMenu extends AbstractContainerMenu {
     }
 
     public List<RecipeHolder<ManualProcessingRecipe>> matchingRecipes() {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return List.of();
+        }
         ItemStack tool = container.getItem(WorkshopBlockEntity.TOOL_SLOT);
         ItemStack input = container.getItem(WorkshopBlockEntity.INPUT_SLOT);
-        return level.recipeAccess()
+        return serverLevel.recipeAccess()
                 .recipeMap()
                 .byType(ModRecipes.MANUAL_PROCESSING.get())
                 .stream()
@@ -89,6 +93,14 @@ public final class WorkshopMenu extends AbstractContainerMenu {
     public boolean selectRecipe(Identifier recipeId) {
         return container instanceof WorkshopBlockEntity workshop
                 && workshop.selectRecipe(recipeId);
+    }
+
+    public ItemStack toolStack() {
+        return container.getItem(WorkshopBlockEntity.TOOL_SLOT);
+    }
+
+    public ItemStack inputStack() {
+        return container.getItem(WorkshopBlockEntity.INPUT_SLOT);
     }
 
     @Override

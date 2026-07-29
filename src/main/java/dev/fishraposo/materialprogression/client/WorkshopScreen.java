@@ -3,11 +3,11 @@ package dev.fishraposo.materialprogression.client;
 import dev.fishraposo.materialprogression.network.SelectWorkshopRecipePayload;
 import dev.fishraposo.materialprogression.world.inventory.WorkshopMenu;
 import java.util.List;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.multiplayer.ClientPacketDistributor;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.network.PacketDistributor;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import dev.fishraposo.materialprogression.world.item.crafting.ManualProcessingRecipe;
@@ -20,9 +20,7 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
             Inventory inventory,
             Component title
     ) {
-        super(menu, inventory, title);
-        imageWidth = 176;
-        imageHeight = 166;
+        super(menu, inventory, title, 176, 166);
         inventoryLabelY = imageHeight - 94;
     }
 
@@ -52,11 +50,11 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
     }
 
     @Override
-    protected void renderBg(
-            GuiGraphics graphics,
-            float partialTick,
+    public void extractBackground(
+            GuiGraphicsExtractor graphics,
             int mouseX,
-            int mouseY
+            int mouseY,
+            float partialTick
     ) {
         graphics.fill(
                 leftPos,
@@ -75,12 +73,12 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
     }
 
     @Override
-    protected void renderLabels(
-            GuiGraphics graphics,
+    protected void extractLabels(
+            GuiGraphicsExtractor graphics,
             int mouseX,
             int mouseY
     ) {
-        super.renderLabels(graphics, mouseX, mouseY);
+        super.extractLabels(graphics, mouseX, mouseY);
         List<RecipeHolder<ManualProcessingRecipe>> recipes =
                 menu.matchingRecipes();
         Component selection = recipes.isEmpty()
@@ -92,7 +90,7 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
                         .result()
                         .create()
                         .getHoverName();
-        graphics.drawCenteredString(
+        graphics.centeredText(
                 font,
                 selection,
                 imageWidth / 2,
@@ -102,14 +100,14 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
     }
 
     @Override
-    public void render(
-            GuiGraphics graphics,
+    public void extractRenderState(
+            GuiGraphicsExtractor graphics,
             int mouseX,
             int mouseY,
             float partialTick
     ) {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        renderTooltip(graphics, mouseX, mouseY);
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        extractTooltip(graphics, mouseX, mouseY);
     }
 
     private void selectRelative(int offset) {
@@ -130,7 +128,7 @@ public final class WorkshopScreen extends AbstractContainerScreen<WorkshopMenu> 
             return;
         }
         selectedIndex = Math.floorMod(selectedIndex, recipes.size());
-        ClientPacketDistributor.sendToServer(
+        PacketDistributor.sendToServer(
                 new SelectWorkshopRecipePayload(
                         recipes.get(selectedIndex).id().identifier()
                 )

@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -78,12 +79,12 @@ public final class WorkshopBlockEntity extends BaseContainerBlockEntity {
     }
 
     public List<RecipeHolder<ManualProcessingRecipe>> matchingRecipes() {
-        if (level == null) {
+        if (!(level instanceof ServerLevel serverLevel)) {
             return List.of();
         }
         ItemStack tool = getItem(TOOL_SLOT);
         ItemStack input = getItem(INPUT_SLOT);
-        return level.recipeAccess()
+        return serverLevel.recipeAccess()
                 .recipeMap()
                 .byType(ModRecipes.MANUAL_PROCESSING.get())
                 .stream()
