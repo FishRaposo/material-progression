@@ -190,7 +190,9 @@ public final class ItemTransaction {
     }
 
     private static List<ItemStack> copyStacks(List<ItemStack> stacks) {
-        return stacks.stream().map(ItemStack::copy).toList();
+        return stacks.stream()
+                .map(ItemStack::copy)
+                .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 
     private static boolean sameStacks(List<ItemStack> left, List<ItemStack> right) {

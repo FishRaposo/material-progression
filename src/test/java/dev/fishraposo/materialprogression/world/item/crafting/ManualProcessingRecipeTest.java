@@ -12,6 +12,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -81,11 +82,15 @@ class ManualProcessingRecipeTest {
                 1,
                 20
         );
+        var registryOps = RegistryOps.create(
+                JsonOps.INSTANCE,
+                RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)
+        );
         ManualProcessingRecipe decoded = ManualProcessingRecipe.MAP_CODEC.codec()
                 .parse(
-                        JsonOps.INSTANCE,
+                        registryOps,
                         ManualProcessingRecipe.MAP_CODEC.codec()
-                                .encodeStart(JsonOps.INSTANCE, original)
+                                .encodeStart(registryOps, original)
                                 .getOrThrow()
                 )
                 .getOrThrow();
