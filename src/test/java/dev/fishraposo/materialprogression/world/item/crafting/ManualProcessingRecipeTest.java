@@ -45,6 +45,25 @@ class ManualProcessingRecipeTest {
     }
 
     @Test
+    void exposesOnlyTheMaterialInputForRecipePlacement() {
+        ManualProcessingRecipe recipe = new ManualProcessingRecipe(
+                Ingredient.of(Items.SHEARS),
+                Ingredient.of(Items.OAK_LEAVES),
+                new ItemStack(Items.STRING, 2),
+                1,
+                20
+        );
+
+        var placementInfo = recipe.placementInfo();
+
+        assertEquals(1, placementInfo.ingredients().size());
+        assertTrue(placementInfo.ingredients().getFirst().test(new ItemStack(Items.OAK_LEAVES)));
+        assertFalse(placementInfo.ingredients().getFirst().test(new ItemStack(Items.SHEARS)));
+        assertEquals(1, placementInfo.slotsToIngredientIndex().size());
+        assertEquals(0, placementInfo.slotsToIngredientIndex().getInt(0));
+    }
+
+    @Test
     void matchesItemsThroughTagIngredients() {
         ManualProcessingRecipe recipe = new ManualProcessingRecipe(
                 Ingredient.of(TagKey.create(

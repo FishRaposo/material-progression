@@ -10,6 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeBookCategories;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
@@ -36,6 +37,7 @@ public final class ManualProcessingRecipe implements Recipe<SingleRecipeInput> {
     private final ItemStackTemplate result;
     private final int durabilityCost;
     private final int operationTime;
+    private PlacementInfo placementInfo;
 
     public ManualProcessingRecipe(
             Ingredient tool,
@@ -105,6 +107,14 @@ public final class ManualProcessingRecipe implements Recipe<SingleRecipeInput> {
     @Override
     public ItemStack assemble(SingleRecipeInput input) {
         return resultStack();
+    }
+
+    @Override
+    public PlacementInfo placementInfo() {
+        if (this.placementInfo == null) {
+            this.placementInfo = PlacementInfo.create(this.input);
+        }
+        return this.placementInfo;
     }
 
     @Override
