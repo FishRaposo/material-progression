@@ -465,13 +465,15 @@ public final class BulkCraftingTableBlockEntity
                                 .boxed()
                                 .toList()
                 );
-        List<BulkCraftingTransaction.Slice> ordered = new ArrayList<>(internal);
+        List<BulkCraftingTransaction.Slice> ordered = new ArrayList<>();
         if (moduleCapacity(
                 BulkCraftingUpgradeItem.Family.PRIORITY
         ) > 0) {
             ordered.addAll(adjacent);
+            ordered.addAll(internal);
             ordered.add(player);
         } else {
+            ordered.addAll(internal);
             ordered.add(player);
             ordered.addAll(adjacent);
         }
