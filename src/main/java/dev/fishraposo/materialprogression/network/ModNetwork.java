@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression.network;
 
 import dev.fishraposo.materialprogression.client.ClientWorkshopPreviews;
+import dev.fishraposo.materialprogression.client.ClientBulkCraftingPreviews;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
@@ -29,11 +30,27 @@ public final class ModNetwork {
                 ExecuteWorkshopBatchPayload.STREAM_CODEC,
                 ExecuteWorkshopBatchPayload::handle
         );
+        registrar.playToServer(
+                RequestBulkCraftingPreviewPayload.TYPE,
+                RequestBulkCraftingPreviewPayload.STREAM_CODEC,
+                RequestBulkCraftingPreviewPayload::handle
+        );
+        registrar.playToServer(
+                ExecuteBulkCraftingPayload.TYPE,
+                ExecuteBulkCraftingPayload.STREAM_CODEC,
+                ExecuteBulkCraftingPayload::handle
+        );
         registrar.playToClient(
                 WorkshopPreviewPayload.TYPE,
                 WorkshopPreviewPayload.STREAM_CODEC,
                 (payload, context) ->
                         ClientWorkshopPreviews.accept(payload)
+        );
+        registrar.playToClient(
+                BulkCraftingPreviewPayload.TYPE,
+                BulkCraftingPreviewPayload.STREAM_CODEC,
+                (payload, context) ->
+                        ClientBulkCraftingPreviews.accept(payload)
         );
     }
 }

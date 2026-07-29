@@ -26,6 +26,10 @@ public final class RecipeGraph {
         return recipesByOutput.getOrDefault(item, List.of());
     }
 
+    public List<String> outputs() {
+        return recipesByOutput.keySet().stream().sorted().toList();
+    }
+
     public record ItemAmount(String item, int count) {
         public ItemAmount {
             if (item == null || item.isBlank()) {

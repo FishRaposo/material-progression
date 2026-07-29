@@ -1,5 +1,6 @@
 package dev.fishraposo.materialprogression.world.inventory;
 
+import dev.fishraposo.materialprogression.network.BulkCraftingPreviewPayload;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import dev.fishraposo.materialprogression.world.item.BulkCraftingUpgradeItem;
 import dev.fishraposo.materialprogression.world.level.block.entity.BulkCraftingTableBlockEntity;
@@ -10,11 +11,15 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public final class BulkCraftingTableMenu extends AbstractContainerMenu {
     private static final int PLAYER_SLOT_START =
             BulkCraftingTableBlockEntity.SLOT_COUNT;
     private final Container container;
+    private final Inventory playerInventory;
+    private long previewSequence;
 
     public BulkCraftingTableMenu(int containerId, Inventory inventory) {
         this(
@@ -35,6 +40,7 @@ public final class BulkCraftingTableMenu extends AbstractContainerMenu {
                 BulkCraftingTableBlockEntity.SLOT_COUNT
         );
         this.container = container;
+        this.playerInventory = inventory;
         container.startOpen(inventory.player);
 
         for (int slot = 0;
@@ -90,6 +96,74 @@ public final class BulkCraftingTableMenu extends AbstractContainerMenu {
                     142
             ));
         }
+    }
+
+    public void sendPreview(
+            Player player,
+            String query,
+            String target,
+            int requested
+    ) {
+        if (!(player instanceof ServerPlayer serverPlayer)
+                || !(container
+                        instanceof BulkCraftingTableBlockEntity table)) {
+            return;
+        }
+        previewSequence++;
+        var targets = table.searchableTargets(query)
+                .stream()
+                .limit(256)
+                .toList();
+        String selected = target;
+        if (selected == null || selected.isBlank()
+                || !targets.contains(selected)) {
+            selected = targets.isEmpty() ? "" : targets.getFirst();
+        }
+        var preview = selected.isEmpty()
+                ? null
+                : table.preview(playerInventory, selected, requested);
+        PacketDistributor.sendToPlayer(
+                serverPlayer,
+                preview == null
+                        ? BulkCraftingPreviewPayload.rejected(
+                                containerId,
+                                previewSequence,
+                                targets,
+                                selected,
+                                requested,
+                                selected.isEmpty()
+                                        ? "no_recipe"
+                                        : "invalid_request"
+                        )
+                        : BulkCraftingPreviewPayload.from(
+                                containerId,
+                                previewSequence,
+                                targets,
+                                preview
+                        )
+        );
+    }
+
+    public boolean execute(
+            Player player,
+            String target,
+            int requested,
+            long fingerprint,
+            long sequence
+    ) {
+        if (sequence != previewSequence
+                || !(container
+                        instanceof BulkCraftingTableBlockEntity table)) {
+            return false;
+        }
+        boolean committed = table.execute(
+                playerInventory,
+                target,
+                requested,
+                fingerprint
+        );
+        sendPreview(player, "", target, requested);
+        return committed;
     }
 
     @Override

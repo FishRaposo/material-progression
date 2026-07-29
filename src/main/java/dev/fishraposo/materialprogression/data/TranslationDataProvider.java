@@ -53,6 +53,18 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
                 portuguese ? "Sem receita válida" : "No valid recipe"
         );
         translations.put(
+                "gui.material_progression.bulk_crafting_table.search",
+                portuguese ? "Buscar receitas" : "Search recipes"
+        );
+        translations.put(
+                "gui.material_progression.bulk_crafting_table.craft",
+                portuguese ? "Fabricar" : "Craft"
+        );
+        translations.put(
+                "gui.material_progression.bulk_crafting_table.no_recipe",
+                portuguese ? "Sem receita" : "No recipe"
+        );
+        translations.put(
                 "gui.material_progression.recipebook.toggle_crushable",
                 portuguese ? "Mostrar Trituráveis" : "Show Crushable"
         );
