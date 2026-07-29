@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_processing",
+  "durability_cost": 1,
+  "input": "minecraft:bamboo_planks",
+  "operation_time": 20,
+  "result": {
+    "count": 3,
+    "id": "minecraft:stick"
+  },
+  "tool": "#c:tools/saws"
+}

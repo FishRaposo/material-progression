@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_processing",
+  "durability_cost": 1,
+  "input": "#c:rocks",
+  "operation_time": 20,
+  "result": {
+    "count": 2,
+    "id": "material_progression:flint_shard"
+  },
+  "tool": "#c:tools/knives"
+}

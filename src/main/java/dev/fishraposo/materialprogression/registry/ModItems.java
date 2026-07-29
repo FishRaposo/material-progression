@@ -1,6 +1,9 @@
 package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
+import dev.fishraposo.materialprogression.data.MaterialFamilies;
+import dev.fishraposo.materialprogression.world.item.BulkCraftingUpgradeItem;
+import dev.fishraposo.materialprogression.world.item.BulkCraftingUpgradeItem.Family;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.AxeItem;
@@ -21,32 +24,14 @@ public final class ModItems {
             DeferredRegister.create(net.minecraft.core.registries.Registries.CREATIVE_MODE_TAB, MaterialProgression.MOD_ID);
 
     // Provisional MVP balance: tin is deliberately below stone; bronze is an iron-like upgrade.
-    public static final ToolMaterial FLINT = new ToolMaterial(
-            ModTags.INCORRECT_FOR_FLINT_TOOL,
-            64,
-            5.0F,
-            1.5F,
-            5,
-            ModTags.FLINT_SHARDS
-    );
+    public static final ToolMaterial FLINT =
+            MaterialFamilies.FLINT.toolMaterial();
 
-    public static final ToolMaterial TIN = new ToolMaterial(
-            ModTags.INCORRECT_FOR_TIN_TOOL,
-            96,
-            3.5F,
-            0.5F,
-            8,
-            ModTags.INGOTS_TIN
-    );
+    public static final ToolMaterial TIN =
+            MaterialFamilies.TIN.toolMaterial();
 
-    public static final ToolMaterial BRONZE = new ToolMaterial(
-            ModTags.INCORRECT_FOR_BRONZE_TOOL,
-            325,
-            6.5F,
-            2.0F,
-            12,
-            ModTags.INGOTS_BRONZE
-    );
+    public static final ToolMaterial BRONZE =
+            MaterialFamilies.BRONZE.toolMaterial();
 
     public static final DeferredItem<Item> RAW_TIN = ITEMS.registerSimpleItem("raw_tin");
     public static final DeferredItem<Item> TIN_INGOT = ITEMS.registerSimpleItem("tin_ingot");
@@ -56,9 +41,22 @@ public final class ModItems {
     public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
     public static final DeferredItem<Item> ROCK = ITEMS.registerSimpleItem("rock");
     public static final DeferredItem<Item> FLINT_SHARD = ITEMS.registerSimpleItem("flint_shard");
+    public static final DeferredItem<Item> PLANT_FIBER = ITEMS.registerSimpleItem("plant_fiber");
 
     public static final DeferredItem<AxeItem> FLINT_HATCHET = ITEMS.registerItem(
             "flint_hatchet", properties -> new AxeItem(FLINT, 5.0F, -3.2F, properties)
+    );
+    public static final DeferredItem<Item> FLINT_KNIFE = ITEMS.registerItem(
+            "flint_knife",
+            properties -> new Item(properties.sword(FLINT, 2.0F, -2.0F))
+    );
+    public static final DeferredItem<Item> FLINT_HAMMER = ITEMS.registerItem(
+            "flint_hammer",
+            properties -> new Item(properties.pickaxe(FLINT, 1.0F, -2.8F))
+    );
+    public static final DeferredItem<AxeItem> FLINT_SAW = ITEMS.registerItem(
+            "flint_saw",
+            properties -> new AxeItem(FLINT, 5.0F, -3.1F, properties)
     );
 
     public static final DeferredItem<Item> TIN_SWORD = ITEMS.registerItem(
@@ -94,30 +92,121 @@ public final class ModItems {
     );
 
     public static final DeferredItem<?> CRUSHER = ITEMS.registerSimpleBlockItem("crusher", ModBlocks.CRUSHER);
+    public static final DeferredItem<?> WORKSHOP =
+            ITEMS.registerSimpleBlockItem("workshop", ModBlocks.WORKSHOP);
+    public static final DeferredItem<?> BULK_CRAFTING_TABLE =
+            ITEMS.registerSimpleBlockItem(
+                    "bulk_crafting_table",
+                    ModBlocks.BULK_CRAFTING_TABLE
+            );
     public static final DeferredItem<?> TIN_ORE = ITEMS.registerSimpleBlockItem("tin_ore", ModBlocks.TIN_ORE);
     public static final DeferredItem<?> DEEPSLATE_TIN_ORE =
             ITEMS.registerSimpleBlockItem("deepslate_tin_ore", ModBlocks.DEEPSLATE_TIN_ORE);
+    public static final DeferredItem<?> LOOSE_ROCKS =
+            ITEMS.registerSimpleBlockItem("loose_rocks", ModBlocks.LOOSE_ROCKS);
+    public static final DeferredItem<?> GROUND_STICK =
+            ITEMS.registerSimpleBlockItem("ground_stick", ModBlocks.GROUND_STICK);
 
-    private static final List<DeferredItem<? extends Item>> MATERIAL_ITEMS = List.of(
-            RAW_TIN, TIN_INGOT, TIN_DUST, COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,
-            ROCK, FLINT_SHARD, FLINT_HATCHET,
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            STORAGE_MODULE = upgrade("storage_module", Family.STORAGE, 1, 1);
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_STORAGE_MODULE = upgrade(
+                    "advanced_storage_module",
+                    Family.STORAGE,
+                    2,
+                    3
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            FILTER_MODULE = upgrade("filter_module", Family.FILTER, 1, 1);
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_FILTER_MODULE = upgrade(
+                    "advanced_filter_module",
+                    Family.FILTER,
+                    2,
+                    3
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            PRIORITY_MODULE = upgrade(
+                    "priority_module",
+                    Family.PRIORITY,
+                    1,
+                    1
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_PRIORITY_MODULE = upgrade(
+                    "advanced_priority_module",
+                    Family.PRIORITY,
+                    2,
+                    2
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            RESERVATION_MODULE = upgrade(
+                    "reservation_module",
+                    Family.RESERVATION,
+                    1,
+                    1
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_RESERVATION_MODULE = upgrade(
+                    "advanced_reservation_module",
+                    Family.RESERVATION,
+                    2,
+                    3
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            MEMORY_MODULE = upgrade("memory_module", Family.MEMORY, 1, 1);
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_MEMORY_MODULE = upgrade(
+                    "advanced_memory_module",
+                    Family.MEMORY,
+                    2,
+                    3
+            );
+
+    public static List<DeferredItem<? extends Item>> creativeTabContents() {
+        return List.of(
+            LOOSE_ROCKS, GROUND_STICK,
+            ROCK, FLINT_SHARD, FLINT_HATCHET, FLINT_HAMMER, FLINT_KNIFE,
+            FLINT_SAW, PLANT_FIBER,
+            TIN_ORE, DEEPSLATE_TIN_ORE, RAW_TIN, TIN_DUST, TIN_INGOT,
             TIN_SWORD, TIN_PICKAXE, TIN_AXE, TIN_SHOVEL, TIN_HOE,
-            BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE
-    );
+            COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,
+            BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE,
+            CRUSHER, WORKSHOP, BULK_CRAFTING_TABLE,
+            STORAGE_MODULE, ADVANCED_STORAGE_MODULE,
+            FILTER_MODULE, ADVANCED_FILTER_MODULE,
+            PRIORITY_MODULE, ADVANCED_PRIORITY_MODULE,
+            RESERVATION_MODULE, ADVANCED_RESERVATION_MODULE,
+            MEMORY_MODULE, ADVANCED_MEMORY_MODULE
+        );
+    }
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB =
             TABS.register("main", () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.material_progression"))
                     .icon(() -> BRONZE_INGOT.get().getDefaultInstance())
-                    .displayItems((parameters, output) -> {
-                        output.accept(CRUSHER.get());
-                        output.accept(TIN_ORE.get());
-                        output.accept(DEEPSLATE_TIN_ORE.get());
-                        MATERIAL_ITEMS.forEach(item -> output.accept(item.get()));
-                    })
+                    .displayItems((parameters, output) ->
+                            creativeTabContents().forEach(item -> output.accept(item.get())))
                     .build());
 
     private ModItems() {
+    }
+
+    private static DeferredItem<BulkCraftingUpgradeItem> upgrade(
+            String name,
+            Family family,
+            int tier,
+            int units
+    ) {
+        return ITEMS.registerItem(
+                name,
+                properties -> new BulkCraftingUpgradeItem(
+                        family,
+                        tier,
+                        units,
+                        properties.stacksTo(1)
+                )
+        );
     }
 
     public static void register(IEventBus modBus) {

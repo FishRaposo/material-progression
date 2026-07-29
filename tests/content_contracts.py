@@ -2,6 +2,11 @@ from support.resources import RecipeContract
 
 
 SHIPPED_ITEMS = {
+    "advanced_filter_module",
+    "advanced_memory_module",
+    "advanced_priority_module",
+    "advanced_reservation_module",
+    "advanced_storage_module",
     "bronze_axe",
     "bronze_dust",
     "bronze_hoe",
@@ -9,13 +14,25 @@ SHIPPED_ITEMS = {
     "bronze_pickaxe",
     "bronze_shovel",
     "bronze_sword",
+    "bulk_crafting_table",
     "copper_dust",
     "crusher",
     "deepslate_tin_ore",
     "flint_hatchet",
+    "flint_hammer",
+    "flint_knife",
+    "flint_saw",
     "flint_shard",
+    "filter_module",
+    "ground_stick",
+    "loose_rocks",
+    "memory_module",
+    "plant_fiber",
+    "priority_module",
     "raw_tin",
+    "reservation_module",
     "rock",
+    "storage_module",
     "tin_axe",
     "tin_dust",
     "tin_hoe",
@@ -24,17 +41,93 @@ SHIPPED_ITEMS = {
     "tin_pickaxe",
     "tin_shovel",
     "tin_sword",
+    "workshop",
 }
 
 SHIPPED_BLOCKS = {
+    "bulk_crafting_table",
     "crusher",
     "deepslate_tin_ore",
     "ground_stick",
     "loose_rocks",
     "tin_ore",
+    "workshop",
 }
 
-WORLD_ONLY_BLOCKS = {"ground_stick", "loose_rocks"}
+WORLD_PLACED_BLOCKS = {
+    "ground_stick",
+    "loose_rocks",
+}
+
+CREATIVE_TAB_ITEMS = (
+    "loose_rocks",
+    "ground_stick",
+    "rock",
+    "flint_shard",
+    "flint_hatchet",
+    "flint_hammer",
+    "flint_knife",
+    "flint_saw",
+    "plant_fiber",
+    "tin_ore",
+    "deepslate_tin_ore",
+    "raw_tin",
+    "tin_dust",
+    "tin_ingot",
+    "tin_sword",
+    "tin_pickaxe",
+    "tin_axe",
+    "tin_shovel",
+    "tin_hoe",
+    "copper_dust",
+    "bronze_dust",
+    "bronze_ingot",
+    "bronze_sword",
+    "bronze_pickaxe",
+    "bronze_axe",
+    "bronze_shovel",
+    "bronze_hoe",
+    "crusher",
+    "workshop",
+    "bulk_crafting_table",
+    "storage_module",
+    "advanced_storage_module",
+    "filter_module",
+    "advanced_filter_module",
+    "priority_module",
+    "advanced_priority_module",
+    "reservation_module",
+    "advanced_reservation_module",
+    "memory_module",
+    "advanced_memory_module",
+)
+
+MATERIAL_FAMILIES = {
+    "flint": {
+        "durability": 64,
+        "speed": 5.0,
+        "attack_bonus": 1.5,
+        "enchantment_value": 5,
+        "repair_tag": "c:flint_shards",
+        "incorrect_blocks_tag": "material_progression:incorrect_for_flint_tool",
+    },
+    "tin": {
+        "durability": 96,
+        "speed": 3.5,
+        "attack_bonus": 0.5,
+        "enchantment_value": 8,
+        "repair_tag": "c:ingots/tin",
+        "incorrect_blocks_tag": "material_progression:incorrect_for_tin_tool",
+    },
+    "bronze": {
+        "durability": 325,
+        "speed": 6.5,
+        "attack_bonus": 2.0,
+        "enchantment_value": 12,
+        "repair_tag": "c:ingots/bronze",
+        "incorrect_blocks_tag": "material_progression:incorrect_for_bronze_tool",
+    },
+}
 
 PRIMITIVE_RECIPES = {
     "cobblestone_from_rocks": {
@@ -48,6 +141,24 @@ PRIMITIVE_RECIPES = {
         "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
         "result": {"id": "material_progression:flint_hatchet"},
     },
+    "flint_hammer": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["RRR", " S ", " S "],
+        "key": {"R": "#c:rocks", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_hammer"},
+    },
+    "flint_knife": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["R", "S"],
+        "key": {"R": "#c:rocks", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_knife"},
+    },
+    "flint_saw": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["RR", " S"],
+        "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_saw"},
+    },
     "flint_shard_from_flint": {
         "type": "minecraft:crafting_shapeless",
         "ingredients": ["minecraft:flint"],
@@ -58,10 +169,24 @@ PRIMITIVE_RECIPES = {
         "ingredients": ["#c:rocks"],
         "result": {"id": "material_progression:flint_shard"},
     },
+    "string_from_plant_fiber": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": ["#c:fibers/plant"] * 3,
+        "result": {"id": "minecraft:string"},
+    },
+    "workshop": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["PPP", "RCR", "PPP"],
+        "key": {
+            "C": "minecraft:crafting_table",
+            "P": "#minecraft:planks",
+            "R": "#c:rocks",
+        },
+        "result": {"id": "material_progression:workshop"},
+    },
 }
 
 SURFACE_WORLDGEN_FEATURES = {
-    "ground_stick": "material_progression:ground_stick",
     "loose_rocks": "material_progression:loose_rocks",
 }
 
@@ -119,9 +244,100 @@ SMELTING_RECIPES = {
     ),
 }
 
+MANUAL_PROCESSING_RECIPES = {
+    "knife_rock": {
+        "tool": "#c:tools/knives",
+        "input": "#c:rocks",
+        "result": {"count": 2, "id": "material_progression:flint_shard"},
+        "durability_cost": 1,
+        "operation_time": 20,
+    },
+    "knife_leaves": {
+        "tool": "#c:tools/knives",
+        "input": "#minecraft:leaves",
+        "result": {"count": 2, "id": "material_progression:plant_fiber"},
+        "durability_cost": 1,
+        "operation_time": 20,
+    },
+    "hammer_stone": {
+        "tool": "#c:tools/hammers",
+        "input": "minecraft:stone",
+        "result": {"id": "minecraft:gravel"},
+        "durability_cost": 2,
+        "operation_time": 40,
+    },
+    "hammer_gravel": {
+        "tool": "#c:tools/hammers",
+        "input": "minecraft:gravel",
+        "result": {"id": "minecraft:sand"},
+        "durability_cost": 2,
+        "operation_time": 40,
+    },
+    "hammer_copper_ore": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:ores/copper",
+        "result": {"count": 2, "id": "material_progression:copper_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+    "hammer_raw_copper": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:raw_materials/copper",
+        "result": {"count": 2, "id": "material_progression:copper_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+    "hammer_tin_ore": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:ores/tin",
+        "result": {"count": 2, "id": "material_progression:tin_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+    "hammer_raw_tin": {
+        "tool": "#c:tools/hammers",
+        "input": "#c:raw_materials/tin",
+        "result": {"count": 2, "id": "material_progression:tin_dust"},
+        "durability_cost": 12,
+        "operation_time": 100,
+    },
+}
+
+for wood, log in {
+    "oak": "oak_log",
+    "spruce": "spruce_log",
+    "birch": "birch_log",
+    "jungle": "jungle_log",
+    "acacia": "acacia_log",
+    "dark_oak": "dark_oak_log",
+    "mangrove": "mangrove_log",
+    "cherry": "cherry_log",
+    "pale_oak": "pale_oak_log",
+    "bamboo": "bamboo_block",
+    "crimson": "crimson_stem",
+    "warped": "warped_stem",
+}.items():
+    MANUAL_PROCESSING_RECIPES[f"saw_{wood}_log"] = {
+        "tool": "#c:tools/saws",
+        "input": f"minecraft:{log}",
+        "result": {"count": 6, "id": f"minecraft:{wood}_planks"},
+        "durability_cost": 2,
+        "operation_time": 40,
+    }
+    MANUAL_PROCESSING_RECIPES[f"saw_{wood}_planks"] = {
+        "tool": "#c:tools/saws",
+        "input": f"minecraft:{wood}_planks",
+        "result": {"count": 3, "id": "minecraft:stick"},
+        "durability_cost": 1,
+        "operation_time": 20,
+    }
+
 TOOL_FAMILIES = {
     "flint": {
         "flint_hatchet",
+        "flint_hammer",
+        "flint_knife",
+        "flint_saw",
     },
     "tin": {
         "tin_sword",

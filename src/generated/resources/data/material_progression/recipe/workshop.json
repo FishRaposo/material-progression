@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "minecraft:crafting_table",
+    "P": "#minecraft:planks",
+    "R": "#c:rocks"
+  },
+  "pattern": [
+    "PPP",
+    "RCR",
+    "PPP"
+  ],
+  "result": {
+    "id": "material_progression:workshop"
+  }
+}

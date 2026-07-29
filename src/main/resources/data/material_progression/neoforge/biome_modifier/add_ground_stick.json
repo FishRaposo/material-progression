@@ -1,6 +1,0 @@
-{
-  "type": "neoforge:add_features",
-  "biomes": "#minecraft:is_overworld",
-  "features": "material_progression:ground_stick",
-  "step": "vegetal_decoration"
-}

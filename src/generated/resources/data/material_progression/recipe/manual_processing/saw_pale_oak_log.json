@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_processing",
+  "durability_cost": 2,
+  "input": "minecraft:pale_oak_log",
+  "operation_time": 40,
+  "result": {
+    "count": 6,
+    "id": "minecraft:pale_oak_planks"
+  },
+  "tool": "#c:tools/saws"
+}

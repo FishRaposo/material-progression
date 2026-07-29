@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:flint"
+  ],
+  "result": {
+    "count": 2,
+    "id": "material_progression:flint_shard"
+  }
+}

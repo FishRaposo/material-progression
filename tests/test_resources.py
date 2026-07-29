@@ -3,14 +3,17 @@ import unittest
 from pathlib import Path
 
 from content_contracts import (
+    CREATIVE_TAB_ITEMS,
     CRUSHING_RECIPES,
+    MANUAL_PROCESSING_RECIPES,
+    MATERIAL_FAMILIES,
     PRIMITIVE_RECIPES,
     SHIPPED_BLOCKS,
     SHIPPED_ITEMS,
     SMELTING_RECIPES,
     SURFACE_WORLDGEN_FEATURES,
     TOOL_FAMILIES,
-    WORLD_ONLY_BLOCKS,
+    WORLD_PLACED_BLOCKS,
 )
 from support.resources import RecipeContract, ResourceTree
 
@@ -21,6 +24,8 @@ RESOURCES = TREE.resources
 DATA = TREE.data
 ASSETS = TREE.assets
 COMMON_DATA = RESOURCES / "data" / "c"
+GENERATED_RESOURCES = ROOT / "src" / "generated" / "resources"
+MAIN_RESOURCES = ROOT / "src" / "main" / "resources"
 
 COMMON_ITEM_TAGS = {
     "dusts/bronze": ["material_progression:bronze_dust"],
@@ -29,12 +34,16 @@ COMMON_ITEM_TAGS = {
     "ingots/bronze": ["material_progression:bronze_ingot"],
     "ingots/tin": ["material_progression:tin_ingot"],
     "flint_shards": ["material_progression:flint_shard"],
+    "fibers/plant": ["material_progression:plant_fiber"],
     "ores/tin": [
         "material_progression:tin_ore",
         "material_progression:deepslate_tin_ore",
     ],
     "raw_materials/tin": ["material_progression:raw_tin"],
     "rocks": ["material_progression:rock"],
+    "tools/hammers": ["material_progression:flint_hammer"],
+    "tools/knives": ["material_progression:flint_knife"],
+    "tools/saws": ["material_progression:flint_saw"],
 }
 
 COMMON_BLOCK_TAGS = {
@@ -46,8 +55,72 @@ COMMON_BLOCK_TAGS = {
 
 
 class ResourceContractTests(unittest.TestCase):
+    def test_creative_tab_catalog_contains_every_shipped_item_once(self):
+        catalog_path = (
+            GENERATED_RESOURCES
+            / "data"
+            / "material_progression"
+            / "creative_tab"
+            / "main.json"
+        )
+        self.assertTrue(catalog_path.is_file())
+        catalog = TREE.load_json(catalog_path)
+
+        self.assertEqual(list(CREATIVE_TAB_ITEMS), catalog["items"])
+        self.assertEqual(len(catalog["items"]), len(set(catalog["items"])))
+        self.assertEqual(SHIPPED_ITEMS, set(catalog["items"]))
+
+    def test_world_placed_blocks_have_testing_item_forms(self):
+        self.assertEqual({"ground_stick", "loose_rocks"}, WORLD_PLACED_BLOCKS)
+        self.assertLessEqual(WORLD_PLACED_BLOCKS, SHIPPED_BLOCKS)
+        self.assertLessEqual(WORLD_PLACED_BLOCKS, SHIPPED_ITEMS)
+
+    def test_regular_resources_are_generated_instead_of_hand_authored(self):
+        generated_roots = (
+            GENERATED_RESOURCES / "data" / "material_progression" / "recipe",
+            GENERATED_RESOURCES / "data" / "material_progression" / "tags",
+            GENERATED_RESOURCES
+            / "data"
+            / "material_progression"
+            / "loot_table"
+            / "blocks",
+            GENERATED_RESOURCES
+            / "assets"
+            / "material_progression"
+            / "items",
+            GENERATED_RESOURCES
+            / "assets"
+            / "material_progression"
+            / "blockstates",
+            GENERATED_RESOURCES
+            / "assets"
+            / "material_progression"
+            / "lang",
+        )
+        hand_authored_roots = (
+            MAIN_RESOURCES / "data" / "material_progression" / "recipe",
+            MAIN_RESOURCES / "data" / "material_progression" / "tags",
+            MAIN_RESOURCES
+            / "data"
+            / "material_progression"
+            / "loot_table"
+            / "blocks",
+            MAIN_RESOURCES / "assets" / "material_progression" / "items",
+            MAIN_RESOURCES / "assets" / "material_progression" / "blockstates",
+            MAIN_RESOURCES / "assets" / "material_progression" / "lang",
+        )
+
+        for path in generated_roots:
+            with self.subTest(generated=path.relative_to(ROOT)):
+                self.assertTrue(path.is_dir())
+                self.assertTrue(any(path.rglob("*.json")))
+
+        for path in hand_authored_roots:
+            with self.subTest(hand_authored=path.relative_to(ROOT)):
+                self.assertFalse(path.exists())
+
     def test_every_json_resource_parses(self):
-        json_files = sorted(RESOURCES.rglob("*.json"))
+        json_files = sorted(TREE.json_files())
         self.assertGreater(len(json_files), 0)
 
         for path in json_files:
@@ -62,7 +135,7 @@ class ResourceContractTests(unittest.TestCase):
 
         for item in SHIPPED_ITEMS:
             with self.subTest(item=item):
-                self.assertTrue((ASSETS / "items" / f"{item}.json").is_file())
+                self.assertTrue(TREE.exists(ASSETS / "items" / f"{item}.json"))
                 prefix = "block" if item in SHIPPED_BLOCKS else "item"
                 translation_key = f"{prefix}.material_progression.{item}"
                 self.assertIn(translation_key, english)
@@ -78,7 +151,9 @@ class ResourceContractTests(unittest.TestCase):
 
         for block in SHIPPED_BLOCKS:
             with self.subTest(block=block):
-                self.assertTrue((ASSETS / "blockstates" / f"{block}.json").is_file())
+                self.assertTrue(
+                    TREE.exists(ASSETS / "blockstates" / f"{block}.json")
+                )
                 loot = TREE.load_json(
                     DATA / "loot_table" / "blocks" / f"{block}.json"
                 )
@@ -87,9 +162,16 @@ class ResourceContractTests(unittest.TestCase):
                 self.assertIn(translation_key, english)
                 self.assertIn(translation_key, portuguese)
 
-    def test_world_only_blocks_have_no_inventory_form(self):
-        item_models = TREE.names_matching(ASSETS / "items", "*.json")
-        self.assertTrue(WORLD_ONLY_BLOCKS.isdisjoint(item_models))
+    def test_declarative_material_catalog_preserves_tool_balance(self):
+        generated_catalog = (
+            ROOT
+            / "src/generated/resources/data/material_progression/material_family/catalog.json"
+        )
+
+        self.assertEqual(
+            MATERIAL_FAMILIES,
+            TREE.load_json(generated_catalog)["families"],
+        )
 
     def test_primitive_recipes_preserve_the_bootstrap(self):
         for name, expected in PRIMITIVE_RECIPES.items():
@@ -130,6 +212,65 @@ class ResourceContractTests(unittest.TestCase):
                 )
                 self.assertEqual("vegetal_decoration", modifier["step"])
 
+    def test_ground_sticks_have_tree_bias_and_overworld_fallback(self):
+        tree_placed = TREE.load_json(
+            DATA
+            / "worldgen"
+            / "placed_feature"
+            / "ground_stick_tree_biased.json"
+        )
+        fallback_placed = TREE.load_json(
+            DATA
+            / "worldgen"
+            / "placed_feature"
+            / "ground_stick_fallback.json"
+        )
+        tree_modifier = TREE.load_json(
+            DATA
+            / "neoforge"
+            / "biome_modifier"
+            / "add_ground_stick_tree_biased.json"
+        )
+        fallback_modifier = TREE.load_json(
+            DATA
+            / "neoforge"
+            / "biome_modifier"
+            / "add_ground_stick_fallback.json"
+        )
+
+        self.assertEqual(
+            "material_progression:ground_stick",
+            tree_placed["feature"],
+        )
+        self.assertEqual(
+            "material_progression:ground_stick",
+            fallback_placed["feature"],
+        )
+        self.assertEqual("#minecraft:is_forest", tree_modifier["biomes"])
+        self.assertEqual(
+            "#minecraft:is_overworld",
+            fallback_modifier["biomes"],
+        )
+        self.assertEqual(
+            "material_progression:ground_stick_tree_biased",
+            tree_modifier["features"],
+        )
+        self.assertEqual(
+            "material_progression:ground_stick_fallback",
+            fallback_modifier["features"],
+        )
+        tree_count = next(
+            placement["count"]
+            for placement in tree_placed["placement"]
+            if placement["type"] == "minecraft:count"
+        )
+        fallback_count = next(
+            placement["count"]
+            for placement in fallback_placed["placement"]
+            if placement["type"] == "minecraft:count"
+        )
+        self.assertGreater(tree_count, fallback_count)
+
     def test_crushing_recipes_match_two_dust_contract(self):
         recipe_dir = DATA / "recipe"
         actual_names = TREE.names_matching(recipe_dir, "crushing_*.json")
@@ -138,6 +279,23 @@ class ResourceContractTests(unittest.TestCase):
         for name, contract in CRUSHING_RECIPES.items():
             with self.subTest(recipe=name):
                 self.assert_recipe_matches(name, contract)
+
+    def test_manual_processing_recipes_keep_tool_tags_and_material_flow(self):
+        recipe_dir = DATA / "recipe" / "manual_processing"
+        actual_names = TREE.names_matching(recipe_dir, "*.json")
+        self.assertEqual(set(MANUAL_PROCESSING_RECIPES), actual_names)
+
+        for name, expected in MANUAL_PROCESSING_RECIPES.items():
+            with self.subTest(recipe=name):
+                recipe = TREE.load_json(recipe_dir / f"{name}.json")
+                self.assertEqual("material_progression:manual_processing", recipe["type"])
+                self.assertEqual(expected, {
+                    "tool": recipe["tool"],
+                    "input": recipe["input"],
+                    "result": recipe["result"],
+                    "durability_cost": recipe["durability_cost"],
+                    "operation_time": recipe["operation_time"],
+                })
 
     def test_smelting_recipes_preserve_material_flow(self):
         actual_names = TREE.names_matching(DATA / "recipe", "smelting_*.json")
@@ -187,9 +345,14 @@ class ResourceContractTests(unittest.TestCase):
         )
 
         expected_by_type = {
-            "axes": {"flint_hatchet", "tin_axe", "bronze_axe"},
+            "axes": {
+                "flint_hatchet",
+                "flint_saw",
+                "tin_axe",
+                "bronze_axe",
+            },
             "hoes": {"tin_hoe", "bronze_hoe"},
-            "pickaxes": {"tin_pickaxe", "bronze_pickaxe"},
+            "pickaxes": {"flint_hammer", "tin_pickaxe", "bronze_pickaxe"},
             "shovels": {"tin_shovel", "bronze_shovel"},
             "swords": {"tin_sword", "bronze_sword"},
         }
@@ -239,6 +402,7 @@ class ResourceContractTests(unittest.TestCase):
                 "#c:dusts/tin",
             },
             "ingots": {"#c:ingots/bronze", "#c:ingots/tin"},
+            "fibers": {"#c:fibers/plant"},
             "ores": {"#c:ores/tin"},
             "raw_materials": {"#c:raw_materials/tin"},
         }
@@ -268,7 +432,7 @@ class ResourceContractTests(unittest.TestCase):
             "minecraft:raw_copper",
         }
 
-        for recipe_path in sorted((DATA / "recipe").glob("*.json")):
+        for recipe_path in sorted(TREE.paths_matching(DATA / "recipe", "*.json")):
             recipe = TREE.load_json(recipe_path)
             ingredients = []
             if "ingredient" in recipe:

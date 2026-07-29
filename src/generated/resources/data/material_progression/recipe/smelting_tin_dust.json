@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": "#c:dusts/tin",
+  "result": {
+    "id": "material_progression:tin_ingot"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": "#c:flint_shards",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "RS",
+    " S"
+  ],
+  "result": {
+    "id": "material_progression:flint_hatchet"
+  }
+}

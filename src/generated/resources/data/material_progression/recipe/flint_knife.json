@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": "#c:rocks",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "R",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:flint_knife"
+  }
+}

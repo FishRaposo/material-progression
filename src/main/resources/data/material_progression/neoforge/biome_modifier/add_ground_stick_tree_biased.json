@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_forest",
+  "features": "material_progression:ground_stick_tree_biased",
+  "step": "vegetal_decoration"
+}
