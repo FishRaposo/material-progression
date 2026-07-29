@@ -24,6 +24,10 @@ final class LootDataProvider extends GeneratedResourceProvider {
                 selfDrop("material_progression:crusher")
         );
         resources.put(
+                "loot_table/blocks/workshop.json",
+                selfDrop("material_progression:workshop")
+        );
+        resources.put(
                 "loot_table/blocks/" + tin.name() + "_ore.json",
                 oreDrop("material_progression:raw_" + tin.name())
         );

@@ -2,6 +2,7 @@
   "values": [
     "material_progression:flint_hatchet",
     "material_progression:tin_axe",
-    "material_progression:bronze_axe"
+    "material_progression:bronze_axe",
+    "material_progression:flint_saw"
   ]
 }

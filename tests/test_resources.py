@@ -41,9 +41,9 @@ COMMON_ITEM_TAGS = {
     ],
     "raw_materials/tin": ["material_progression:raw_tin"],
     "rocks": ["material_progression:rock"],
-    "tools/hammers": [],
+    "tools/hammers": ["material_progression:flint_hammer"],
     "tools/knives": ["material_progression:flint_knife"],
-    "tools/saws": [],
+    "tools/saws": ["material_progression:flint_saw"],
 }
 
 COMMON_BLOCK_TAGS = {
@@ -345,9 +345,14 @@ class ResourceContractTests(unittest.TestCase):
         )
 
         expected_by_type = {
-            "axes": {"flint_hatchet", "tin_axe", "bronze_axe"},
+            "axes": {
+                "flint_hatchet",
+                "flint_saw",
+                "tin_axe",
+                "bronze_axe",
+            },
             "hoes": {"tin_hoe", "bronze_hoe"},
-            "pickaxes": {"tin_pickaxe", "bronze_pickaxe"},
+            "pickaxes": {"flint_hammer", "tin_pickaxe", "bronze_pickaxe"},
             "shovels": {"tin_shovel", "bronze_shovel"},
             "swords": {"tin_sword", "bronze_sword"},
         }

@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression;
 
 import dev.fishraposo.materialprogression.client.CrusherScreen;
+import dev.fishraposo.materialprogression.client.WorkshopScreen;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,5 +15,6 @@ public final class MaterialProgressionClient {
     @SubscribeEvent
     static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.CRUSHER.get(), CrusherScreen::new);
+        event.register(ModMenus.WORKSHOP.get(), WorkshopScreen::new);
     }
 }

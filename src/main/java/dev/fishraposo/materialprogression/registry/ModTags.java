@@ -27,6 +27,10 @@ public final class ModTags {
             commonItemTag("rocks");
     public static final TagKey<Item> KNIVES =
             commonItemTag("tools/knives");
+    public static final TagKey<Item> HAMMERS =
+            commonItemTag("tools/hammers");
+    public static final TagKey<Item> SAWS =
+            commonItemTag("tools/saws");
     public static final TagKey<Item> PLANT_FIBERS =
             commonItemTag("fibers/plant");
     public static final TagKey<Item> CRUSHER_INPUTS =

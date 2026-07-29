@@ -38,6 +38,14 @@ final class ItemModelDataProvider extends GeneratedResourceProvider {
                 itemModel("minecraft:item/stone_sword")
         );
         resources.put(
+                "items/flint_hammer.json",
+                itemModel("minecraft:item/stone_pickaxe")
+        );
+        resources.put(
+                "items/flint_saw.json",
+                itemModel("minecraft:item/stone_axe")
+        );
+        resources.put(
                 "items/plant_fiber.json",
                 itemModel("minecraft:item/string")
         );
@@ -70,6 +78,10 @@ final class ItemModelDataProvider extends GeneratedResourceProvider {
         resources.put(
                 "items/crusher.json",
                 itemModel("minecraft:block/furnace")
+        );
+        resources.put(
+                "items/workshop.json",
+                itemModel("minecraft:block/crafting_table")
         );
         resources.put(
                 "items/" + tin.name() + "_ore.json",

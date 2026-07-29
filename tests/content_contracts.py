@@ -13,7 +13,9 @@ SHIPPED_ITEMS = {
     "crusher",
     "deepslate_tin_ore",
     "flint_hatchet",
+    "flint_hammer",
     "flint_knife",
+    "flint_saw",
     "flint_shard",
     "ground_stick",
     "loose_rocks",
@@ -28,6 +30,7 @@ SHIPPED_ITEMS = {
     "tin_pickaxe",
     "tin_shovel",
     "tin_sword",
+    "workshop",
 }
 
 SHIPPED_BLOCKS = {
@@ -36,6 +39,7 @@ SHIPPED_BLOCKS = {
     "ground_stick",
     "loose_rocks",
     "tin_ore",
+    "workshop",
 }
 
 WORLD_PLACED_BLOCKS = {
@@ -49,7 +53,9 @@ CREATIVE_TAB_ITEMS = (
     "rock",
     "flint_shard",
     "flint_hatchet",
+    "flint_hammer",
     "flint_knife",
+    "flint_saw",
     "plant_fiber",
     "tin_ore",
     "deepslate_tin_ore",
@@ -70,6 +76,7 @@ CREATIVE_TAB_ITEMS = (
     "bronze_shovel",
     "bronze_hoe",
     "crusher",
+    "workshop",
 )
 
 MATERIAL_FAMILIES = {
@@ -111,11 +118,23 @@ PRIMITIVE_RECIPES = {
         "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
         "result": {"id": "material_progression:flint_hatchet"},
     },
+    "flint_hammer": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["RRR", " S ", " S "],
+        "key": {"R": "#c:rocks", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_hammer"},
+    },
     "flint_knife": {
         "type": "minecraft:crafting_shaped",
         "pattern": ["R", "S"],
         "key": {"R": "#c:rocks", "S": "#c:rods/wooden"},
         "result": {"id": "material_progression:flint_knife"},
+    },
+    "flint_saw": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["RR", " S"],
+        "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_saw"},
     },
     "flint_shard_from_flint": {
         "type": "minecraft:crafting_shapeless",
@@ -131,6 +150,16 @@ PRIMITIVE_RECIPES = {
         "type": "minecraft:crafting_shapeless",
         "ingredients": ["#c:fibers/plant"] * 3,
         "result": {"id": "minecraft:string"},
+    },
+    "workshop": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["PPP", "RCR", "PPP"],
+        "key": {
+            "C": "minecraft:crafting_table",
+            "P": "#minecraft:planks",
+            "R": "#c:rocks",
+        },
+        "result": {"id": "material_progression:workshop"},
     },
 }
 
@@ -283,7 +312,9 @@ for wood, log in {
 TOOL_FAMILIES = {
     "flint": {
         "flint_hatchet",
+        "flint_hammer",
         "flint_knife",
+        "flint_saw",
     },
     "tin": {
         "tin_sword",

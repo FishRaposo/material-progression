@@ -3,6 +3,7 @@ package dev.fishraposo.materialprogression.registry;
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.level.block.CrusherBlock;
 import dev.fishraposo.materialprogression.world.level.block.GroundResourceBlock;
+import dev.fishraposo.materialprogression.world.level.block.WorkshopBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -24,6 +25,15 @@ public final class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(3.5F)
                     .lightLevel(state -> state.getValue(CrusherBlock.LIT) ? 13 : 0)
+    );
+
+    public static final DeferredBlock<WorkshopBlock> WORKSHOP = BLOCKS.registerBlock(
+            "workshop",
+            WorkshopBlock::new,
+            properties -> properties
+                    .mapColor(MapColor.WOOD)
+                    .strength(2.5F)
+                    .sound(SoundType.WOOD)
     );
 
     public static final DeferredBlock<Block> TIN_ORE = BLOCKS.registerSimpleBlock(

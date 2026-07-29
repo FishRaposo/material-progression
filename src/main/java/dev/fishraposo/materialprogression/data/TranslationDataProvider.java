@@ -35,6 +35,18 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
                 portuguese ? "Britador de Pedra" : "Stone Crusher"
         );
         translations.put(
+                "container.material_progression.workshop",
+                portuguese ? "Oficina Manual" : "Manual Workshop"
+        );
+        translations.put(
+                "gui.material_progression.workshop.process",
+                portuguese ? "Processar" : "Process"
+        );
+        translations.put(
+                "gui.material_progression.workshop.no_recipe",
+                portuguese ? "Sem receita válida" : "No valid recipe"
+        );
+        translations.put(
                 "gui.material_progression.recipebook.toggle_crushable",
                 portuguese ? "Mostrar Trituráveis" : "Show Crushable"
         );
@@ -60,6 +72,10 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
         translations.put(
                 "block.material_progression.crusher",
                 portuguese ? "Britador de Pedra" : "Stone Crusher"
+        );
+        translations.put(
+                "block.material_progression.workshop",
+                portuguese ? "Oficina Manual" : "Manual Workshop"
         );
         translations.put(
                 "block.material_progression.loose_rocks",
@@ -118,6 +134,14 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
         translations.put(
                 itemKey("flint_knife"),
                 portuguese ? "Faca de Sílex" : "Flint Knife"
+        );
+        translations.put(
+                itemKey("flint_hammer"),
+                portuguese ? "Martelo de Sílex" : "Flint Hammer"
+        );
+        translations.put(
+                itemKey("flint_saw"),
+                portuguese ? "Serra de Sílex" : "Flint Saw"
         );
         translations.put(
                 itemKey("plant_fiber"),

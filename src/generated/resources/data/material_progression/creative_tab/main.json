@@ -5,7 +5,9 @@
     "rock",
     "flint_shard",
     "flint_hatchet",
+    "flint_hammer",
     "flint_knife",
+    "flint_saw",
     "plant_fiber",
     "tin_ore",
     "deepslate_tin_ore",
@@ -25,6 +27,7 @@
     "bronze_axe",
     "bronze_shovel",
     "bronze_hoe",
-    "crusher"
+    "crusher",
+    "workshop"
   ]
 }

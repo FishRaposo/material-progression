@@ -110,11 +110,11 @@ final class TagDataProvider extends GeneratedResourceProvider {
         );
         resources.put(
                 "c/tags/item/tools/hammers.json",
-                tag()
+                tag("material_progression:flint_hammer")
         );
         resources.put(
                 "c/tags/item/tools/saws.json",
-                tag()
+                tag("material_progression:flint_saw")
         );
 
         for (MaterialFamily family : MaterialFamilies.ALL) {
@@ -157,6 +157,10 @@ final class TagDataProvider extends GeneratedResourceProvider {
                         itemId(tin, "ore"),
                         "material_progression:deepslate_" + tin.name() + "_ore"
                 )
+        );
+        resources.put(
+                "minecraft/tags/block/mineable/axe.json",
+                additiveTag("material_progression:workshop")
         );
         resources.put(
                 "minecraft/tags/block/needs_stone_tool.json",
@@ -205,6 +209,8 @@ final class TagDataProvider extends GeneratedResourceProvider {
             }
         }
         items.add("material_progression:flint_knife");
+        items.add("material_progression:flint_hammer");
+        items.add("material_progression:flint_saw");
         return items;
     }
 
@@ -217,6 +223,11 @@ final class TagDataProvider extends GeneratedResourceProvider {
                     items.add(family.itemId(tool));
                 }
             }
+        }
+        if (expected == ToolKind.AXE) {
+            items.add("material_progression:flint_saw");
+        } else if (expected == ToolKind.PICKAXE) {
+            items.add("material_progression:flint_hammer");
         }
         return items;
     }
@@ -231,12 +242,15 @@ final class TagDataProvider extends GeneratedResourceProvider {
             }
         }
         items.add("material_progression:flint_knife");
+        items.add("material_progression:flint_hammer");
+        items.add("material_progression:flint_saw");
         return items;
     }
 
     private static List<Object> weaponItems() {
         List<Object> items = toolItems(ToolKind.SWORD);
         items.add("material_progression:flint_knife");
+        items.add("material_progression:flint_saw");
         return items;
     }
 
@@ -250,6 +264,7 @@ final class TagDataProvider extends GeneratedResourceProvider {
             }
         }
         items.add("material_progression:flint_knife");
+        items.add("material_progression:flint_saw");
         return items;
     }
 

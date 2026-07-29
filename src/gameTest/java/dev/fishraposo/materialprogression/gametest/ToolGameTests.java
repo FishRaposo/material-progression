@@ -58,6 +58,14 @@ public final class ToolGameTests {
                 "Tin ore is not mineable with a pickaxe"
         );
         helper.assertTrue(
+                ModItems.FLINT_HAMMER.get().getDefaultInstance().is(ItemTags.PICKAXES),
+                "Flint hammer is not a pickaxe-compatible field tool"
+        );
+        helper.assertTrue(
+                ModItems.FLINT_SAW.get().getDefaultInstance().is(ItemTags.AXES),
+                "Flint saw is not an axe-compatible field tool"
+        );
+        helper.assertTrue(
                 ModBlocks.TIN_ORE.get().defaultBlockState().is(BlockTags.NEEDS_STONE_TOOL),
                 "Tin ore does not require a stone-tier tool"
         );

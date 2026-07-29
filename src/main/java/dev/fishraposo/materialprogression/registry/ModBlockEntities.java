@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.level.block.entity.CrusherBlockEntity;
+import dev.fishraposo.materialprogression.world.level.block.entity.WorkshopBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.bus.api.IEventBus;
@@ -16,6 +17,15 @@ public final class ModBlockEntities {
             BLOCK_ENTITIES.register(
                     "crusher",
                     () -> new BlockEntityType<>(CrusherBlockEntity::new, ModBlocks.CRUSHER.get())
+            );
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WorkshopBlockEntity>> WORKSHOP =
+            BLOCK_ENTITIES.register(
+                    "workshop",
+                    () -> new BlockEntityType<>(
+                            WorkshopBlockEntity::new,
+                            ModBlocks.WORKSHOP.get()
+                    )
             );
 
     private ModBlockEntities() {

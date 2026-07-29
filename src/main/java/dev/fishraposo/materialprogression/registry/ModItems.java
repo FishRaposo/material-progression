@@ -48,6 +48,14 @@ public final class ModItems {
             "flint_knife",
             properties -> new Item(properties.sword(FLINT, 2.0F, -2.0F))
     );
+    public static final DeferredItem<Item> FLINT_HAMMER = ITEMS.registerItem(
+            "flint_hammer",
+            properties -> new Item(properties.pickaxe(FLINT, 1.0F, -2.8F))
+    );
+    public static final DeferredItem<AxeItem> FLINT_SAW = ITEMS.registerItem(
+            "flint_saw",
+            properties -> new AxeItem(FLINT, 5.0F, -3.1F, properties)
+    );
 
     public static final DeferredItem<Item> TIN_SWORD = ITEMS.registerItem(
             "tin_sword", properties -> new Item(properties.sword(TIN, 3.0F, -2.4F))
@@ -82,6 +90,8 @@ public final class ModItems {
     );
 
     public static final DeferredItem<?> CRUSHER = ITEMS.registerSimpleBlockItem("crusher", ModBlocks.CRUSHER);
+    public static final DeferredItem<?> WORKSHOP =
+            ITEMS.registerSimpleBlockItem("workshop", ModBlocks.WORKSHOP);
     public static final DeferredItem<?> TIN_ORE = ITEMS.registerSimpleBlockItem("tin_ore", ModBlocks.TIN_ORE);
     public static final DeferredItem<?> DEEPSLATE_TIN_ORE =
             ITEMS.registerSimpleBlockItem("deepslate_tin_ore", ModBlocks.DEEPSLATE_TIN_ORE);
@@ -93,12 +103,13 @@ public final class ModItems {
     public static List<DeferredItem<? extends Item>> creativeTabContents() {
         return List.of(
             LOOSE_ROCKS, GROUND_STICK,
-            ROCK, FLINT_SHARD, FLINT_HATCHET, FLINT_KNIFE, PLANT_FIBER,
+            ROCK, FLINT_SHARD, FLINT_HATCHET, FLINT_HAMMER, FLINT_KNIFE,
+            FLINT_SAW, PLANT_FIBER,
             TIN_ORE, DEEPSLATE_TIN_ORE, RAW_TIN, TIN_DUST, TIN_INGOT,
             TIN_SWORD, TIN_PICKAXE, TIN_AXE, TIN_SHOVEL, TIN_HOE,
             COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,
             BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE,
-            CRUSHER
+            CRUSHER, WORKSHOP
         );
     }
 

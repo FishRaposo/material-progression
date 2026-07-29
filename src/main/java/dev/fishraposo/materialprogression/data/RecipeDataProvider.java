@@ -103,6 +103,36 @@ final class RecipeDataProvider extends GeneratedResourceProvider {
                 )
         );
         resources.put(
+                "recipe/flint_hammer.json",
+                DataJson.object(
+                        "type", "minecraft:crafting_shaped",
+                        "key", DataJson.object(
+                                "R", "#c:rocks",
+                                "S", "#c:rods/wooden"
+                        ),
+                        "pattern", DataJson.array("RRR", " S ", " S "),
+                        "result", result(
+                                "material_progression:flint_hammer",
+                                1
+                        )
+                )
+        );
+        resources.put(
+                "recipe/flint_saw.json",
+                DataJson.object(
+                        "type", "minecraft:crafting_shaped",
+                        "key", DataJson.object(
+                                "R", "#c:flint_shards",
+                                "S", "#c:rods/wooden"
+                        ),
+                        "pattern", DataJson.array("RR", " S"),
+                        "result", result(
+                                "material_progression:flint_saw",
+                                1
+                        )
+                )
+        );
+        resources.put(
                 "recipe/string_from_plant_fiber.json",
                 DataJson.object(
                         "type", "minecraft:crafting_shapeless",
@@ -112,6 +142,19 @@ final class RecipeDataProvider extends GeneratedResourceProvider {
                                 "#c:fibers/plant"
                         ),
                         "result", result("minecraft:string", 1)
+                )
+        );
+        resources.put(
+                "recipe/workshop.json",
+                DataJson.object(
+                        "type", "minecraft:crafting_shaped",
+                        "key", DataJson.object(
+                                "C", "minecraft:crafting_table",
+                                "P", "#minecraft:planks",
+                                "R", "#c:rocks"
+                        ),
+                        "pattern", DataJson.array("PPP", "RCR", "PPP"),
+                        "result", result("material_progression:workshop", 1)
                 )
         );
 
