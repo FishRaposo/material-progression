@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import dev.fishraposo.materialprogression.testsupport.MinecraftTestBootstrap;
 import dev.fishraposo.materialprogression.world.item.crafting.ManualProcessingRecipe;
 import java.util.List;
 import net.minecraft.world.SimpleContainer;
@@ -13,17 +14,23 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ItemTransactionTest {
-    private static final ManualProcessingRecipe PROCESSING_RECIPE =
-            new ManualProcessingRecipe(
-                    Ingredient.of(Items.WOODEN_SWORD),
-                    Ingredient.of(Items.HONEY_BOTTLE),
-                    new ItemStack(Items.STICK, 2),
-                    1,
-                    20
-            );
+    private static ManualProcessingRecipe processingRecipe;
+
+    @BeforeAll
+    static void bootStrapMinecraft() {
+        MinecraftTestBootstrap.bootStrap();
+        processingRecipe = new ManualProcessingRecipe(
+                Ingredient.of(Items.WOODEN_SWORD),
+                Ingredient.of(Items.HONEY_BOTTLE),
+                new ItemStack(Items.STICK, 2),
+                1,
+                20
+        );
+    }
 
     @Test
     void simulationRejectsAFullOutputWithoutChangingAnySlot() {
@@ -33,7 +40,7 @@ class ItemTransactionTest {
                 new ItemStack(Items.STICK, 64)
         );
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                inventory, PROCESSING_RECIPE, 0, 1, List.of(2)
+                inventory, processingRecipe, 0, 1, List.of(2)
         );
 
         ItemTransaction.Preview preview = transaction.simulate();
@@ -54,7 +61,7 @@ class ItemTransactionTest {
                 ItemStack.EMPTY
         );
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                inventory, PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                inventory, processingRecipe, 0, 1, List.of(2, 3)
         );
 
         ItemTransaction.Preview preview = transaction.simulate();
@@ -73,7 +80,7 @@ class ItemTransactionTest {
                 ItemStack.EMPTY
         );
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                inventory, PROCESSING_RECIPE, 0, 1, List.of(3, 2)
+                inventory, processingRecipe, 0, 1, List.of(3, 2)
         );
 
         ItemTransaction.Preview preview = transaction.simulate();
@@ -93,7 +100,7 @@ class ItemTransactionTest {
                 ItemStack.EMPTY
         );
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                inventory, PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                inventory, processingRecipe, 0, 1, List.of(2, 3)
         );
         ItemTransaction.Preview preview = transaction.simulate();
         inventory.setItem(3, new ItemStack(Items.DIRT));
@@ -110,7 +117,7 @@ class ItemTransactionTest {
         container.setItem(1, new ItemStack(Items.HONEY_BOTTLE));
         InventoryView view = InventoryView.of(container);
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                view, PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                view, processingRecipe, 0, 1, List.of(2, 3)
         );
 
         assertTrue(transaction.commit(transaction.simulate()));
@@ -131,7 +138,7 @@ class ItemTransactionTest {
         handler.setStackInSlot(0, new ItemStack(Items.WOODEN_SWORD));
         handler.setStackInSlot(1, new ItemStack(Items.HONEY_BOTTLE));
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                InventoryView.of(handler), PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                InventoryView.of(handler), processingRecipe, 0, 1, List.of(2, 3)
         );
 
         ItemTransaction.Preview preview = transaction.simulate();
@@ -147,7 +154,7 @@ class ItemTransactionTest {
         handler.setStackInSlot(0, new ItemStack(Items.WOODEN_SWORD));
         handler.setStackInSlot(1, new ItemStack(Items.HONEY_BOTTLE));
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                InventoryView.of((IItemHandler) handler), PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                InventoryView.of((IItemHandler) handler), processingRecipe, 0, 1, List.of(2, 3)
         );
 
         assertTrue(transaction.commit(transaction.simulate()));
@@ -174,7 +181,7 @@ class ItemTransactionTest {
                 ItemStack.EMPTY
         );
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                inventory, PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                inventory, processingRecipe, 0, 1, List.of(2, 3)
         );
 
         assertFalse(transaction.commit(transaction.simulate()));
@@ -193,7 +200,7 @@ class ItemTransactionTest {
                 ItemStack.EMPTY
         );
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                inventory, PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                inventory, processingRecipe, 0, 1, List.of(2, 3)
         );
         ItemTransaction.Preview preview = transaction.simulate();
         inventory.replaceWithoutRevision(3, new ItemStack(Items.DIRT));
@@ -212,7 +219,7 @@ class ItemTransactionTest {
                 ItemStack.EMPTY
         );
         ItemTransaction.Preview preview = ItemTransaction.manualProcessing(
-                inventory, PROCESSING_RECIPE, 0, 1, List.of(2, 3)
+                inventory, processingRecipe, 0, 1, List.of(2, 3)
         ).simulate();
 
         ItemStack exposed = preview.stackAt(2);

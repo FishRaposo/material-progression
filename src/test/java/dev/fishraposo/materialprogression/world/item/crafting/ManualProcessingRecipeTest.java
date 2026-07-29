@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.mojang.serialization.JsonOps;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
+import dev.fishraposo.materialprogression.testsupport.MinecraftTestBootstrap;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -18,9 +19,15 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.neoforged.neoforge.network.connection.ConnectionType;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class ManualProcessingRecipeTest {
+    @BeforeAll
+    static void bootStrapMinecraft() {
+        MinecraftTestBootstrap.bootStrap();
+    }
+
     @Test
     void matchesOnlyTheDeclaredToolAndInputIngredients() {
         ManualProcessingRecipe recipe = new ManualProcessingRecipe(

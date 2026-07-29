@@ -5,6 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 JAVA_ROOT = ROOT / "src" / "main" / "java"
 GAME_TEST_JAVA_ROOT = ROOT / "src" / "gameTest" / "java"
+UNIT_TEST_JAVA_ROOT = ROOT / "src" / "test" / "java"
 BUILD_GRADLE = ROOT / "build.gradle"
 TYPE_DECLARATIONS = ("class ", "interface ", "enum ", "record ")
 
@@ -24,6 +25,40 @@ class JavaSourceContractTests(unittest.TestCase):
             "testRuntimeOnly 'org.junit.platform:junit-platform-launcher'",
             build_script,
         )
+
+    def test_minecraft_unit_tests_bootstrap_builtin_registries(self):
+        bootstrap = (
+            UNIT_TEST_JAVA_ROOT
+            / "dev"
+            / "fishraposo"
+            / "materialprogression"
+            / "testsupport"
+            / "MinecraftTestBootstrap.java"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn("SharedConstants.tryDetectVersion();", bootstrap)
+        self.assertIn("Bootstrap.bootStrap();", bootstrap)
+
+        expected_users = (
+            UNIT_TEST_JAVA_ROOT
+            / "dev"
+            / "fishraposo"
+            / "materialprogression"
+            / "transaction"
+            / "ItemTransactionTest.java",
+            UNIT_TEST_JAVA_ROOT
+            / "dev"
+            / "fishraposo"
+            / "materialprogression"
+            / "world"
+            / "item"
+            / "crafting"
+            / "ManualProcessingRecipeTest.java",
+        )
+        for path in expected_users:
+            with self.subTest(path=path.relative_to(ROOT)):
+                source = path.read_text(encoding="utf-8")
+                self.assertIn("MinecraftTestBootstrap.bootStrap();", source)
 
     def test_game_tests_use_current_recipe_access_api(self):
         stale_calls = []
