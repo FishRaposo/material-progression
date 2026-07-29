@@ -67,7 +67,7 @@ neoForge {
     unitTest {
         enable()
         testedMod = mods.getByName(project.mod_id)
-        loadedMods = [testedMod]
+        loadedMods = [mods.getByName(project.mod_id)]
     }
 
     // This line is optional. Access Transformers are automatically detected
