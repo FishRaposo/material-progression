@@ -84,6 +84,9 @@ neoForge {
 
         data {
             clientData()
+            // Datagen loads production content only. The GameTest mod requires
+            // Test Framework, which is intentionally scoped to gameTestServer.
+            loadedMods = [mods."${project.mod_id}"]
 
             // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
             // gameDirectory = project.file('run-data')
