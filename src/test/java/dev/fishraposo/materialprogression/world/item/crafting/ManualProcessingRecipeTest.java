@@ -61,6 +61,7 @@ class ManualProcessingRecipeTest {
         assertFalse(placementInfo.ingredients().getFirst().test(new ItemStack(Items.SHEARS)));
         assertEquals(1, placementInfo.slotsToIngredientIndex().size());
         assertEquals(0, placementInfo.slotsToIngredientIndex().getInt(0));
+        assertEquals("", recipe.group());
     }
 
     @Test

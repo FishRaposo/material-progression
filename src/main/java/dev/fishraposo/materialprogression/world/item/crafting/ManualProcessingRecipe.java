@@ -131,4 +131,9 @@ public final class ManualProcessingRecipe implements Recipe<SingleRecipeInput> {
     public RecipeBookCategory recipeBookCategory() {
         return RecipeBookCategories.CRAFTING_MISC;
     }
+
+    @Override
+    public String group() {
+        return "";
+    }
 }
