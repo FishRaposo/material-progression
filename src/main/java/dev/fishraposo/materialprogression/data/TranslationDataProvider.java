@@ -39,6 +39,12 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
                 portuguese ? "Oficina Manual" : "Manual Workshop"
         );
         translations.put(
+                "container.material_progression.bulk_crafting_table",
+                portuguese
+                        ? "Mesa de Fabricação em Massa"
+                        : "Bulk Crafting Table"
+        );
+        translations.put(
                 "gui.material_progression.workshop.process",
                 portuguese ? "Processar" : "Process"
         );
@@ -76,6 +82,12 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
         translations.put(
                 "block.material_progression.workshop",
                 portuguese ? "Oficina Manual" : "Manual Workshop"
+        );
+        translations.put(
+                "block.material_progression.bulk_crafting_table",
+                portuguese
+                        ? "Mesa de Fabricação em Massa"
+                        : "Bulk Crafting Table"
         );
         translations.put(
                 "block.material_progression.loose_rocks",
@@ -147,6 +159,7 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
                 itemKey("plant_fiber"),
                 portuguese ? "Fibra Vegetal" : "Plant Fiber"
         );
+        moduleTranslations(translations, portuguese);
 
         for (MaterialFamily family : MaterialFamilies.ALL) {
             for (ToolKind tool : family.tools()) {
@@ -166,6 +179,39 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
 
     private static String itemKey(String path) {
         return "item.material_progression." + path;
+    }
+
+    private static void moduleTranslations(
+            Map<String, String> translations,
+            boolean portuguese
+    ) {
+        String[][] modules = {
+                {"storage_module", "Storage Module",
+                        "Módulo de Armazenamento"},
+                {"advanced_storage_module", "Advanced Storage Module",
+                        "Módulo de Armazenamento Avançado"},
+                {"filter_module", "Filter Module", "Módulo de Filtro"},
+                {"advanced_filter_module", "Advanced Filter Module",
+                        "Módulo de Filtro Avançado"},
+                {"priority_module", "Priority Module",
+                        "Módulo de Prioridade"},
+                {"advanced_priority_module", "Advanced Priority Module",
+                        "Módulo de Prioridade Avançado"},
+                {"reservation_module", "Reservation Module",
+                        "Módulo de Reserva"},
+                {"advanced_reservation_module",
+                        "Advanced Reservation Module",
+                        "Módulo de Reserva Avançado"},
+                {"memory_module", "Memory Module", "Módulo de Memória"},
+                {"advanced_memory_module", "Advanced Memory Module",
+                        "Módulo de Memória Avançado"}
+        };
+        for (String[] module : modules) {
+            translations.put(
+                    itemKey(module[0]),
+                    portuguese ? module[2] : module[1]
+            );
+        }
     }
 
     private static String blockKey(String path) {

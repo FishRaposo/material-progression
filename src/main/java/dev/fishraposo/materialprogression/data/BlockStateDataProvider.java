@@ -55,6 +55,10 @@ final class BlockStateDataProvider extends GeneratedResourceProvider {
                 simpleBlockstate("minecraft:block/crafting_table")
         );
         resources.put(
+                "blockstates/bulk_crafting_table.json",
+                simpleBlockstate("minecraft:block/crafting_table")
+        );
+        resources.put(
                 "blockstates/" + tin.name() + "_ore.json",
                 simpleBlockstate("minecraft:block/iron_ore")
         );

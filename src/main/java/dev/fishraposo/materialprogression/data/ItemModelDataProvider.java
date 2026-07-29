@@ -84,6 +84,27 @@ final class ItemModelDataProvider extends GeneratedResourceProvider {
                 itemModel("minecraft:block/crafting_table")
         );
         resources.put(
+                "items/bulk_crafting_table.json",
+                itemModel("minecraft:block/crafting_table")
+        );
+        for (String module : new String[]{
+                "storage_module",
+                "advanced_storage_module",
+                "filter_module",
+                "advanced_filter_module",
+                "priority_module",
+                "advanced_priority_module",
+                "reservation_module",
+                "advanced_reservation_module",
+                "memory_module",
+                "advanced_memory_module"
+        }) {
+            resources.put(
+                    "items/" + module + ".json",
+                    itemModel("minecraft:item/comparator")
+            );
+        }
+        resources.put(
                 "items/" + tin.name() + "_ore.json",
                 itemModel("minecraft:block/iron_ore")
         );

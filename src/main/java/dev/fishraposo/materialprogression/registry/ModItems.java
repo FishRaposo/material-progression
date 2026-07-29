@@ -2,6 +2,8 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.data.MaterialFamilies;
+import dev.fishraposo.materialprogression.world.item.BulkCraftingUpgradeItem;
+import dev.fishraposo.materialprogression.world.item.BulkCraftingUpgradeItem.Family;
 import java.util.List;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.AxeItem;
@@ -92,6 +94,11 @@ public final class ModItems {
     public static final DeferredItem<?> CRUSHER = ITEMS.registerSimpleBlockItem("crusher", ModBlocks.CRUSHER);
     public static final DeferredItem<?> WORKSHOP =
             ITEMS.registerSimpleBlockItem("workshop", ModBlocks.WORKSHOP);
+    public static final DeferredItem<?> BULK_CRAFTING_TABLE =
+            ITEMS.registerSimpleBlockItem(
+                    "bulk_crafting_table",
+                    ModBlocks.BULK_CRAFTING_TABLE
+            );
     public static final DeferredItem<?> TIN_ORE = ITEMS.registerSimpleBlockItem("tin_ore", ModBlocks.TIN_ORE);
     public static final DeferredItem<?> DEEPSLATE_TIN_ORE =
             ITEMS.registerSimpleBlockItem("deepslate_tin_ore", ModBlocks.DEEPSLATE_TIN_ORE);
@@ -99,6 +106,62 @@ public final class ModItems {
             ITEMS.registerSimpleBlockItem("loose_rocks", ModBlocks.LOOSE_ROCKS);
     public static final DeferredItem<?> GROUND_STICK =
             ITEMS.registerSimpleBlockItem("ground_stick", ModBlocks.GROUND_STICK);
+
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            STORAGE_MODULE = upgrade("storage_module", Family.STORAGE, 1, 1);
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_STORAGE_MODULE = upgrade(
+                    "advanced_storage_module",
+                    Family.STORAGE,
+                    2,
+                    3
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            FILTER_MODULE = upgrade("filter_module", Family.FILTER, 1, 1);
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_FILTER_MODULE = upgrade(
+                    "advanced_filter_module",
+                    Family.FILTER,
+                    2,
+                    3
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            PRIORITY_MODULE = upgrade(
+                    "priority_module",
+                    Family.PRIORITY,
+                    1,
+                    1
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_PRIORITY_MODULE = upgrade(
+                    "advanced_priority_module",
+                    Family.PRIORITY,
+                    2,
+                    2
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            RESERVATION_MODULE = upgrade(
+                    "reservation_module",
+                    Family.RESERVATION,
+                    1,
+                    1
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_RESERVATION_MODULE = upgrade(
+                    "advanced_reservation_module",
+                    Family.RESERVATION,
+                    2,
+                    3
+            );
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            MEMORY_MODULE = upgrade("memory_module", Family.MEMORY, 1, 1);
+    public static final DeferredItem<BulkCraftingUpgradeItem>
+            ADVANCED_MEMORY_MODULE = upgrade(
+                    "advanced_memory_module",
+                    Family.MEMORY,
+                    2,
+                    3
+            );
 
     public static List<DeferredItem<? extends Item>> creativeTabContents() {
         return List.of(
@@ -109,7 +172,12 @@ public final class ModItems {
             TIN_SWORD, TIN_PICKAXE, TIN_AXE, TIN_SHOVEL, TIN_HOE,
             COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,
             BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE,
-            CRUSHER, WORKSHOP
+            CRUSHER, WORKSHOP, BULK_CRAFTING_TABLE,
+            STORAGE_MODULE, ADVANCED_STORAGE_MODULE,
+            FILTER_MODULE, ADVANCED_FILTER_MODULE,
+            PRIORITY_MODULE, ADVANCED_PRIORITY_MODULE,
+            RESERVATION_MODULE, ADVANCED_RESERVATION_MODULE,
+            MEMORY_MODULE, ADVANCED_MEMORY_MODULE
         );
     }
 
@@ -122,6 +190,23 @@ public final class ModItems {
                     .build());
 
     private ModItems() {
+    }
+
+    private static DeferredItem<BulkCraftingUpgradeItem> upgrade(
+            String name,
+            Family family,
+            int tier,
+            int units
+    ) {
+        return ITEMS.registerItem(
+                name,
+                properties -> new BulkCraftingUpgradeItem(
+                        family,
+                        tier,
+                        units,
+                        properties.stacksTo(1)
+                )
+        );
     }
 
     public static void register(IEventBus modBus) {

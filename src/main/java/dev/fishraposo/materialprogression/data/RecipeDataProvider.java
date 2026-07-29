@@ -157,6 +157,24 @@ final class RecipeDataProvider extends GeneratedResourceProvider {
                         "result", result("material_progression:workshop", 1)
                 )
         );
+        resources.put(
+                "recipe/bulk_crafting_table.json",
+                DataJson.object(
+                        "type", "minecraft:crafting_shaped",
+                        "category", "misc",
+                        "key", DataJson.object(
+                                "B", "#c:ingots/bronze",
+                                "C", "minecraft:chest",
+                                "W", "material_progression:workshop"
+                        ),
+                        "pattern", DataJson.array("BBB", "CWC", "BBB"),
+                        "result", result(
+                                "material_progression:bulk_crafting_table",
+                                1
+                        )
+                )
+        );
+        addUpgradeRecipes(resources);
 
         resources.put(
                 "recipe/crushing_copper_ore.json",
@@ -297,6 +315,54 @@ final class RecipeDataProvider extends GeneratedResourceProvider {
                 )
         );
         return resources;
+    }
+
+    private static void addUpgradeRecipes(
+            Map<String, JsonElement> resources
+    ) {
+        String[][] modules = {
+                {"storage", "minecraft:chest"},
+                {"filter", "minecraft:hopper"},
+                {"priority", "minecraft:comparator"},
+                {"reservation", "minecraft:redstone"},
+                {"memory", "minecraft:book"}
+        };
+        for (String[] module : modules) {
+            String basic = module[0] + "_module";
+            String advanced = "advanced_" + basic;
+            resources.put(
+                    "recipe/" + basic + ".json",
+                    DataJson.object(
+                            "type", "minecraft:crafting_shaped",
+                            "category", "misc",
+                            "key", DataJson.object(
+                                    "B", "#c:ingots/bronze",
+                                    "C", module[1]
+                            ),
+                            "pattern", DataJson.array(" B ", "BCB", " B "),
+                            "result", result(
+                                    "material_progression:" + basic,
+                                    1
+                            )
+                    )
+            );
+            resources.put(
+                    "recipe/" + advanced + ".json",
+                    DataJson.object(
+                            "type", "minecraft:crafting_shaped",
+                            "category", "misc",
+                            "key", DataJson.object(
+                                    "B", "#c:ingots/bronze",
+                                    "M", "material_progression:" + basic
+                            ),
+                            "pattern", DataJson.array("BBB", "BMB", "BBB"),
+                            "result", result(
+                                    "material_progression:" + advanced,
+                                    1
+                            )
+                    )
+            );
+        }
     }
 
     private static JsonObject toolRecipe(

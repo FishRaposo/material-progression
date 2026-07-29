@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
+import dev.fishraposo.materialprogression.world.level.block.BulkCraftingTableBlock;
 import dev.fishraposo.materialprogression.world.level.block.CrusherBlock;
 import dev.fishraposo.materialprogression.world.level.block.GroundResourceBlock;
 import dev.fishraposo.materialprogression.world.level.block.WorkshopBlock;
@@ -35,6 +36,16 @@ public final class ModBlocks {
                     .strength(2.5F)
                     .sound(SoundType.WOOD)
     );
+
+    public static final DeferredBlock<BulkCraftingTableBlock>
+            BULK_CRAFTING_TABLE = BLOCKS.registerBlock(
+                    "bulk_crafting_table",
+                    BulkCraftingTableBlock::new,
+                    properties -> properties
+                            .mapColor(MapColor.WOOD)
+                            .strength(3.0F)
+                            .sound(SoundType.WOOD)
+            );
 
     public static final DeferredBlock<Block> TIN_ORE = BLOCKS.registerSimpleBlock(
             "tin_ore",

@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
+import dev.fishraposo.materialprogression.world.inventory.BulkCraftingTableMenu;
 import dev.fishraposo.materialprogression.world.inventory.CrusherMenu;
 import dev.fishraposo.materialprogression.world.inventory.WorkshopMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -30,6 +31,17 @@ public final class ModMenus {
                                     new WorkshopMenu(containerId, inventory)
                     )
             );
+
+    public static final DeferredHolder<
+            MenuType<?>,
+            MenuType<BulkCraftingTableMenu>
+    > BULK_CRAFTING_TABLE = MENUS.register(
+            "bulk_crafting_table",
+            () -> IMenuTypeExtension.create(
+                    (containerId, inventory, data) ->
+                            new BulkCraftingTableMenu(containerId, inventory)
+            )
+    );
 
     private ModMenus() {
     }

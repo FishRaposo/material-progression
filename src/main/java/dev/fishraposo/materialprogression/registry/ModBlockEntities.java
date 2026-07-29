@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
+import dev.fishraposo.materialprogression.world.level.block.entity.BulkCraftingTableBlockEntity;
 import dev.fishraposo.materialprogression.world.level.block.entity.CrusherBlockEntity;
 import dev.fishraposo.materialprogression.world.level.block.entity.WorkshopBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,6 +28,17 @@ public final class ModBlockEntities {
                             ModBlocks.WORKSHOP.get()
                     )
             );
+
+    public static final DeferredHolder<
+            BlockEntityType<?>,
+            BlockEntityType<BulkCraftingTableBlockEntity>
+    > BULK_CRAFTING_TABLE = BLOCK_ENTITIES.register(
+            "bulk_crafting_table",
+            () -> new BlockEntityType<>(
+                    BulkCraftingTableBlockEntity::new,
+                    ModBlocks.BULK_CRAFTING_TABLE.get()
+            )
+    );
 
     private ModBlockEntities() {
     }

@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression;
 
 import dev.fishraposo.materialprogression.client.CrusherScreen;
+import dev.fishraposo.materialprogression.client.BulkCraftingTableScreen;
 import dev.fishraposo.materialprogression.client.ClientManualRecipes;
 import dev.fishraposo.materialprogression.client.ClientWorkshopPreviews;
 import dev.fishraposo.materialprogression.client.WorkshopScreen;
@@ -20,6 +21,10 @@ public final class MaterialProgressionClient {
     static void registerScreens(RegisterMenuScreensEvent event) {
         event.register(ModMenus.CRUSHER.get(), CrusherScreen::new);
         event.register(ModMenus.WORKSHOP.get(), WorkshopScreen::new);
+        event.register(
+                ModMenus.BULK_CRAFTING_TABLE.get(),
+                BulkCraftingTableScreen::new
+        );
     }
 
     @SubscribeEvent
