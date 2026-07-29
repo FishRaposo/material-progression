@@ -44,6 +44,18 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
                         ? "Exigir Machado para Troncos"
                         : "Require Axes for Logs"
         );
+        translations.put(
+                "config.material_progression.server.knifePlantHarvesting",
+                portuguese
+                        ? "Colheita de Fibras com Facas"
+                        : "Knife Plant Harvesting"
+        );
+        translations.put(
+                "config.material_progression.server.stoneRockHarvesting",
+                portuguese
+                        ? "Colheita de Pedras em Rocha Natural"
+                        : "Natural Stone Rock Harvesting"
+        );
 
         translations.put(
                 "block.material_progression.crusher",
@@ -102,6 +114,14 @@ final class TranslationDataProvider extends GeneratedResourceProvider {
         translations.put(
                 itemKey(MaterialFamilies.FLINT.name() + "_shard"),
                 portuguese ? "Lasca de Sílex" : "Flint Shard"
+        );
+        translations.put(
+                itemKey("flint_knife"),
+                portuguese ? "Faca de Sílex" : "Flint Knife"
+        );
+        translations.put(
+                itemKey("plant_fiber"),
+                portuguese ? "Fibra Vegetal" : "Plant Fiber"
         );
 
         for (MaterialFamily family : MaterialFamilies.ALL) {

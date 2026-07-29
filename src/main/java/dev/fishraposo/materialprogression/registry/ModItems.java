@@ -39,9 +39,14 @@ public final class ModItems {
     public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
     public static final DeferredItem<Item> ROCK = ITEMS.registerSimpleItem("rock");
     public static final DeferredItem<Item> FLINT_SHARD = ITEMS.registerSimpleItem("flint_shard");
+    public static final DeferredItem<Item> PLANT_FIBER = ITEMS.registerSimpleItem("plant_fiber");
 
     public static final DeferredItem<AxeItem> FLINT_HATCHET = ITEMS.registerItem(
             "flint_hatchet", properties -> new AxeItem(FLINT, 5.0F, -3.2F, properties)
+    );
+    public static final DeferredItem<Item> FLINT_KNIFE = ITEMS.registerItem(
+            "flint_knife",
+            properties -> new Item(properties.sword(FLINT, 2.0F, -2.0F))
     );
 
     public static final DeferredItem<Item> TIN_SWORD = ITEMS.registerItem(
@@ -88,7 +93,7 @@ public final class ModItems {
     public static List<DeferredItem<? extends Item>> creativeTabContents() {
         return List.of(
             LOOSE_ROCKS, GROUND_STICK,
-            ROCK, FLINT_SHARD, FLINT_HATCHET,
+            ROCK, FLINT_SHARD, FLINT_HATCHET, FLINT_KNIFE, PLANT_FIBER,
             TIN_ORE, DEEPSLATE_TIN_ORE, RAW_TIN, TIN_DUST, TIN_INGOT,
             TIN_SWORD, TIN_PICKAXE, TIN_AXE, TIN_SHOVEL, TIN_HOE,
             COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,

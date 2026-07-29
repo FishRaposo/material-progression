@@ -33,6 +33,14 @@ final class ItemModelDataProvider extends GeneratedResourceProvider {
                 "items/" + flint.name() + "_shard.json",
                 itemModel("minecraft:item/flint")
         );
+        resources.put(
+                "items/flint_knife.json",
+                itemModel("minecraft:item/stone_sword")
+        );
+        resources.put(
+                "items/plant_fiber.json",
+                itemModel("minecraft:item/string")
+        );
         resources.put("items/rock.json", itemModel("minecraft:item/cobblestone"));
         resources.put(
                 "items/raw_" + tin.name() + ".json",

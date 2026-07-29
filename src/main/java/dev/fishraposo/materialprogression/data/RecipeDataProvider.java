@@ -87,6 +87,33 @@ final class RecipeDataProvider extends GeneratedResourceProvider {
                         "result", result("material_progression:flint_shard", 1)
                 )
         );
+        resources.put(
+                "recipe/flint_knife.json",
+                DataJson.object(
+                        "type", "minecraft:crafting_shaped",
+                        "key", DataJson.object(
+                                "R", "#c:rocks",
+                                "S", "#c:rods/wooden"
+                        ),
+                        "pattern", DataJson.array("R", "S"),
+                        "result", result(
+                                "material_progression:flint_knife",
+                                1
+                        )
+                )
+        );
+        resources.put(
+                "recipe/string_from_plant_fiber.json",
+                DataJson.object(
+                        "type", "minecraft:crafting_shapeless",
+                        "ingredients", DataJson.array(
+                                "#c:fibers/plant",
+                                "#c:fibers/plant",
+                                "#c:fibers/plant"
+                        ),
+                        "result", result("minecraft:string", 1)
+                )
+        );
 
         resources.put(
                 "recipe/crushing_copper_ore.json",

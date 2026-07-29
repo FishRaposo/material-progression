@@ -33,12 +33,14 @@ COMMON_ITEM_TAGS = {
     "ingots/bronze": ["material_progression:bronze_ingot"],
     "ingots/tin": ["material_progression:tin_ingot"],
     "flint_shards": ["material_progression:flint_shard"],
+    "fibers/plant": ["material_progression:plant_fiber"],
     "ores/tin": [
         "material_progression:tin_ore",
         "material_progression:deepslate_tin_ore",
     ],
     "raw_materials/tin": ["material_progression:raw_tin"],
     "rocks": ["material_progression:rock"],
+    "tools/knives": ["material_progression:flint_knife"],
 }
 
 COMMON_BLOCK_TAGS = {
@@ -207,6 +209,65 @@ class ResourceContractTests(unittest.TestCase):
                 )
                 self.assertEqual("vegetal_decoration", modifier["step"])
 
+    def test_ground_sticks_have_tree_bias_and_overworld_fallback(self):
+        tree_placed = TREE.load_json(
+            DATA
+            / "worldgen"
+            / "placed_feature"
+            / "ground_stick_tree_biased.json"
+        )
+        fallback_placed = TREE.load_json(
+            DATA
+            / "worldgen"
+            / "placed_feature"
+            / "ground_stick_fallback.json"
+        )
+        tree_modifier = TREE.load_json(
+            DATA
+            / "neoforge"
+            / "biome_modifier"
+            / "add_ground_stick_tree_biased.json"
+        )
+        fallback_modifier = TREE.load_json(
+            DATA
+            / "neoforge"
+            / "biome_modifier"
+            / "add_ground_stick_fallback.json"
+        )
+
+        self.assertEqual(
+            "material_progression:ground_stick",
+            tree_placed["feature"],
+        )
+        self.assertEqual(
+            "material_progression:ground_stick",
+            fallback_placed["feature"],
+        )
+        self.assertEqual("#minecraft:is_forest", tree_modifier["biomes"])
+        self.assertEqual(
+            "#minecraft:is_overworld",
+            fallback_modifier["biomes"],
+        )
+        self.assertEqual(
+            "material_progression:ground_stick_tree_biased",
+            tree_modifier["features"],
+        )
+        self.assertEqual(
+            "material_progression:ground_stick_fallback",
+            fallback_modifier["features"],
+        )
+        tree_count = next(
+            placement["count"]
+            for placement in tree_placed["placement"]
+            if placement["type"] == "minecraft:count"
+        )
+        fallback_count = next(
+            placement["count"]
+            for placement in fallback_placed["placement"]
+            if placement["type"] == "minecraft:count"
+        )
+        self.assertGreater(tree_count, fallback_count)
+
     def test_crushing_recipes_match_two_dust_contract(self):
         recipe_dir = DATA / "recipe"
         actual_names = TREE.names_matching(recipe_dir, "crushing_*.json")
@@ -316,6 +377,7 @@ class ResourceContractTests(unittest.TestCase):
                 "#c:dusts/tin",
             },
             "ingots": {"#c:ingots/bronze", "#c:ingots/tin"},
+            "fibers": {"#c:fibers/plant"},
             "ores": {"#c:ores/tin"},
             "raw_materials": {"#c:raw_materials/tin"},
         }

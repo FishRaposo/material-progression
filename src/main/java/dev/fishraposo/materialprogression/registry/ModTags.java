@@ -14,6 +14,8 @@ public final class ModTags {
             blockTag("incorrect_for_bronze_tool");
     public static final TagKey<Block> INCORRECT_FOR_FLINT_TOOL =
             blockTag("incorrect_for_flint_tool");
+    public static final TagKey<Block> FIBER_PLANTS =
+            blockTag("fiber_plants");
 
     public static final TagKey<Item> FLINT_SHARDS =
             commonItemTag("flint_shards");
@@ -23,6 +25,10 @@ public final class ModTags {
             commonItemTag("ingots/bronze");
     public static final TagKey<Item> ROCKS =
             commonItemTag("rocks");
+    public static final TagKey<Item> KNIVES =
+            commonItemTag("tools/knives");
+    public static final TagKey<Item> PLANT_FIBERS =
+            commonItemTag("fibers/plant");
     public static final TagKey<Item> CRUSHER_INPUTS =
             itemTag("crusher_inputs");
 

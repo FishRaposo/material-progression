@@ -59,6 +59,14 @@ final class TagDataProvider extends GeneratedResourceProvider {
                 tag(itemId(flint, "shard"))
         );
         resources.put(
+                "c/tags/item/fibers.json",
+                tag("#c:fibers/plant")
+        );
+        resources.put(
+                "c/tags/item/fibers/plant.json",
+                tag("material_progression:plant_fiber")
+        );
+        resources.put(
                 "c/tags/item/ingots.json",
                 tag(
                         "#c:ingots/" + bronze.name(),
@@ -96,6 +104,10 @@ final class TagDataProvider extends GeneratedResourceProvider {
                 "c/tags/item/rocks.json",
                 tag("material_progression:rock")
         );
+        resources.put(
+                "c/tags/item/tools/knives.json",
+                tag("material_progression:flint_knife")
+        );
 
         for (MaterialFamily family : MaterialFamilies.ALL) {
             resources.put(
@@ -116,6 +128,17 @@ final class TagDataProvider extends GeneratedResourceProvider {
                         "#c:ores/" + tin.name(),
                         "#c:raw_materials/copper",
                         "#c:raw_materials/" + tin.name()
+                )
+        );
+        resources.put(
+                MaterialProgression.MOD_ID + "/tags/block/fiber_plants.json",
+                tag(
+                        "minecraft:short_grass",
+                        "minecraft:tall_grass",
+                        "minecraft:fern",
+                        "minecraft:large_fern",
+                        "minecraft:vine",
+                        "#minecraft:leaves"
                 )
         );
 
@@ -161,7 +184,7 @@ final class TagDataProvider extends GeneratedResourceProvider {
         );
         resources.put(
                 "minecraft/tags/item/enchantable/weapon.json",
-                additiveTag(toolItems(ToolKind.SWORD).toArray())
+                additiveTag(weaponItems().toArray())
         );
         return resources;
     }
@@ -173,6 +196,7 @@ final class TagDataProvider extends GeneratedResourceProvider {
                 items.add(family.itemId(tool));
             }
         }
+        items.add("material_progression:flint_knife");
         return items;
     }
 
@@ -198,6 +222,13 @@ final class TagDataProvider extends GeneratedResourceProvider {
                 }
             }
         }
+        items.add("material_progression:flint_knife");
+        return items;
+    }
+
+    private static List<Object> weaponItems() {
+        List<Object> items = toolItems(ToolKind.SWORD);
+        items.add("material_progression:flint_knife");
         return items;
     }
 
@@ -210,6 +241,7 @@ final class TagDataProvider extends GeneratedResourceProvider {
                 }
             }
         }
+        items.add("material_progression:flint_knife");
         return items;
     }
 

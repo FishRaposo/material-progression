@@ -13,9 +13,11 @@ SHIPPED_ITEMS = {
     "crusher",
     "deepslate_tin_ore",
     "flint_hatchet",
+    "flint_knife",
     "flint_shard",
     "ground_stick",
     "loose_rocks",
+    "plant_fiber",
     "raw_tin",
     "rock",
     "tin_axe",
@@ -47,6 +49,8 @@ CREATIVE_TAB_ITEMS = (
     "rock",
     "flint_shard",
     "flint_hatchet",
+    "flint_knife",
+    "plant_fiber",
     "tin_ore",
     "deepslate_tin_ore",
     "raw_tin",
@@ -107,6 +111,12 @@ PRIMITIVE_RECIPES = {
         "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
         "result": {"id": "material_progression:flint_hatchet"},
     },
+    "flint_knife": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": ["R", "S"],
+        "key": {"R": "#c:rocks", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_knife"},
+    },
     "flint_shard_from_flint": {
         "type": "minecraft:crafting_shapeless",
         "ingredients": ["minecraft:flint"],
@@ -117,10 +127,14 @@ PRIMITIVE_RECIPES = {
         "ingredients": ["#c:rocks"],
         "result": {"id": "material_progression:flint_shard"},
     },
+    "string_from_plant_fiber": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": ["#c:fibers/plant"] * 3,
+        "result": {"id": "minecraft:string"},
+    },
 }
 
 SURFACE_WORLDGEN_FEATURES = {
-    "ground_stick": "material_progression:ground_stick",
     "loose_rocks": "material_progression:loose_rocks",
 }
 
@@ -181,6 +195,7 @@ SMELTING_RECIPES = {
 TOOL_FAMILIES = {
     "flint": {
         "flint_hatchet",
+        "flint_knife",
     },
     "tin": {
         "tin_sword",
