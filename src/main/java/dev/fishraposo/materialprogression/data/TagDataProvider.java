@@ -108,6 +108,14 @@ final class TagDataProvider extends GeneratedResourceProvider {
                 "c/tags/item/tools/knives.json",
                 tag("material_progression:flint_knife")
         );
+        resources.put(
+                "c/tags/item/tools/hammers.json",
+                tag()
+        );
+        resources.put(
+                "c/tags/item/tools/saws.json",
+                tag()
+        );
 
         for (MaterialFamily family : MaterialFamilies.ALL) {
             resources.put(

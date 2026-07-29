@@ -41,7 +41,9 @@ COMMON_ITEM_TAGS = {
     ],
     "raw_materials/tin": ["material_progression:raw_tin"],
     "rocks": ["material_progression:rock"],
+    "tools/hammers": [],
     "tools/knives": ["material_progression:flint_knife"],
+    "tools/saws": [],
 }
 
 COMMON_BLOCK_TAGS = {
