@@ -39,10 +39,10 @@ class BulkCraftingTransactionTest {
 
         assertTrue(preview.accepted());
         assertTrue(transaction.commit(preview));
-        assertTrue(buffer.getItem(0).is(Items.STICK));
-        assertEquals(8, buffer.getItem(0).getCount());
-        assertTrue(buffer.getItem(1).is(Items.OAK_PLANKS));
-        assertEquals(2, buffer.getItem(1).getCount());
+        assertTrue(buffer.getItem(0).is(Items.OAK_PLANKS));
+        assertEquals(2, buffer.getItem(0).getCount());
+        assertTrue(buffer.getItem(1).is(Items.STICK));
+        assertEquals(8, buffer.getItem(1).getCount());
         assertTrue(player.getItem(0).isEmpty());
     }
 
