@@ -25,6 +25,9 @@ jobs:
       - name: Validate resources and documentation
         run: ./gradlew contractTest --stacktrace
 
+      - name: Verify deterministic data generation
+        run: ./scripts/verify-datagen.sh
+
       - name: Build with Gradle
         run: ./gradlew build --stacktrace
 

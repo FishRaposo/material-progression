@@ -36,6 +36,38 @@ SHIPPED_BLOCKS = {
     "tin_ore",
 }
 
+WORLD_PLACED_BLOCKS = {
+    "ground_stick",
+    "loose_rocks",
+}
+
+CREATIVE_TAB_ITEMS = (
+    "loose_rocks",
+    "ground_stick",
+    "rock",
+    "flint_shard",
+    "flint_hatchet",
+    "tin_ore",
+    "deepslate_tin_ore",
+    "raw_tin",
+    "tin_dust",
+    "tin_ingot",
+    "tin_sword",
+    "tin_pickaxe",
+    "tin_axe",
+    "tin_shovel",
+    "tin_hoe",
+    "copper_dust",
+    "bronze_dust",
+    "bronze_ingot",
+    "bronze_sword",
+    "bronze_pickaxe",
+    "bronze_axe",
+    "bronze_shovel",
+    "bronze_hoe",
+    "crusher",
+)
+
 MATERIAL_FAMILIES = {
     "flint": {
         "durability": 64,

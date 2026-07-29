@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 from content_contracts import (
+    CREATIVE_TAB_ITEMS,
     CRUSHING_RECIPES,
     MATERIAL_FAMILIES,
     PRIMITIVE_RECIPES,
@@ -11,6 +12,7 @@ from content_contracts import (
     SMELTING_RECIPES,
     SURFACE_WORLDGEN_FEATURES,
     TOOL_FAMILIES,
+    WORLD_PLACED_BLOCKS,
 )
 from support.resources import RecipeContract, ResourceTree
 
@@ -21,6 +23,8 @@ RESOURCES = TREE.resources
 DATA = TREE.data
 ASSETS = TREE.assets
 COMMON_DATA = RESOURCES / "data" / "c"
+GENERATED_RESOURCES = ROOT / "src" / "generated" / "resources"
+MAIN_RESOURCES = ROOT / "src" / "main" / "resources"
 
 COMMON_ITEM_TAGS = {
     "dusts/bronze": ["material_progression:bronze_dust"],
@@ -46,8 +50,72 @@ COMMON_BLOCK_TAGS = {
 
 
 class ResourceContractTests(unittest.TestCase):
+    def test_creative_tab_catalog_contains_every_shipped_item_once(self):
+        catalog_path = (
+            GENERATED_RESOURCES
+            / "data"
+            / "material_progression"
+            / "creative_tab"
+            / "main.json"
+        )
+        self.assertTrue(catalog_path.is_file())
+        catalog = TREE.load_json(catalog_path)
+
+        self.assertEqual(list(CREATIVE_TAB_ITEMS), catalog["items"])
+        self.assertEqual(len(catalog["items"]), len(set(catalog["items"])))
+        self.assertEqual(SHIPPED_ITEMS, set(catalog["items"]))
+
+    def test_world_placed_blocks_have_testing_item_forms(self):
+        self.assertEqual({"ground_stick", "loose_rocks"}, WORLD_PLACED_BLOCKS)
+        self.assertLessEqual(WORLD_PLACED_BLOCKS, SHIPPED_BLOCKS)
+        self.assertLessEqual(WORLD_PLACED_BLOCKS, SHIPPED_ITEMS)
+
+    def test_regular_resources_are_generated_instead_of_hand_authored(self):
+        generated_roots = (
+            GENERATED_RESOURCES / "data" / "material_progression" / "recipe",
+            GENERATED_RESOURCES / "data" / "material_progression" / "tags",
+            GENERATED_RESOURCES
+            / "data"
+            / "material_progression"
+            / "loot_table"
+            / "blocks",
+            GENERATED_RESOURCES
+            / "assets"
+            / "material_progression"
+            / "items",
+            GENERATED_RESOURCES
+            / "assets"
+            / "material_progression"
+            / "blockstates",
+            GENERATED_RESOURCES
+            / "assets"
+            / "material_progression"
+            / "lang",
+        )
+        hand_authored_roots = (
+            MAIN_RESOURCES / "data" / "material_progression" / "recipe",
+            MAIN_RESOURCES / "data" / "material_progression" / "tags",
+            MAIN_RESOURCES
+            / "data"
+            / "material_progression"
+            / "loot_table"
+            / "blocks",
+            MAIN_RESOURCES / "assets" / "material_progression" / "items",
+            MAIN_RESOURCES / "assets" / "material_progression" / "blockstates",
+            MAIN_RESOURCES / "assets" / "material_progression" / "lang",
+        )
+
+        for path in generated_roots:
+            with self.subTest(generated=path.relative_to(ROOT)):
+                self.assertTrue(path.is_dir())
+                self.assertTrue(any(path.rglob("*.json")))
+
+        for path in hand_authored_roots:
+            with self.subTest(hand_authored=path.relative_to(ROOT)):
+                self.assertFalse(path.exists())
+
     def test_every_json_resource_parses(self):
-        json_files = sorted(RESOURCES.rglob("*.json"))
+        json_files = sorted(TREE.json_files())
         self.assertGreater(len(json_files), 0)
 
         for path in json_files:
@@ -62,7 +130,7 @@ class ResourceContractTests(unittest.TestCase):
 
         for item in SHIPPED_ITEMS:
             with self.subTest(item=item):
-                self.assertTrue((ASSETS / "items" / f"{item}.json").is_file())
+                self.assertTrue(TREE.exists(ASSETS / "items" / f"{item}.json"))
                 prefix = "block" if item in SHIPPED_BLOCKS else "item"
                 translation_key = f"{prefix}.material_progression.{item}"
                 self.assertIn(translation_key, english)
@@ -78,7 +146,9 @@ class ResourceContractTests(unittest.TestCase):
 
         for block in SHIPPED_BLOCKS:
             with self.subTest(block=block):
-                self.assertTrue((ASSETS / "blockstates" / f"{block}.json").is_file())
+                self.assertTrue(
+                    TREE.exists(ASSETS / "blockstates" / f"{block}.json")
+                )
                 loot = TREE.load_json(
                     DATA / "loot_table" / "blocks" / f"{block}.json"
                 )
@@ -275,7 +345,7 @@ class ResourceContractTests(unittest.TestCase):
             "minecraft:raw_copper",
         }
 
-        for recipe_path in sorted((DATA / "recipe").glob("*.json")):
+        for recipe_path in sorted(TREE.paths_matching(DATA / "recipe", "*.json")):
             recipe = TREE.load_json(recipe_path)
             ingredients = []
             if "ingredient" in recipe:
