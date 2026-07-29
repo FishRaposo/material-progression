@@ -122,7 +122,7 @@ public final class WorkshopBlockEntity extends BaseContainerBlockEntity {
         }
 
         ItemTransaction transaction = ItemTransaction.manualProcessing(
-                InventoryView.of(this),
+                InventoryView.of(this, slot -> slot == OUTPUT_SLOT),
                 recipe,
                 TOOL_SLOT,
                 INPUT_SLOT,

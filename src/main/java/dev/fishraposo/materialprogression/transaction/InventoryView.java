@@ -1,5 +1,6 @@
 package dev.fishraposo.materialprogression.transaction;
 
+import java.util.function.IntPredicate;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
@@ -33,7 +34,18 @@ public interface InventoryView {
     void setItem(int slot, ItemStack stack);
 
     static InventoryView of(Container container) {
-        return new ContainerView(container);
+        return of(container, slot -> false);
+    }
+
+    /**
+     * Adapts a container while allowing declared slots to receive internal
+     * machine output even when their player-facing placement filter rejects it.
+     */
+    static InventoryView of(
+            Container container,
+            IntPredicate programmaticOutputSlot
+    ) {
+        return new ContainerView(container, programmaticOutputSlot);
     }
 
     static InventoryView of(IItemHandler handler) {
@@ -51,10 +63,15 @@ public interface InventoryView {
 
     final class ContainerView implements InventoryView {
         private final Container container;
+        private final IntPredicate programmaticOutputSlot;
         private long revision;
 
-        private ContainerView(Container container) {
+        private ContainerView(
+                Container container,
+                IntPredicate programmaticOutputSlot
+        ) {
             this.container = container;
+            this.programmaticOutputSlot = programmaticOutputSlot;
         }
 
         @Override
@@ -74,7 +91,8 @@ public interface InventoryView {
 
         @Override
         public boolean canStore(int slot, ItemStack stack) {
-            return stack.isEmpty() || (container.canPlaceItem(slot, stack)
+            return stack.isEmpty() || ((programmaticOutputSlot.test(slot)
+                    || container.canPlaceItem(slot, stack))
                     && stack.getCount() <= Math.min(
                             container.getMaxStackSize(),
                             stack.getMaxStackSize()

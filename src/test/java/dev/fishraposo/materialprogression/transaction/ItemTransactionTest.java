@@ -128,6 +128,33 @@ class ItemTransactionTest {
     }
 
     @Test
+    void declaredMachineOutputBypassesOnlyThePlayerPlacementFilter() {
+        SimpleContainer container = new SimpleContainer(4) {
+            @Override
+            public boolean canPlaceItem(int slot, ItemStack stack) {
+                return slot < 2;
+            }
+        };
+        container.setItem(0, new ItemStack(Items.WOODEN_SWORD));
+        container.setItem(1, new ItemStack(Items.HONEY_BOTTLE));
+        ItemTransaction transaction = ItemTransaction.manualProcessing(
+                InventoryView.of(container, slot -> slot >= 2),
+                processingRecipe,
+                0,
+                1,
+                List.of(2, 3)
+        );
+
+        ItemTransaction.Preview preview = transaction.simulate();
+
+        assertTrue(preview.accepted());
+        assertTrue(transaction.commit(preview));
+        assertFalse(container.canPlaceItem(2, new ItemStack(Items.STICK)));
+        assertTrue(container.getItem(2).is(Items.STICK));
+        assertEquals(2, container.getItem(2).getCount());
+    }
+
+    @Test
     void rejectsARestrictiveItemHandlerDuringPlanning() {
         ItemStackHandler handler = new ItemStackHandler(4) {
             @Override
