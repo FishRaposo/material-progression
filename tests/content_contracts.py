@@ -2,6 +2,11 @@ from support.resources import RecipeContract
 
 
 SHIPPED_ITEMS = {
+    "advanced_filter_module",
+    "advanced_memory_module",
+    "advanced_priority_module",
+    "advanced_reservation_module",
+    "advanced_storage_module",
     "bronze_axe",
     "bronze_dust",
     "bronze_hoe",
@@ -9,6 +14,7 @@ SHIPPED_ITEMS = {
     "bronze_pickaxe",
     "bronze_shovel",
     "bronze_sword",
+    "bulk_crafting_table",
     "copper_dust",
     "crusher",
     "deepslate_tin_ore",
@@ -17,11 +23,16 @@ SHIPPED_ITEMS = {
     "flint_knife",
     "flint_saw",
     "flint_shard",
+    "filter_module",
     "ground_stick",
     "loose_rocks",
+    "memory_module",
     "plant_fiber",
+    "priority_module",
     "raw_tin",
+    "reservation_module",
     "rock",
+    "storage_module",
     "tin_axe",
     "tin_dust",
     "tin_hoe",
@@ -34,6 +45,7 @@ SHIPPED_ITEMS = {
 }
 
 SHIPPED_BLOCKS = {
+    "bulk_crafting_table",
     "crusher",
     "deepslate_tin_ore",
     "ground_stick",
@@ -77,6 +89,17 @@ CREATIVE_TAB_ITEMS = (
     "bronze_hoe",
     "crusher",
     "workshop",
+    "bulk_crafting_table",
+    "storage_module",
+    "advanced_storage_module",
+    "filter_module",
+    "advanced_filter_module",
+    "priority_module",
+    "advanced_priority_module",
+    "reservation_module",
+    "advanced_reservation_module",
+    "memory_module",
+    "advanced_memory_module",
 )
 
 MATERIAL_FAMILIES = {

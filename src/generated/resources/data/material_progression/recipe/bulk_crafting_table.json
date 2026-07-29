@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": "#c:ingots/bronze",
+    "C": "minecraft:chest",
+    "W": "material_progression:workshop"
+  },
+  "pattern": [
+    "BBB",
+    "CWC",
+    "BBB"
+  ],
+  "result": {
+    "id": "material_progression:bulk_crafting_table"
+  }
+}

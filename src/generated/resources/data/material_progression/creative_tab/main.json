@@ -28,6 +28,17 @@
     "bronze_shovel",
     "bronze_hoe",
     "crusher",
-    "workshop"
+    "workshop",
+    "bulk_crafting_table",
+    "storage_module",
+    "advanced_storage_module",
+    "filter_module",
+    "advanced_filter_module",
+    "priority_module",
+    "advanced_priority_module",
+    "reservation_module",
+    "advanced_reservation_module",
+    "memory_module",
+    "advanced_memory_module"
   ]
 }
