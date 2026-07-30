@@ -1,6 +1,7 @@
 {
   "itemGroup.material_progression": "Progressão de Materiais",
   "container.material_progression.crusher": "Britador de Pedra",
+  "container.material_progression.manual_workshop": "Oficina Manual",
   "gui.material_progression.recipebook.toggle_crushable": "Mostrar Trituráveis",
   "config.material_progression.server.requireAxeForLogs": "Exigir Machado para Troncos",
   "config.material_progression.server.enableGeologicalHardness": "Ativar Dureza Geológica",
@@ -11,6 +12,7 @@
   "message.material_progression.geology.capability.2": "nível geológico 2 (uma picareta ou martelo de ferro ou bronze)",
   "message.material_progression.geology.capability.3": "nível geológico 3 (uma picareta ou martelo de diamante)",
   "block.material_progression.crusher": "Britador de Pedra",
+  "block.material_progression.manual_workshop": "Oficina Manual",
   "block.material_progression.tin_ore": "Minério de Estanho",
   "block.material_progression.deepslate_tin_ore": "Minério de Estanho de Ardósia",
   "block.material_progression.loose_rocks": "Pedras Soltas",

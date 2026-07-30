@@ -4,6 +4,7 @@ import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.level.block.CrusherBlock;
 import dev.fishraposo.materialprogression.world.level.block.GroundResourceBlock;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
+import dev.fishraposo.materialprogression.world.level.block.ManualWorkshopBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -42,6 +43,16 @@ public final class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(4.5F, 3.0F)
     );
+
+    public static final DeferredBlock<ManualWorkshopBlock> MANUAL_WORKSHOP =
+            BLOCKS.registerBlock(
+                    "manual_workshop",
+                    ManualWorkshopBlock::new,
+                    properties -> properties
+                            .mapColor(MapColor.WOOD)
+                            .strength(2.5F)
+                            .sound(SoundType.WOOD)
+            );
 
     public static final DeferredBlock<Block> COBBLED_GRANITE = cobbled("cobbled_granite", MapColor.STONE, 2.0F);
     public static final DeferredBlock<Block> COBBLED_DIORITE = cobbled("cobbled_diorite", MapColor.STONE, 2.0F);

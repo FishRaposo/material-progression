@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.item.crafting.CrushingRecipe;
+import dev.fishraposo.materialprogression.world.item.crafting.ManualWorkshopRecipe;
 import dev.fishraposo.materialprogression.world.item.crafting.RockCobblingRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -38,6 +39,30 @@ public final class ModRecipes {
                             RockCobblingRecipe.STREAM_CODEC
                     )
             );
+
+    public static final DeferredHolder<
+            RecipeType<?>,
+            RecipeType<ManualWorkshopRecipe>
+    > MANUAL_WORKSHOP = RECIPE_TYPES.register(
+            "manual_workshop",
+            () -> new RecipeType<>() {
+                @Override
+                public String toString() {
+                    return MaterialProgression.MOD_ID + ":manual_workshop";
+                }
+            }
+    );
+
+    public static final DeferredHolder<
+            RecipeSerializer<?>,
+            RecipeSerializer<ManualWorkshopRecipe>
+    > MANUAL_WORKSHOP_SERIALIZER = RECIPE_SERIALIZERS.register(
+            "manual_workshop",
+            () -> new RecipeSerializer<>(
+                    ManualWorkshopRecipe.MAP_CODEC,
+                    ManualWorkshopRecipe.STREAM_CODEC
+            )
+    );
 
     private ModRecipes() {
     }

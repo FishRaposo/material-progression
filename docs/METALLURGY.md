@@ -91,7 +91,7 @@ The dust can be smelted into two ingots or used in an alloy recipe. The machine
 therefore creates two concrete forms of value: increased yield and access to
 alloying.
 
-The workshop hammer is an equal-yield manual route:
+The implemented workshop hammer is an equal-yield manual route:
 
 > **1 ore or raw metal + substantial hammer durability -> 2 dust**
 

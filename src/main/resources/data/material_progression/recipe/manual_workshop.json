@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PPP",
+    "S S",
+    "CCC"
+  ],
+  "key": {
+    "C": "#c:cobblestones",
+    "P": "#minecraft:planks",
+    "S": "#c:rods/wooden"
+  },
+  "result": {
+    "id": "material_progression:manual_workshop"
+  }
+}

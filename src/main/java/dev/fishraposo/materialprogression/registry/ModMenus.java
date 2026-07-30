@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.inventory.CrusherMenu;
+import dev.fishraposo.materialprogression.world.inventory.ManualWorkshopMenu;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.inventory.MenuType;
 import net.neoforged.bus.api.IEventBus;
@@ -20,6 +21,17 @@ public final class ModMenus {
                             (containerId, inventory, data) -> new CrusherMenu(containerId, inventory)
                     )
             );
+
+    public static final DeferredHolder<
+            MenuType<?>,
+            MenuType<ManualWorkshopMenu>
+    > MANUAL_WORKSHOP = MENUS.register(
+            "manual_workshop",
+            () -> IMenuTypeExtension.create(
+                    (containerId, inventory, data) ->
+                            new ManualWorkshopMenu(containerId, inventory)
+            )
+    );
 
     private ModMenus() {
     }

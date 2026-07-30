@@ -336,7 +336,13 @@ class ResourceContractTests(unittest.TestCase):
             DATA / "tags" / "item", "*.json"
         )
         self.assertEqual(
-            {"crusher_inputs", "hammers", "knives", "saws"},
+            {
+                "crusher_inputs",
+                "hammers",
+                "knives",
+                "saws",
+                "workshop_stone_to_gravel",
+            },
             private_item_tags,
         )
 
@@ -384,10 +390,14 @@ class ResourceContractTests(unittest.TestCase):
         )
         self.assertFalse(minecraft_recipe_root.exists())
         for recipe_path in sorted((DATA / "recipe").glob("*.json")):
-            result = TREE.load_json(recipe_path).get("result", {})
+            recipe = TREE.load_json(recipe_path)
+            result = recipe.get("result", {})
             with self.subTest(recipe=recipe_path.stem):
-                self.assertFalse(
-                    result.get("id", "").endswith("_planks"),
+                if not result.get("id", "").endswith("_planks"):
+                    continue
+                self.assertEqual(
+                    "material_progression:manual_workshop",
+                    recipe.get("type"),
                     "Workshop wood efficiency must not replace inventory "
                     "log crafting",
                 )

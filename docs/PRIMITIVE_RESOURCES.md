@@ -3,9 +3,9 @@
 > **Status: partially implemented.** Family-aware loose rocks, ground sticks,
 > Rock and flint-shard conversions, partial raw-stone drops, the flint hatchet,
 > the default-enabled log-only axe requirement, Plant Fiber, and Flint/Bronze
-> Knives, Hammers, and Saws now ship. Tree-adjacent stick-density tuning,
-> workshop processing, and expanded plant yields remain subject to
-> implementation and playtesting.
+> Knives, Hammers, Saws, and Manual Workshop processing now ship.
+> Tree-adjacent stick-density tuning remains subject to implementation and
+> playtesting.
 
 ## Purpose
 
@@ -316,8 +316,9 @@ The system should remain simple:
 The first implemented field contract is deliberately narrow and deterministic:
 short grass yields one Fiber, tall grass yields two, and three
 `#c:fibers/plant` craft shapelessly into one String. Workshop plant processing
-will broaden the accepted plants and yields without replacing these field
-drops.
+broadens the accepted materials without replacing these field drops: leaves
+and small flowers yield one Fiber; saplings, tall flowers, and Wheat yield two;
+Cactus and Sugar Cane yield three; and vines yield five.
 
 ## Saws and active wood efficiency
 
@@ -337,15 +338,17 @@ higher-yield workshop processing; a bonsai supports the workshop passively.
 
 Vanilla's four-plank inventory-crafting baseline is preserved. Flint and Bronze
 Saws are real axe alternatives in the field and both satisfy the configured log
-harvest rule. Workshop processing will provide the separately visible
-efficiency bonus; no ordinary log recipe is replaced. Flint has 64 durability
-and Bronze has 325 durability, while both will use the same workshop yield.
+harvest rule. Workshop processing provides the separately visible 50 percent
+efficiency bonus: logs and stems produce six matching Planks, Bamboo Blocks
+produce three Bamboo Planks, and a Plank produces three Sticks. No ordinary log
+recipe is replaced. Flint has 64 durability and Bronze has 325 durability,
+while both use the same workshop yield.
 
-The preferred interface is the workshop block rather than a crafting recipe
-that silently damages a reusable saw. The player installs the saw, supplies the
-log, selects a valid output if necessary, and spends durability through the
-visible processing operation. The same interaction can support knives and
-hammers without turning the ordinary crafting grid into a hidden tool machine.
+The interface is the Manual Workshop block rather than a crafting recipe that
+silently damages a reusable saw. The player installs the saw, supplies the
+wood, and spends durability through the visible processing operation. The same
+interaction supports knives and hammers without turning the ordinary crafting
+grid into a hidden tool machine.
 
 ## The three workshop tools
 

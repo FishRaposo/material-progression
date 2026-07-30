@@ -107,6 +107,7 @@ SHIPPED_ITEMS = {
     "plant_fiber",
     "raw_tin",
     "rock",
+    "manual_workshop",
     "tin_axe",
     "tin_dust",
     "tin_hoe",
@@ -126,6 +127,7 @@ SHIPPED_BLOCKS = {
     "deepslate_tin_ore",
     "ground_stick",
     "loose_rocks",
+    "manual_workshop",
     "tin_ore",
 } | {
     f"cobbled_{family}"
@@ -202,6 +204,17 @@ PRIMITIVE_RECIPES = {
         "ingredients": ["#c:fibers/plant"] * 3,
         "result": {"id": "minecraft:string"},
     },
+    "manual_workshop": {
+        "type": "minecraft:crafting_shaped",
+        "category": "building",
+        "pattern": ["PPP", "S S", "CCC"],
+        "key": {
+            "C": "#c:cobblestones",
+            "P": "#minecraft:planks",
+            "S": "#c:rods/wooden",
+        },
+        "result": {"id": "material_progression:manual_workshop"},
+    },
 }
 
 SURFACE_WORLDGEN_FEATURES = {
@@ -267,6 +280,183 @@ SMELTING_RECIPES = {
         contract["raw_block"],
     )
     for family, contract in STONE_FAMILIES.items()
+}
+
+WORKSHOP_PLANT_TAGS = {
+    "fiber_1": ["#minecraft:leaves", "#minecraft:small_flowers"],
+    "fiber_2": [
+        "#minecraft:saplings",
+        "minecraft:sunflower",
+        "minecraft:lilac",
+        "minecraft:peony",
+        "minecraft:rose_bush",
+        "minecraft:wheat",
+    ],
+    "fiber_3": ["minecraft:cactus", "minecraft:sugar_cane"],
+    "fiber_5": [
+        "minecraft:vine",
+        "minecraft:weeping_vines",
+        "minecraft:twisting_vines",
+    ],
+}
+
+WORKSHOP_WOOD_RECIPES = {
+    "oak": ("#minecraft:oak_logs", "minecraft:oak_planks", 6),
+    "spruce": ("#minecraft:spruce_logs", "minecraft:spruce_planks", 6),
+    "birch": ("#minecraft:birch_logs", "minecraft:birch_planks", 6),
+    "jungle": ("#minecraft:jungle_logs", "minecraft:jungle_planks", 6),
+    "acacia": ("#minecraft:acacia_logs", "minecraft:acacia_planks", 6),
+    "dark_oak": (
+        "#minecraft:dark_oak_logs",
+        "minecraft:dark_oak_planks",
+        6,
+    ),
+    "pale_oak": (
+        "#minecraft:pale_oak_logs",
+        "minecraft:pale_oak_planks",
+        6,
+    ),
+    "mangrove": (
+        "#minecraft:mangrove_logs",
+        "minecraft:mangrove_planks",
+        6,
+    ),
+    "cherry": ("#minecraft:cherry_logs", "minecraft:cherry_planks", 6),
+    "crimson": (
+        "#minecraft:crimson_stems",
+        "minecraft:crimson_planks",
+        6,
+    ),
+    "warped": (
+        "#minecraft:warped_stems",
+        "minecraft:warped_planks",
+        6,
+    ),
+    "bamboo": (
+        "#minecraft:bamboo_blocks",
+        "minecraft:bamboo_planks",
+        3,
+    ),
+}
+
+WORKSHOP_RECIPES = {
+    "manual_workshop_rock_sharpening": {
+        "ingredient": "#c:rocks",
+        "tool": "#c:tools/knives",
+        "result": {
+            "count": 2,
+            "id": "material_progression:flint_shard",
+        },
+        "processing_time": 40,
+        "tool_damage": 1,
+    },
+    "manual_workshop_plant_fiber_1": {
+        "ingredient": "#material_progression:workshop_plants/fiber_1",
+        "tool": "#c:tools/knives",
+        "result": {"id": "material_progression:plant_fiber"},
+        "processing_time": 40,
+        "tool_damage": 1,
+    },
+    "manual_workshop_plant_fiber_2": {
+        "ingredient": "#material_progression:workshop_plants/fiber_2",
+        "tool": "#c:tools/knives",
+        "result": {
+            "count": 2,
+            "id": "material_progression:plant_fiber",
+        },
+        "processing_time": 40,
+        "tool_damage": 1,
+    },
+    "manual_workshop_plant_fiber_3": {
+        "ingredient": "#material_progression:workshop_plants/fiber_3",
+        "tool": "#c:tools/knives",
+        "result": {
+            "count": 3,
+            "id": "material_progression:plant_fiber",
+        },
+        "processing_time": 40,
+        "tool_damage": 1,
+    },
+    "manual_workshop_plant_fiber_5": {
+        "ingredient": "#material_progression:workshop_plants/fiber_5",
+        "tool": "#c:tools/knives",
+        "result": {
+            "count": 5,
+            "id": "material_progression:plant_fiber",
+        },
+        "processing_time": 40,
+        "tool_damage": 1,
+    },
+    "manual_workshop_stone_to_gravel": {
+        "ingredient": "#material_progression:workshop_stone_to_gravel",
+        "tool": "#c:tools/hammers",
+        "result": {"id": "minecraft:gravel"},
+        "processing_time": 80,
+        "tool_damage": 2,
+    },
+    "manual_workshop_gravel_to_sand": {
+        "ingredient": "minecraft:gravel",
+        "tool": "#c:tools/hammers",
+        "result": {"id": "minecraft:sand"},
+        "processing_time": 80,
+        "tool_damage": 2,
+    },
+    "manual_workshop_copper_ore": {
+        "ingredient": "#c:ores/copper",
+        "tool": "#c:tools/hammers",
+        "result": {
+            "count": 2,
+            "id": "material_progression:copper_dust",
+        },
+        "processing_time": 160,
+        "tool_damage": 8,
+    },
+    "manual_workshop_raw_copper": {
+        "ingredient": "#c:raw_materials/copper",
+        "tool": "#c:tools/hammers",
+        "result": {
+            "count": 2,
+            "id": "material_progression:copper_dust",
+        },
+        "processing_time": 160,
+        "tool_damage": 8,
+    },
+    "manual_workshop_tin_ore": {
+        "ingredient": "#c:ores/tin",
+        "tool": "#c:tools/hammers",
+        "result": {
+            "count": 2,
+            "id": "material_progression:tin_dust",
+        },
+        "processing_time": 160,
+        "tool_damage": 8,
+    },
+    "manual_workshop_raw_tin": {
+        "ingredient": "#c:raw_materials/tin",
+        "tool": "#c:tools/hammers",
+        "result": {
+            "count": 2,
+            "id": "material_progression:tin_dust",
+        },
+        "processing_time": 160,
+        "tool_damage": 8,
+    },
+    "manual_workshop_planks_to_sticks": {
+        "ingredient": "#minecraft:planks",
+        "tool": "#c:tools/saws",
+        "result": {"count": 3, "id": "minecraft:stick"},
+        "processing_time": 60,
+        "tool_damage": 1,
+    },
+} | {
+    f"manual_workshop_{family}_logs": {
+        "ingredient": ingredient,
+        "tool": "#c:tools/saws",
+        "result": {"count": count, "id": result},
+        "processing_time": 100,
+        "tool_damage": 2,
+    }
+    for family, (ingredient, result, count) in WORKSHOP_WOOD_RECIPES.items()
 }
 
 TOOL_FAMILIES = {

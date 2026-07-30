@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "material_progression:block/manual_workshop"
+    }
+  }
+}

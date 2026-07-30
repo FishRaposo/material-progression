@@ -1,6 +1,7 @@
 {
   "itemGroup.material_progression": "Material Progression",
   "container.material_progression.crusher": "Stone Crusher",
+  "container.material_progression.manual_workshop": "Manual Workshop",
   "gui.material_progression.recipebook.toggle_crushable": "Show Crushable",
   "config.material_progression.server.requireAxeForLogs": "Require Axes for Logs",
   "config.material_progression.server.enableGeologicalHardness": "Enable Geological Hardness",
@@ -11,6 +12,7 @@
   "message.material_progression.geology.capability.2": "geology level 2 (an iron or bronze pickaxe or hammer)",
   "message.material_progression.geology.capability.3": "geology level 3 (a diamond pickaxe or hammer)",
   "block.material_progression.crusher": "Stone Crusher",
+  "block.material_progression.manual_workshop": "Manual Workshop",
   "block.material_progression.tin_ore": "Tin Ore",
   "block.material_progression.deepslate_tin_ore": "Deepslate Tin Ore",
   "block.material_progression.loose_rocks": "Loose Rocks",

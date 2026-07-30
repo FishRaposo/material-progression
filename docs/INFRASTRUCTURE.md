@@ -1,9 +1,9 @@
 # Workshop Infrastructure and Automation
 
-> **Status: designed, not implemented.** The system boundaries and settled
-> bulk-crafter behaviors are current decisions. Exact blocks, recipes, slot
-> counts, numerical effects, output rates, and progression positions remain
-> subject to implementation and playtesting.
+> **Status: partially implemented.** The Manual Workshop, its public recipe
+> type, and its first knife, hammer, and saw operations now ship. Expanded
+> storage, hopper variants, bonsai, shallow logistics, and the bulk-crafting
+> table remain designed future systems.
 
 ## Purpose
 
@@ -30,8 +30,8 @@ where they need to go.
 
 ## The workshop block
 
-The workshop is the proposed home for manual, tool-assisted processing. Its
-core interaction is:
+The implemented Manual Workshop is the home for manual, tool-assisted
+processing. Its core interaction is:
 
 > **Installed hand tool + material -> processed output**
 
@@ -43,13 +43,14 @@ plausibly perform at a bench with the installed tool.
 
 The initial operation families are:
 
-- **Knife + Rock -> more flint shards than shapeless sharpening**
-- **Knife + suitable plants -> more plant fiber than field harvesting**
-- **Hammer + stone -> gravel**
-- **Hammer + gravel -> sand**
-- **Hammer + ore or raw metal -> 2 dust at a high durability cost**
-- **Saw + log -> more than the default four planks**
-- **Saw + planks -> more sticks than ordinary crafting**
+- **Knife + Rock -> 2 Flint Shards**
+- **Knife + suitable plant -> 1, 2, 3, or 5 Plant Fiber**
+- **Hammer + Stone or Cobblestone -> Gravel**
+- **Hammer + Gravel -> Sand**
+- **Hammer + compatible ore or raw metal -> 2 Dust**
+- **Saw + log or stem -> 6 matching Planks**
+- **Saw + Bamboo Block -> 3 Bamboo Planks**
+- **Saw + Plank -> 3 Sticks**
 
 Plates, shaped pieces, and other hammered components remain possible later
 operations when metallurgy justifies them.
@@ -81,17 +82,19 @@ bonus. The player chooses the transformation by bringing the material to the
 workshop. This keeps ordinary block drops predictable and makes processing
 intentional.
 
-The exact interface remains provisional, but the conceptual slots are simply a
-tool, an input material, and an output. The installed tool remains visible and
-persists between operations. Its durability is consumed when processing occurs,
-instead of placing a reusable tool in an ordinary crafting recipe and relying
-on hidden recipe-specific damage behavior.
+The interface has one persistent tool slot, input slot, and output slot. The
+installed tool remains visible on the block and persists between operations.
+Its durability is consumed when an operation completes, instead of placing a
+reusable tool in an ordinary crafting recipe and relying on hidden
+recipe-specific damage behavior.
 
 The interaction should resemble Minecraft's existing workstation language more
-than an industrial machine. A stonecutter-like selection interface is one
-candidate when a tool and material combination has several valid outputs.
-Processing speed, whether output is taken immediately, tool replacement,
-automation, and redstone behavior remain open implementation questions.
+than an industrial machine. Recipes progress only while the block is loaded.
+A blocked output pauses without consuming input or durability; changing the
+recipe, tool, or input resets progress. Completion, input consumption, output,
+and tool damage happen as one successful operation, including when the tool
+breaks on that operation. Breaking the block drops all three inventory slots
+and discards partial progress. Hoppers cannot insert or extract.
 
 ### Boundaries
 

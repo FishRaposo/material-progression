@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_workshop",
+  "ingredient": "#material_progression:workshop_plants/fiber_5",
+  "tool": "#c:tools/knives",
+  "result": {
+    "count": 5,
+    "id": "material_progression:plant_fiber"
+  },
+  "processing_time": 40,
+  "tool_damage": 1
+}

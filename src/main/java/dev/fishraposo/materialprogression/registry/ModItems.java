@@ -134,6 +134,11 @@ public final class ModItems {
     );
 
     public static final DeferredItem<?> CRUSHER = ITEMS.registerSimpleBlockItem("crusher", ModBlocks.CRUSHER);
+    public static final DeferredItem<?> MANUAL_WORKSHOP =
+            ITEMS.registerSimpleBlockItem(
+                    "manual_workshop",
+                    ModBlocks.MANUAL_WORKSHOP
+            );
     public static final DeferredItem<?> TIN_ORE = ITEMS.registerSimpleBlockItem("tin_ore", ModBlocks.TIN_ORE);
     public static final DeferredItem<?> DEEPSLATE_TIN_ORE =
             ITEMS.registerSimpleBlockItem("deepslate_tin_ore", ModBlocks.DEEPSLATE_TIN_ORE);
@@ -171,6 +176,7 @@ public final class ModItems {
                     .icon(() -> BRONZE_INGOT.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(CRUSHER.get());
+                        output.accept(MANUAL_WORKSHOP.get());
                         output.accept(TIN_ORE.get());
                         output.accept(DEEPSLATE_TIN_ORE.get());
                         output.accept(COBBLED_GRANITE.get());

@@ -1,0 +1,11 @@
+{
+  "type": "material_progression:manual_workshop",
+  "ingredient": "#minecraft:warped_stems",
+  "tool": "#c:tools/saws",
+  "result": {
+    "count": 6,
+    "id": "minecraft:warped_planks"
+  },
+  "processing_time": 100,
+  "tool_damage": 2
+}

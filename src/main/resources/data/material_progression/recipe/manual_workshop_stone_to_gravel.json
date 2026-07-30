@@ -1,0 +1,10 @@
+{
+  "type": "material_progression:manual_workshop",
+  "ingredient": "#material_progression:workshop_stone_to_gravel",
+  "tool": "#c:tools/hammers",
+  "result": {
+    "id": "minecraft:gravel"
+  },
+  "processing_time": 80,
+  "tool_damage": 2
+}
