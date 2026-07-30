@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "material_progression:loose_rocks",
+    "material_progression:external_loose_rocks",
+    "material_progression:ground_stick"
+  ]
+}

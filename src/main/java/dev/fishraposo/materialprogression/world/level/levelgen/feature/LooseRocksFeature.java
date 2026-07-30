@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.world.level.levelgen.feature;
 
 import com.mojang.serialization.Codec;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
+import dev.fishraposo.materialprogression.registry.ModTags;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
 import dev.fishraposo.materialprogression.stone.StoneFamilyCatalog;
 import dev.fishraposo.materialprogression.stone.StoneFamilyResolver;
@@ -23,7 +24,9 @@ public final class LooseRocksFeature extends Feature<NoneFeatureConfiguration> {
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
         BlockPos position = context.origin();
         BlockState replaced = context.level().getBlockState(position);
-        if (!replaced.canBeReplaced() || !context.level().getFluidState(position).isEmpty()) {
+        if (!replaced.canBeReplaced()
+                || replaced.is(ModTags.GROUND_RESOURCES)
+                || !context.level().getFluidState(position).isEmpty()) {
             return false;
         }
 

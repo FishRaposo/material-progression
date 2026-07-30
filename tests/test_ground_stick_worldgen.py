@@ -76,6 +76,25 @@ class GroundStickWorldgenContracts(unittest.TestCase):
         self.assertNotIn("#minecraft:flowers", serialized)
         self.assertNotIn("#minecraft:crops", serialized)
 
+    def test_ground_resources_publish_mutual_worldgen_exclusion(self):
+        path = DATA / "tags" / "block" / "ground_resources.json"
+        self.assertTrue(
+            path.is_file(),
+            "ground-resource exclusion tag is missing",
+        )
+        resources = load_json(path)
+        self.assertEqual(
+            {
+                "replace": False,
+                "values": [
+                    "material_progression:loose_rocks",
+                    "material_progression:external_loose_rocks",
+                    "material_progression:ground_stick",
+                ],
+            },
+            resources,
+        )
+
     def test_ground_stick_worldgen_is_overworld_only(self):
         modifier_directory = DATA / "neoforge" / "biome_modifier"
         ground_stick_modifiers = sorted(

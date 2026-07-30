@@ -638,6 +638,29 @@ public final class StoneFamilyGameTests {
 
     @GameTest
     @EmptyTemplate
+    @TestHolder(description = "Loose Rocks never replace ground resources")
+    static void looseRockFeatureRejectsExistingGroundResources(
+            ExtendedGameTestHelper helper
+    ) {
+        helper.setBlock(ROOT, Blocks.GRANITE);
+
+        for (Block existing : List.of(
+                ModBlocks.GROUND_STICK.get(),
+                ModBlocks.LOOSE_ROCKS.get(),
+                ModBlocks.EXTERNAL_LOOSE_ROCKS.get()
+        )) {
+            helper.setBlock(ROOT.above(), existing);
+            helper.assertFalse(
+                    placeFeature(helper, ROOT.above()),
+                    "Loose Rock feature replaced " + existing
+            );
+            helper.assertBlockPresent(existing, ROOT.above());
+        }
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
     @TestHolder(description = "Loose-rock feature rejects fluid targets")
     static void featureRejectsFluidTarget(ExtendedGameTestHelper helper) {
         helper.setBlock(ROOT, Blocks.GRANITE);

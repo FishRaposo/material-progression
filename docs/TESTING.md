@@ -56,8 +56,9 @@ GameTests are grouped by gameplay system under
 - `PrimitiveGameTests` verifies ground-resource support and drops.
 - `GroundStickFeatureGameTests` verifies registered configured-feature density
   separation near trees, shrub and datapack anchor recognition, bare/cave
-  rejection without a background chance, placement bounds, codec bounds, and
-  exact support-removal drops.
+  rejection without a background chance, protected shrub and ground-resource
+  targets, inclusive surface and anchor-search bounds, ordinary replaceable
+  cover, placement bounds, codec bounds, and exact support-removal drops.
 - `LogHarvestGameTests` verifies the configurable log-only tool rule.
 - `StoneFamilyGameTests` drives the registered Loose Rocks configured feature
   across all sixteen raw supports, direct Sand surfaces, covered sources, named
@@ -83,7 +84,7 @@ GameTests are grouped by gameplay system under
   throttled log hints, the Dense-geology advancement, the dedicated Manual
   Workshop recipe category, and real inventory-triggered Recipe Book unlocks.
 
-The current opening branch runs 123 live GameTests. Treat that count as a
+The current opening branch runs 129 live GameTests. Treat that count as a
 snapshot, not a reason to avoid adding the next regression test.
 
 GameTests must use real registries, recipes, inventories, blocks, and server

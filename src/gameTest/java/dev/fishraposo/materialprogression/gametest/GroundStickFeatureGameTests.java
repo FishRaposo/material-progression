@@ -43,6 +43,21 @@ public final class GroundStickFeatureGameTests {
                     MaterialProgressionGameTestMod.MOD_ID,
                     "ground_stick_bounded"
             );
+    private static final Identifier SURFACE_BOUNDS_FEATURE =
+            Identifier.fromNamespaceAndPath(
+                    MaterialProgressionGameTestMod.MOD_ID,
+                    "ground_stick_surface_bounds"
+            );
+    private static final Identifier ANCHOR_BOUNDS_FEATURE =
+            Identifier.fromNamespaceAndPath(
+                    MaterialProgressionGameTestMod.MOD_ID,
+                    "ground_stick_anchor_bounds"
+            );
+    private static final Identifier EXACT_TARGET_FEATURE =
+            Identifier.fromNamespaceAndPath(
+                    MaterialProgressionGameTestMod.MOD_ID,
+                    "ground_stick_exact_target"
+            );
     private static final TagKey<Block> GROUND_STICK_ANCHORS = TagKey.create(
             Registries.BLOCK,
             Identifier.fromNamespaceAndPath(
@@ -51,6 +66,8 @@ public final class GroundStickFeatureGameTests {
             )
     );
     private static final BlockPos CENTER = new BlockPos(4, 2, 4);
+    private static final BlockPos VERTICAL_ORIGIN = new BlockPos(4, 7, 4);
+    private static final BlockPos RADIUS_ORIGIN = new BlockPos(1, 6, 1);
 
     private GroundStickFeatureGameTests() {
     }
@@ -135,6 +152,123 @@ public final class GroundStickFeatureGameTests {
                 "test datapack anchor extension was not honored"
         );
         helper.assertBlockPresent(ModBlocks.GROUND_STICK.get(), CENTER);
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "9x9x8")
+    @TestHolder(description = "Ground Sticks never replace their shrub anchor")
+    static void replaceableShrubAtCandidateSurvives(
+            ExtendedGameTestHelper helper
+    ) {
+        prepareFlatGround(helper, 1, 7);
+        helper.setBlock(CENTER, Blocks.SWEET_BERRY_BUSH);
+
+        boolean placed = placeFeature(
+                helper,
+                EXACT_TARGET_FEATURE,
+                CENTER,
+                46L
+        );
+        helper.assertBlockPresent(Blocks.SWEET_BERRY_BUSH, CENTER);
+        helper.assertFalse(
+                placed,
+                "feature replaced its tagged shrub anchor"
+        );
+
+        BlockPos nearby = CENTER.west();
+        helper.assertTrue(
+                placeFeature(
+                        helper,
+                        EXACT_TARGET_FEATURE,
+                        nearby,
+                        47L
+                ),
+                "surviving shrub did not anchor nearby valid ground"
+        );
+        helper.assertBlockPresent(ModBlocks.GROUND_STICK.get(), nearby);
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "9x9x8")
+    @TestHolder(description = "Ground Sticks never replace Loose Rock resources")
+    static void groundStickFeatureRejectsExistingGroundResources(
+            ExtendedGameTestHelper helper
+    ) {
+        prepareFlatGround(helper, 1, 7);
+        helper.setBlock(CENTER.east(), Blocks.OAK_LOG);
+
+        for (Block existing : List.of(
+                ModBlocks.LOOSE_ROCKS.get(),
+                ModBlocks.EXTERNAL_LOOSE_ROCKS.get()
+        )) {
+            helper.setBlock(CENTER, existing);
+            boolean placed = placeFeature(
+                    helper,
+                    EXACT_TARGET_FEATURE,
+                    CENTER,
+                    48L
+            );
+            helper.assertBlockPresent(existing, CENTER);
+            helper.assertFalse(
+                    placed,
+                    "Ground Stick feature replaced " + existing
+            );
+        }
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "9x9x14")
+    @TestHolder(description = "Surface search has an inclusive four-block bound")
+    static void surfaceSearchHonorsInclusiveFourBlockBounds(
+            ExtendedGameTestHelper helper
+    ) {
+        clearVerticalColumn(helper, VERTICAL_ORIGIN, 1, 12);
+
+        assertSurfaceOffsetPlaced(helper, 4, 49L);
+        assertSurfaceOffsetPlaced(helper, -4, 50L);
+        assertSurfaceOffsetRejected(helper, 5, 51L);
+        assertSurfaceOffsetRejected(helper, -5, 52L);
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "13x13x14")
+    @TestHolder(description = "Anchor search honors maximum radius boundaries")
+    static void anchorSearchHonorsInclusiveMaximumRadii(
+            ExtendedGameTestHelper helper
+    ) {
+        helper.setBlock(RADIUS_ORIGIN.below(), Blocks.DIRT);
+
+        assertAnchorOffsetPlaced(helper, new BlockPos(8, 0, 0), 53L);
+        assertAnchorOffsetPlaced(helper, new BlockPos(0, 4, 0), 54L);
+        assertAnchorOffsetRejected(helper, new BlockPos(9, 0, 0), 55L);
+        assertAnchorOffsetRejected(helper, new BlockPos(0, 5, 0), 56L);
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "9x9x8")
+    @TestHolder(description = "Ordinary replaceable ground cover stays eligible")
+    static void ordinaryReplaceableGroundCoverRemainsEligible(
+            ExtendedGameTestHelper helper
+    ) {
+        prepareFlatGround(helper, 1, 7);
+        for (Block cover : List.of(Blocks.SHORT_GRASS, Blocks.SNOW)) {
+            helper.setBlock(CENTER, cover);
+            helper.assertTrue(
+                    placeFeature(
+                            helper,
+                            SURFACE_BOUNDS_FEATURE,
+                            CENTER,
+                            57L
+                    ),
+                    "Ground Stick feature rejected replaceable cover " + cover
+            );
+            helper.assertBlockPresent(ModBlocks.GROUND_STICK.get(), CENTER);
+        }
         helper.succeed();
     }
 
@@ -306,6 +440,104 @@ public final class GroundStickFeatureGameTests {
                 }
             }
         }
+    }
+
+    private static void clearVerticalColumn(
+            ExtendedGameTestHelper helper,
+            BlockPos origin,
+            int minY,
+            int maxY
+    ) {
+        for (int y = minY; y <= maxY; y++) {
+            helper.setBlock(
+                    new BlockPos(origin.getX(), y, origin.getZ()),
+                    Blocks.AIR
+            );
+        }
+    }
+
+    private static void assertSurfaceOffsetPlaced(
+            ExtendedGameTestHelper helper,
+            int offset,
+            long seed
+    ) {
+        BlockPos target = VERTICAL_ORIGIN.above(offset);
+        BlockPos support = target.below();
+        helper.setBlock(support, Blocks.DIRT);
+        helper.assertTrue(
+                placeFeature(
+                        helper,
+                        SURFACE_BOUNDS_FEATURE,
+                        VERTICAL_ORIGIN,
+                        seed
+                ),
+                "surface search rejected inclusive offset " + offset
+        );
+        helper.assertBlockPresent(ModBlocks.GROUND_STICK.get(), target);
+        helper.setBlock(target, Blocks.AIR);
+        helper.setBlock(support, Blocks.AIR);
+    }
+
+    private static void assertSurfaceOffsetRejected(
+            ExtendedGameTestHelper helper,
+            int offset,
+            long seed
+    ) {
+        BlockPos target = VERTICAL_ORIGIN.above(offset);
+        BlockPos support = target.below();
+        helper.setBlock(support, Blocks.DIRT);
+        helper.assertFalse(
+                placeFeature(
+                        helper,
+                        SURFACE_BOUNDS_FEATURE,
+                        VERTICAL_ORIGIN,
+                        seed
+                ),
+                "surface search escaped to offset " + offset
+        );
+        helper.assertBlockPresent(Blocks.AIR, target);
+        helper.setBlock(support, Blocks.AIR);
+    }
+
+    private static void assertAnchorOffsetPlaced(
+            ExtendedGameTestHelper helper,
+            BlockPos offset,
+            long seed
+    ) {
+        BlockPos anchor = RADIUS_ORIGIN.offset(offset);
+        helper.setBlock(anchor, Blocks.OAK_LOG);
+        helper.assertTrue(
+                placeFeature(
+                        helper,
+                        ANCHOR_BOUNDS_FEATURE,
+                        RADIUS_ORIGIN,
+                        seed
+                ),
+                "anchor at inclusive offset " + offset + " was ignored"
+        );
+        helper.assertBlockPresent(ModBlocks.GROUND_STICK.get(), RADIUS_ORIGIN);
+        helper.setBlock(RADIUS_ORIGIN, Blocks.AIR);
+        helper.setBlock(anchor, Blocks.AIR);
+    }
+
+    private static void assertAnchorOffsetRejected(
+            ExtendedGameTestHelper helper,
+            BlockPos offset,
+            long seed
+    ) {
+        BlockPos anchor = RADIUS_ORIGIN.offset(offset);
+        helper.setBlock(anchor, Blocks.OAK_LOG);
+        helper.assertFalse(
+                placeFeature(
+                        helper,
+                        ANCHOR_BOUNDS_FEATURE,
+                        RADIUS_ORIGIN,
+                        seed
+                ),
+                "anchor search escaped to offset " + offset
+        );
+        helper.assertBlockPresent(Blocks.AIR, RADIUS_ORIGIN);
+        helper.setBlock(anchor, Blocks.AIR);
     }
 
     private static void clearGroundSticks(

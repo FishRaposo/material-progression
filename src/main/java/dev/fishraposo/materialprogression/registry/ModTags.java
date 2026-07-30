@@ -18,6 +18,8 @@ public final class ModTags {
             blockTag("loose_rock_cover");
     public static final TagKey<Block> LOOSE_ROCK_NETHERRACK_COVER =
             blockTag("loose_rock_netherrack_cover");
+    public static final TagKey<Block> GROUND_RESOURCES =
+            blockTag("ground_resources");
 
     public static final TagKey<Item> FLINT_SHARDS =
             commonItemTag("flint_shards");

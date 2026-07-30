@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression.world.level.levelgen.feature;
 
 import com.mojang.serialization.Codec;
+import dev.fishraposo.materialprogression.registry.ModTags;
 import dev.fishraposo.materialprogression.world.level.levelgen.feature.configurations.GroundStickConfiguration;
 import java.util.HashSet;
 import java.util.Set;
@@ -96,6 +97,8 @@ public final class GroundStickFeature
             BlockState replaced = level.getBlockState(position);
             BlockState support = level.getBlockState(supportPosition);
             if (replaced.canBeReplaced()
+                    && !replaced.is(configuration.anchorTag())
+                    && !replaced.is(ModTags.GROUND_RESOURCES)
                     && level.getFluidState(position).isEmpty()
                     && !support.is(configuration.anchorTag())
                     && support.isFaceSturdy(
@@ -123,6 +126,8 @@ public final class GroundStickFeature
         BlockState replaced = level.getBlockState(position);
         BlockState support = level.getBlockState(supportPosition);
         return replaced.canBeReplaced()
+                && !replaced.is(configuration.anchorTag())
+                && !replaced.is(ModTags.GROUND_RESOURCES)
                 && level.getFluidState(position).isEmpty()
                 && !support.is(configuration.anchorTag())
                 && support.isFaceSturdy(

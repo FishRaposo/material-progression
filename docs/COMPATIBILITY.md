@@ -63,6 +63,13 @@ The `material_progression:ground_stick` configured-feature codec exposes
 `background_chance` (0-1). The near chance must not be lower than the background
 chance. Searches never force-load chunks.
 
+Ground-resource world generation consumes the reloadable
+`#material_progression:ground_resources` block tag. It contains built-in Loose
+Rocks, externally resolved Loose Rocks, and Ground Sticks. Both configured
+features reject tagged placement targets, so world-generation order cannot
+replace an existing ground resource. Datapacks that introduce another
+replaceable ground resource should extend this behavior tag.
+
 ## Stone-family data interface
 
 Each file under `data/<namespace>/stone_family/` declares:

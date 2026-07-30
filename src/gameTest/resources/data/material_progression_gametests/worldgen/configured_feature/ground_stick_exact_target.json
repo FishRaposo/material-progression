@@ -1,0 +1,19 @@
+{
+  "type": "material_progression:ground_stick",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "material_progression:ground_stick"
+      }
+    },
+    "anchor_tag": "#material_progression:ground_stick_anchors",
+    "attempts": 1,
+    "horizontal_spread": 0,
+    "surface_vertical_range": 0,
+    "anchor_horizontal_radius": 5,
+    "anchor_vertical_radius": 3,
+    "near_chance": 1.0,
+    "background_chance": 0.0
+  }
+}

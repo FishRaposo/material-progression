@@ -114,6 +114,11 @@ probabilities are codec-bounded. Surface-height resolution plus the
 Overworld-only biome modifier prevents generic cave, Nether, or End Stick
 placement. Ground Sticks remain finite world objects: they do not regenerate,
 drop one vanilla Stick, and break when their support is removed.
+Ground Sticks and either Loose Rock block reject targets in the reloadable
+`#material_progression:ground_resources` behavior tag, so overlapping worldgen
+cannot overwrite an existing ground resource. Tree and shrub anchors are also
+protected when replaceable. Ordinary replaceable surface cover such as short
+grass and snow remains eligible.
 
 Both ground resources use the reusable surface-resource placement design
 recorded in [the ground-resource design](superpowers/specs/2026-07-28-ground-resources-design.md).
