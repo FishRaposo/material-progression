@@ -393,6 +393,172 @@ public final class PlacedRawStoneGameTests {
         });
     }
 
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
+    @TestHolder(description = "A quiet same-family replacement clears its old marker")
+    static void noNeighborSameFamilyReplacementClearsMarker(
+            ExtendedGameTestHelper helper
+    ) {
+        Map<Identifier, StoneFamilyDefinition> original =
+                StoneFamilyCatalogFixture.replaceRawBlock(
+                        helper,
+                        StoneFamily.STONE,
+                        MaterialProgressionGameTestMod.VETO_RAW_STONE.get()
+                );
+        BlockPos absolute = helper.absolutePos(ROOT);
+        try {
+            helper.setBlock(
+                    ROOT,
+                    MaterialProgressionGameTestMod.VETO_RAW_STONE.get()
+                            .defaultBlockState()
+                            .setValue(
+                                    MaterialProgressionGameTestMod
+                                            .VetoRawStoneBlock.BREAK_MODE,
+                                    1
+                            )
+            );
+            PlacedRawStoneTracker.mark(helper.getLevel(), absolute);
+            ServerPlayer player = player(helper, GameType.SURVIVAL);
+            player.setItemInHand(
+                    InteractionHand.MAIN_HAND,
+                    new ItemStack(Items.DIAMOND_PICKAXE)
+            );
+
+            helper.assertTrue(
+                    player.gameMode.destroyBlock(absolute),
+                    "quiet replacement break path did not complete"
+            );
+            helper.assertBlockProperty(
+                    ROOT,
+                    MaterialProgressionGameTestMod
+                            .VetoRawStoneBlock.BREAK_MODE,
+                    0
+            );
+        } finally {
+            StoneFamilyCatalogFixture.publish(helper, original);
+        }
+
+        helper.runAfterDelay(1, () -> {
+            helper.assertFalse(
+                    hasStoredMarker(helper, absolute),
+                    "quiet same-family replacement retained its old marker"
+            );
+            helper.succeed();
+        });
+    }
+
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
+    @TestHolder(description = "A quiet successful removal clears its old marker")
+    static void noNeighborRemovalClearsMarker(
+            ExtendedGameTestHelper helper
+    ) {
+        Map<Identifier, StoneFamilyDefinition> original =
+                StoneFamilyCatalogFixture.replaceRawBlock(
+                        helper,
+                        StoneFamily.STONE,
+                        MaterialProgressionGameTestMod.VETO_RAW_STONE.get()
+                );
+        BlockPos absolute = helper.absolutePos(ROOT);
+        try {
+            helper.setBlock(
+                    ROOT,
+                    MaterialProgressionGameTestMod.VETO_RAW_STONE.get()
+                            .defaultBlockState()
+                            .setValue(
+                                    MaterialProgressionGameTestMod
+                                            .VetoRawStoneBlock.BREAK_MODE,
+                                    2
+                            )
+            );
+            PlacedRawStoneTracker.mark(helper.getLevel(), absolute);
+            ServerPlayer player = player(helper, GameType.SURVIVAL);
+            player.setItemInHand(
+                    InteractionHand.MAIN_HAND,
+                    new ItemStack(Items.DIAMOND_PICKAXE)
+            );
+
+            helper.assertTrue(
+                    player.gameMode.destroyBlock(absolute),
+                    "quiet removal break path did not complete"
+            );
+            helper.assertBlockPresent(Blocks.AIR, ROOT);
+        } finally {
+            StoneFamilyCatalogFixture.publish(helper, original);
+        }
+
+        helper.runAfterDelay(1, () -> {
+            helper.assertFalse(
+                    hasStoredMarker(helper, absolute),
+                    "quiet successful removal retained its old marker"
+            );
+            helper.succeed();
+        });
+    }
+
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
+    @TestHolder(description = "Canceled neighbor notification cannot hide a successful removal")
+    static void canceledNeighborNotifyStillClearsMarker(
+            ExtendedGameTestHelper helper
+    ) {
+        helper.setBlock(ROOT, Blocks.STONE);
+        BlockPos absolute = helper.absolutePos(ROOT);
+        PlacedRawStoneTracker.mark(helper.getLevel(), absolute);
+        MaterialProgressionGameTestMod.cancelNextNeighborNotifyAt(absolute);
+        helper.addEndListener(ignored ->
+                MaterialProgressionGameTestMod.clearCancellations()
+        );
+
+        helper.assertTrue(
+                player(helper, GameType.CREATIVE)
+                        .gameMode.destroyBlock(absolute),
+                "canceled-notify removal was rejected"
+        );
+        helper.assertBlockPresent(Blocks.AIR, ROOT);
+        helper.runAfterDelay(1, () -> {
+            helper.assertFalse(
+                    hasStoredMarker(helper, absolute),
+                    "canceled neighbor notification hid the removal"
+            );
+            helper.succeed();
+        });
+    }
+
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
+    @TestHolder(description = "A canceled nested operation cannot consume an outer mutation")
+    static void canceledNestedOperationDoesNotConsumeMutation(
+            ExtendedGameTestHelper helper
+    ) {
+        helper.setBlock(ROOT, Blocks.GRANITE);
+        BlockPos absolute = helper.absolutePos(ROOT);
+        PlacedRawStoneTracker.mark(helper.getLevel(), absolute);
+        MaterialProgressionGameTestMod
+                .runNestedCanceledBreakMutationAt(absolute);
+        helper.addEndListener(ignored ->
+                MaterialProgressionGameTestMod.clearCancellations()
+        );
+
+        var outer = NeoForge.EVENT_BUS.post(new LivingDestroyBlockEvent(
+                player(helper, GameType.SURVIVAL),
+                absolute,
+                helper.getBlockState(ROOT)
+        ));
+        helper.assertFalse(
+                outer.isCanceled(),
+                "outer nested-mutation fixture was canceled"
+        );
+        helper.assertBlockPresent(Blocks.AIR, ROOT);
+        helper.runAfterDelay(1, () -> {
+            helper.assertFalse(
+                    hasStoredMarker(helper, absolute),
+                    "canceled nested operation consumed the outer mutation"
+            );
+            helper.succeed();
+        });
+    }
+
     @GameTest
     @EmptyTemplate
     @TestHolder(description = "Level unload discards pending marker operations")

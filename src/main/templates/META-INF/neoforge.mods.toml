@@ -1,6 +1,9 @@
 license="${mod_license}"
 issueTrackerURL="https://github.com/FishRaposo/minecraft-progression/issues"
 
+[[mixins]]
+config="material_progression.mixins.json"
+
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"

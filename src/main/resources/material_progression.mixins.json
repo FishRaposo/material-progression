@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "dev.fishraposo.materialprogression.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "PlacedRawStoneLevelChunkMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

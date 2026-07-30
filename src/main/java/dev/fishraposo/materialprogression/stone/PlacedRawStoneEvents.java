@@ -33,9 +33,6 @@ public final class PlacedRawStoneEvents {
         NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onPlaced);
         NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onBlockBroken);
         NeoForge.EVENT_BUS.addListener(
-                PlacedRawStoneEvents::onNeighborNotify
-        );
-        NeoForge.EVENT_BUS.addListener(
                 PlacedRawStoneEvents::onFluidPlacedBlock
         );
         NeoForge.EVENT_BUS.addListener(
@@ -87,18 +84,6 @@ public final class PlacedRawStoneEvents {
         if (!event.isCanceled()
                 && event.getLevel() instanceof ServerLevel level) {
             queueBreak(level, event);
-        }
-    }
-
-    private static void onNeighborNotify(
-            BlockEvent.NeighborNotifyEvent event
-    ) {
-        if (event.getLevel() instanceof ServerLevel level) {
-            observeMutation(
-                    level,
-                    event.getPos(),
-                    event.getState()
-            );
         }
     }
 
@@ -298,10 +283,9 @@ public final class PlacedRawStoneEvents {
         ).add(update);
     }
 
-    private static void observeMutation(
+    public static void observeSuccessfulStateWrite(
             ServerLevel level,
-            BlockPos pos,
-            BlockState observedState
+            BlockPos pos
     ) {
         List<PendingMarkerUpdate> updates = MARKER_UPDATES.get(level);
         if (updates == null) {
@@ -309,7 +293,8 @@ public final class PlacedRawStoneEvents {
         }
         for (int index = updates.size() - 1; index >= 0; index--) {
             PendingMarkerUpdate update = updates.get(index);
-            if (update.observeMutationAt(pos, observedState)) {
+            if (!update.isCanceled()
+                    && update.observeMutationAt(pos)) {
                 return;
             }
         }
@@ -451,14 +436,10 @@ public final class PlacedRawStoneEvents {
                     && mutationObservation.observed();
         }
 
-        private boolean observeMutationAt(
-                BlockPos changedPos,
-                BlockState observedState
-        ) {
+        private boolean observeMutationAt(BlockPos changedPos) {
             if (mutationObservation == null
                     || mutationObservation.observed()
-                    || !pos.equals(changedPos)
-                    || expectedState.equals(observedState)) {
+                    || !pos.equals(changedPos)) {
                 return false;
             }
             mutationObservation.observe();

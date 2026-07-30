@@ -10,6 +10,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.EventPriority;
@@ -19,6 +21,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -43,6 +46,9 @@ public final class MaterialProgressionGameTestMod {
             ITEMS.registerSimpleItem("unknown_rock");
     private static BlockPos canceledPlacement;
     private static BlockPos canceledLivingDestruction;
+    private static BlockPos canceledNeighborNotify;
+    private static BlockPos canceledBreak;
+    private static BlockPos nestedCanceledBreakMutation;
 
     public MaterialProgressionGameTestMod(IEventBus modBus, ModContainer container) {
         BLOCKS.register(modBus);
@@ -56,12 +62,24 @@ public final class MaterialProgressionGameTestMod {
                 MaterialProgressionGameTestMod::configureFluidFixture
         );
         NeoForge.EVENT_BUS.addListener(
+                EventPriority.HIGHEST,
+                MaterialProgressionGameTestMod::cancelTargetedNeighborNotify
+        );
+        NeoForge.EVENT_BUS.addListener(
                 EventPriority.LOWEST,
                 MaterialProgressionGameTestMod::cancelTargetedPlacement
         );
         NeoForge.EVENT_BUS.addListener(
                 EventPriority.LOWEST,
                 MaterialProgressionGameTestMod::cancelTargetedLivingDestruction
+        );
+        NeoForge.EVENT_BUS.addListener(
+                EventPriority.LOWEST,
+                MaterialProgressionGameTestMod::cancelTargetedBreak
+        );
+        NeoForge.EVENT_BUS.addListener(
+                EventPriority.LOWEST,
+                MaterialProgressionGameTestMod::runNestedCanceledBreakMutation
         );
         FrameworkConfiguration.builder(
                         Identifier.fromNamespaceAndPath(MOD_ID, "tests")
@@ -79,9 +97,20 @@ public final class MaterialProgressionGameTestMod {
         canceledLivingDestruction = pos.immutable();
     }
 
+    static void cancelNextNeighborNotifyAt(BlockPos pos) {
+        canceledNeighborNotify = pos.immutable();
+    }
+
+    static void runNestedCanceledBreakMutationAt(BlockPos pos) {
+        nestedCanceledBreakMutation = pos.immutable();
+    }
+
     static void clearCancellations() {
         canceledPlacement = null;
         canceledLivingDestruction = null;
+        canceledNeighborNotify = null;
+        canceledBreak = null;
+        nestedCanceledBreakMutation = null;
     }
 
     private static void cancelTargetedPlacement(
@@ -100,6 +129,48 @@ public final class MaterialProgressionGameTestMod {
             canceledLivingDestruction = null;
             event.setCanceled(true);
         }
+    }
+
+    private static void cancelTargetedNeighborNotify(
+            BlockEvent.NeighborNotifyEvent event
+    ) {
+        if (event.getPos().equals(canceledNeighborNotify)) {
+            canceledNeighborNotify = null;
+            event.setCanceled(true);
+        }
+    }
+
+    private static void cancelTargetedBreak(BreakBlockEvent event) {
+        if (event.getPos().equals(canceledBreak)) {
+            canceledBreak = null;
+            event.setCanceled(true);
+        }
+    }
+
+    private static void runNestedCanceledBreakMutation(
+            LivingDestroyBlockEvent event
+    ) {
+        if (!event.getPos().equals(nestedCanceledBreakMutation)) {
+            return;
+        }
+        nestedCanceledBreakMutation = null;
+        canceledBreak = event.getPos().immutable();
+        var nested = NeoForge.EVENT_BUS.post(new BreakBlockEvent(
+                event.getEntity().level(),
+                event.getPos(),
+                event.getState(),
+                (Player) event.getEntity()
+        ));
+        if (!nested.isCanceled()) {
+            throw new IllegalStateException(
+                    "Nested BreakBlockEvent fixture was not canceled"
+            );
+        }
+        event.getEntity().level().setBlock(
+                event.getPos(),
+                Blocks.AIR.defaultBlockState(),
+                Block.UPDATE_ALL
+        );
     }
 
     private static void configureFluidFixture(
@@ -135,8 +206,14 @@ public final class MaterialProgressionGameTestMod {
     }
 
     static final class VetoRawStoneBlock extends Block {
+        static final IntegerProperty BREAK_MODE =
+                IntegerProperty.create("break_mode", 0, 2);
+
         private VetoRawStoneBlock(BlockBehaviour.Properties properties) {
             super(properties);
+            registerDefaultState(
+                    stateDefinition.any().setValue(BREAK_MODE, 0)
+            );
         }
 
         @Override
@@ -149,7 +226,28 @@ public final class MaterialProgressionGameTestMod {
                 boolean willHarvest,
                 FluidState fluid
         ) {
+            int breakMode = state.getValue(BREAK_MODE);
+            if (breakMode == 1) {
+                level.setBlock(
+                        pos,
+                        state.setValue(BREAK_MODE, 0),
+                        Block.UPDATE_CLIENTS
+                );
+            } else if (breakMode == 2) {
+                level.setBlock(
+                        pos,
+                        Blocks.AIR.defaultBlockState(),
+                        Block.UPDATE_CLIENTS
+                );
+            }
             return false;
+        }
+
+        @Override
+        protected void createBlockStateDefinition(
+                StateDefinition.Builder<Block, BlockState> builder
+        ) {
+            builder.add(BREAK_MODE);
         }
     }
 }
