@@ -151,22 +151,20 @@ public final class GeologyTierGameTests {
 
         BlockPos placed = SUPPORT.above();
         BlockPos absolute = helper.absolutePos(placed);
-        helper.runAfterDelay(1, () -> {
-            helper.assertTrue(
-                    PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
-                    "player placement did not create a raw-stone marker"
-            );
-            helper.assertValueEqual(
-                    0,
-                    GeologyTierResolver.resolve(
-                            helper.getLevel(),
-                            absolute,
-                            helper.getBlockState(placed)
-                    ).orElseThrow().level(),
-                    "placed raw-stone geology level"
-            );
-            helper.succeed();
-        });
+        helper.assertTrue(
+                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                "player placement was not immediately classified as placed"
+        );
+        helper.assertValueEqual(
+                0,
+                GeologyTierResolver.resolve(
+                        helper.getLevel(),
+                        absolute,
+                        helper.getBlockState(placed)
+                ).orElseThrow().level(),
+                "immediate placed raw-stone geology level"
+        );
+        helper.succeed();
     }
 
     private static void assertNaturalTier(

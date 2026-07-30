@@ -98,6 +98,44 @@ public final class PlacedRawStoneGameTests {
         });
     }
 
+    @GameTest(timeoutTicks = 80)
+    @EmptyTemplate
+    @TestHolder(description = "A piston transfers raw stone placed in the same tick")
+    static void sameTickPistonTransfersPlayerPlacement(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos piston = ROOT.west();
+        BlockPos support = ROOT.below();
+        BlockPos destination = ROOT.east();
+        helper.setBlock(
+                piston,
+                Blocks.PISTON.defaultBlockState().setValue(
+                        PistonBaseBlock.FACING,
+                        helper.getAbsoluteDirection(Direction.EAST)
+                )
+        );
+        helper.setBlock(support, Blocks.COBBLESTONE);
+        placeStone(helper, player(helper, GameType.SURVIVAL), support);
+
+        helper.setBlock(piston.above(), Blocks.REDSTONE_BLOCK);
+        helper.getLevel().neighborChanged(
+                helper.absolutePos(piston),
+                Blocks.REDSTONE_BLOCK,
+                null
+        );
+
+        helper.succeedWhen(() -> {
+            helper.assertBlockPresent(Blocks.STONE, destination);
+            helper.assertTrue(
+                    PlacedRawStoneTracker.isMarked(
+                            helper.getLevel(),
+                            helper.absolutePos(destination)
+                    ),
+                    "same-tick piston destination did not inherit the marker"
+            );
+        });
+    }
+
     @GameTest(timeoutTicks = 100)
     @EmptyTemplate
     @TestHolder(description = "Sticky-piston retraction transfers a placed raw-stone marker")
@@ -223,6 +261,38 @@ public final class PlacedRawStoneGameTests {
 
     @GameTest(timeoutTicks = 20)
     @EmptyTemplate
+    @TestHolder(description = "Remove and identical replacement cannot retain an old marker")
+    static void sameStateReplacementClearsOldMarker(
+            ExtendedGameTestHelper helper
+    ) {
+        helper.setBlock(ROOT, Blocks.STONE);
+        BlockPos absolute = helper.absolutePos(ROOT);
+        PlacedRawStoneTracker.mark(helper.getLevel(), absolute);
+        helper.assertTrue(
+                hasStoredMarker(helper, absolute),
+                "ABA fixture did not start with a stored marker"
+        );
+        ServerPlayer player = player(helper, GameType.CREATIVE);
+
+        helper.assertTrue(
+                player.gameMode.destroyBlock(absolute),
+                "creative ABA removal was rejected"
+        );
+        helper.assertBlockPresent(Blocks.AIR, ROOT);
+        helper.setBlock(ROOT, Blocks.STONE);
+
+        helper.runAfterDelay(1, () -> {
+            helper.assertBlockPresent(Blocks.STONE, ROOT);
+            helper.assertFalse(
+                    hasStoredMarker(helper, absolute),
+                    "identical replacement retained the removed marker"
+            );
+            helper.succeed();
+        });
+    }
+
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
     @TestHolder(description = "Lower-priority placement cancellation never creates a marker")
     static void canceledPlacementDoesNotCreateMarker(
             ExtendedGameTestHelper helper
@@ -238,6 +308,14 @@ public final class PlacedRawStoneGameTests {
 
         placeStone(helper, player, support);
         helper.assertBlockPresent(Blocks.AIR, ROOT);
+        helper.assertFalse(
+                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                "canceled placement remained immediately classified as placed"
+        );
+        helper.assertFalse(
+                hasStoredMarker(helper, absolute),
+                "canceled placement immediately created a stored marker"
+        );
         helper.runAfterDelay(1, () -> {
             helper.assertFalse(
                     hasStoredMarker(helper, absolute),

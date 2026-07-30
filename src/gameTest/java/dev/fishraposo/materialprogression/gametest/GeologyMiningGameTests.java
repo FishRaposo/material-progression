@@ -187,18 +187,30 @@ public final class GeologyMiningGameTests {
         ServerPlayer player = player(helper, new ItemStack(Blocks.STONE));
         helper.placeAt(player, player.getMainHandItem(), support, Direction.UP);
         BlockPos absolute = helper.absolutePos(BLOCK_POS);
+        helper.assertTrue(
+                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                "new raw stone was not immediately classified as placed"
+        );
+        helper.assertValueEqual(
+                0,
+                GeologyTierResolver.resolve(
+                        helper.getLevel(),
+                        absolute,
+                        helper.getBlockState(BLOCK_POS)
+                ).orElseThrow().level(),
+                "same-tick mining geology level"
+        );
+        player.setItemInHand(
+                InteractionHand.MAIN_HAND,
+                new ItemStack(Items.WOODEN_PICKAXE)
+        );
+        helper.assertTrue(
+                player.gameMode.destroyBlock(absolute),
+                "same-tick placed-stone removal was rejected"
+        );
+        helper.assertBlockPresent(Blocks.AIR, BLOCK_POS);
+
         helper.runAfterDelay(1, () -> {
-            helper.assertTrue(
-                    PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
-                    "fixture raw stone was not marked"
-            );
-            player.setItemInHand(
-                    InteractionHand.MAIN_HAND,
-                    new ItemStack(Items.WOODEN_PICKAXE)
-            );
-            player.gameMode.destroyBlock(absolute);
-        });
-        helper.runAfterDelay(2, () -> {
             helper.assertFalse(
                     PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
                     "removed raw stone retained its marker"

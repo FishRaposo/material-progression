@@ -23,14 +23,20 @@ public final class PlacedRawStoneTracker {
         PlacedRawStoneMarkers markers = chunk.getExistingDataOrNull(
                 ModDataAttachments.PLACED_RAW_STONES
         );
-        if (markers == null || !markers.contains(pos)) {
-            return false;
-        }
         if (StoneFamilyCatalog.get().byRaw(expectedState).isEmpty()) {
-            clear(level, pos);
+            if (markers != null && markers.contains(pos)) {
+                clear(level, pos);
+            }
             return false;
         }
-        return true;
+        if (PlacedRawStoneEvents.hasPendingPlayerPlacement(
+                level,
+                pos,
+                expectedState
+        )) {
+            return true;
+        }
+        return markers != null && markers.contains(pos);
     }
 
     public static void mark(ServerLevel level, BlockPos pos) {

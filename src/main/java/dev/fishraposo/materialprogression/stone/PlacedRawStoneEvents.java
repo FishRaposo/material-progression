@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
@@ -60,7 +61,8 @@ public final class PlacedRawStoneEvents {
                         level,
                         snapshot.getPos(),
                         level.getBlockState(snapshot.getPos()),
-                        event.getEntity() instanceof Player
+                        event.getEntity() instanceof Player,
+                        event
                 );
             }
             return;
@@ -69,14 +71,15 @@ public final class PlacedRawStoneEvents {
                 level,
                 event.getPos(),
                 event.getPlacedBlock(),
-                event.getEntity() instanceof Player
+                event.getEntity() instanceof Player,
+                event
         );
     }
 
     private static void onBlockBroken(BreakBlockEvent event) {
         if (!event.isCanceled()
                 && event.getLevel() instanceof ServerLevel level) {
-            queueMutation(level, event.getPos(), event.getState());
+            queueBreak(level, event);
         }
     }
 
@@ -205,14 +208,30 @@ public final class PlacedRawStoneEvents {
             ServerLevel level,
             BlockPos pos,
             BlockState expectedState,
-            boolean playerPlacement
+            boolean playerPlacement,
+            BlockEvent.EntityPlaceEvent event
     ) {
         queueUpdate(
                 level,
                 PendingMarkerUpdate.placement(
                         pos,
                         expectedState,
-                        playerPlacement
+                        playerPlacement,
+                        event::isCanceled
+                )
+        );
+    }
+
+    private static void queueBreak(
+            ServerLevel level,
+            BreakBlockEvent event
+    ) {
+        queueUpdate(
+                level,
+                PendingMarkerUpdate.breakBlock(
+                        event.getPos(),
+                        event.getState(),
+                        event::isCanceled
                 )
         );
     }
@@ -236,6 +255,28 @@ public final class PlacedRawStoneEvents {
                 level,
                 ignored -> new ArrayList<>()
         ).add(update);
+    }
+
+    static boolean hasPendingPlayerPlacement(
+            ServerLevel level,
+            BlockPos pos,
+            BlockState expectedState
+    ) {
+        List<PendingMarkerUpdate> updates = MARKER_UPDATES.get(level);
+        if (updates == null) {
+            return false;
+        }
+        for (int index = updates.size() - 1; index >= 0; index--) {
+            PendingMarkerUpdate update = updates.get(index);
+            if (!update.pos().equals(pos) || update.isCanceled()) {
+                continue;
+            }
+            if (update.placement()
+                    && update.expectedState().equals(expectedState)) {
+                return update.playerPlacement();
+            }
+        }
+        return false;
     }
 
     private record PistonKey(
@@ -268,18 +309,23 @@ public final class PlacedRawStoneEvents {
             BlockPos pos,
             BlockState expectedState,
             boolean placement,
-            boolean playerPlacement
+            boolean playerPlacement,
+            boolean breakBlock,
+            BooleanSupplier canceled
     ) {
         private static PendingMarkerUpdate placement(
                 BlockPos pos,
                 BlockState expectedState,
-                boolean playerPlacement
+                boolean playerPlacement,
+                BooleanSupplier canceled
         ) {
             return new PendingMarkerUpdate(
                     pos.immutable(),
                     expectedState,
                     true,
-                    playerPlacement
+                    playerPlacement,
+                    false,
+                    canceled
             );
         }
 
@@ -291,11 +337,35 @@ public final class PlacedRawStoneEvents {
                     pos.immutable(),
                     originalState,
                     false,
-                    false
+                    false,
+                    false,
+                    () -> false
             );
         }
 
+        private static PendingMarkerUpdate breakBlock(
+                BlockPos pos,
+                BlockState originalState,
+                BooleanSupplier canceled
+        ) {
+            return new PendingMarkerUpdate(
+                    pos.immutable(),
+                    originalState,
+                    false,
+                    false,
+                    true,
+                    canceled
+            );
+        }
+
+        private boolean isCanceled() {
+            return canceled.getAsBoolean();
+        }
+
         private void apply(ServerLevel level) {
+            if (isCanceled()) {
+                return;
+            }
             BlockState currentState = level.getBlockState(pos);
             if (placement) {
                 if (!currentState.equals(expectedState)) {
@@ -312,7 +382,8 @@ public final class PlacedRawStoneEvents {
                 } else {
                     PlacedRawStoneTracker.clear(level, pos);
                 }
-            } else if (!currentState.equals(expectedState)) {
+            } else if (breakBlock
+                    || !currentState.equals(expectedState)) {
                 PlacedRawStoneTracker.clear(level, pos);
             }
         }
