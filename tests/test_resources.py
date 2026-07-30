@@ -47,6 +47,31 @@ COMMON_BLOCK_TAGS = {
 
 
 class ResourceContractTests(unittest.TestCase):
+    def test_geology_feedback_and_hammer_extension_are_localized_and_tagged(self):
+        hammer_tag = TREE.load_json(
+            DATA / "tags" / "item" / "hammers.json"
+        )
+        self.assertEqual({"replace": False, "values": []}, hammer_tag)
+
+        expected_messages = {
+            "config.material_progression.server.enableGeologicalHardness",
+            "config.material_progression.server.enableStoneRockDrops",
+            "message.material_progression.geology.insufficient",
+            *{
+                f"message.material_progression.geology.capability.{level}"
+                for level in range(4)
+            },
+        }
+        for language in ("en_us", "pt_br"):
+            translations = TREE.load_json(
+                ASSETS / "lang" / f"{language}.json"
+            )
+            with self.subTest(language=language):
+                self.assertTrue(expected_messages.issubset(translations))
+                self.assertTrue(
+                    all(translations[key].strip() for key in expected_messages)
+                )
+
     def test_every_json_resource_parses(self):
         json_files = sorted(RESOURCES.rglob("*.json"))
         self.assertGreater(len(json_files), 0)
@@ -288,7 +313,7 @@ class ResourceContractTests(unittest.TestCase):
         private_item_tags = TREE.names_matching(
             DATA / "tags" / "item", "*.json"
         )
-        self.assertEqual({"crusher_inputs"}, private_item_tags)
+        self.assertEqual({"crusher_inputs", "hammers"}, private_item_tags)
 
     def test_stone_family_static_resources_preserve_material_identity(self):
         expected_resistance = {

@@ -27,6 +27,8 @@ public final class ModTags {
             commonItemTag("rocks");
     public static final TagKey<Item> CRUSHER_INPUTS =
             itemTag("crusher_inputs");
+    public static final TagKey<Item> HAMMERS =
+            itemTag("hammers");
 
     private ModTags() {
     }

@@ -4,11 +4,15 @@ import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
 import dev.fishraposo.materialprogression.progression.HarvestRuleEvents;
 import dev.fishraposo.materialprogression.registry.ModBlockEntities;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
+import dev.fishraposo.materialprogression.registry.ModDataAttachments;
 import dev.fishraposo.materialprogression.registry.ModItems;
 import dev.fishraposo.materialprogression.registry.ModFeatures;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.stone.StoneFamilyReloadListener;
+import dev.fishraposo.materialprogression.stone.GeologyFeedbackEvents;
+import dev.fishraposo.materialprogression.stone.GeologyMiningEvents;
+import dev.fishraposo.materialprogression.stone.PlacedRawStoneEvents;
 import dev.fishraposo.materialprogression.world.level.block.LooseRockInvalidationEvents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -22,6 +26,7 @@ public final class MaterialProgression {
     public MaterialProgression(IEventBus modBus, ModContainer container) {
         ModBlocks.register(modBus);
         ModItems.register(modBus);
+        ModDataAttachments.register(modBus);
         ModBlockEntities.register(modBus);
         ModMenus.register(modBus);
         ModRecipes.register(modBus);
@@ -31,7 +36,10 @@ public final class MaterialProgression {
                 MaterialProgressionConfig.SPEC
         );
         HarvestRuleEvents.register();
+        GeologyFeedbackEvents.register();
+        GeologyMiningEvents.register();
         LooseRockInvalidationEvents.register();
+        PlacedRawStoneEvents.register();
         StoneFamilyReloadListener.register();
     }
 }
