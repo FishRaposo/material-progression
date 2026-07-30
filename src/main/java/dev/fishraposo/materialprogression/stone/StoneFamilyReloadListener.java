@@ -1,5 +1,6 @@
 package dev.fishraposo.materialprogression.stone;
 
+import com.mojang.serialization.JsonOps;
 import dev.fishraposo.materialprogression.MaterialProgression;
 import java.util.Map;
 import net.minecraft.resources.FileToIdConverter;
@@ -13,20 +14,38 @@ import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.resource.ListenerKey;
 import org.jetbrains.annotations.ApiStatus;
 
-public final class StoneFamilyReloadListener
+public class StoneFamilyReloadListener
         extends SimpleJsonResourceReloadListener<StoneFamilyDefinition> {
     private static final Identifier LISTENER_ID = Identifier.fromNamespaceAndPath(
             MaterialProgression.MOD_ID, "stone_families"
     );
     private static final ListenerKey<StoneFamilyReloadListener> LISTENER_KEY =
             ListenerKey.create(LISTENER_ID);
+    private static final FileToIdConverter RESOURCE_CONVERTER =
+            FileToIdConverter.json("stone_family");
     private StoneFamilyCatalog validatedCatalog = StoneFamilyCatalog.empty();
 
     @ApiStatus.Internal
     public StoneFamilyReloadListener() {
         super(
                 StoneFamilyDefinition.CODEC,
-                FileToIdConverter.json("stone_family")
+                RESOURCE_CONVERTER
+        );
+    }
+
+    @Override
+    protected Map<Identifier, StoneFamilyDefinition> prepare(
+            ResourceManager resourceManager,
+            ProfilerFiller profiler
+    ) {
+        return StrictJsonResourceLoader.load(
+                resourceManager,
+                RESOURCE_CONVERTER,
+                getRegistryLookup().createSerializationContext(
+                        JsonOps.INSTANCE
+                ),
+                StoneFamilyDefinition.CODEC,
+                "stone family"
         );
     }
 

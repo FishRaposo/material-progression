@@ -58,7 +58,7 @@ final class StoneFamilyCatalogFixture {
         listener.publishValidated();
     }
 
-    private static ICondition.IContext boundTagContext(
+    static ICondition.IContext boundTagContext(
             HolderLookup.Provider registries
     ) {
         return new ICondition.IContext() {

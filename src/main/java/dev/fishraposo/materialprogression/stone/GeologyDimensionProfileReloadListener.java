@@ -1,10 +1,7 @@
 package dev.fishraposo.materialprogression.stone;
 
-import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import dev.fishraposo.materialprogression.MaterialProgression;
-import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import net.minecraft.resources.FileToIdConverter;
 import net.minecraft.resources.Identifier;
@@ -44,42 +41,13 @@ public class GeologyDimensionProfileReloadListener
             ResourceManager resourceManager,
             ProfilerFiller profiler
     ) {
-        Map<Identifier, GeologyDimensionProfileDefinition> definitions =
-                new LinkedHashMap<>();
-        RESOURCE_CONVERTER.listMatchingResources(resourceManager)
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByKey())
-                .forEach(entry -> {
-                    Identifier fileId = entry.getKey();
-                    Identifier resourceId =
-                            RESOURCE_CONVERTER.fileToId(fileId);
-                    try (var reader = entry.getValue().openAsReader()) {
-                        var json = JsonParser.parseReader(reader);
-                        GeologyDimensionProfileDefinition definition =
-                                GeologyDimensionProfileDefinition.CODEC
-                                        .parse(JsonOps.INSTANCE, json)
-                                        .getOrThrow(IllegalStateException::new);
-                        GeologyDimensionProfileDefinition previous =
-                                definitions.put(resourceId, definition);
-                        if (previous != null) {
-                            throw new IllegalStateException(
-                                    "duplicate resource ID " + resourceId
-                            );
-                        }
-                    } catch (IOException | RuntimeException exception) {
-                        throw new IllegalStateException(
-                                "Invalid geology dimension profile "
-                                        + resourceId
-                                        + " from "
-                                        + fileId
-                                        + ": "
-                                        + exception.getMessage(),
-                                exception
-                        );
-                    }
-                });
-        return Map.copyOf(definitions);
+        return StrictJsonResourceLoader.load(
+                resourceManager,
+                RESOURCE_CONVERTER,
+                JsonOps.INSTANCE,
+                GeologyDimensionProfileDefinition.CODEC,
+                "geology dimension profile"
+        );
     }
 
     @Override

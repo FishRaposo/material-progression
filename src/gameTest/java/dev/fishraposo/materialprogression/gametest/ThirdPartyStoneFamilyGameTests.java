@@ -600,6 +600,187 @@ public final class ThirdPartyStoneFamilyGameTests {
         });
     }
 
+    @GameTest(
+            timeoutTicks = 80,
+            batch = "stone_family_strict_reload"
+    )
+    @EmptyTemplate
+    @TestHolder(description = "Malformed and invalid family packs retain the exact published runtime state")
+    static void failedResourceReloadRetainsCatalogAndPlacedRock(
+            ExtendedGameTestHelper helper
+    ) {
+        Map<Identifier, StoneFamilyDefinition> original =
+                StoneFamilyCatalogFixture.definitionsFrom(
+                        StoneFamilyCatalog.get()
+                );
+        StoneFamilyDefinition external = original.get(FAMILY_ID);
+        try {
+            StoneFamilyReloadPackFixture.reloadAndPublish(
+                    helper,
+                    StoneFamilyReloadPackFixture.encode(original)
+            );
+            StoneFamilyCatalog published = StoneFamilyCatalog.get();
+            long publishedVersion = StoneFamilyCatalog.version();
+
+            helper.setBlock(
+                    ROOT,
+                    MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get()
+            );
+            helper.assertTrue(
+                    placeFeature(helper, ROOT.above()),
+                    "external Rock placement before failed reload"
+            );
+            ExternalLooseRockBlockEntity placed = assertExternalIdentity(
+                    helper,
+                    ROOT.above()
+            );
+
+            Map<Identifier, StoneFamilyDefinition> alternateDefinitions =
+                    replacing(
+                            original,
+                            externalWith(
+                                    external,
+                                    external.sourceBlockTag(),
+                                    TagKey.create(
+                                            Registries.ITEM,
+                                            Identifier.parse(
+                                                    "c:rocks/slate_alternate"
+                                            )
+                                    ),
+                                    external.cobbledBlock(),
+                                    external.rawBlock(),
+                                    external.looseRockSurfaceBlockTag(),
+                                    external.resistance()
+                            )
+                    );
+
+            Map<Identifier, String> malformedSyntax =
+                    new HashMap<>(
+                            StoneFamilyReloadPackFixture.encode(
+                                    alternateDefinitions
+                            )
+                    );
+            malformedSyntax.put(
+                    Identifier.fromNamespaceAndPath(
+                            MaterialProgressionGameTestMod.MOD_ID,
+                            "malformed_syntax"
+                    ),
+                    "{"
+            );
+            assertFailedResourceReload(
+                    helper,
+                    malformedSyntax,
+                    "malformed_syntax",
+                    published,
+                    publishedVersion,
+                    placed
+            );
+
+            Map<Identifier, String> malformedShape =
+                    new HashMap<>(
+                            StoneFamilyReloadPackFixture.encode(
+                                    alternateDefinitions
+                            )
+                    );
+            malformedShape.put(
+                    Identifier.fromNamespaceAndPath(
+                            MaterialProgressionGameTestMod.MOD_ID,
+                            "malformed_shape"
+                    ),
+                    "{}"
+            );
+            assertFailedResourceReload(
+                    helper,
+                    malformedShape,
+                    "malformed_shape",
+                    published,
+                    publishedVersion,
+                    placed
+            );
+
+            Map<Identifier, String> invalidModifier =
+                    new HashMap<>(
+                            StoneFamilyReloadPackFixture.encode(original)
+                    );
+            invalidModifier.put(
+                    FAMILY_ID,
+                    StoneFamilyReloadPackFixture.withResistanceModifier(
+                            external,
+                            4
+                    )
+            );
+            assertFailedResourceReload(
+                    helper,
+                    invalidModifier,
+                    "-3 through 3",
+                    published,
+                    publishedVersion,
+                    placed
+            );
+
+            Map<Identifier, StoneFamilyDefinition> duplicateSource =
+                    replacing(
+                            original,
+                            externalWith(
+                                    external,
+                                    blockTag("duplicate_source"),
+                                    external.rockItemTag(),
+                                    external.cobbledBlock(),
+                                    external.rawBlock(),
+                                    external.looseRockSurfaceBlockTag(),
+                                    external.resistance()
+                            )
+                    );
+            assertFailedResourceReload(
+                    helper,
+                    StoneFamilyReloadPackFixture.encode(duplicateSource),
+                    "source block is already owned by",
+                    published,
+                    publishedVersion,
+                    placed
+            );
+
+            Map<Identifier, StoneFamilyDefinition> duplicateSurface =
+                    replacing(
+                            original,
+                            externalWith(
+                                    external,
+                                    external.sourceBlockTag(),
+                                    external.rockItemTag(),
+                                    external.cobbledBlock(),
+                                    external.rawBlock(),
+                                    blockTag("duplicate_surface"),
+                                    external.resistance()
+                            )
+                    );
+            assertFailedResourceReload(
+                    helper,
+                    StoneFamilyReloadPackFixture.encode(duplicateSurface),
+                    "direct surface is already owned by",
+                    published,
+                    publishedVersion,
+                    placed
+            );
+
+            helper.runAfterDelay(2, () -> {
+                try {
+                    assertPublishedStateUnchanged(
+                            helper,
+                            published,
+                            publishedVersion,
+                            placed
+                    );
+                } finally {
+                    StoneFamilyCatalogFixture.publish(helper, original);
+                }
+                helper.succeed();
+            });
+        } catch (RuntimeException | Error failure) {
+            StoneFamilyCatalogFixture.publish(helper, original);
+            throw failure;
+        }
+    }
+
     @GameTest
     @EmptyTemplate
     @TestHolder(description = "Invalid external definitions are rejected without replacing the catalog")
@@ -799,6 +980,97 @@ public final class ThirdPartyStoneFamilyGameTests {
                 raw,
                 surface,
                 resistance
+        );
+    }
+
+    private static void assertFailedResourceReload(
+            ExtendedGameTestHelper helper,
+            Map<Identifier, String> resources,
+            String expectedError,
+            StoneFamilyCatalog published,
+            long publishedVersion,
+            ExternalLooseRockBlockEntity placed
+    ) {
+        boolean rejected = false;
+        try {
+            StoneFamilyReloadPackFixture.reloadAndPublish(helper, resources);
+        } catch (IllegalStateException expected) {
+            rejected = expected.getMessage().contains(expectedError);
+        }
+        helper.assertTrue(
+                rejected,
+                "resource reload did not reject with " + expectedError
+        );
+        assertPublishedStateUnchanged(
+                helper,
+                published,
+                publishedVersion,
+                placed
+        );
+    }
+
+    private static void assertPublishedStateUnchanged(
+            ExtendedGameTestHelper helper,
+            StoneFamilyCatalog published,
+            long publishedVersion,
+            ExternalLooseRockBlockEntity placed
+    ) {
+        helper.assertTrue(
+                StoneFamilyCatalog.get() == published,
+                "failed resource reload replaced the catalog snapshot"
+        );
+        helper.assertValueEqual(
+                publishedVersion,
+                StoneFamilyCatalog.version(),
+                "failed resource reload changed the catalog version"
+        );
+        helper.assertValueEqual(
+                MaterialProgressionGameTestMod.EXTERNAL_ROCK.get(),
+                StoneFamilyCatalog.get().byId(FAMILY_ID).orElseThrow()
+                        .rockItem(),
+                "failed resource reload changed the external Rock mapping"
+        );
+        helper.assertBlockPresent(
+                ModBlocks.EXTERNAL_LOOSE_ROCKS.get(),
+                ROOT.above()
+        );
+        helper.assertTrue(
+                helper.getBlockEntity(
+                        ROOT.above(),
+                        ExternalLooseRockBlockEntity.class
+                ) == placed,
+                "failed resource reload replaced the external Rock entity"
+        );
+        helper.assertValueEqual(
+                FAMILY_ID,
+                placed.familyId().orElseThrow(),
+                "failed resource reload changed the placed family ID"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                placed.rock(),
+                MaterialProgressionGameTestMod.EXTERNAL_ROCK.get(),
+                1,
+                "Rock stored across failed resource reload"
+        );
+        helper.assertValueEqual(
+                0,
+                itemCount(
+                        helper,
+                        ROOT.above(),
+                        MaterialProgressionGameTestMod.EXTERNAL_ROCK.get()
+                ),
+                "old Rock drop after failed resource reload"
+        );
+        helper.assertValueEqual(
+                0,
+                itemCount(
+                        helper,
+                        ROOT.above(),
+                        MaterialProgressionGameTestMod
+                                .EXTERNAL_ROCK_ALTERNATE.get()
+                ),
+                "alternate Rock drop after failed resource reload"
         );
     }
 

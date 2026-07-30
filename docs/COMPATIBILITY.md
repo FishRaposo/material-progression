@@ -118,13 +118,17 @@ and have block items. Source and direct-surface tags must exist, be non-empty,
 and include the declared raw block.
 
 Raw blocks, cobbled blocks, Rock items, source membership, and direct-surface
-membership may each belong to only one family. Reload validation stages the
+membership may each belong to only one family. Resources are decoded strictly
+and in deterministic resource-ID order with the server registry context.
+Malformed JSON, an invalid field shape, or a codec error rejects the complete
+reload instead of being logged and skipped. Reload validation then stages the
 complete resolved catalog transactionally before publishing it, so any missing
 tag, ambiguous Rock tag, unregistered object, invalid modifier, or ownership
-conflict rejects the reload without replacing the last valid catalog. Standard
-resource-pack precedence applies when multiple packs provide the same family
-resource ID: the winning resource is validated as that single family
-definition.
+conflict also rejects the reload without changing the catalog snapshot or
+version. Loaded external Loose Rocks retain their family ID and stored Rock
+across any failed reload. Standard resource-pack precedence applies when
+multiple packs provide the same family resource ID: the winning resource is
+validated as that single family definition.
 
 The sixteen built-ins use the compact `family` block state on
 `material_progression:loose_rocks`. External IDs use the non-obtainable
