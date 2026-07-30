@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "has_rock": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:rocks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:gui/advancements/backgrounds/stone",
+    "description": {
+      "translate": "advancement.material_progression.first_rock.description"
+    },
+    "icon": {
+      "id": "material_progression:rock"
+    },
+    "title": {
+      "translate": "advancement.material_progression.first_rock.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_rock"
+    ]
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_flint_shard": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:flint_shards"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_stick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:rods/wooden"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_flint_shard"
+    ],
+    [
+      "has_stick"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "material_progression:flint_hatchet",
+      "material_progression:flint_knife",
+      "material_progression:flint_hammer",
+      "material_progression:flint_saw"
+    ]
+  }
+}

@@ -25,50 +25,29 @@ Nothing about this experiment is protected from replacement.
 
 ## Implemented primitive foundation
 
-The first primitive slice now implements this deterministic opening:
+The complete opening branch now implements:
 
-> Gather ground Rocks and sticks -> sharpen a Rock -> craft a flint hatchet ->
-> harvest logs
+> Gather family-correct Rocks and sticks -> make Flint tools -> harvest plants
+> and wood -> use the Manual Workshop -> process Copper and Tin -> make Bronze
+> -> enter Dense geology
 
-The log-only axe requirement is enabled by default and has a server
-configuration opt-out. Loose rocks and ground sticks generate as persistent,
-easy hand-breakable surface blocks. Rock and flint recipes guarantee the first
-hatchet without gravel luck.
+The shipped slice contains:
 
-The next primitive experiment should add the knife, plant fiber, craftable
-string, mined-stone Rock drops, and density tuning around trees and shrubs.
+- Sixteen Rock families, family cobbles, fragment drops, and family-aware Loose
+  Rock placement without a Stone fallback
+- A deterministic shapeless Rock-to-Flint-Shard recipe and mixed/family
+  four-Rock cobbling
+- Plant Fiber, field Knife harvesting, and three-Fiber String
+- Flint and Bronze Knives, Hammers, and Saws
+- The default-enabled log-only Axe/Saw rule, with localized throttled feedback
+- A persistent Manual Workshop for knife, hammer, and Saw operations
+- Vanilla four-Plank crafting plus six matching Planks per ordinary Log at the
+  Workshop, and three Sticks per Plank
+- Five opening advancements, operation unlock rewards, localized tooltips, and
+  geological requirement hints
 
-Loose rocks must remove the random first-flint gate. One Rock should sharpen
-into one flint shard through a shapeless 2x2 recipe, one flint should produce
-two shards, and four Rocks should form one cobblestone. Mined stone should
-return Rocks instead of ready-made cobblestone. No knife, knapping station, or
-lucky gravel drop may be required before the first hatchet or knife.
-
-Ground sticks should be persistent visible objects beneath trees and around
-shrubs, yielding ordinary vanilla sticks. Leaves remain the renewable fallback
-and dead bushes the dry-biome source. The experiment must determine placement
-density and pickup behavior without making random leaf drops the bootstrap.
-
-The first hatchet recipe should be tested in its intended 2x2 upside-down-L
-shape: one flint shard beside the upper stick and one stick directly below the
-first. String must not be required for this tool.
-
-The experiment should compare stone and flint tool profiles, with flint
-currently expected to trade durability for speed or damage. It must test both
-premium performance at the stone harvest tier and a narrow intermediate harvest
-capability for flint. It should also determine which plants produce fiber,
-whether knives continue through metal families, and whether the loop is
-understandable without a guide.
-
-The experiment must validate spawn viability, ground Rock and stick
-distribution, the shapeless sharpening and cobblestone recipes, the shaped
-hatchet recipe, modded-log behavior, and feedback when a player tries to harvest
-a log by hand. Knapping is not part of the current candidate. The goal is a
-brief, useful primitive phase, not a longer ritual before ordinary play.
-
-The same experiment should validate the broader tool rule: each included tool
-must grant a material interaction or a meaningful trade-off, rather than exist
-only to complete a recolored equipment set.
+Ground Sticks still use broad clustered Overworld placement. Genuine density
+tuning around trees and shrubs is a required pre-0.2.0 fix.
 
 ## Candidate experiment: cave-biome resources
 
@@ -84,29 +63,37 @@ whether lush-cave clay makes pottery infrastructure accessible without making
 clay globally uniform. Gravel must remain valuable without being required to
 make the first tool.
 
-## Candidate experiment: meaningful geology
+## Implemented experiment: meaningful geology
 
-Build the smallest possible geology prototype capable of comparing:
+The first geology implementation now resolves:
 
-- Ordinary vanilla stone behavior
-- Hardness or harvest changes by layer
-- Easier exposed blocks
-- Enclosure-sensitive resistance
-- Natural-only versus placed-block behavior
+- Dimension-specific depth bands
+- Soft, standard, and hard family modifiers
+- One-level relief from any non-sturdy exposed face
+- Four capability levels from Exposed through Deep
+- Natural resistance versus L0 player-placed raw stone
+- Correct-tool, Fortune, Silk Touch, and incorrect-tool drops
+- Persistent placed-stone markers with removal and piston transfer
+- Independent resistance and fragment-drop server toggles
 
-The goal is not to implement an entire underground rewrite immediately. It is to
-find the smallest rule set that makes caves and structures rationally valuable
-without making mining miserable.
+Other dimensions currently resolve to L0. The promised datapack-configurable
+depth profiles for those dimensions are required before 0.2.0.
 
-## Candidate experiment: access progression
+The reloadable stone-family schema validates duplicate sources and direct
+surfaces, but the runtime currently rejects family IDs outside the sixteen
+built-ins. Arbitrary third-party families using externally registered Rocks and
+cobbles are the third required pre-release fix.
 
-Once geology and bronze can interact, test a short playable arc:
+## Current playtest: access progression
+
+Geology and Bronze now interact in the intended short arc:
 
 > Primitive extraction -> accessible copper and tin -> processing -> bronze ->
 > expanded underground access -> iron -> economical sustained excavation
 
-This is the first point at which bronze's intended role can be evaluated rather
-than assumed.
+Bronze Hammers and Pickaxes reach Dense geology. The remaining question is
+balance and discoverability: complete a 20-30 minute survival run before release
+and adjust placement, durability, timings, and feedback from evidence.
 
 ## Candidate experiment: broader base family
 
@@ -194,49 +181,33 @@ The bulk-crafting table must remain separate from the manual workshop, furnaces,
 crushers, and bonsai. It automates ordinary crafting decisions and repetition;
 it does not become a universal processing machine.
 
-## Candidate experiment: manual workshop
+## Implemented experiment: manual workshop
 
-Test one workstation whose installed hand tool selects the available processing
-recipes:
+The Manual Workshop now ships as one persistent workstation whose installed hand
+tool selects processing:
 
 > **Tool + material -> processed output**
 
-The first operations to test are:
+The initial operations are:
 
-- Knife + loose rock -> improved flint-shard yield
-- Knife + suitable plants -> improved fiber yield
-- Hammer + stone -> gravel
-- Hammer + gravel -> sand
-- Hammer + ore or raw metal -> two dust at a high durability cost
-- Saw + log -> more than four planks
-- Saw + planks -> improved stick yield
+- Knife + Rock -> two Flint Shards
+- Knife + suitable plants -> one, two, three, or five Plant Fiber
+- Hammer + Stone or Cobblestone -> Gravel
+- Hammer + Gravel -> Sand
+- Hammer + compatible ore or raw metal -> two Dust at high durability cost
+- Saw + Log or stem -> six matching Planks
+- Saw + Plank -> three Sticks
 
-The tools must also remain usable in the field: the knife as a lightweight
+The tools remain usable in the field: the Knife as a lightweight
 weapon and plant harvester, the hammer as a pickaxe alternative, and the saw as
 an axe alternative. The workshop remains their intended use. Testing should
 preserve the rule that field use harvests while workshop use processes.
 
-The experiment should compare a compact stonecutter-like interface with any
-simpler interaction that preserves the same fantasy. It must make the installed
-tool, valid inputs, produced output, and durability cost legible.
-
-The workshop should answer:
-
-- Does visible tool installation feel more natural than damaging tools in
-  crafting recipes?
-- Does the installed tool clearly determine the recipe family?
-- Can the block support several hand tools without becoming a universal
-  machine?
-- Do field drops remain predictable instead of changing merely because a hammer
-  or saw broke the block?
-- Are baseline plant fiber and the shapeless Rock-to-shard recipe still
-  available without a workshop?
-- Do tool materials create meaningful durability or speed trade-offs?
-- Is the manual ore-crushing durability cost high enough to keep the
-  fuel-burning crusher valuable?
-- Should any tool material affect yield, or is yield principally determined by
-  the operation?
-- Where should automation stop so the block remains manual bench work?
+Tool/input/output/progress persist. Output blocking pauses; recipe or tool
+changes reset progress; completion, durability, and tool breakage are atomic;
+breaking the block drops inventory but loses progress; and hoppers cannot
+insert or extract. The public `material_progression:manual_workshop` recipe type
+keeps operations datapack-driven.
 
 Manual and machine ore processing must both turn one ore or raw metal into two
 dust. The hammer spends substantial durability without tier-gating recipes; the
@@ -266,20 +237,17 @@ The experiment should determine:
 - Whether its output meaningfully supports metallurgy rather than existing as
   unrelated convenience content
 
-## Candidate experiment: saws and wood efficiency
+## Implemented experiment: Saws and wood efficiency
 
-Test whether saws create a satisfying active wood-processing role while
-remaining usable as an axe alternative in the field:
+Saws are Axe alternatives in the field and satisfy the log-harvest rule:
 
 > Harvest logs -> install a saw in the workshop -> process logs -> receive
 > better yield
 
-Preserve vanilla's four-plank baseline and treat the saw as a bonus. Test both
-log-to-plank and plank-to-stick improvement. The experiment should keep axes,
-saws, and bonsai distinct: primary harvesting, alternate field use plus active
-yield, and passive supply.
-Saw durability should be consumed through the workshop operation rather than a
-hidden reusable-tool crafting recipe.
+Vanilla's four-Plank baseline remains. Both Flint and Bronze Saws produce six
+matching Planks from an ordinary Log and three Sticks from a Plank at the
+Workshop. Bronze buys durability, not additional yield. Bonsai remains a later
+passive-supply system.
 
 ## Candidate experiment: magical metallurgy
 
@@ -291,9 +259,16 @@ This may remain in the core mod or become a separate compatible module.
 
 ## Release planning
 
-No release scope is currently frozen. A future MVP should be declared only after
-the relevant experiments demonstrate a coherent, enjoyable loop. The existing
-bronze content is a starting test bed, not that declaration.
+The local 0.2.0 target is the complete opening/geology slice. Before the release
+workflow may synchronize version and JAR, it still requires:
+
+1. Arbitrary third-party stone-family support
+2. Tree/shrub-aware Ground Stick density
+3. Datapack-configurable other-dimension depth profiles
+4. A 20-30 minute survival playtest through Bronze and Dense geology
+5. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
+
+Do not push, merge, or move `main` without explicit authorization.
 
 ## Automated acceptance coverage
 
@@ -303,15 +278,15 @@ test with the production change. The current harness has two layers:
 - Repository contract tests validate JSON resources, recipe outputs, material
   flow, translations, models, tags, loot, world-generation wiring, internal
   documentation links, and whitespace.
-- NeoForge GameTests load the real mod and validate crusher processing, fuel
-  requirements, sided inventory, block drops, tool durability, repair materials,
-  mining requirements, and enchantability tags.
+- NeoForge GameTests load the real mod and validate crusher processing, every
+  stone family, Loose Rock resolution, cobbling, geological resistance and
+  drops, placed-stone persistence, primitive tools, Manual Workshop behavior,
+  discoverability, configuration, and gameplay tags.
 
-The Gradle build and GameTest server are separate CI gates. Future loose-rock,
-tree-punching, workshop, hammer, knife, saw, bonsai, logistics, bulk-crafting,
-and geology implementations should extend the live suite when they are
-introduced. Tests must not pretend that a documented but unimplemented feature
-exists.
+The opening branch currently runs 102 live GameTests. Future pottery, samples,
+deposits, prospecting, bonsai, logistics, bulk crafting, and expanded metallurgy
+must extend the suite when they are introduced. Tests must not pretend that a
+documented but unimplemented feature exists.
 
 Human playtesting remains responsible for whether the opening is satisfying,
 durability costs feel fair, terrain creates interesting routes, and interfaces

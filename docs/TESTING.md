@@ -1,8 +1,8 @@
 # Testing toolkit
 
-Material Progression uses two complementary headless test layers. Fast Python
+Material Progression uses two complementary headless layers. Fast Python
 contracts inspect repository resources directly. NeoForge GameTests load the
-real mod in a ticking Minecraft server and exercise gameplay behavior.
+real mod in a ticking dedicated server and exercise gameplay behavior.
 
 Run everything with:
 
@@ -10,7 +10,7 @@ Run everything with:
 ./gradlew headlessTest
 ```
 
-The individual layers remain available when iterating:
+The individual gates remain available while iterating:
 
 ```bash
 ./gradlew contractTest
@@ -18,70 +18,98 @@ The individual layers remain available when iterating:
 ./gradlew runGameTestServer
 ```
 
+`headlessTest` runs the contracts, Java build, distribution check, and live
+GameTests. It is the complete local verification command.
+
 ## Fast resource contracts
 
-`tests/content_contracts.py` is the declarative catalog of shipped content and
-literal progression expectations. Add items, blocks, recipe contracts, and tool
-families there. Generic assertions in `tests/test_resources.py` apply the same
-checks to every catalog entry.
+`tests/content_contracts.py` is the literal catalog of shipped items, blocks,
+recipes, and tool families. Generic assertions in `tests/test_resources.py`
+apply the same resource checks to every entry. Reusable filesystem and JSON
+parsing belongs in `tests/support/`; new domain contracts belong in focused
+`test_*.py` modules.
 
-Shared filesystem and JSON behavior belongs in `tests/support/`. Domain
-assertions belong in a focused `test_*.py` module. Keep expected values literal:
-the test must not calculate its expected result from the resource it is
-checking.
+The opening/geology contracts cover:
 
-When adding content:
+- The exact sixteen-family catalog and soft, standard, and hard profiles
+- Fifteen additional Rock items and fourteen custom cobbled blocks
+- Unique source and direct-generation surfaces
+- The absence of a generic Loose Rock fallback
+- Models, blockstates, translations, loot, smelting, mining tags, and recipes
+- Shared-tag inputs and the single custom four-Rock cobbling recipe
+- The Manual Workshop serializer and complete operation catalog
+- Opening advancements, Recipe Book rewards, localized feedback, and tooltips
+- Production-JAR exclusion of development-only GameTest code
 
-1. Add the item, block, recipe, or family to `content_contracts.py`.
-2. Add a focused assertion only if the content introduces a new kind of
-   contract.
-3. Run `./gradlew contractTest`.
+Keep expected values literal. A test must not calculate its expected result from
+the same resource it is meant to validate.
 
 ## Live NeoForge GameTests
 
 GameTests are grouped by gameplay system under
 `src/gameTest/java/dev/fishraposo/materialprogression/gametest/`.
 
-- `GameTestSupport` contains assertions and setup useful across systems.
-- A system fixture, such as `CrusherFixture`, owns repeated placement,
-  inventory-slot, and block-entity setup for that system.
-- A focused class, such as `CrusherGameTests`, contains observable behavior
-  tests for one system.
-- `ToolGameTests` demonstrates a separate domain that shares the same runner
-  without sharing irrelevant setup.
-- `PrimitiveGameTests` verifies ground-resource drops and support behavior.
-- `LogHarvestGameTests` verifies the config toggle and the log-only axe
-  boundary through real block breaking.
+- `GameTestSupport` contains cross-system helpers.
+- `CrusherFixture` and `WorkshopFixture` own repeated block-entity setup.
+- `CrusherGameTests` verifies fuel processing and sided inventory.
+- `PrimitiveGameTests` verifies ground-resource support and drops.
+- `LogHarvestGameTests` verifies the configurable log-only tool rule.
+- `StoneFamilyGameTests` verifies all-family direct support, cover resolution,
+  Nether/End behavior, no-fallback placement, support changes, and cobbling.
+- Geology-focused tests verify depth bands, modifiers, exposure, correct-tool
+  drops, Fortune, Silk Touch, config toggles, persistent placed-stone markers,
+  and piston transfer.
+- Tool tests verify Plant Fiber harvesting and Knife/Hammer/Saw category
+  behavior.
+- Workshop tests verify recipe matching, timing, persistence, output blocking,
+  recipe reset, atomic completion and breakage, wood-species preservation, and
+  automation rejection.
+- `DiscoverabilityGameTests` verifies localized lore, structured feedback,
+  throttled log hints, the Dense-geology advancement, and the dedicated Manual
+  Workshop recipe category.
 
-New systems should follow the same shape. For example, workshop behavior should
-live in `WorkshopGameTests` with a `WorkshopFixture` once the workshop exists.
-Add a shared helper only after at least two tests need the same operation.
+The current opening branch runs 102 live GameTests. Treat that count as a
+snapshot, not a reason to avoid adding the next regression test.
 
-GameTests must exercise real registries, recipes, inventories, blocks, and
-server ticks. Test-only setup remains in fixtures; production classes should
-not gain methods solely to support tests. Reload-sensitive behavior must use
-the real `RecipeManager` reload application path, and ticker wiring must have
-at least one sequence-driven test that advances through level ticks.
+GameTests must use real registries, recipes, inventories, blocks, and server
+ticks. Test-only setup stays in fixtures; production classes must not gain
+methods solely for tests. Reload-sensitive behavior uses the real
+`RecipeManager` application path, and ticker wiring has sequence-driven tests
+that advance level ticks.
 
-## Adding a behavior
+## Known verification boundaries
 
-For each implemented mechanic:
+Automated tests validate the registered attachment codec and live save,
+removal, and piston behavior. The GameTest structure does not currently perform
+a literal survival-world chunk unload/reload cycle for placed-stone markers.
+That persistence boundary should be included in manual release verification or
+in a future harness that can safely unload the containing chunk.
+
+Server GameTests cannot judge the Manual Workshop's client rendering, UI
+clarity, sound balance, particle restraint, translated text presentation, or
+the feel of the opening. Before 0.2.0, run a real client and complete a 20-30
+minute survival path through Bronze and a Dense-geology encounter.
+
+## Adding behavior
+
+For every gameplay change:
 
 1. Name the production regression the test should catch.
-2. Write the smallest GameTest that demonstrates the expected result.
+2. Write the smallest relevant contract or GameTest.
 3. Run it and confirm it fails for the intended reason.
-4. Implement the mechanic.
-5. Run `./gradlew runGameTestServer`.
-6. Run `./gradlew headlessTest` before integration.
+4. Implement the behavior.
+5. Run the focused test.
+6. Run `./gradlew headlessTest`.
 
-Do not add placeholder tests for systems that exist only in the design
-documents. Add their tests alongside their implementation.
+Do not add placeholder tests for systems that exist only in design documents.
+Add tests alongside implementation.
 
 ## CI and diagnostics
 
-GitHub Actions keeps contracts, the Gradle build, and GameTests as separate
-named steps so the failing layer is immediately visible. GameTest logs and test
-results are uploaded even when the live server fails.
+GitHub Actions keeps contracts, the Gradle build, and GameTests as separately
+named steps. GameTest logs and results are uploaded even when the live server
+fails.
 
-Automation verifies deterministic correctness. Progression feel, interface
-clarity, and balance remain human playtesting responsibilities.
+Automation establishes deterministic correctness. Progression feel, client
+presentation, interface clarity, and balance remain human playtesting
+responsibilities.

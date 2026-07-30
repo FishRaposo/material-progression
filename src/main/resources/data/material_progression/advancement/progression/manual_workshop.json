@@ -1,0 +1,31 @@
+{
+  "parent": "material_progression:progression/flint_hatchet",
+  "criteria": {
+    "has_manual_workshop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "material_progression:manual_workshop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.material_progression.manual_workshop.description"
+    },
+    "icon": {
+      "id": "material_progression:manual_workshop"
+    },
+    "title": {
+      "translate": "advancement.material_progression.manual_workshop.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_manual_workshop"
+    ]
+  ]
+}

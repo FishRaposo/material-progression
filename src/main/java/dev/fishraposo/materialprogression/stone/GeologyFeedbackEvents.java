@@ -1,8 +1,9 @@
 package dev.fishraposo.materialprogression.stone;
 
 import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
+import dev.fishraposo.materialprogression.progression.FeedbackMessages;
+import dev.fishraposo.materialprogression.progression.OpeningAdvancements;
 import dev.fishraposo.materialprogression.registry.ModDataAttachments;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.common.NeoForge;
@@ -33,24 +34,27 @@ public final class GeologyFeedbackEvents {
                 event.getPos(),
                 state
         );
+        var family = StoneFamilyCatalog.get().byRaw(state);
         if (tier.isEmpty()
+                || family.isEmpty()
                 || GeologyToolCapability.canMine(
                         player.getMainHandItem(),
                         state,
                         tier.orElseThrow()
-                )
-                || !tryAcquire(player)) {
+                )) {
+            return;
+        }
+        if (tier.orElseThrow() == GeologyTier.LEVEL_2) {
+            OpeningAdvancements.awardDenseGeology(player);
+        }
+        if (!tryAcquire(player)) {
             return;
         }
 
         player.sendOverlayMessage(
-                Component.translatable(
-                        "message.material_progression.geology.insufficient",
-                        state.getBlock().getName(),
-                        Component.translatable(
-                                "message.material_progression.geology.capability."
-                                        + tier.orElseThrow().level()
-                        )
+                FeedbackMessages.insufficientGeology(
+                        family.orElseThrow().family(),
+                        tier.orElseThrow()
                 )
         );
     }

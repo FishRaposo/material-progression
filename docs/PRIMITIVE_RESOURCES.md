@@ -4,8 +4,8 @@
 > Rock and flint-shard conversions, partial raw-stone drops, the flint hatchet,
 > the default-enabled log-only axe requirement, Plant Fiber, and Flint/Bronze
 > Knives, Hammers, Saws, and Manual Workshop processing now ship.
-> Tree-adjacent stick-density tuning remains subject to implementation and
-> playtesting.
+> Tree/shrub-aware Ground Stick density is a required pre-0.2.0 implementation
+> gap, not an accepted later feature.
 
 ## Purpose
 
@@ -50,13 +50,16 @@ The first conversion is shapeless and fits in the player's 2x2 crafting grid.
 It represents sharpening an ordinary Rock into a usable edge, with no knife,
 workstation, knapping interface, or lucky flint drop required. A full flint item
 remains the superior source because it produces two shards. Four unsharpened
-Rocks can instead be consolidated into cobblestone; flint shards are not valid
-ingredients for that recipe.
+Rocks can instead be consolidated through the single custom cobbling recipe;
+flint shards are not valid ingredients. Four Rocks mapped to the same family
+produce its matching cobble. Any mixed set, or compatible third-party Rocks
+without a family mapping, produces vanilla Cobblestone.
 
-The item is **Rock** (`material_progression:rock`), while its world feature is
-**loose rocks**. “Loose” describes how Rocks appear in the world, not the item
-name. Rock is published under and consumed through `#c:rocks` so compatible
-items from other mods participate in the same recipes.
+The item is **Rock** (`material_progression:rock`) for the Stone family, while
+its world feature is **loose rocks**. “Loose” describes how Rocks appear in the
+world, not the item name. The fifteen other raw-stone families have named Rocks.
+All are published under family `#c:rocks/<family>` tags and the `#c:rocks`
+parent, so compatible items from other mods participate in generic recipes.
 
 This creates two complementary sources:
 
@@ -67,8 +70,8 @@ This creates two complementary sources:
   the same material loop underground.
 
 Sticks receive the same visible bootstrap treatment. Loose sticks are
-persistent ground objects placed especially beneath trees and around shrubs.
-Picking one up yields the ordinary vanilla stick; there is no separate
+persistent ground objects. Picking one up yields the ordinary vanilla stick;
+there is no separate
 Material Progression stick item. Leaves remain a renewable fallback through
 their existing stick drops, and dead bushes remain the dry-biome source.
 
@@ -90,10 +93,11 @@ and other mod code that writes blocks directly without one of those gameplay
 events are outside this reactive boundary. This explicit boundary avoids
 perpetual block polling while covering ordinary survival-world changes.
 
-Loose rocks generate broadly on valid solid overworld ground. Ground sticks
-retain a sparse broad distribution so the bootstrap is not biome-gated, with
-patch placement and later biome-density tuning concentrating them beneath trees
-and around shrubs. Both use the reusable surface-resource placement design
+Loose Rocks generate on family-correct Overworld surfaces and cave floors, with
+sparse Nether and End placement. Ground Sticks remain Overworld-only and retain
+broad clustered placement so the bootstrap is not biome-gated. The required
+tree/shrub-aware density rule has not yet been implemented. Both use the
+reusable surface-resource placement design
 recorded in
 [the ground-resource design](superpowers/specs/2026-07-28-ground-resources-design.md).
 
@@ -147,6 +151,11 @@ breaking stone without a pickaxe: the block can be broken but produces no
 drop. A valid axe or hatchet leaves the ordinary log loot table unchanged.
 Leaves, planks, crafting tables, and other wooden blocks remain vanilla unless
 they are deliberately members of `#minecraft:logs`.
+
+Trying to punch a Log sends a localized, per-player throttled action-bar hint
+that asks for an Axe or Saw. Flint and Bronze Saws satisfy the same vanilla Axe
+tag boundary. The hint is disabled with the harvest rule and never blocks
+creative players.
 
 The exact implementation boundary and required GameTests are recorded in
 [the configurable log harvest rule design](superpowers/specs/2026-07-28-log-harvest-rule-design.md).
@@ -401,6 +410,22 @@ progression rather than a potentially impossible spawn.
 The filter is the same one used throughout the project: a step belongs when it
 creates a capability, choice, or meaningful efficiency gain. It does not belong
 merely because it makes the opening longer.
+
+## Discoverability
+
+The opening uses Minecraft-native discovery rather than a custom guidebook:
+
+- Localized item lore explains Rocks, Flint Shards, Plant Fiber, the primitive
+  tools, and the Manual Workshop.
+- The first Rock, Flint Hatchet, Manual Workshop, Dense-geology encounter, and
+  Bronze access have advancements.
+- Inventory milestones reward the primitive and Workshop operation recipes.
+- Log punching and insufficient geological capability use localized, throttled
+  action-bar hints.
+
+Workshop operations receive recipe unlock rewards and use a dedicated
+recipe-book category. The Workshop UI still resolves its operation from the
+installed tool and input instead of embedding the ordinary crafting Recipe Book.
 
 ## Relationship to geology and metallurgy
 

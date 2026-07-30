@@ -1,7 +1,9 @@
 # Vision
 
 > **Status: provisional.** This document captures the current direction, not a
-> locked specification.
+> locked specification. The primitive opening, Manual Workshop, and first
+> geology/access slice now exist; pottery, ore prospecting, logistics, bonsai,
+> bulk crafting, and expanded metallurgy remain later systems.
 
 Minecraft's progression is nominally about mining and crafting, but much of the
 generated underground stops mattering almost immediately. Once a player has an
@@ -92,24 +94,26 @@ The current primitive-resource direction is deliberately simple:
 
 - The item is Rock; loose rocks are its persistent world feature.
 - One Rock sharpens into one flint shard through a shapeless 2x2 recipe.
-- One flint produces two shards; four Rocks form cobblestone.
-- Persistent ground sticks yield vanilla sticks beneath trees and around
-  shrubs, while leaves remain a renewable fallback.
+- One flint produces two shards; four same-family Rocks form their matching
+  cobble, while mixed or unmapped compatible Rocks form Cobblestone.
+- Persistent Ground Sticks yield vanilla Sticks, while leaves remain a renewable
+  fallback. Their current broad clusters still require true tree/shrub-aware
+  density tuning.
 - A configurable rule can prevent logs from being harvested by hand.
 - A flint hatchet made from the sharpened shard then becomes the first goal and
   earns access to wood.
 - Lush caves are excellent sources of clay for pottery and later bonsai.
 - Other wet caves may contain smaller clay pockets.
 - Cave gravel provides flint in bulk after loose rocks guarantee the bootstrap.
-- Flint may support sharper, faster, less durable tools at stone harvest level.
-- A flint knife cuts plants into fiber.
-- Plant fiber provides a crafting route to string.
-- Metal knives may extend the cutting-tool family.
+- Flint supplies accessible low-durability tools at stone capability.
+- Flint and Bronze Knives cut plants into Fiber.
+- Three Plant Fiber provide a crafting route to String.
+- Bronze extends Knife, Hammer, and Saw durability.
 - Workshop knives extract more fiber from plants and more shards from rocks.
 - Hammers mine like alternative picks, then reduce stone to gravel and gravel to
   sand at a workshop.
-- Saws harvest like alternative axes, then improve plank and stick yield at a
-  workshop.
+- Saws harvest like alternative Axes, then turn an ordinary Log into six
+  matching Planks or one Plank into three Sticks at a Workshop.
 
 The knife is the clearest idea borrowed from No Tree Punching. The broader
 survival ceremony is not. Flint already communicates "sharp stone" in
@@ -121,10 +125,10 @@ shard through a shapeless inventory recipe. The opening still asks the player
 to gather materials, but it cannot be invalidated by gravel placement or
 flint-drop luck.
 
-Saws remain more provisional. They could let copper, bronze, or later metals
-improve the output of active forestry. The preferred first experiment is to
-preserve vanilla wood output and make sawing a bonus, rather than reduce
-baseline output and force the player to recover it.
+The implemented Saw rule preserves vanilla's four-Plank baseline and makes
+Workshop sawing a 50 percent bonus. Flint and Bronze have identical processing
+yield; Bronze buys durability. This makes the Saw valuable without making
+ordinary crafting deliberately inefficient.
 
 This gives the opening several connected but distinct tools:
 
@@ -136,7 +140,7 @@ This gives the opening several connected but distinct tools:
 - Hatchets earn access to wood when tree punching is disabled.
 - Knives turn vegetation into fiber and string.
 - Axes accelerate forestry.
-- Saws may improve active wood efficiency.
+- Saws improve active wood efficiency at the Manual Workshop.
 - Bonsai may provide slow passive tree products.
 
 The first hatchet uses an upside-down-L recipe in the 2x2 inventory grid: one
@@ -158,11 +162,12 @@ living design.
 ## The workshop grows with the player
 
 Progression should not only improve what the player can hold in an equipment
-slot. It should change what their base can do.
+slot. It should change what their base can do. The first Manual Workshop now
+provides that transition.
 
 The current direction uses deliberately ordinary Minecraft objects:
 
-- **A workshop block** holds an installed hand tool and uses it to process an
+- **The Manual Workshop** holds an installed hand tool and uses it to process an
   input material.
 - **Knives, hammers, and saws** remain usable as alternatives to swords, picks,
   and axes in the field, but select their intended processing operations at the
@@ -210,7 +215,7 @@ processing; better hammers simply survive more work. Heating remains in
 furnaces, alloying remains in its own metallurgical process, and passive
 cultivation remains in bonsai.
 
-None of those implementations is fixed. Bonsai output may be manual before a
+None of the later automation implementations is fixed. Bonsai output may be manual before a
 hopper is added; hoppers may be equivalent across materials or divided into
 variants; and bulk-crafting upgrades require testing. The durable idea is that
 automation should be assembled from resources the player physically earned and
@@ -243,8 +248,10 @@ primitive tools. Clearings, cave mouths, ravines, and structures determine
 early routes. Hatchets, axes, saws, and stronger picks gradually turn those
 obstacles into resources.
 
-The exact stones, strata, metals, recipes, tiers, dimensions, and pacing remain
-open design questions. The same is true of bonsai, hopper variants, larger
-chests, bulk-crafting upgrades, and other automation details. Even the currently
-implemented bronze slice is an experiment used to learn what the final loop
-should be.
+The opening fixes sixteen built-in stone families, four geological resistance
+levels, and a first Bronze-access relationship for testing. Arbitrary
+third-party families and datapack-configurable depth profiles for other
+dimensions remain required pre-release extension work. Bonsai, hopper variants,
+larger chests, bulk-crafting upgrades, pottery, samples, deposits, prospecting,
+and expanded metallurgy remain open later systems. The implemented Bronze slice
+is still an experiment used to learn what the final loop should be.

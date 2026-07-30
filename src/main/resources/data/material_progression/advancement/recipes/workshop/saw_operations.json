@@ -1,0 +1,50 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_workshop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "material_progression:manual_workshop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_saw": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:tools/saws"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_workshop"
+    ],
+    [
+      "has_saw"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "material_progression:manual_workshop_planks_to_sticks",
+      "material_progression:manual_workshop_acacia_logs",
+      "material_progression:manual_workshop_bamboo_logs",
+      "material_progression:manual_workshop_birch_logs",
+      "material_progression:manual_workshop_cherry_logs",
+      "material_progression:manual_workshop_crimson_logs",
+      "material_progression:manual_workshop_dark_oak_logs",
+      "material_progression:manual_workshop_jungle_logs",
+      "material_progression:manual_workshop_mangrove_logs",
+      "material_progression:manual_workshop_oak_logs",
+      "material_progression:manual_workshop_pale_oak_logs",
+      "material_progression:manual_workshop_spruce_logs",
+      "material_progression:manual_workshop_warped_logs"
+    ]
+  }
+}

@@ -1,8 +1,9 @@
 # Material Progression
 
-> **Early design prototype:** the current vertical slice, recipes, values,
-> loader, target version, and every future system described here remain
-> provisional.
+> **Development build:** the opening/geology vertical slice is implemented, but
+> values and content remain subject to survival playtesting. The tracked
+> installable JAR remains the last synchronized release until the 0.2.0 release
+> workflow is completed.
 
 Material Progression is an open-source experiment in rebuilding Minecraft's
 progression around the thing its name promises: mining a world whose shape
@@ -31,9 +32,8 @@ instead of the optimal move five minutes into a world.
 - **The underground participates in progression.** Solid geology resists early
   tools, while caves and structures provide natural routes through it.
 - **Primitive resources matter before metallurgy.** Ground Rocks and sticks
-  bootstrap flint shards and tools deterministically; knives, plant fiber,
-  cave-biome clay and gravel, and possible saws give wood, stone, and plants
-  useful roles.
+  bootstrap flint shards and tools deterministically; knives, Plant Fiber,
+  Hammers, and Saws give wood, stone, and plants useful roles.
 - **Natural openings matter until tools create new ones.** A configurable
   tree-punching rule can make forests physical obstacles, while resistant
   geology makes mountains expensive to tunnel through.
@@ -41,7 +41,8 @@ instead of the optimal move five minutes into a world.
   colored ore; it changes what parts of the world can be reached and reshaped
   economically.
 - **Tools grant material interactions.** Hatchets access wood, knives turn
-  plants into fiber, saws may improve wood yield, and picks progressively
+  plants into fiber, Saws improve workshop wood yield, and Picks/Hammers
+  progressively
   overcome geology instead of merely repeating the same tool with larger
   numbers.
 - **Materials form a network, not a disposable ladder.** Mundane metals, alloy
@@ -80,7 +81,7 @@ Read the complete living design:
 ## Current prototype
 
 The repository currently targets Minecraft 26.2 with NeoForge and Java 25. Its
-first implemented vertical slice contains:
+complete opening/geology development slice contains:
 
 - Tin ore, raw tin, ingots, dust, and tools
 - Copper dust
@@ -89,9 +90,36 @@ first implemented vertical slice contains:
 - Ore and raw-metal crushing into two dust
 - A provisional `3 copper dust + 1 tin dust -> 4 bronze dust` recipe
 - Dust smelting
-- Loose-rock and ground-stick world generation
-- Rock, flint shards, and the flint hatchet
-- A default-enabled log-only axe requirement with a server opt-out
+- Sixteen raw-stone families from Stone through Sulfur, Cinnabar, Nether
+  families, and End Stone; sixteen Rock items; and matching family cobbles
+- Loose-rock and ground-stick world generation, with family-aware Loose Rocks
+  that resolve their supporting geology instead of falling back to generic
+  Stone Rock
+- Four-Rock cobbling: four identical mapped Rocks produce their family cobble,
+  while mixed or unmapped compatible Rocks produce vanilla Cobblestone
+- Geological resistance determined by dimension depth, family, exposure, and
+  whether the raw stone was player placed
+- Partial raw-stone drops: two or three family Rocks with a correct tool, four
+  with Fortune, the raw block with Silk Touch, and nothing with an insufficient
+  tool
+- Rock, flint shards, and the flint hatchet, plus Plant Fiber and Flint/Bronze
+  Knives, Hammers, and Saws
+- A default-enabled log-only axe requirement with a server opt-out; Saws
+  satisfy it
+- A persistent Manual Workshop for knife, hammer, and Saw processing, including
+  six matching Planks per ordinary Log and three Sticks per Plank
+- Recipe unlocks, five opening-progression advancements, localized tooltips,
+  and throttled action-bar guidance
+
+Three promised extension points still block the final 0.2.0 release: arbitrary
+third-party stone-family definitions, genuinely tree/shrub-aware Ground Stick
+density, and datapack-configurable depth profiles for dimensions other than the
+Overworld, Nether, and End. The current code is intentionally documented as
+incomplete on those boundaries rather than presenting them as deferred design.
+
+Ore samples, geological deposits, prospecting, pottery, expanded storage and
+hoppers, shallow logistics, bonsai, bulk crafting, and expanded metallurgy are
+later slices and are not shipped.
 
 This is a test bed, not a promised MVP. The current content, balance, art,
 architecture, and even its place in the eventual progression may be replaced.
@@ -133,11 +161,13 @@ Run the full automated test suite:
 ./gradlew headlessTest
 ```
 
-The Python contracts validate resources, recipes, translations, world-generation
-wiring, and documentation links. The GameTest server loads the real mod and
-exercises crusher processing, fuel requirements, sided inventory, block drops,
-tool durability, and gameplay tags. GameTest code is development-only and is
-not packaged in the production mod JAR. See the
+The Python contracts validate resources, recipes, translations,
+world-generation wiring, stone-family data, advancement unlocks, documentation
+links, and distribution boundaries. The GameTest server loads the real mod and
+exercises the crusher, family-aware Loose Rocks and cobbling, geological
+resistance and drops, primitive tools, the Manual Workshop, configuration,
+feedback, persistence, and gameplay tags. GameTest code is development-only and
+is not packaged in the production mod JAR. See the
 [testing toolkit guide](docs/TESTING.md) for the reusable fixtures, content
 catalog, focused commands, and extension conventions.
 

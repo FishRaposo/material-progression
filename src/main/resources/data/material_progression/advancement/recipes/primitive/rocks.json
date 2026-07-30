@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rock": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:rocks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_rock"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "material_progression:flint_shard_from_rock",
+      "material_progression:rock_cobbling"
+    ]
+  }
+}

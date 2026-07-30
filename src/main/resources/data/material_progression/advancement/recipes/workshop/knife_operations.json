@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_workshop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "material_progression:manual_workshop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_knife": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:tools/knives"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_workshop"
+    ],
+    [
+      "has_knife"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "material_progression:manual_workshop_rock_sharpening",
+      "material_progression:manual_workshop_plant_fiber_1",
+      "material_progression:manual_workshop_plant_fiber_2",
+      "material_progression:manual_workshop_plant_fiber_3",
+      "material_progression:manual_workshop_plant_fiber_5"
+    ]
+  }
+}

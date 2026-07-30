@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_plant_fiber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:fibers/plant"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_plant_fiber"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "material_progression:plant_fiber_to_string"
+    ]
+  }
+}

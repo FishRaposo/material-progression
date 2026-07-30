@@ -58,6 +58,35 @@ For example, bulk crafting combines CraftingTable IV's output-first interface,
 the Crafting Station's local inventory boundary, and Furnus's upgrade vocabulary,
 but its recursive recipe planner is a Material Progression system of its own.
 
+## Opening/geology implementation lineage
+
+The implemented opening pass used the references selectively:
+
+- **Divergent Underground** informed multiple geological resistance levels,
+  family differences, exposure relief, natural-versus-placed behavior, and stone
+  fragment drops. Material Progression implements its own four-level,
+  dimension/depth/family formula, sixteen-family data catalog, placed-block
+  attachment, and Rock/cobble loop.
+- **No Tree Punching** informed the configurable log rule, Knives, Plant Fiber,
+  and Saws. Material Progression removes the random first-Flint gate, keeps
+  ordinary one-Log-to-four-Plank crafting, and gives both Flint and Bronze Saws
+  a visible six-Plank Workshop operation.
+- **Pyrotech** and **MineFantasy Reforged** informed the physical
+  tool-plus-material Workshop fantasy and transactional durability/progress
+  questions. The implemented block entity, menu, recipes, state machine, and
+  rendering are independent Material Progression code.
+- **Better With Mods** reinforced optional efficiency and local, visible
+  material processing. The opening pass does not import its mechanical-power
+  network or hardcore baseline nerfs.
+- **TerraFirmaCraft** informed persistent world-space Rocks and Sticks and the
+  connection between samples and local terrain. The opening keeps ordinary
+  Minecraft crafting and does not require knapping or a custom field guide.
+
+No reference project is a dependency, and no reference code was copied. Source
+links exist for behavioral study and credit. Ore samples, deposits, prospecting,
+pottery, logistics, bonsai, bulk crafting, and expanded metallurgy remain later
+reference work rather than shipped opening features.
+
 ## Divergent Underground
 
 Divergent Underground is the strongest reference for making the underground

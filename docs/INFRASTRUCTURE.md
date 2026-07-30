@@ -88,6 +88,11 @@ Its durability is consumed when an operation completes, instead of placing a
 reusable tool in an ordinary crafting recipe and relying on hidden
 recipe-specific damage behavior.
 
+The public recipe type and serializer are
+`material_progression:manual_workshop`. Each operation declares an `ingredient`,
+`tool`, concrete `result`, `processing_time`, and `tool_damage`. Generic inputs
+and tool requirements use shared or reloadable behavior tags.
+
 The interaction should resemble Minecraft's existing workstation language more
 than an industrial machine. Recipes progress only while the block is loaded.
 A blocked output pauses without consuming input or durability; changing the
@@ -97,6 +102,16 @@ breaks on that operation. Breaking the block drops all three inventory slots
 and discards partial progress. A datapack reload preserves partial work only
 when the recipe ID and complete operation definition are unchanged; changing
 or removing that definition resets progress. Hoppers cannot insert or extract.
+
+The block entity, menu, screen, and renderer expose the installed tool and
+operation state. Progress uses UI feedback, sound, and restrained particles.
+Operation recipe rewards use a dedicated Recipe Book category, but the Workshop
+screen does not embed the ordinary crafting Recipe Book as a selection menu;
+tool and input continue to determine the operation.
+
+Localized lore introduces the block and tools. The first Workshop advancement
+and recipe unlock rewards connect it to the opening without adding a custom
+guidebook.
 
 ### Boundaries
 

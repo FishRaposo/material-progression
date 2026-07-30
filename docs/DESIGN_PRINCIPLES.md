@@ -79,9 +79,9 @@ a meaningful decision.
 ## 9. Tools should grant material interactions
 
 A tool tier should not be only a repeated equipment set with larger numbers.
-Tools give the player verbs: hatchets access wood, knives extract plant fiber,
-saws may improve wood yield, and picks determine which geology can be exploited
-economically.
+Tools give the player verbs: Hatchets access wood, Knives extract Plant Fiber,
+Saws improve Workshop wood yield, and Picks/Hammers determine which geology can
+be exploited economically.
 
 Statistics remain useful for differentiating materials—flint can be faster and
 more damaging but less durable than stone—but those profiles should support a
@@ -142,8 +142,8 @@ The reward is a workshop that becomes increasingly self-sustaining.
 
 ## 14. Active play and passive supply should complement each other
 
-Efficiency tools and automation should solve different problems. A saw may
-increase the yield of active forestry when used at a workshop, while a bonsai
+Efficiency tools and automation should solve different problems. A Saw
+increases the yield of active forestry when used at a Workshop, while a bonsai
 slowly supports the base in the background. Neither should make the other—or
 the generated world—irrelevant.
 
@@ -151,6 +151,10 @@ Baseline resource nerfs require stronger justification than optional efficiency
 rewards. Making a saw useful by improving wood yield is preferable to making
 ordinary crafting feel deliberately broken unless testing demonstrates that a
 lower baseline improves the entire progression.
+
+The first implementation keeps one Log to four Planks in ordinary crafting and
+offers six matching Planks through Workshop sawing. Better Saw material buys
+durability, not a further output multiplier.
 
 ## 15. Bulk crafting should remove repetition, not logistics
 
@@ -181,12 +185,20 @@ easier to exploit than fully enclosed stone is more Minecraft-shaped than a
 hidden character level. Recipes and material properties should teach the system
 without requiring a wiki open at all times.
 
+Localized tooltips, recipe unlocks, opening advancements, and throttled
+action-bar messages may explain unfamiliar rules. They should point back to
+physical blocks and tools rather than become a separate guide or research
+system.
+
 ## 18. Player construction should not be punished
 
 Natural geology may have progression-sensitive hardness. Blocks placed for
 building should remain reasonable to remove. The system exists to make
 exploration and excavation meaningful, not to make correcting a misplaced block
 tedious.
+
+The current rule records player-placed raw stone persistently and resolves it at
+the Exposed resistance level while preserving Rock fragment drops.
 
 ## 19. The design remains revisable
 

@@ -1,145 +1,160 @@
 # Underground and Geology
 
-> **Status: provisional.** Divergent Underground establishes the reference
-> problem and a promising solution; this mod has not yet selected an exact
-> implementation.
+> **Status: implemented opening slice.** The sixteen built-in stone families,
+> their Loose Rocks, cobbles, fragment drops, and geological resistance ship in
+> the development tree. Arbitrary third-party family registration and
+> datapack-configurable depth profiles for other dimensions are required
+> pre-0.2.0 gaps.
 
 ## Why geology is foundational
 
-A large material roster only matters when the player has reasons to engage with
-it. If iron remains available immediately and makes every layer cheap to tunnel
-through, the shortest path still bypasses most metals and most terrain.
+The underground is not a neutral container for ore. Caves, ravines, structures,
+exposure, stone identity, and depth determine which routes are affordable.
+Better materials increase the player's authority over that world:
 
-The underground therefore cannot be a neutral container for the metallurgy
-system. It is the physical foundation of that system.
+> **Follow natural openings first; earn sustained excavation later.**
 
-## Desired behavior
+This is a physical rule, not an invisible lock. A player can attack difficult
+geology early, but slow mining and lost drops make the cost legible.
 
-Natural underground blocks may differ by:
+## Built-in stone families
 
-- Mining time
-- Minimum harvest capability
-- Depth or geological layer
-- Exposure to air
-- Degree of enclosure or compression
-- Whether the block was naturally generated or placed by a player
+The opening pass recognizes exactly sixteen raw-stone families:
 
-Exact formulas and layer counts are deliberately undecided.
+| Profile | Families |
+| --- | --- |
+| Soft (`-1`) | Calcite, Dripstone, Sulfur, Sandstone, Red Sandstone, Netherrack |
+| Standard (`0`) | Stone, Granite, Diorite, Andesite, Tuff, Cinnabar, End Stone |
+| Hard (`+1`) | Deepslate, Basalt, Blackstone |
 
-Geology also includes exposed, non-metal resources. Clay and gravel should not
-be distributed independently of the spaces around them. Cave biome, moisture,
-water, and exposure can give them recognizable environmental homes.
+Each family has a Rock. Stone keeps `material_progression:rock`; the other
+fifteen have family-named Rock items. Stone uses vanilla Cobblestone and
+Deepslate uses Cobbled Deepslate. The other fourteen families have custom
+cobbled blocks that self-drop and smelt into their matching raw stone.
 
-Ordinary stone should participate in the primitive material loop as well.
-Rather than dropping a ready-made cobblestone block, mined stone can drop loose
-Rocks. One Rock can be sharpened into one flint shard through the shapeless 2x2
-recipe, while four Rocks can be consolidated into cobblestone. This connects
-the loose rocks gathered on the surface to the stone the player later excavates
-instead of treating them as a disposable starting currency.
+Slabs, stairs, walls, polished blocks, ores, Potent Sulfur, and Sulfur Spikes
+are intentionally outside the raw-stone system.
 
-## Cave biomes as resource biomes
+## Geological resistance
 
-The shape of a cave matters, but its ecological identity should matter too.
+Natural raw stone resolves a resistance level using:
 
-Lush caves should be the premier underground clay source. Vanilla already gives
-them wet floors, pools, and clay as part of their visual language; the intended
-change is to make that supply abundant and reliable enough to support pottery
-and bonsai infrastructure. Discovering a lush cave should plausibly mean
-"pottery is solved."
+> **dimension depth tier + family modifier - exposure modifier, clamped to
+> L0-L3**
 
-Other wet caves may contain smaller clay pockets around cave floors and
-underground water. Dry caves should not receive equivalent deposits merely for
-uniformity. The world should communicate where a resource belongs.
+Any face adjacent to a non-sturdy block reduces the result by one level.
 
-Gravel should receive similar treatment. Exposed cave deposits can become
-recognizable sources of flint and therefore primitive tools, knives, plant
-fiber, and string. Exact biome associations, frequencies, and deposit shapes
-remain undecided.
+| Level | Name | Mining speed | Required capability |
+| --- | --- | --- | --- |
+| L0 | Exposed | Normal | Any correct Pickaxe or Hammer |
+| L1 | Compacted | 2.5x slower | Stone-level |
+| L2 | Dense | 4x slower | Iron-level, including Bronze |
+| L3 | Deep | 6x slower | Diamond-level |
 
-See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the resource
-loops these deposits support.
+The built-in depth bases are:
 
-## Terrain as progression
+- **Overworld:** L0 above Y48; L1 from Y48 through Y17; L2 from Y16 through
+  Y-15; L3 at Y-16 and below.
+- **Nether:** L0 at Y96 and above; L1 from Y95 through Y64; L2 from Y63 through
+  Y32; L3 at Y31 and below.
+- **End:** enclosed End Stone begins at L2.
+- **Other dimensions:** currently resolve to L0.
 
-The important distinction is between following existing space and creating new
-space. This principle applies above ground as well as below it.
+The last rule is not the finished compatibility promise. Datapack-configurable
+depth profiles for other dimensions must be implemented before 0.2.0.
 
-Early in progression:
+Raw stone placed by a player always mines at L0, while still fragmenting into
+Rocks. A compact persistent chunk attachment records these positions. Saving
+and loading preserves markers, block removal clears them, and piston movement
+transfers them. This protects building and cleanup from natural-geology
+resistance without exempting placed stone from the material loop.
 
-- Forest edges and clearings provide routes around wood the player cannot yet
-  harvest efficiently.
-- Exposed deposits are more valuable than buried ones.
-- Caves provide access through rock that is expensive to excavate in bulk.
-- Cave biomes provide recognizable concentrations of clay, gravel, and other
-  non-metal resources.
-- Ravines create vertical routes across geological layers.
-- Mineshafts and underground structures provide pre-cut infrastructure.
-- Route finding and prospecting outperform coordinate-driven tunnelling.
+The independent server options `enableGeologicalHardness` and
+`enableStoneRockDrops` let a world disable resistance or fragment drops without
+coupling the two systems.
 
-Later in progression:
+## Raw-stone drops and cobbling
 
-- Flint hatchets, axes, and possible saws turn forests from obstacles into
-  increasingly efficient resources.
-- Better tools make sustained excavation economical.
-- The player becomes less dependent on natural openings.
-- Strip mining changes from technically possible but foolish to a competitive
-  strategy.
-- Clay, stone, metals, and other construction resources become inputs to a
-  workshop that reduces repetitive labor.
-- Mastery feels like increased control over the same world that constrained the
-  player earlier.
+When stone-fragment drops are enabled, mining a raw family block gives:
 
-The shared rule is:
+- **Correct capability:** two or three matching Rocks.
+- **Fortune I or higher:** exactly four matching Rocks.
+- **Silk Touch:** the original raw block.
+- **Incorrect capability:** no drop.
 
-> **Natural openings matter until technology lets the player create new ones.**
+Cobbled and processed variants keep normal self-drops.
 
-A forest cannot simply be punched through before the first cutting tool. A
-mountain cannot simply be strip-mined with primitive excavation tools. The
-player initially works around both, then earns the ability to reshape them.
+The single `material_progression:rock_cobbling` recipe accepts exactly four
+`#c:rocks`. Four Rocks mapped to the same registered family produce that
+family's cobble. Mixed mapped Rocks, or compatible third-party Rocks without a
+family mapping, produce vanilla Cobblestone. Precedence is implemented inside
+the custom recipe; there are no competing generic and family recipes.
 
-This relationship is important even for seemingly modest infrastructure. A
-bonsai pot may ask for clay, while automatic collection may ask for a hopper or
-another metal component. If obtaining those ingredients requires meaningful
-exploration and excavation, the resulting automation is a consequence of
-geological progress rather than a free convenience recipe.
+## Family-aware Loose Rocks
 
-## Air exposure and enclosure
+Loose Rocks store their resolved family in block state and drop exactly one
+matching Rock. They break and drop when their support becomes invalid.
 
-Divergent Underground's most important reference point is not merely
-"deeper stone is harder." It is the possibility that exposed stone is easier
-than fully enclosed stone. That rule allows caves to function as natural
-breaches without making their walls inaccessible.
+Support resolves in this order:
 
-An enclosure-sensitive model could go further by scaling resistance with the
-amount of surrounding solid material. This remains a design candidate, not a
-decision. It must be tested for:
+1. An explicit direct surface mapping selects its family.
+2. On approved natural cover, the resolver searches downward up to eight blocks
+   for the nearest raw family.
+3. Placement is skipped when no family resolves. There is no generic Stone
+   fallback.
 
-- Player comprehension
-- Runtime cost
-- Interaction with world generation
-- Interaction with explosions and artificial openings
-- Compatibility with other mods
-- Whether it rewards cave exploration without creating tedious edge cases
+Required direct mappings include Sand to Sandstone Rock, Red Sand to Red
+Sandstone Rock, and every raw stone to its matching Rock. Natural soil and
+gravel cover resolve the nearest Overworld geology beneath them. Soul Sand and
+Soul Soil produce Netherrack Rock only when Netherrack resolves below.
 
-## Natural versus placed blocks
+World generation places family-correct Loose Rocks on Overworld surfaces and
+cave floors, with sparse Nether and End placement. The cave set includes
+Sulfur, Cinnabar, Deepslate, Tuff, and Dripstone terrain. Loose Rocks are finite
+world objects and do not regenerate; mining raw stone is their renewable source.
 
-Geological resistance should apply to the generated world, not indiscriminately
-to every stone block. A player who places deep stone in a house should not need
-late-game mining equipment to correct it.
+Normal support changes update directly. Covered sources are revalidated through
+targeted gameplay events for player breaking and placement, fluids, tool
+transformations, explosions, living-entity destruction, and pistons. Commands,
+structure loading, and mod code that writes blocks without those events are
+outside this reactive boundary.
 
-Tracking or inferring natural blocks is therefore a core technical question.
-Possible implementations must be evaluated for save size, performance, and
-compatibility before one becomes part of the design.
+The definitions under `data/material_progression/stone_family/` expose the
+current reloadable schema and tag boundaries. Reload validation is atomic and
+rejects duplicate raw-source or direct-surface membership with a clear error.
+The current catalog, however, deliberately accepts only the sixteen built-in
+family IDs. Supporting arbitrary third-party family IDs and externally
+registered Rocks/cobbles is a required release blocker, not later optional work.
+
+## Discoverability
+
+Attempting to mine above the held tool's geological capability produces
+localized, throttled action-bar feedback that names the resolved level, family,
+and requirement—for example, “Dense Cinnabar — iron-level Pickaxe or Hammer
+required.” Encountering Dense geology also completes the corresponding opening
+advancement.
+
+Loose Rocks, Rock tooltips, recipe unlocks, and the first-Rock advancement teach
+the material loop without a custom guidebook.
+
+## Later geological work
+
+The following systems remain later slices:
+
+- Ore samples and deposits
+- Surface evidence and prospecting
+- Cave-biome clay and broader gravel deposits
+- Pottery and its geological resource loop
+- Expanded ore replacement and duplicate-ore governance
+
+These ideas may build on the current resistance and family vocabulary, but they
+are not implemented by the opening pass.
 
 ## Success criteria
 
-The geology system succeeds if:
-
-- A new player prefers caves and exposed routes for rational mechanical reasons.
-- Different underground shapes create different progression stories.
-- Intermediate tools expand access in perceptible steps.
-- Iron and later materials do not make every prior route choice irrelevant
-  immediately.
-- Strip mining feels powerful because the player remembers when it was
-  uneconomical.
-- Building and ordinary block cleanup remain comfortable.
+The system succeeds when caves and exposed routes are rational early choices,
+intermediate tools expand access in visible steps, Stone identity survives
+through Rocks and cobbles, and building remains comfortable. Automated tests
+establish deterministic behavior; a 20-30 minute survival run through Bronze
+and Dense geology remains the required balance and discoverability check before
+release.

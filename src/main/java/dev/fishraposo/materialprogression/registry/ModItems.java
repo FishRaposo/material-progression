@@ -2,13 +2,16 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import java.util.List;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.ItemLore;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -54,39 +57,65 @@ public final class ModItems {
     public static final DeferredItem<Item> COPPER_DUST = ITEMS.registerSimpleItem("copper_dust");
     public static final DeferredItem<Item> BRONZE_DUST = ITEMS.registerSimpleItem("bronze_dust");
     public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
-    public static final DeferredItem<Item> PLANT_FIBER = ITEMS.registerSimpleItem("plant_fiber");
-    public static final DeferredItem<Item> ROCK = ITEMS.registerSimpleItem("rock");
-    public static final DeferredItem<Item> GRANITE_ROCK = ITEMS.registerSimpleItem("granite_rock");
-    public static final DeferredItem<Item> DIORITE_ROCK = ITEMS.registerSimpleItem("diorite_rock");
-    public static final DeferredItem<Item> ANDESITE_ROCK = ITEMS.registerSimpleItem("andesite_rock");
-    public static final DeferredItem<Item> DEEPSLATE_ROCK = ITEMS.registerSimpleItem("deepslate_rock");
-    public static final DeferredItem<Item> TUFF_ROCK = ITEMS.registerSimpleItem("tuff_rock");
-    public static final DeferredItem<Item> CALCITE_ROCK = ITEMS.registerSimpleItem("calcite_rock");
-    public static final DeferredItem<Item> DRIPSTONE_ROCK = ITEMS.registerSimpleItem("dripstone_rock");
-    public static final DeferredItem<Item> SULFUR_ROCK = ITEMS.registerSimpleItem("sulfur_rock");
-    public static final DeferredItem<Item> CINNABAR_ROCK = ITEMS.registerSimpleItem("cinnabar_rock");
-    public static final DeferredItem<Item> SANDSTONE_ROCK = ITEMS.registerSimpleItem("sandstone_rock");
-    public static final DeferredItem<Item> RED_SANDSTONE_ROCK = ITEMS.registerSimpleItem("red_sandstone_rock");
-    public static final DeferredItem<Item> NETHERRACK_ROCK = ITEMS.registerSimpleItem("netherrack_rock");
-    public static final DeferredItem<Item> BASALT_ROCK = ITEMS.registerSimpleItem("basalt_rock");
-    public static final DeferredItem<Item> BLACKSTONE_ROCK = ITEMS.registerSimpleItem("blackstone_rock");
-    public static final DeferredItem<Item> END_STONE_ROCK = ITEMS.registerSimpleItem("end_stone_rock");
-    public static final DeferredItem<Item> FLINT_SHARD = ITEMS.registerSimpleItem("flint_shard");
+    public static final DeferredItem<Item> PLANT_FIBER = tooltipItem(
+            "plant_fiber",
+            "tooltip.material_progression.plant_fiber"
+    );
+    public static final DeferredItem<Item> ROCK = rockItem("rock");
+    public static final DeferredItem<Item> GRANITE_ROCK = rockItem("granite_rock");
+    public static final DeferredItem<Item> DIORITE_ROCK = rockItem("diorite_rock");
+    public static final DeferredItem<Item> ANDESITE_ROCK = rockItem("andesite_rock");
+    public static final DeferredItem<Item> DEEPSLATE_ROCK = rockItem("deepslate_rock");
+    public static final DeferredItem<Item> TUFF_ROCK = rockItem("tuff_rock");
+    public static final DeferredItem<Item> CALCITE_ROCK = rockItem("calcite_rock");
+    public static final DeferredItem<Item> DRIPSTONE_ROCK = rockItem("dripstone_rock");
+    public static final DeferredItem<Item> SULFUR_ROCK = rockItem("sulfur_rock");
+    public static final DeferredItem<Item> CINNABAR_ROCK = rockItem("cinnabar_rock");
+    public static final DeferredItem<Item> SANDSTONE_ROCK = rockItem("sandstone_rock");
+    public static final DeferredItem<Item> RED_SANDSTONE_ROCK = rockItem("red_sandstone_rock");
+    public static final DeferredItem<Item> NETHERRACK_ROCK = rockItem("netherrack_rock");
+    public static final DeferredItem<Item> BASALT_ROCK = rockItem("basalt_rock");
+    public static final DeferredItem<Item> BLACKSTONE_ROCK = rockItem("blackstone_rock");
+    public static final DeferredItem<Item> END_STONE_ROCK = rockItem("end_stone_rock");
+    public static final DeferredItem<Item> FLINT_SHARD = tooltipItem(
+            "flint_shard",
+            "tooltip.material_progression.flint_shard"
+    );
 
     public static final DeferredItem<AxeItem> FLINT_HATCHET = ITEMS.registerItem(
-            "flint_hatchet", properties -> new AxeItem(FLINT, 5.0F, -3.2F, properties)
+            "flint_hatchet",
+            properties -> new AxeItem(
+                    FLINT,
+                    5.0F,
+                    -3.2F,
+                    withTooltip(
+                            properties,
+                            "tooltip.material_progression.flint_hatchet"
+                    )
+            )
     );
     public static final DeferredItem<Item> FLINT_KNIFE = ITEMS.registerItem(
             "flint_knife",
-            properties -> new Item(properties.sword(FLINT, 1.0F, -1.8F))
+            properties -> new Item(withTooltip(
+                    properties,
+                    "tooltip.material_progression.knife"
+            ).sword(FLINT, 1.0F, -1.8F))
     );
     public static final DeferredItem<Item> FLINT_HAMMER = ITEMS.registerItem(
             "flint_hammer",
-            properties -> new Item(properties.pickaxe(FLINT, 2.0F, -3.0F))
+            properties -> new Item(withTooltip(
+                    properties,
+                    "tooltip.material_progression.hammer"
+            ).pickaxe(FLINT, 2.0F, -3.0F))
     );
     public static final DeferredItem<AxeItem> FLINT_SAW = ITEMS.registerItem(
             "flint_saw",
-            properties -> new AxeItem(FLINT, 4.0F, -2.8F, properties)
+            properties -> new AxeItem(
+                    FLINT,
+                    4.0F,
+                    -2.8F,
+                    withTooltip(properties, "tooltip.material_progression.saw")
+            )
     );
 
     public static final DeferredItem<Item> TIN_SWORD = ITEMS.registerItem(
@@ -122,23 +151,39 @@ public final class ModItems {
     );
     public static final DeferredItem<Item> BRONZE_KNIFE = ITEMS.registerItem(
             "bronze_knife",
-            properties -> new Item(properties.sword(BRONZE, 1.0F, -1.8F))
+            properties -> new Item(withTooltip(
+                    properties,
+                    "tooltip.material_progression.knife"
+            ).sword(BRONZE, 1.0F, -1.8F))
     );
     public static final DeferredItem<Item> BRONZE_HAMMER = ITEMS.registerItem(
             "bronze_hammer",
-            properties -> new Item(properties.pickaxe(BRONZE, 2.0F, -3.0F))
+            properties -> new Item(withTooltip(
+                    properties,
+                    "tooltip.material_progression.hammer"
+            ).pickaxe(BRONZE, 2.0F, -3.0F))
     );
     public static final DeferredItem<AxeItem> BRONZE_SAW = ITEMS.registerItem(
             "bronze_saw",
-            properties -> new AxeItem(BRONZE, 4.0F, -2.8F, properties)
+            properties -> new AxeItem(
+                    BRONZE,
+                    4.0F,
+                    -2.8F,
+                    withTooltip(properties, "tooltip.material_progression.saw")
+            )
     );
 
     public static final DeferredItem<?> CRUSHER = ITEMS.registerSimpleBlockItem("crusher", ModBlocks.CRUSHER);
-    public static final DeferredItem<?> MANUAL_WORKSHOP =
-            ITEMS.registerSimpleBlockItem(
-                    "manual_workshop",
-                    ModBlocks.MANUAL_WORKSHOP
-            );
+    public static final DeferredItem<?> MANUAL_WORKSHOP = ITEMS.registerItem(
+            "manual_workshop",
+            properties -> new BlockItem(
+                    ModBlocks.MANUAL_WORKSHOP.get(),
+                    withTooltip(
+                            properties.useBlockDescriptionPrefix(),
+                            "tooltip.material_progression.manual_workshop"
+                    )
+            )
+    );
     public static final DeferredItem<?> TIN_ORE = ITEMS.registerSimpleBlockItem("tin_ore", ModBlocks.TIN_ORE);
     public static final DeferredItem<?> DEEPSLATE_TIN_ORE =
             ITEMS.registerSimpleBlockItem("deepslate_tin_ore", ModBlocks.DEEPSLATE_TIN_ORE);
@@ -204,6 +249,30 @@ public final class ModItems {
             String name, net.neoforged.neoforge.registries.DeferredBlock<?> block
     ) {
         return ITEMS.registerSimpleBlockItem(name, block);
+    }
+
+    private static DeferredItem<Item> rockItem(String name) {
+        return tooltipItem(name, "tooltip.material_progression.rock");
+    }
+
+    private static DeferredItem<Item> tooltipItem(
+            String name,
+            String translationKey
+    ) {
+        return ITEMS.registerItem(
+                name,
+                properties -> new Item(withTooltip(properties, translationKey))
+        );
+    }
+
+    private static Item.Properties withTooltip(
+            Item.Properties properties,
+            String translationKey
+    ) {
+        return properties.component(
+                DataComponents.LORE,
+                new ItemLore(List.of(Component.translatable(translationKey)))
+        );
     }
 
     public static void register(IEventBus modBus) {

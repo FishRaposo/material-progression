@@ -1,0 +1,31 @@
+{
+  "parent": "material_progression:progression/manual_workshop",
+  "criteria": {
+    "has_bronze": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:ingots/bronze"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.material_progression.bronze_access.description"
+    },
+    "icon": {
+      "id": "material_progression:bronze_ingot"
+    },
+    "title": {
+      "translate": "advancement.material_progression.bronze_access.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_bronze"
+    ]
+  ]
+}

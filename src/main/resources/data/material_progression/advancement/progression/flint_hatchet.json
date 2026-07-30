@@ -1,0 +1,31 @@
+{
+  "parent": "material_progression:progression/first_rock",
+  "criteria": {
+    "has_flint_hatchet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "material_progression:flint_hatchet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.material_progression.flint_hatchet.description"
+    },
+    "icon": {
+      "id": "material_progression:flint_hatchet"
+    },
+    "title": {
+      "translate": "advancement.material_progression.flint_hatchet.title"
+    }
+  },
+  "requirements": [
+    [
+      "has_flint_hatchet"
+    ]
+  ]
+}

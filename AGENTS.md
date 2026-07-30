@@ -61,16 +61,30 @@ Code currently implements:
 - Fuel-burning stone crusher with sided inventory
 - Ore and raw-metal crushing into two dust
 - Dust smelting and provisional bronze alloy crafting
-- Loose-rock and ground-stick world generation
-- Rock, flint shards, and the flint hatchet
-- A default-enabled log-only axe requirement with a server opt-out
+- Sixteen raw-stone families, family Rocks, family cobbles, and partial raw-stone
+  drops
+- Loose-rock and ground-stick world generation, including family-aware Rocks
+  across the Overworld, Nether, and End
+- Geological resistance by dimension, depth, family, exposure, and natural
+  versus player-placed origin
+- Rock, flint shards, and the flint hatchet, plus Plant Fiber and Flint/Bronze
+  Knives, Hammers, and Saws
+- A default-enabled log-only axe requirement with a server opt-out; Saws
+  satisfy it, and invalid attempts receive throttled action-bar feedback
+- A persistent Manual Workshop with public recipes for knife, hammer, and saw
+  operations
+- Recipe unlock advancements, opening-progression advancements, localized
+  tooltips, and geological capability feedback
 - Reusable Python resource contracts and NeoForge GameTests
 - A reproducible installable JAR under `dist/`
 
-The flint knife, plant fiber, stone-drop replacement, tuned tree-adjacent stick
-density, the manual workshop, geology progression, expanded storage and
-hoppers, and the bulk-crafting table remain documented designs, not implemented
-features. Do not describe planned behavior as shipped behavior.
+Tree- and shrub-aware Ground Stick density, arbitrary third-party stone-family
+definitions, and datapack-configurable depth profiles for other dimensions are
+required gaps in the complete opening/geology pass and must be fixed before the
+0.2.0 release. Expanded storage and hoppers, bonsai, pottery, ore samples,
+deposits and prospecting, the bulk-crafting table, and expanded metallurgy
+remain documented later work. Do not describe planned behavior as shipped
+behavior.
 
 The current dependency order is:
 

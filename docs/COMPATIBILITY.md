@@ -15,74 +15,107 @@ Choose an input category in this order:
 
 1. Use an established vanilla tag when it expresses the intended generic
    category or behavior.
-2. Use an established shared `c:` tag for interchangeable materials and
-   cross-loader conventions.
-3. Create a new plural `c:` tag when the category represents a material other
-   mods can reasonably provide.
-4. Use `material_progression:` only when membership controls behavior unique to
-   this mod.
-5. Use a concrete item ID only when identity itself matters or the data format
-   requires a concrete registry object.
+2. Use an established shared `c:` tag for interchangeable materials.
+3. Create a plural `c:` tag when the category represents material other mods
+   can reasonably provide.
+4. Use `material_progression:` for behavior unique to this mod.
+5. Use a concrete ID only when identity itself matters or the format requires a
+   concrete registry object.
 
-Material tags use plural folders and material subtags:
+Subtype tags must also be included by their parent tags. Examples include
+`#c:ingots/tin`, `#c:dusts/copper`, `#c:raw_materials/tin`,
+`#c:ores/tin`, `#c:rods/wooden`, `#c:rocks/stone`, and `#c:rocks`.
 
-- `#c:ingots/tin`
-- `#c:dusts/copper`
-- `#c:raw_materials/tin`
-- `#c:ores/tin`
-- `#c:rods/wooden`
-- `#c:rocks` for the planned Rock item
+## Published material and tool tags
 
-Rock recipes must consume `#c:rocks`, not
-`material_progression:rock`. Ground Rock world generation may place the
-concrete Material Progression object because world placement creates a specific
-block or entity, but its pickup item is published as interchangeable material.
-The primitive sharpening and cobblestone recipes therefore accept compatible
-Rocks supplied by other mods. Flint shards must likewise use the established
-shared tag available in the target NeoForge common-tag vocabulary; verify the
-exact 26.2 tag rather than inventing a private substitute during implementation.
+| Content | Shared interface |
+| --- | --- |
+| Tin/Bronze ingots | `#c:ingots/tin`, `#c:ingots/bronze`, and `#c:ingots` |
+| Tin/Copper/Bronze dusts | Material subtag and `#c:dusts` |
+| Raw tin | `#c:raw_materials/tin` and `#c:raw_materials` |
+| Tin ore blocks and items | `#c:ores/tin` and `#c:ores` |
+| Plant Fiber | `#c:fibers/plant` and `#c:fibers` |
+| Knives | `#c:tools/knives` and `#c:tools` |
+| Hammers | `#c:tools/hammers` and `#c:tools` |
+| Saws | `#c:tools/saws` and `#c:tools` |
+| Family Rocks | `#c:rocks/<family>` and `#c:rocks` |
+| Family cobbles | block and item `#c:cobblestones/<family>` and their parents |
 
-Ground sticks yield the ordinary vanilla stick rather than a new mod item.
-Recipes use the established wooden-stick category, currently
-`#c:rods/wooden`, so compatible sticks remain interchangeable.
+Tools also belong to established vanilla categories when they implement that
+behavior. Hammers join `#minecraft:pickaxes`, Saws join
+`#minecraft:axes`, and Knives join `#minecraft:swords`. The private
+`material_progression:knives`, `hammers`, and `saws` tags are reloadable
+behavior boundaries that consume those shared categories.
 
-When introducing a new subtype, publish it through the parent tag as well. For
-example, `#c:ingots/tin` is also included by `#c:ingots`.
+Ground Sticks yield the ordinary vanilla Stick. Generic recipes consume
+`#c:rods/wooden`.
 
-## Publishing our content
+## Stone-family data interface
 
-Every interchangeable item must be added to its shared subtype tag. Blocks with
-material identity, especially ores and storage blocks, normally need equivalent
-block and item tags.
+Each built-in file under `data/material_progression/stone_family/` declares:
 
-Current examples:
+```json
+{
+  "source_block_tag": "#material_progression:stone_sources/cinnabar",
+  "rock_item_tag": "#c:rocks/cinnabar",
+  "cobbled_block": "material_progression:cobbled_cinnabar",
+  "raw_block": "material_progression:cinnabar_block",
+  "loose_rock_surface_block_tag":
+    "#material_progression:loose_rock_surfaces/cinnabar",
+  "resistance": {
+    "tier": "standard",
+    "modifier": 1.0
+  }
+}
+```
 
-| Content | Shared tag |
-|---|---|
-| Tin ingot | `#c:ingots/tin` |
-| Bronze ingot | `#c:ingots/bronze` |
-| Tin dust | `#c:dusts/tin` |
-| Copper dust | `#c:dusts/copper` |
-| Bronze dust | `#c:dusts/bronze` |
-| Raw tin | `#c:raw_materials/tin` |
-| Tin ore blocks and items | `#c:ores/tin` |
-| Plant fiber | `#c:fibers/plant` and parent `#c:fibers` |
-| Knives | `#c:tools/knives` and parent `#c:tools` |
-| Hammers | `#c:tools/hammers` and parent `#c:tools` |
-| Saws | `#c:tools/saws` and parent `#c:tools` |
+The resistance tier is `soft`, `standard`, or `hard`. The matching modifiers
+are currently `0.75`, `1.0`, and `1.5`; runtime geology converts the profile to
+the family tier shift described in [Underground and Geology](GEOLOGY.md).
 
-Tool items also belong to the established vanilla category tags such as
-`#minecraft:pickaxes`, `#minecraft:axes`, `#minecraft:shovels`,
-`#minecraft:hoes`, and `#minecraft:swords`. NeoForge's broader tool tags build
-on those categories. Hammers join `#minecraft:pickaxes`, saws join
-`#minecraft:axes`, and knives join `#minecraft:swords` because they carry the
-corresponding real Tool component and field actions, not merely for recipe
-classification.
+The public behavior tags are:
 
-The private `material_progression:knives`, `hammers`, and `saws` tags are
-reloadable behavior boundaries. Each consumes its shared `c:tools/...`
-category, so datapacks may refine Material Progression behavior while other
-mods can publish compatible tools through the shared interface.
+- `#material_progression:stone_sources/<family>`
+- `#material_progression:loose_rock_surfaces/<family>`
+- `#material_progression:loose_rock_cover`
+- block and item `#c:cobblestones/<family>` plus their parents
+- `#c:rocks/<family>` plus `#c:rocks`
+
+Reload validation stages the complete catalog atomically. Duplicate source
+membership and duplicate direct-surface membership are rejected with a clear
+reload error.
+
+This interface is not yet fully extensible. The runtime catalog currently
+requires exactly the sixteen built-in IDs and rejects unknown family IDs because
+Loose Rock block state is bound to the built-in family enum. Allowing datapacks
+to define arbitrary third-party families using externally registered Rock and
+cobbled objects is a required pre-0.2.0 fix. Do not claim that the schema
+currently provides that promised extension.
+
+Compatible Rocks from other mods can already join `#c:rocks`. They participate
+in the custom four-Rock cobbling recipe and resolve to vanilla Cobblestone when
+they have no registered family mapping.
+
+## Manual Workshop recipe interface
+
+`material_progression:manual_workshop` is a public recipe type and serializer.
+Its data fields are:
+
+- `ingredient`
+- `tool`
+- `result`
+- `processing_time`
+- `tool_damage`
+
+Generic ingredients and tools use shared or behavior tags. Results remain
+concrete registry IDs. Recipe changes reload with datapacks; a running operation
+preserves progress only when the recipe ID and complete operation definition
+remain unchanged.
+
+Workshop operations unlock through Recipe Book rewards and use a dedicated
+recipe-book category. The Manual Workshop screen does not embed the vanilla
+crafting Recipe Book as a recipe-selection interface; the block continues to
+resolve operations from its installed tool and input.
 
 ## Consuming compatible content
 
@@ -94,7 +127,7 @@ Recipes and machines should consume tags:
 }
 ```
 
-Shaped recipe keys use the same rule:
+Shaped recipe keys follow the same rule:
 
 ```json
 {
@@ -105,48 +138,31 @@ Shaped recipe keys use the same rule:
 }
 ```
 
-Tool repair ingredients must use common ingot tags. Machine allowlists may
-remain private behavior tags, but their values should be shared material tags:
-
-```json
-{
-  "values": [
-    "#c:ores/copper",
-    "#c:ores/tin",
-    "#c:raw_materials/copper",
-    "#c:raw_materials/tin"
-  ]
-}
-```
-
-This makes `#material_progression:crusher_inputs` a behavior boundary without
-hard-coding which mod supplies copper or tin.
+Machine allowlists may remain private behavior tags, but their members should be
+shared material tags. For example, `#material_progression:crusher_inputs`
+contains compatible ore and raw-material tags rather than direct mod item IDs.
 
 ## Legitimate concrete IDs
 
-Tags describe equivalence, not outputs. Recipe result fields must name a
-concrete item. World-generation configured features and registrations also
-refer to concrete blocks. An input may use a concrete ID when the exact item is
-the mechanic rather than merely one representative of a material category.
-
-Do not create a private tag to disguise a single hard-coded material. Either
-use the shared category or document why exact identity is required.
+Tags describe equivalence, not outputs. Recipe results, registrations,
+configured world objects, and identity-specific stone mappings name concrete
+registry objects. Do not create a private one-member tag to disguise a
+hard-coded material.
 
 ## New-content checklist
 
 For every new material or material form:
 
-1. Find the established vanilla and NeoForge tags before inventing a name.
-2. Add the item to its `c:` subtype tag.
-3. Add the subtype to its parent tag.
-4. Add both block and item tags when the content exists in both registries.
-5. Use the shared tag in all recipe and machine inputs.
-6. Use the shared tag for repair ingredients and code membership checks.
-7. Add tools to established vanilla tool tags.
-8. Add literal expectations to the fast compatibility contracts.
-9. Add a GameTest when runtime tag behavior affects gameplay.
-10. Run `./gradlew headlessTest`.
+1. Find established vanilla and common tags before inventing a name.
+2. Add the item to its shared subtype and the subtype to its parent.
+3. Add block and item tags when both registries contain the form.
+4. Use shared tags in recipe, repair, machine, and code inputs.
+5. Add real tools to established vanilla tool tags.
+6. Add behavior-private tags only when Material Progression owns the rule.
+7. Add literal expectations to the fast compatibility contracts.
+8. Add a GameTest when runtime tag behavior changes gameplay.
+9. Run `./gradlew headlessTest`.
 
-The contract suite rejects direct Material Progression material IDs in recipe
-inputs and verifies the published common-tag catalog. Expand those contracts
-when a new material category is added.
+The contract suite rejects direct Material Progression material IDs in generic
+recipe inputs, verifies the common-tag catalog, checks the sixteen family
+definitions, and ensures GameTest code remains outside the production JAR.

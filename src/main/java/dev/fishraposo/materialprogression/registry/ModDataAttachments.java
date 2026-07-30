@@ -34,6 +34,13 @@ public final class ModDataAttachments {
                     "geology_feedback_tick",
                     () -> AttachmentType.builder(() -> -20L).build()
             );
+    public static final DeferredHolder<
+            AttachmentType<?>,
+            AttachmentType<Long>
+            > LOG_FEEDBACK_TICK = ATTACHMENTS.register(
+                    "log_feedback_tick",
+                    () -> AttachmentType.builder(() -> -20L).build()
+            );
 
     private ModDataAttachments() {
     }

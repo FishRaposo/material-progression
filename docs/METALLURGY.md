@@ -1,7 +1,9 @@
 # Metallurgy and Material Families
 
-> **Status: provisional.** No listed material, recipe, tier, or family is
-> guaranteed for a release. Bronze is implemented as a prototype, not canon.
+> **Status: implemented test cell.** Copper/Tin dust processing, provisional
+> Bronze alloying, Bronze equipment, Bronze Workshop tools, and Bronze access to
+> Dense geology ship in the opening branch. The expanded metallurgy roster
+> remains later work.
 
 ## Purpose
 
@@ -42,10 +44,10 @@ durable tools at the same harvest capability.
 
 This is also the first example of the wider tool philosophy. Materials do not
 need complete recolored equipment sets merely to occupy the graph. A tool
-belongs when it grants a useful interaction or trade-off: knives cut plants
-into fiber, saws may improve wood efficiency, and picks expand geological
-access. Metal knives and saws can later extend those cutting and efficiency
-roles without making every metal another full vanilla tool set.
+belongs when it grants a useful interaction or trade-off: Knives cut plants
+into Fiber, Saws improve Workshop wood efficiency, and Picks/Hammers expand
+geological access. Flint and Bronze currently demonstrate those roles without
+making every metal another full vanilla tool set.
 
 ## Mundane metals are allowed to be mundane
 
@@ -68,6 +70,7 @@ The prototype currently models:
 3. Combine copper and tin dust into bronze dust.
 4. Smelt the alloy dust into bronze ingots.
 5. Craft bronze equipment.
+6. Use Bronze Picks or Hammers to harvest Dense geology.
 
 This small loop tests:
 
@@ -76,6 +79,8 @@ This small loop tests:
 - Ore doubling
 - Dust-based alloying
 - A complete equipment family
+- More durable Knives, Hammers, and Saws without output inflation
+- A manufactured iron-level route into Dense geology
 - Tags, recipes, loot, localization, and assets
 
 Its current `3:1` recipe, yields, tool values, ore distribution, and even its
@@ -106,19 +111,20 @@ upgrades, alternative crushers, automation, and later processing stages are
 open questions. None are required merely because an inspiration mod included
 them.
 
-## Candidate progression relationship
+## Implemented progression relationship
 
-One current hypothesis is:
+The opening slice implements:
 
 - Primitive tools exploit exposed and soft geology.
 - Early mundane metals provide options but limited excavation power.
-- Bronze is an accessible manufactured route toward serious mining.
+- Bronze is an accessible manufactured iron-level route into Dense geology.
 - Iron supports sustained excavation and helps make strip mining economical.
 - Later alloys and specialist materials diversify rather than merely replacing
   iron.
 
-This relationship needs playtesting. In particular, bronze must have a real job
-created by geology; "iron stats but brown" is not enough by itself.
+This relationship still needs survival playtesting. Bronze now has a concrete
+job created by geology; the remaining question is whether its access,
+durability, and timing make that job satisfying.
 
 ## Materials beyond tool sets
 
@@ -146,6 +152,11 @@ preserved by inertia.
 The same test applies to every infrastructure block: material flexibility
 should make physical and progression sense. The goal is not to manufacture
 dozens of recolored machines solely to consume every ingot.
+
+Ore samples, deposits, prospecting, additional base metals and alloys, precious
+and magical families, expanded processing stages, storage, hoppers, and
+bulk-crafting components are later work. Their presence in this design does not
+make them part of the opening release.
 
 ## Evaluation questions for every material
 

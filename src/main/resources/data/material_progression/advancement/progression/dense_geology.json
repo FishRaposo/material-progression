@@ -1,0 +1,24 @@
+{
+  "parent": "material_progression:progression/manual_workshop",
+  "criteria": {
+    "dense_geology": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.material_progression.dense_geology.description"
+    },
+    "icon": {
+      "id": "material_progression:cinnabar_rock"
+    },
+    "title": {
+      "translate": "advancement.material_progression.dense_geology.title"
+    }
+  },
+  "requirements": [
+    [
+      "dense_geology"
+    ]
+  ]
+}

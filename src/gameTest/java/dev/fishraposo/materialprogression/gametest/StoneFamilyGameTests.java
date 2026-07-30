@@ -42,6 +42,12 @@ public final class StoneFamilyGameTests {
     @EmptyTemplate
     @TestHolder(description = "Direct stone-family supports resolve without fallback")
     static void directFamilySupport(ExtendedGameTestHelper helper) {
+        var catalog = StoneFamilyCatalog.get();
+        for (StoneFamily family : StoneFamily.values()) {
+            var entry = catalog.byFamily(family).orElseThrow();
+            helper.setBlock(ROOT, entry.rawBlock());
+            assertResolvedSupport(helper, ROOT, family);
+        }
         helper.setBlock(ROOT, Blocks.GRANITE);
         assertResolvedSupport(helper, ROOT, StoneFamily.GRANITE);
         helper.setBlock(ROOT, Blocks.SAND);
@@ -49,7 +55,6 @@ public final class StoneFamilyGameTests {
         helper.setBlock(ROOT, Blocks.RED_SAND);
         assertResolvedSupport(helper, ROOT, StoneFamily.RED_SANDSTONE);
 
-        var catalog = StoneFamilyCatalog.get();
         var granite = catalog.byFamily(StoneFamily.GRANITE).orElseThrow();
         helper.assertValueEqual(
                 granite,
