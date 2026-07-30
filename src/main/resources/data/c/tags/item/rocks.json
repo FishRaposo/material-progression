@@ -1,5 +1,20 @@
 {
   "values": [
-    "material_progression:rock"
+    "#c:rocks/stone",
+    "#c:rocks/granite",
+    "#c:rocks/diorite",
+    "#c:rocks/andesite",
+    "#c:rocks/deepslate",
+    "#c:rocks/tuff",
+    "#c:rocks/calcite",
+    "#c:rocks/dripstone",
+    "#c:rocks/sulfur",
+    "#c:rocks/cinnabar",
+    "#c:rocks/sandstone",
+    "#c:rocks/red_sandstone",
+    "#c:rocks/netherrack",
+    "#c:rocks/basalt",
+    "#c:rocks/blackstone",
+    "#c:rocks/end_stone"
   ]
 }

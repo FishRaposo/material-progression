@@ -55,6 +55,21 @@ public final class ModItems {
     public static final DeferredItem<Item> BRONZE_DUST = ITEMS.registerSimpleItem("bronze_dust");
     public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
     public static final DeferredItem<Item> ROCK = ITEMS.registerSimpleItem("rock");
+    public static final DeferredItem<Item> GRANITE_ROCK = ITEMS.registerSimpleItem("granite_rock");
+    public static final DeferredItem<Item> DIORITE_ROCK = ITEMS.registerSimpleItem("diorite_rock");
+    public static final DeferredItem<Item> ANDESITE_ROCK = ITEMS.registerSimpleItem("andesite_rock");
+    public static final DeferredItem<Item> DEEPSLATE_ROCK = ITEMS.registerSimpleItem("deepslate_rock");
+    public static final DeferredItem<Item> TUFF_ROCK = ITEMS.registerSimpleItem("tuff_rock");
+    public static final DeferredItem<Item> CALCITE_ROCK = ITEMS.registerSimpleItem("calcite_rock");
+    public static final DeferredItem<Item> DRIPSTONE_ROCK = ITEMS.registerSimpleItem("dripstone_rock");
+    public static final DeferredItem<Item> SULFUR_ROCK = ITEMS.registerSimpleItem("sulfur_rock");
+    public static final DeferredItem<Item> CINNABAR_ROCK = ITEMS.registerSimpleItem("cinnabar_rock");
+    public static final DeferredItem<Item> SANDSTONE_ROCK = ITEMS.registerSimpleItem("sandstone_rock");
+    public static final DeferredItem<Item> RED_SANDSTONE_ROCK = ITEMS.registerSimpleItem("red_sandstone_rock");
+    public static final DeferredItem<Item> NETHERRACK_ROCK = ITEMS.registerSimpleItem("netherrack_rock");
+    public static final DeferredItem<Item> BASALT_ROCK = ITEMS.registerSimpleItem("basalt_rock");
+    public static final DeferredItem<Item> BLACKSTONE_ROCK = ITEMS.registerSimpleItem("blackstone_rock");
+    public static final DeferredItem<Item> END_STONE_ROCK = ITEMS.registerSimpleItem("end_stone_rock");
     public static final DeferredItem<Item> FLINT_SHARD = ITEMS.registerSimpleItem("flint_shard");
 
     public static final DeferredItem<AxeItem> FLINT_HATCHET = ITEMS.registerItem(
@@ -97,10 +112,28 @@ public final class ModItems {
     public static final DeferredItem<?> TIN_ORE = ITEMS.registerSimpleBlockItem("tin_ore", ModBlocks.TIN_ORE);
     public static final DeferredItem<?> DEEPSLATE_TIN_ORE =
             ITEMS.registerSimpleBlockItem("deepslate_tin_ore", ModBlocks.DEEPSLATE_TIN_ORE);
+    public static final DeferredItem<?> COBBLED_GRANITE = blockItem("cobbled_granite", ModBlocks.COBBLED_GRANITE);
+    public static final DeferredItem<?> COBBLED_DIORITE = blockItem("cobbled_diorite", ModBlocks.COBBLED_DIORITE);
+    public static final DeferredItem<?> COBBLED_ANDESITE = blockItem("cobbled_andesite", ModBlocks.COBBLED_ANDESITE);
+    public static final DeferredItem<?> COBBLED_TUFF = blockItem("cobbled_tuff", ModBlocks.COBBLED_TUFF);
+    public static final DeferredItem<?> COBBLED_CALCITE = blockItem("cobbled_calcite", ModBlocks.COBBLED_CALCITE);
+    public static final DeferredItem<?> COBBLED_DRIPSTONE = blockItem("cobbled_dripstone", ModBlocks.COBBLED_DRIPSTONE);
+    public static final DeferredItem<?> COBBLED_SULFUR = blockItem("cobbled_sulfur", ModBlocks.COBBLED_SULFUR);
+    public static final DeferredItem<?> COBBLED_CINNABAR = blockItem("cobbled_cinnabar", ModBlocks.COBBLED_CINNABAR);
+    public static final DeferredItem<?> COBBLED_SANDSTONE = blockItem("cobbled_sandstone", ModBlocks.COBBLED_SANDSTONE);
+    public static final DeferredItem<?> COBBLED_RED_SANDSTONE = blockItem("cobbled_red_sandstone", ModBlocks.COBBLED_RED_SANDSTONE);
+    public static final DeferredItem<?> COBBLED_NETHERRACK = blockItem("cobbled_netherrack", ModBlocks.COBBLED_NETHERRACK);
+    public static final DeferredItem<?> COBBLED_BASALT = blockItem("cobbled_basalt", ModBlocks.COBBLED_BASALT);
+    public static final DeferredItem<?> COBBLED_BLACKSTONE = blockItem("cobbled_blackstone", ModBlocks.COBBLED_BLACKSTONE);
+    public static final DeferredItem<?> COBBLED_END_STONE = blockItem("cobbled_end_stone", ModBlocks.COBBLED_END_STONE);
 
     private static final List<DeferredItem<? extends Item>> MATERIAL_ITEMS = List.of(
             RAW_TIN, TIN_INGOT, TIN_DUST, COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,
-            ROCK, FLINT_SHARD, FLINT_HATCHET,
+            ROCK, GRANITE_ROCK, DIORITE_ROCK, ANDESITE_ROCK, DEEPSLATE_ROCK,
+            TUFF_ROCK, CALCITE_ROCK, DRIPSTONE_ROCK, SULFUR_ROCK,
+            CINNABAR_ROCK, SANDSTONE_ROCK, RED_SANDSTONE_ROCK,
+            NETHERRACK_ROCK, BASALT_ROCK, BLACKSTONE_ROCK, END_STONE_ROCK,
+            FLINT_SHARD, FLINT_HATCHET,
             TIN_SWORD, TIN_PICKAXE, TIN_AXE, TIN_SHOVEL, TIN_HOE,
             BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE
     );
@@ -113,11 +146,31 @@ public final class ModItems {
                         output.accept(CRUSHER.get());
                         output.accept(TIN_ORE.get());
                         output.accept(DEEPSLATE_TIN_ORE.get());
+                        output.accept(COBBLED_GRANITE.get());
+                        output.accept(COBBLED_DIORITE.get());
+                        output.accept(COBBLED_ANDESITE.get());
+                        output.accept(COBBLED_TUFF.get());
+                        output.accept(COBBLED_CALCITE.get());
+                        output.accept(COBBLED_DRIPSTONE.get());
+                        output.accept(COBBLED_SULFUR.get());
+                        output.accept(COBBLED_CINNABAR.get());
+                        output.accept(COBBLED_SANDSTONE.get());
+                        output.accept(COBBLED_RED_SANDSTONE.get());
+                        output.accept(COBBLED_NETHERRACK.get());
+                        output.accept(COBBLED_BASALT.get());
+                        output.accept(COBBLED_BLACKSTONE.get());
+                        output.accept(COBBLED_END_STONE.get());
                         MATERIAL_ITEMS.forEach(item -> output.accept(item.get()));
                     })
                     .build());
 
     private ModItems() {
+    }
+
+    private static DeferredItem<?> blockItem(
+            String name, net.neoforged.neoforge.registries.DeferredBlock<?> block
+    ) {
+        return ITEMS.registerSimpleBlockItem(name, block);
     }
 
     public static void register(IEventBus modBus) {

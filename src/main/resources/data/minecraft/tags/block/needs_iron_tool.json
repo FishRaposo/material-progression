@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "material_progression:cobbled_basalt",
+    "material_progression:cobbled_blackstone"
+  ]
+}

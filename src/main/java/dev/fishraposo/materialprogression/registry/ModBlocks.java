@@ -42,6 +42,21 @@ public final class ModBlocks {
                     .strength(4.5F, 3.0F)
     );
 
+    public static final DeferredBlock<Block> COBBLED_GRANITE = cobbled("cobbled_granite", MapColor.STONE, 2.0F);
+    public static final DeferredBlock<Block> COBBLED_DIORITE = cobbled("cobbled_diorite", MapColor.STONE, 2.0F);
+    public static final DeferredBlock<Block> COBBLED_ANDESITE = cobbled("cobbled_andesite", MapColor.STONE, 2.0F);
+    public static final DeferredBlock<Block> COBBLED_TUFF = cobbled("cobbled_tuff", MapColor.STONE, 2.0F);
+    public static final DeferredBlock<Block> COBBLED_CALCITE = cobbled("cobbled_calcite", MapColor.STONE, 1.5F);
+    public static final DeferredBlock<Block> COBBLED_DRIPSTONE = cobbled("cobbled_dripstone", MapColor.STONE, 1.5F);
+    public static final DeferredBlock<Block> COBBLED_SULFUR = cobbled("cobbled_sulfur", MapColor.STONE, 1.5F);
+    public static final DeferredBlock<Block> COBBLED_CINNABAR = cobbled("cobbled_cinnabar", MapColor.STONE, 2.0F);
+    public static final DeferredBlock<Block> COBBLED_SANDSTONE = cobbled("cobbled_sandstone", MapColor.STONE, 1.5F);
+    public static final DeferredBlock<Block> COBBLED_RED_SANDSTONE = cobbled("cobbled_red_sandstone", MapColor.STONE, 1.5F);
+    public static final DeferredBlock<Block> COBBLED_NETHERRACK = cobbled("cobbled_netherrack", MapColor.STONE, 1.5F);
+    public static final DeferredBlock<Block> COBBLED_BASALT = cobbled("cobbled_basalt", MapColor.STONE, 3.0F);
+    public static final DeferredBlock<Block> COBBLED_BLACKSTONE = cobbled("cobbled_blackstone", MapColor.STONE, 3.0F);
+    public static final DeferredBlock<Block> COBBLED_END_STONE = cobbled("cobbled_end_stone", MapColor.STONE, 2.0F);
+
     public static final DeferredBlock<GroundResourceBlock> LOOSE_ROCKS =
             BLOCKS.registerBlock(
                     "loose_rocks",
@@ -71,6 +86,18 @@ public final class ModBlocks {
             );
 
     private ModBlocks() {
+    }
+
+    private static DeferredBlock<Block> cobbled(
+            String name, MapColor mapColor, float strength
+    ) {
+        return BLOCKS.registerSimpleBlock(
+                name,
+                properties -> properties
+                        .mapColor(mapColor)
+                        .requiresCorrectToolForDrops()
+                        .strength(strength)
+        );
     }
 
     public static void register(IEventBus modBus) {

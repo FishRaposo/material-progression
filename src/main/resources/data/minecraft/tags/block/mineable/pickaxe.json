@@ -3,6 +3,20 @@
   "values": [
     "material_progression:crusher",
     "material_progression:tin_ore",
-    "material_progression:deepslate_tin_ore"
+    "material_progression:deepslate_tin_ore",
+    "material_progression:cobbled_granite",
+    "material_progression:cobbled_diorite",
+    "material_progression:cobbled_andesite",
+    "material_progression:cobbled_tuff",
+    "material_progression:cobbled_calcite",
+    "material_progression:cobbled_dripstone",
+    "material_progression:cobbled_sulfur",
+    "material_progression:cobbled_cinnabar",
+    "material_progression:cobbled_sandstone",
+    "material_progression:cobbled_red_sandstone",
+    "material_progression:cobbled_netherrack",
+    "material_progression:cobbled_basalt",
+    "material_progression:cobbled_blackstone",
+    "material_progression:cobbled_end_stone"
   ]
 }

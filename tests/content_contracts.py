@@ -1,6 +1,90 @@
 from support.resources import RecipeContract
 
 
+STONE_FAMILIES = {
+    "stone": {
+        "raw_block": "minecraft:stone",
+        "cobbled_block": "minecraft:cobblestone",
+        "resistance": "standard",
+    },
+    "granite": {
+        "raw_block": "minecraft:granite",
+        "cobbled_block": "material_progression:cobbled_granite",
+        "resistance": "standard",
+    },
+    "diorite": {
+        "raw_block": "minecraft:diorite",
+        "cobbled_block": "material_progression:cobbled_diorite",
+        "resistance": "standard",
+    },
+    "andesite": {
+        "raw_block": "minecraft:andesite",
+        "cobbled_block": "material_progression:cobbled_andesite",
+        "resistance": "standard",
+    },
+    "deepslate": {
+        "raw_block": "minecraft:deepslate",
+        "cobbled_block": "minecraft:cobbled_deepslate",
+        "resistance": "hard",
+    },
+    "tuff": {
+        "raw_block": "minecraft:tuff",
+        "cobbled_block": "material_progression:cobbled_tuff",
+        "resistance": "standard",
+    },
+    "calcite": {
+        "raw_block": "minecraft:calcite",
+        "cobbled_block": "material_progression:cobbled_calcite",
+        "resistance": "soft",
+    },
+    "dripstone": {
+        "raw_block": "minecraft:dripstone_block",
+        "cobbled_block": "material_progression:cobbled_dripstone",
+        "resistance": "soft",
+    },
+    "sulfur": {
+        "raw_block": "minecraft:sulfur",
+        "cobbled_block": "material_progression:cobbled_sulfur",
+        "resistance": "soft",
+    },
+    "cinnabar": {
+        "raw_block": "minecraft:cinnabar",
+        "cobbled_block": "material_progression:cobbled_cinnabar",
+        "resistance": "standard",
+    },
+    "sandstone": {
+        "raw_block": "minecraft:sandstone",
+        "cobbled_block": "material_progression:cobbled_sandstone",
+        "resistance": "soft",
+    },
+    "red_sandstone": {
+        "raw_block": "minecraft:red_sandstone",
+        "cobbled_block": "material_progression:cobbled_red_sandstone",
+        "resistance": "soft",
+    },
+    "netherrack": {
+        "raw_block": "minecraft:netherrack",
+        "cobbled_block": "material_progression:cobbled_netherrack",
+        "resistance": "soft",
+    },
+    "basalt": {
+        "raw_block": "minecraft:basalt",
+        "cobbled_block": "material_progression:cobbled_basalt",
+        "resistance": "hard",
+    },
+    "blackstone": {
+        "raw_block": "minecraft:blackstone",
+        "cobbled_block": "material_progression:cobbled_blackstone",
+        "resistance": "hard",
+    },
+    "end_stone": {
+        "raw_block": "minecraft:end_stone",
+        "cobbled_block": "material_progression:cobbled_end_stone",
+        "resistance": "standard",
+    },
+}
+
+
 SHIPPED_ITEMS = {
     "bronze_axe",
     "bronze_dust",
@@ -24,6 +108,10 @@ SHIPPED_ITEMS = {
     "tin_pickaxe",
     "tin_shovel",
     "tin_sword",
+} | {f"{family}_rock" for family in STONE_FAMILIES if family != "stone"} | {
+    f"cobbled_{family}"
+    for family, contract in STONE_FAMILIES.items()
+    if contract["cobbled_block"].startswith("material_progression:")
 }
 
 SHIPPED_BLOCKS = {
@@ -32,6 +120,10 @@ SHIPPED_BLOCKS = {
     "ground_stick",
     "loose_rocks",
     "tin_ore",
+} | {
+    f"cobbled_{family}"
+    for family, contract in STONE_FAMILIES.items()
+    if contract["cobbled_block"].startswith("material_progression:")
 }
 
 WORLD_ONLY_BLOCKS = {"ground_stick", "loose_rocks"}
@@ -117,6 +209,13 @@ SMELTING_RECIPES = {
         "#c:dusts/tin",
         "material_progression:tin_ingot",
     ),
+} | {
+    f"smelting_cobbled_{family}": RecipeContract(
+        "minecraft:smelting",
+        f"#c:cobblestones/{family}",
+        contract["raw_block"],
+    )
+    for family, contract in STONE_FAMILIES.items()
 }
 
 TOOL_FAMILIES = {

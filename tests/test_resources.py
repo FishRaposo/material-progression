@@ -8,6 +8,7 @@ from content_contracts import (
     SHIPPED_BLOCKS,
     SHIPPED_ITEMS,
     SMELTING_RECIPES,
+    STONE_FAMILIES,
     SURFACE_WORLDGEN_FEATURES,
     TOOL_FAMILIES,
     WORLD_ONLY_BLOCKS,
@@ -34,7 +35,7 @@ COMMON_ITEM_TAGS = {
         "material_progression:deepslate_tin_ore",
     ],
     "raw_materials/tin": ["material_progression:raw_tin"],
-    "rocks": ["material_progression:rock"],
+    "rocks": [f"#c:rocks/{family}" for family in STONE_FAMILIES],
 }
 
 COMMON_BLOCK_TAGS = {
@@ -288,6 +289,145 @@ class ResourceContractTests(unittest.TestCase):
             DATA / "tags" / "item", "*.json"
         )
         self.assertEqual({"crusher_inputs"}, private_item_tags)
+
+    def test_stone_family_static_resources_preserve_material_identity(self):
+        expected_resistance = {
+            "soft": {
+                "calcite", "dripstone", "sulfur", "sandstone",
+                "red_sandstone", "netherrack",
+            },
+            "standard": {
+                "stone", "granite", "diorite", "andesite", "tuff",
+                "cinnabar", "end_stone",
+            },
+            "hard": {"deepslate", "basalt", "blackstone"},
+        }
+        self.assertEqual(
+            expected_resistance,
+            {
+                resistance: {
+                    family
+                    for family, contract in STONE_FAMILIES.items()
+                    if contract["resistance"] == resistance
+                }
+                for resistance in expected_resistance
+            },
+        )
+
+        common_blocks = COMMON_DATA / "tags" / "block"
+        common_items = COMMON_DATA / "tags" / "item"
+        for family, contract in STONE_FAMILIES.items():
+            with self.subTest(family=family):
+                rock = "material_progression:rock" if family == "stone" else (
+                    f"material_progression:{family}_rock"
+                )
+                cobbled = contract["cobbled_block"]
+                raw = contract["raw_block"]
+                self.assertEqual(
+                    [rock],
+                    TREE.load_json(
+                        common_items / "rocks" / f"{family}.json"
+                    )["values"],
+                )
+                self.assertEqual(
+                    [cobbled],
+                    TREE.load_json(
+                        common_blocks / "cobblestones" / f"{family}.json"
+                    )["values"],
+                )
+                self.assertEqual(
+                    [cobbled],
+                    TREE.load_json(
+                        common_items / "cobblestones" / f"{family}.json"
+                    )["values"],
+                )
+                self.assertEqual(
+                    [raw],
+                    TREE.load_json(
+                        DATA / "tags" / "block" / "stone_sources"
+                        / f"{family}.json"
+                    )["values"],
+                )
+                self.assertEqual(
+                    {"type": "minecraft:smelting", "ingredient": f"#c:cobblestones/{family}", "result": {"id": raw}},
+                    TREE.recipe(f"smelting_cobbled_{family}"),
+                )
+
+        self.assertEqual(
+            {f"#c:rocks/{family}" for family in STONE_FAMILIES},
+            set(TREE.load_json(common_items / "rocks.json")["values"]),
+        )
+        for registry in (common_blocks, common_items):
+            with self.subTest(registry=registry):
+                self.assertEqual(
+                    {f"#c:cobblestones/{family}" for family in STONE_FAMILIES},
+                    set(TREE.load_json(registry / "cobblestones.json")["values"]),
+                )
+
+        self.assertEqual(
+            {
+                "minecraft:dirt", "minecraft:coarse_dirt", "minecraft:rooted_dirt",
+                "minecraft:grass_block", "minecraft:podzol", "minecraft:mycelium",
+                "minecraft:gravel", "minecraft:snow", "minecraft:snow_block",
+                "minecraft:sand", "minecraft:red_sand", "minecraft:soul_sand",
+                "minecraft:soul_soil",
+            },
+            set(TREE.load_json(
+                DATA / "tags" / "block" / "loose_rock_cover.json"
+            )["values"]),
+        )
+        self.assertEqual(
+            {
+                *(contract["raw_block"] for contract in STONE_FAMILIES.values()),
+                "minecraft:sand",
+                "minecraft:red_sand",
+            },
+            set(TREE.load_json(
+                DATA / "tags" / "block" / "loose_rock_surface.json"
+            )["values"]),
+        )
+
+        mod_cobbled = {
+            contract["cobbled_block"]
+            for contract in STONE_FAMILIES.values()
+            if contract["cobbled_block"].startswith("material_progression:")
+        }
+        self.assertTrue(mod_cobbled.issubset(set(TREE.load_json(
+            RESOURCES / "data" / "minecraft" / "tags" / "block"
+            / "mineable" / "pickaxe.json"
+        )["values"])))
+        for tier, resistance in {
+            "needs_stone_tool": "standard",
+            "needs_iron_tool": "hard",
+        }.items():
+            self.assertEqual(
+                {
+                    contract["cobbled_block"]
+                    for contract in STONE_FAMILIES.values()
+                    if contract["resistance"] == resistance
+                    and contract["cobbled_block"].startswith(
+                        "material_progression:"
+                    )
+                },
+                {
+                    value
+                    for value in TREE.load_json(
+                    RESOURCES / "data" / "minecraft" / "tags" / "block"
+                    / f"{tier}.json"
+                    )["values"]
+                    if value in mod_cobbled
+                },
+            )
+        for family, contract in STONE_FAMILIES.items():
+            cobbled = contract["cobbled_block"]
+            if not cobbled.startswith("material_progression:"):
+                continue
+            with self.subTest(self_drop=cobbled):
+                loot = TREE.load_json(
+                    DATA / "loot_table" / "blocks"
+                    / f"{cobbled.removeprefix('material_progression:')}.json"
+                )
+                self.assertEqual(cobbled, loot["pools"][0]["entries"][0]["name"])
 
     def test_tin_worldgen_resources_form_a_complete_chain(self):
         configured = TREE.load_json(
