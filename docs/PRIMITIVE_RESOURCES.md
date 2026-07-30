@@ -81,6 +81,15 @@ Loose rocks drop one Rock; ground sticks drop one vanilla stick. A reasonable
 spawn must offer a clear finite route to one Rock and two sticks without asking
 the player to break leaves repeatedly and wait for random drops.
 
+Family-aware loose rocks revalidate when normal gameplay changes the raw stone
+beneath up to eight tagged cover blocks. Direct support changes still use
+vanilla shape updates; covered sources use targeted NeoForge events for player
+breaking and placement, fluid-created blocks, tool transformations, explosions,
+living-entity destruction, and piston movement. Commands, structure loading,
+and other mod code that writes blocks directly without one of those gameplay
+events are outside this reactive boundary. This explicit boundary avoids
+perpetual block polling while covering ordinary survival-world changes.
+
 Loose rocks generate broadly on valid solid overworld ground. Ground sticks
 retain a sparse broad distribution so the bootstrap is not biome-gated, with
 patch placement and later biome-density tuning concentrating them beneath trees

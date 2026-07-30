@@ -10,12 +10,16 @@ import dev.fishraposo.materialprogression.stone.StoneResistance;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.resources.Identifier;
@@ -169,8 +173,10 @@ public final class StoneFamilyGameTests {
 
     @GameTest(timeoutTicks = 60)
     @EmptyTemplate
-    @TestHolder(description = "Covered loose rocks revalidate when their deeper source changes")
-    static void coveredSourceChangeBreaksLooseRocks(ExtendedGameTestHelper helper) {
+    @TestHolder(description = "Player-breaking a covered source invalidates loose rocks")
+    static void playerBreakInvalidatesCoveredLooseRocks(
+            ExtendedGameTestHelper helper
+    ) {
         helper.setBlock(ROOT, Blocks.GRANITE);
         helper.setBlock(ROOT.above(), Blocks.DIRT);
         helper.setBlock(
@@ -180,10 +186,110 @@ public final class StoneFamilyGameTests {
                         .setValue(LooseRocksBlock.FAMILY, StoneFamily.GRANITE)
         );
 
-        helper.runAfterDelay(2, () -> helper.setBlock(ROOT, Blocks.STONE));
+        var player = helper.makeTickingMockServerPlayerInLevel(
+                GameType.CREATIVE
+        );
+        helper.assertTrue(
+                player.gameMode.destroyBlock(helper.absolutePos(ROOT)),
+                "server player failed to break the covered source"
+        );
         helper.succeedWhen(() ->
                 helper.assertBlockPresent(Blocks.AIR, ROOT.above(2))
         );
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Valid loose rocks do not schedule polling ticks")
+    static void validLooseRocksDoNotPoll(ExtendedGameTestHelper helper) {
+        helper.setBlock(ROOT, Blocks.GRANITE);
+        helper.setBlock(
+                ROOT.above(),
+                ModBlocks.LOOSE_ROCKS.get()
+                        .defaultBlockState()
+                        .setValue(LooseRocksBlock.FAMILY, StoneFamily.GRANITE)
+        );
+
+        helper.assertFalse(
+                helper.getLevel().getBlockTicks().hasScheduledTick(
+                        helper.absolutePos(ROOT.above()),
+                        ModBlocks.LOOSE_ROCKS.get()
+                ),
+                "valid loose rocks scheduled a recurring validation tick"
+        );
+        helper.succeed();
+    }
+
+    @GameTest(timeoutTicks = 60)
+    @EmptyTemplate
+    @TestHolder(description = "Player placement invalidates a changed covered family")
+    static void playerPlaceInvalidatesCoveredLooseRocks(
+            ExtendedGameTestHelper helper
+    ) {
+        helper.setBlock(ROOT, Blocks.STONE);
+        helper.setBlock(ROOT.above(2), Blocks.DIRT);
+        helper.setBlock(
+                ROOT.above(3),
+                ModBlocks.LOOSE_ROCKS.get()
+                        .defaultBlockState()
+                        .setValue(LooseRocksBlock.FAMILY, StoneFamily.STONE)
+        );
+
+        var player = helper.makeTickingMockServerPlayerInLevel(
+                GameType.CREATIVE
+        );
+        ItemStack granite = new ItemStack(Blocks.GRANITE);
+        player.setItemInHand(InteractionHand.MAIN_HAND, granite);
+        helper.placeAt(player, granite, ROOT, Direction.UP);
+        helper.assertBlockPresent(Blocks.GRANITE, ROOT.above());
+        helper.succeedWhen(() ->
+                helper.assertBlockPresent(Blocks.AIR, ROOT.above(3))
+        );
+    }
+
+    @GameTest(timeoutTicks = 80)
+    @EmptyTemplate
+    @TestHolder(description = "Piston movement invalidates loose rocks above the moved source")
+    static void pistonMoveInvalidatesCoveredLooseRocks(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos piston = ROOT.west();
+        BlockPos source = ROOT;
+        helper.setBlock(
+                piston,
+                Blocks.PISTON.defaultBlockState()
+                        .setValue(
+                                PistonBaseBlock.FACING,
+                                helper.getAbsoluteDirection(Direction.EAST)
+                        )
+        );
+        helper.setBlock(source, Blocks.GRANITE);
+        helper.setBlock(source.above(), Blocks.DIRT);
+        helper.setBlock(
+                source.above(2),
+                ModBlocks.LOOSE_ROCKS.get()
+                        .defaultBlockState()
+                        .setValue(LooseRocksBlock.FAMILY, StoneFamily.GRANITE)
+        );
+
+        helper.runAfterDelay(
+                1,
+                () -> {
+                    helper.setBlock(piston.above(), Blocks.REDSTONE_BLOCK);
+                    helper.getLevel().neighborChanged(
+                            helper.absolutePos(piston),
+                            Blocks.REDSTONE_BLOCK,
+                            null
+                    );
+                }
+        );
+        helper.succeedWhen(() -> {
+            helper.assertFalse(
+                    helper.getBlockState(source).is(Blocks.GRANITE),
+                    "piston did not move the source"
+            );
+            helper.assertBlockPresent(Blocks.AIR, source.above(2));
+        });
     }
 
     @GameTest
@@ -201,6 +307,13 @@ public final class StoneFamilyGameTests {
                 ROOT.above(),
                 LooseRocksBlock.FAMILY,
                 StoneFamily.GRANITE
+        );
+        helper.assertFalse(
+                helper.getLevel().getBlockTicks().hasScheduledTick(
+                        helper.absolutePos(ROOT.above()),
+                        ModBlocks.LOOSE_ROCKS.get()
+                ),
+                "world generation seeded a loose-rock validation tick"
         );
         helper.succeed();
     }

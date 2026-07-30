@@ -41,20 +41,12 @@ public final class LooseRocksFeature extends Feature<NoneFeatureConfiguration> {
             BlockPos position,
             StoneFamily family
     ) {
-        boolean placed = context.level().setBlock(
+        return context.level().setBlock(
                 position,
                 ModBlocks.LOOSE_ROCKS.get()
                         .defaultBlockState()
                         .setValue(LooseRocksBlock.FAMILY, family),
                 2
         );
-        if (placed) {
-            context.level().scheduleTick(
-                    position,
-                    ModBlocks.LOOSE_ROCKS.get(),
-                    LooseRocksBlock.REVALIDATION_INTERVAL_TICKS
-            );
-        }
-        return placed;
     }
 }

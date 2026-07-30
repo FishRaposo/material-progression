@@ -9,6 +9,7 @@ import dev.fishraposo.materialprogression.registry.ModFeatures;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.stone.StoneFamilyReloadListener;
+import dev.fishraposo.materialprogression.world.level.block.LooseRockInvalidationEvents;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
@@ -30,6 +31,7 @@ public final class MaterialProgression {
                 MaterialProgressionConfig.SPEC
         );
         HarvestRuleEvents.register();
+        LooseRockInvalidationEvents.register();
         StoneFamilyReloadListener.register();
     }
 }
