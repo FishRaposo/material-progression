@@ -82,7 +82,7 @@ public final class GeologyTierResolver {
             }
             return 3;
         }
-        if (dimension == Level.END && family == StoneFamily.END_STONE) {
+        if (dimension == Level.END) {
             return 2;
         }
         return 0;

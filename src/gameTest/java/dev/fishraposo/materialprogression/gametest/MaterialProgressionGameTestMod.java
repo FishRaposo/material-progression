@@ -1,5 +1,6 @@
 package dev.fishraposo.materialprogression.gametest;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
@@ -8,6 +9,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -21,6 +23,8 @@ public final class MaterialProgressionGameTestMod {
             DeferredRegister.createItems(MOD_ID);
     static final DeferredItem<Item> UNKNOWN_ROCK =
             ITEMS.registerSimpleItem("unknown_rock");
+    private static BlockPos canceledPlacement;
+    private static BlockPos canceledLivingDestruction;
 
     public MaterialProgressionGameTestMod(IEventBus modBus, ModContainer container) {
         ITEMS.register(modBus);
@@ -32,12 +36,51 @@ public final class MaterialProgressionGameTestMod {
                 EventPriority.HIGHEST,
                 MaterialProgressionGameTestMod::configureFluidFixture
         );
+        NeoForge.EVENT_BUS.addListener(
+                EventPriority.LOWEST,
+                MaterialProgressionGameTestMod::cancelTargetedPlacement
+        );
+        NeoForge.EVENT_BUS.addListener(
+                EventPriority.LOWEST,
+                MaterialProgressionGameTestMod::cancelTargetedLivingDestruction
+        );
         FrameworkConfiguration.builder(
                         Identifier.fromNamespaceAndPath(MOD_ID, "tests")
                 )
                 .build()
                 .create()
                 .init(modBus, container);
+    }
+
+    static void cancelNextPlacementAt(BlockPos pos) {
+        canceledPlacement = pos.immutable();
+    }
+
+    static void cancelNextLivingDestructionAt(BlockPos pos) {
+        canceledLivingDestruction = pos.immutable();
+    }
+
+    static void clearCancellations() {
+        canceledPlacement = null;
+        canceledLivingDestruction = null;
+    }
+
+    private static void cancelTargetedPlacement(
+            BlockEvent.EntityPlaceEvent event
+    ) {
+        if (event.getPos().equals(canceledPlacement)) {
+            canceledPlacement = null;
+            event.setCanceled(true);
+        }
+    }
+
+    private static void cancelTargetedLivingDestruction(
+            LivingDestroyBlockEvent event
+    ) {
+        if (event.getPos().equals(canceledLivingDestruction)) {
+            canceledLivingDestruction = null;
+            event.setCanceled(true);
+        }
     }
 
     private static void configureFluidFixture(

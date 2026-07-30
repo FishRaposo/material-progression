@@ -63,10 +63,11 @@ public final class GeologyTierGameTests {
 
     @GameTest
     @EmptyTemplate
-    @TestHolder(description = "End Stone and unknown dimensions use their explicit fallbacks")
+    @TestHolder(description = "All End raw families start at level two before exposure")
     static void endAndOtherDimensionFallbacks(ExtendedGameTestHelper helper) {
         assertNaturalTier(helper, Level.END, StoneFamily.END_STONE, 64, false, 2);
-        assertNaturalTier(helper, Level.END, StoneFamily.STONE, 64, false, 0);
+        assertNaturalTier(helper, Level.END, StoneFamily.STONE, 64, false, 2);
+        assertNaturalTier(helper, Level.END, StoneFamily.STONE, 64, true, 1);
         assertNaturalTier(helper, OTHER_DIMENSION, StoneFamily.END_STONE, -64, false, 0);
         helper.succeed();
     }
@@ -150,20 +151,22 @@ public final class GeologyTierGameTests {
 
         BlockPos placed = SUPPORT.above();
         BlockPos absolute = helper.absolutePos(placed);
-        helper.assertTrue(
-                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
-                "player placement did not create a raw-stone marker"
-        );
-        helper.assertValueEqual(
-                0,
-                GeologyTierResolver.resolve(
-                        helper.getLevel(),
-                        absolute,
-                        helper.getBlockState(placed)
-                ).orElseThrow().level(),
-                "placed raw-stone geology level"
-        );
-        helper.succeed();
+        helper.runAfterDelay(1, () -> {
+            helper.assertTrue(
+                    PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                    "player placement did not create a raw-stone marker"
+            );
+            helper.assertValueEqual(
+                    0,
+                    GeologyTierResolver.resolve(
+                            helper.getLevel(),
+                            absolute,
+                            helper.getBlockState(placed)
+                    ).orElseThrow().level(),
+                    "placed raw-stone geology level"
+            );
+            helper.succeed();
+        });
     }
 
     private static void assertNaturalTier(

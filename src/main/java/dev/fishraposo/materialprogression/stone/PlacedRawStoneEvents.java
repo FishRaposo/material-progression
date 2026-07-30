@@ -8,28 +8,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
-import net.neoforged.bus.api.EventPriority;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
-import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.PistonEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 public final class PlacedRawStoneEvents {
     private static final Map<PistonKey, PendingPistonMove> PISTON_MOVES =
             new HashMap<>();
+    private static final Map<ServerLevel, List<PendingMarkerUpdate>>
+            MARKER_UPDATES = new HashMap<>();
 
     private PlacedRawStoneEvents() {
     }
 
     public static void register() {
         NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onPlaced);
-        NeoForge.EVENT_BUS.addListener(
-                EventPriority.LOWEST,
-                PlacedRawStoneEvents::onDropsResolved
-        );
+        NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onBlockBroken);
         NeoForge.EVENT_BUS.addListener(
                 PlacedRawStoneEvents::onFluidPlacedBlock
         );
@@ -41,7 +40,6 @@ public final class PlacedRawStoneEvents {
                 PlacedRawStoneEvents::onLivingDestroyedBlock
         );
         NeoForge.EVENT_BUS.addListener(
-                EventPriority.LOWEST,
                 PlacedRawStoneEvents::onPistonPre
         );
         NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onPistonPost);
@@ -51,52 +49,64 @@ public final class PlacedRawStoneEvents {
     }
 
     private static void onPlaced(BlockEvent.EntityPlaceEvent event) {
-        if (!(event.getLevel() instanceof ServerLevel level)) {
+        if (event.isCanceled()
+                || !(event.getLevel() instanceof ServerLevel level)) {
             return;
         }
 
         if (event instanceof BlockEvent.EntityMultiPlaceEvent multiPlace) {
             for (var snapshot : multiPlace.getReplacedBlockSnapshots()) {
-                updatePlacement(
+                queuePlacement(
                         level,
                         snapshot.getPos(),
+                        level.getBlockState(snapshot.getPos()),
                         event.getEntity() instanceof Player
                 );
             }
             return;
         }
-        updatePlacement(
+        queuePlacement(
                 level,
                 event.getPos(),
+                event.getPlacedBlock(),
                 event.getEntity() instanceof Player
         );
     }
 
-    private static void onDropsResolved(BlockDropsEvent event) {
-        PlacedRawStoneTracker.clear(event.getLevel(), event.getPos());
+    private static void onBlockBroken(BreakBlockEvent event) {
+        if (!event.isCanceled()
+                && event.getLevel() instanceof ServerLevel level) {
+            queueMutation(level, event.getPos(), event.getState());
+        }
     }
 
     private static void onFluidPlacedBlock(
             BlockEvent.FluidPlaceBlockEvent event
     ) {
-        if (event.getLevel() instanceof ServerLevel level) {
-            PlacedRawStoneTracker.clear(level, event.getPos());
+        if (!event.isCanceled()
+                && event.getLevel() instanceof ServerLevel level) {
+            queueMutation(level, event.getPos(), event.getOriginalState());
         }
     }
 
     private static void onToolModification(
             BlockEvent.BlockToolModificationEvent event
     ) {
-        if (!event.isSimulated()
+        if (!event.isCanceled()
+                && !event.isSimulated()
                 && event.getLevel() instanceof ServerLevel level) {
-            PlacedRawStoneTracker.clear(level, event.getPos());
+            queueMutation(level, event.getPos(), event.getState());
         }
     }
 
     private static void onExplosion(ExplosionEvent.Detonate event) {
         if (event.getLevel() instanceof ServerLevel level) {
             for (BlockPos pos : event.getAffectedBlocks()) {
-                PlacedRawStoneTracker.clear(level, pos);
+                queueMutation(
+                        level,
+                        pos,
+                        level.getBlockState(pos)
+                );
             }
         }
     }
@@ -104,8 +114,9 @@ public final class PlacedRawStoneEvents {
     private static void onLivingDestroyedBlock(
             LivingDestroyBlockEvent event
     ) {
-        if (event.getEntity().level() instanceof ServerLevel level) {
-            PlacedRawStoneTracker.clear(level, event.getPos());
+        if (!event.isCanceled()
+                && event.getEntity().level() instanceof ServerLevel level) {
+            queueMutation(level, event.getPos(), event.getState());
         }
     }
 
@@ -182,25 +193,49 @@ public final class PlacedRawStoneEvents {
     private static void onLevelTickPost(LevelTickEvent.Post event) {
         if (event.getLevel() instanceof ServerLevel level) {
             PISTON_MOVES.keySet().removeIf(key -> key.level() == level);
+            List<PendingMarkerUpdate> updates =
+                    MARKER_UPDATES.remove(level);
+            if (updates != null) {
+                updates.forEach(update -> update.apply(level));
+            }
         }
     }
 
-    private static void updatePlacement(
+    private static void queuePlacement(
             ServerLevel level,
             BlockPos pos,
+            BlockState expectedState,
             boolean playerPlacement
     ) {
-        // World generation, commands, structures, and direct mod setBlock calls
-        // do not emit a player EntityPlaceEvent and therefore remain natural.
-        // Gameplay replacements still clear an older marker at this position.
-        if (playerPlacement
-                && StoneFamilyCatalog.get()
-                        .byRaw(level.getBlockState(pos))
-                        .isPresent()) {
-            PlacedRawStoneTracker.mark(level, pos);
-        } else {
-            PlacedRawStoneTracker.clear(level, pos);
-        }
+        queueUpdate(
+                level,
+                PendingMarkerUpdate.placement(
+                        pos,
+                        expectedState,
+                        playerPlacement
+                )
+        );
+    }
+
+    private static void queueMutation(
+            ServerLevel level,
+            BlockPos pos,
+            BlockState originalState
+    ) {
+        queueUpdate(
+                level,
+                PendingMarkerUpdate.mutation(pos, originalState)
+        );
+    }
+
+    private static void queueUpdate(
+            ServerLevel level,
+            PendingMarkerUpdate update
+    ) {
+        MARKER_UPDATES.computeIfAbsent(
+                level,
+                ignored -> new ArrayList<>()
+        ).add(update);
     }
 
     private record PistonKey(
@@ -227,5 +262,59 @@ public final class PlacedRawStoneEvents {
             List<BlockPos> destinations,
             List<BlockPos> destroyed
     ) {
+    }
+
+    private record PendingMarkerUpdate(
+            BlockPos pos,
+            BlockState expectedState,
+            boolean placement,
+            boolean playerPlacement
+    ) {
+        private static PendingMarkerUpdate placement(
+                BlockPos pos,
+                BlockState expectedState,
+                boolean playerPlacement
+        ) {
+            return new PendingMarkerUpdate(
+                    pos.immutable(),
+                    expectedState,
+                    true,
+                    playerPlacement
+            );
+        }
+
+        private static PendingMarkerUpdate mutation(
+                BlockPos pos,
+                BlockState originalState
+        ) {
+            return new PendingMarkerUpdate(
+                    pos.immutable(),
+                    originalState,
+                    false,
+                    false
+            );
+        }
+
+        private void apply(ServerLevel level) {
+            BlockState currentState = level.getBlockState(pos);
+            if (placement) {
+                if (!currentState.equals(expectedState)) {
+                    return;
+                }
+                // World generation, commands, structures, and direct mod
+                // setBlock calls do not emit a player EntityPlaceEvent and
+                // therefore remain natural.
+                if (playerPlacement
+                        && StoneFamilyCatalog.get()
+                                .byRaw(currentState)
+                                .isPresent()) {
+                    PlacedRawStoneTracker.mark(level, pos);
+                } else {
+                    PlacedRawStoneTracker.clear(level, pos);
+                }
+            } else if (!currentState.equals(expectedState)) {
+                PlacedRawStoneTracker.clear(level, pos);
+            }
+        }
     }
 }

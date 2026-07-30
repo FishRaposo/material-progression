@@ -187,20 +187,29 @@ public final class GeologyMiningGameTests {
         ServerPlayer player = player(helper, new ItemStack(Blocks.STONE));
         helper.placeAt(player, player.getMainHandItem(), support, Direction.UP);
         BlockPos absolute = helper.absolutePos(BLOCK_POS);
-        helper.assertTrue(
-                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
-                "fixture raw stone was not marked"
-        );
-
-        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.WOODEN_PICKAXE));
-        player.gameMode.destroyBlock(absolute);
-        helper.assertFalse(
-                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
-                "removed raw stone retained its marker"
-        );
-        int count = itemCount(helper, ModItems.ROCK.get());
-        helper.assertTrue(count == 2 || count == 3, "placed Rock count was " + count);
-        helper.succeed();
+        helper.runAfterDelay(1, () -> {
+            helper.assertTrue(
+                    PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                    "fixture raw stone was not marked"
+            );
+            player.setItemInHand(
+                    InteractionHand.MAIN_HAND,
+                    new ItemStack(Items.WOODEN_PICKAXE)
+            );
+            player.gameMode.destroyBlock(absolute);
+        });
+        helper.runAfterDelay(2, () -> {
+            helper.assertFalse(
+                    PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                    "removed raw stone retained its marker"
+            );
+            int count = itemCount(helper, ModItems.ROCK.get());
+            helper.assertTrue(
+                    count == 2 || count == 3,
+                    "placed Rock count was " + count
+            );
+            helper.succeed();
+        });
     }
 
     private static void enchant(
