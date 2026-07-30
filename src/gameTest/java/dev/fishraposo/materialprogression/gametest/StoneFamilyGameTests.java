@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression.gametest;
 
 import dev.fishraposo.materialprogression.registry.ModBlocks;
+import dev.fishraposo.materialprogression.registry.ModFeatures;
 import dev.fishraposo.materialprogression.registry.ModItems;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
 import dev.fishraposo.materialprogression.stone.StoneFamilyCatalog;
@@ -9,11 +10,14 @@ import dev.fishraposo.materialprogression.stone.StoneResistance;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.testframework.annotation.ForEachTest;
@@ -163,6 +167,89 @@ public final class StoneFamilyGameTests {
         helper.succeed();
     }
 
+    @GameTest(timeoutTicks = 60)
+    @EmptyTemplate
+    @TestHolder(description = "Covered loose rocks revalidate when their deeper source changes")
+    static void coveredSourceChangeBreaksLooseRocks(ExtendedGameTestHelper helper) {
+        helper.setBlock(ROOT, Blocks.GRANITE);
+        helper.setBlock(ROOT.above(), Blocks.DIRT);
+        helper.setBlock(
+                ROOT.above(2),
+                ModBlocks.LOOSE_ROCKS.get()
+                        .defaultBlockState()
+                        .setValue(LooseRocksBlock.FAMILY, StoneFamily.GRANITE)
+        );
+
+        helper.runAfterDelay(2, () -> helper.setBlock(ROOT, Blocks.STONE));
+        helper.succeedWhen(() ->
+                helper.assertBlockPresent(Blocks.AIR, ROOT.above(2))
+        );
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Loose-rock feature places the resolved family state")
+    static void featurePlacesResolvedFamily(ExtendedGameTestHelper helper) {
+        helper.setBlock(ROOT, Blocks.GRANITE);
+
+        helper.assertTrue(
+                placeFeature(helper, ROOT.above()),
+                "feature rejected valid Granite support"
+        );
+        helper.assertBlockPresent(ModBlocks.LOOSE_ROCKS.get(), ROOT.above());
+        helper.assertBlockProperty(
+                ROOT.above(),
+                LooseRocksBlock.FAMILY,
+                StoneFamily.GRANITE
+        );
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Loose-rock feature rejects occupied targets")
+    static void featureRejectsOccupiedTarget(ExtendedGameTestHelper helper) {
+        helper.setBlock(ROOT, Blocks.GRANITE);
+        helper.setBlock(ROOT.above(), Blocks.OBSIDIAN);
+
+        helper.assertFalse(
+                placeFeature(helper, ROOT.above()),
+                "feature replaced a non-replaceable block"
+        );
+        helper.assertBlockPresent(Blocks.OBSIDIAN, ROOT.above());
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Loose-rock feature rejects fluid targets")
+    static void featureRejectsFluidTarget(ExtendedGameTestHelper helper) {
+        helper.setBlock(ROOT, Blocks.GRANITE);
+        helper.setBlock(ROOT.above(), Blocks.WATER);
+
+        helper.assertFalse(
+                placeFeature(helper, ROOT.above()),
+                "feature placed loose rocks into fluid"
+        );
+        helper.assertBlockPresent(Blocks.WATER, ROOT.above());
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Loose-rock feature rejects unresolved cover")
+    static void featureRejectsUnresolvedCover(ExtendedGameTestHelper helper) {
+        BlockPos support = ROOT.above(2);
+        helper.setBlock(support, Blocks.DIRT);
+
+        helper.assertFalse(
+                placeFeature(helper, support.above()),
+                "feature invented a family for unresolved cover"
+        );
+        helper.assertBlockPresent(Blocks.AIR, support.above());
+        helper.succeed();
+    }
+
     private static void assertResolvedSupport(
             ExtendedGameTestHelper helper,
             BlockPos support,
@@ -198,5 +285,22 @@ public final class StoneFamilyGameTests {
                 .mapToInt(entity -> entity.getItem().getCount())
                 .sum();
         helper.assertValueEqual(count, actual, "family Rock drop count");
+    }
+
+    private static boolean placeFeature(
+            ExtendedGameTestHelper helper,
+            BlockPos position
+    ) {
+        var level = helper.getLevel();
+        return ModFeatures.LOOSE_ROCKS.get().place(
+                new FeaturePlaceContext<>(
+                        Optional.empty(),
+                        level,
+                        level.getChunkSource().getGenerator(),
+                        RandomSource.create(42L),
+                        helper.absolutePos(position),
+                        NoneFeatureConfiguration.INSTANCE
+                )
+        );
     }
 }

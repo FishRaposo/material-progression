@@ -5,7 +5,10 @@ import dev.fishraposo.materialprogression.stone.StoneFamily;
 import dev.fishraposo.materialprogression.stone.StoneFamilyResolver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -16,6 +19,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public final class LooseRocksBlock extends BushBlock {
+    public static final int REVALIDATION_INTERVAL_TICKS = 10;
     public static final MapCodec<BushBlock> CODEC =
             simpleCodec(LooseRocksBlock::new);
     public static final EnumProperty<StoneFamily> FAMILY =
@@ -60,6 +64,33 @@ public final class LooseRocksBlock extends BushBlock {
         return StoneFamilyResolver.resolveSupport(level, supportPos)
                 .map(entry -> entry.family() == state.getValue(FAMILY))
                 .orElse(false);
+    }
+
+    @Override
+    protected void onPlace(
+            BlockState state,
+            Level level,
+            BlockPos pos,
+            BlockState oldState,
+            boolean movedByPiston
+    ) {
+        if (!level.isClientSide()) {
+            level.scheduleTick(pos, this, REVALIDATION_INTERVAL_TICKS);
+        }
+    }
+
+    @Override
+    protected void tick(
+            BlockState state,
+            ServerLevel level,
+            BlockPos pos,
+            RandomSource random
+    ) {
+        if (!state.canSurvive(level, pos)) {
+            level.destroyBlock(pos, true);
+            return;
+        }
+        level.scheduleTick(pos, this, REVALIDATION_INTERVAL_TICKS);
     }
 
     @Override

@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.world.level.levelgen.feature;
 
 import com.mojang.serialization.Codec;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
+import dev.fishraposo.materialprogression.stone.StoneFamily;
 import dev.fishraposo.materialprogression.stone.StoneFamilyResolver;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
 import net.minecraft.core.BlockPos;
@@ -31,13 +32,29 @@ public final class LooseRocksFeature extends Feature<NoneFeatureConfiguration> {
         }
 
         return StoneFamilyResolver.resolveSupport(context.level(), supportPos)
-                .map(entry -> context.level().setBlock(
-                        position,
-                        ModBlocks.LOOSE_ROCKS.get()
-                                .defaultBlockState()
-                                .setValue(LooseRocksBlock.FAMILY, entry.family()),
-                        2
-                ))
+                .map(entry -> placeResolved(context, position, entry.family()))
                 .orElse(false);
+    }
+
+    private static boolean placeResolved(
+            FeaturePlaceContext<NoneFeatureConfiguration> context,
+            BlockPos position,
+            StoneFamily family
+    ) {
+        boolean placed = context.level().setBlock(
+                position,
+                ModBlocks.LOOSE_ROCKS.get()
+                        .defaultBlockState()
+                        .setValue(LooseRocksBlock.FAMILY, family),
+                2
+        );
+        if (placed) {
+            context.level().scheduleTick(
+                    position,
+                    ModBlocks.LOOSE_ROCKS.get(),
+                    LooseRocksBlock.REVALIDATION_INTERVAL_TICKS
+            );
+        }
+        return placed;
     }
 }

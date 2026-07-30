@@ -9,16 +9,21 @@ import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
+import net.neoforged.neoforge.resource.ListenerKey;
+import org.jetbrains.annotations.ApiStatus;
 
 public final class StoneFamilyReloadListener
         extends SimpleJsonResourceReloadListener<StoneFamilyDefinition> {
     private static final Identifier LISTENER_ID = Identifier.fromNamespaceAndPath(
             MaterialProgression.MOD_ID, "stone_families"
     );
-    private static volatile Map<Identifier, StoneFamilyDefinition>
-            pendingDefinitions = Map.of();
+    private static final ListenerKey<StoneFamilyReloadListener> LISTENER_KEY =
+            ListenerKey.create(LISTENER_ID);
+    private StoneFamilyCatalog validatedCatalog = StoneFamilyCatalog.empty();
 
-    private StoneFamilyReloadListener() {
+    @ApiStatus.Internal
+    public StoneFamilyReloadListener() {
         super(
                 StoneFamilyDefinition.CODEC,
                 FileToIdConverter.json("stone_family")
@@ -26,12 +31,16 @@ public final class StoneFamilyReloadListener
     }
 
     @Override
-    protected void apply(
+    public void apply(
             Map<Identifier, StoneFamilyDefinition> definitions,
             ResourceManager resourceManager,
             ProfilerFiller profiler
     ) {
-        pendingDefinitions = Map.copyOf(definitions);
+        validatedCatalog = StoneFamilyCatalog.build(
+                Map.copyOf(definitions),
+                getRegistryLookup(),
+                getContext()
+        );
     }
 
     public static void register() {
@@ -41,17 +50,34 @@ public final class StoneFamilyReloadListener
         NeoForge.EVENT_BUS.addListener(
                 StoneFamilyReloadListener::tagsUpdated
         );
+        NeoForge.EVENT_BUS.addListener(
+                StoneFamilyReloadListener::serverStopped
+        );
     }
 
     private static void addServerReloadListener(
             AddServerReloadListenersEvent event
     ) {
-        event.addListener(LISTENER_ID, new StoneFamilyReloadListener());
+        event.addRetainedListener(
+                LISTENER_KEY,
+                new StoneFamilyReloadListener()
+        );
     }
 
     private static void tagsUpdated(
             net.neoforged.neoforge.event.TagsUpdatedEvent.ServerDataLoad event
     ) {
-        StoneFamilyCatalog.install(pendingDefinitions, event.getRegistries());
+        event.getServerResources()
+                .getListener(LISTENER_KEY)
+                .publishValidated();
+    }
+
+    private static void serverStopped(ServerStoppedEvent event) {
+        StoneFamilyCatalog.clear();
+    }
+
+    @ApiStatus.Internal
+    public void publishValidated() {
+        StoneFamilyCatalog.install(validatedCatalog);
     }
 }

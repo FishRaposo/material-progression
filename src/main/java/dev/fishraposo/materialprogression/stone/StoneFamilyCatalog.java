@@ -1,12 +1,12 @@
 package dev.fishraposo.materialprogression.stone;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -14,7 +14,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.conditions.ICondition;
 
+/**
+ * Server-only snapshot of the stone-family data validated during datapack
+ * reload. The client renders the family already encoded in block state and
+ * must not use this catalog as a gameplay authority.
+ */
 public final class StoneFamilyCatalog {
     private static final StoneFamilyCatalog EMPTY = new StoneFamilyCatalog(
             Map.of(), Map.of(), Map.of(), Map.of(), Map.of(), Map.of()
@@ -48,16 +54,22 @@ public final class StoneFamilyCatalog {
         return current;
     }
 
-    static void install(
-            Map<Identifier, StoneFamilyDefinition> definitions,
-            HolderLookup.Provider registries
-    ) {
-        current = build(definitions, registries);
+    static StoneFamilyCatalog empty() {
+        return EMPTY;
+    }
+
+    static void install(StoneFamilyCatalog validatedCatalog) {
+        current = validatedCatalog;
+    }
+
+    static void clear() {
+        current = EMPTY;
     }
 
     static StoneFamilyCatalog build(
             Map<Identifier, StoneFamilyDefinition> definitions,
-            HolderLookup.Provider registries
+            HolderLookup.Provider registries,
+            ICondition.IContext tagContext
     ) {
         Map<StoneFamily, Entry> families = new EnumMap<>(StoneFamily.class);
         Map<Block, Entry> sources = new HashMap<>();
@@ -78,7 +90,6 @@ public final class StoneFamilyCatalog {
             }
 
             var blockLookup = registries.lookupOrThrow(Registries.BLOCK);
-            var itemLookup = registries.lookupOrThrow(Registries.ITEM);
             Holder.Reference<Block> rawHolder = blockLookup.get(
                     ResourceKey.create(Registries.BLOCK, definition.rawBlock())
             ).orElseThrow(() -> invalid(
@@ -91,29 +102,30 @@ public final class StoneFamilyCatalog {
                     family.id(),
                     "cobbled block " + definition.cobbledBlock() + " is not registered"
             ));
-            HolderSet.Named<Block> sourceTag =
-                    blockLookup.get(definition.sourceBlockTag())
-                            .orElseThrow(() -> invalid(
-                                    family.id(),
-                                    "source block tag "
-                                            + definition.sourceBlockTag()
-                                            + " does not exist"
-                            ));
-            HolderSet.Named<Block> directSurfaceTag =
-                    blockLookup.get(definition.looseRockSurfaceBlockTag())
-                            .orElseThrow(() -> invalid(
-                                    family.id(),
-                                    "loose-rock surface block tag "
-                                            + definition.looseRockSurfaceBlockTag()
-                                            + " does not exist"
-                            ));
-            HolderSet.Named<Item> rockTag =
-                    itemLookup.get(definition.rockItemTag())
-                            .orElseThrow(() -> invalid(
-                                    family.id(),
-                                    "Rock item tag " + definition.rockItemTag()
-                                            + " does not exist"
-                            ));
+            requireLoaded(
+                    family.id(),
+                    "source block tag",
+                    definition.sourceBlockTag(),
+                    tagContext
+            );
+            requireLoaded(
+                    family.id(),
+                    "loose-rock surface block tag",
+                    definition.looseRockSurfaceBlockTag(),
+                    tagContext
+            );
+            requireLoaded(
+                    family.id(),
+                    "Rock item tag",
+                    definition.rockItemTag(),
+                    tagContext
+            );
+            Collection<Holder<Block>> sourceTag =
+                    tagContext.getTag(definition.sourceBlockTag());
+            Collection<Holder<Block>> directSurfaceTag =
+                    tagContext.getTag(definition.looseRockSurfaceBlockTag());
+            Collection<Holder<Item>> rockTag =
+                    tagContext.getTag(definition.rockItemTag());
 
             requireNonEmpty(family.id(), "source block tag", sourceTag.size());
             requireNonEmpty(family.id(), "loose-rock surface block tag", directSurfaceTag.size());
@@ -234,6 +246,17 @@ public final class StoneFamilyCatalog {
     ) {
         if (size == 0) {
             throw invalid(id, kind + " resolves to no registry entries");
+        }
+    }
+
+    private static <T> void requireLoaded(
+            Identifier id,
+            String kind,
+            net.minecraft.tags.TagKey<T> tag,
+            ICondition.IContext context
+    ) {
+        if (!context.isTagLoaded(tag)) {
+            throw invalid(id, kind + " " + tag + " does not exist");
         }
     }
 
