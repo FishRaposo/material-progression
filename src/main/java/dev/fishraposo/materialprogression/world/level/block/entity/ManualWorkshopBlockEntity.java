@@ -13,6 +13,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
@@ -65,6 +67,7 @@ public final class ManualWorkshopBlockEntity
     private int progress;
     private int maxProgress;
     private @Nullable ResourceKey<Recipe<?>> activeRecipe;
+    private CompoundTag activeOperation = new CompoundTag();
     private ItemStack activeToolIdentity = ItemStack.EMPTY;
     private ItemStack activeInputIdentity = ItemStack.EMPTY;
 
@@ -122,10 +125,17 @@ public final class ManualWorkshopBlockEntity
 
         RecipeHolder<ManualWorkshopRecipe> holder = match.get();
         ManualWorkshopRecipe recipe = holder.value();
-        if (workshop.identityChanged(holder, tool, ingredient)) {
+        CompoundTag operation = operationOf(holder, serverLevel);
+        if (workshop.identityChanged(
+                holder,
+                operation,
+                tool,
+                ingredient
+        )) {
             workshop.progress = 0;
         }
         workshop.activeRecipe = holder.id();
+        workshop.activeOperation = operation;
         workshop.activeToolIdentity = identityOf(tool);
         workshop.activeInputIdentity = identityOf(ingredient);
         workshop.maxProgress = recipe.processingTime();
@@ -161,6 +171,7 @@ public final class ManualWorkshopBlockEntity
 
     private boolean identityChanged(
             RecipeHolder<ManualWorkshopRecipe> holder,
+            CompoundTag operation,
             ItemStack tool,
             ItemStack ingredient
     ) {
@@ -168,8 +179,29 @@ public final class ManualWorkshopBlockEntity
             return progress > 0;
         }
         return !activeRecipe.equals(holder.id())
+                || !activeOperation.equals(operation)
                 || !sameIdentity(activeToolIdentity, tool)
                 || !sameIdentity(activeInputIdentity, ingredient);
+    }
+
+    private static CompoundTag operationOf(
+            RecipeHolder<ManualWorkshopRecipe> holder,
+            ServerLevel level
+    ) {
+        Tag definition = ManualWorkshopRecipe.MAP_CODEC.codec()
+                .encodeStart(
+                        level.registryAccess()
+                                .createSerializationContext(NbtOps.INSTANCE),
+                        holder.value()
+                )
+                .getOrThrow();
+        CompoundTag operation = new CompoundTag();
+        operation.putString(
+                "Recipe",
+                holder.id().identifier().toString()
+        );
+        operation.put("Definition", definition);
+        return operation;
     }
 
     private void complete(
@@ -203,6 +235,7 @@ public final class ManualWorkshopBlockEntity
 
         progress = 0;
         activeRecipe = null;
+        activeOperation = new CompoundTag();
         activeToolIdentity = ItemStack.EMPTY;
         activeInputIdentity = ItemStack.EMPTY;
         setChanged();
@@ -245,12 +278,16 @@ public final class ManualWorkshopBlockEntity
     }
 
     private void resetProgress() {
-        if (progress == 0 && maxProgress == 0 && activeRecipe == null) {
+        if (progress == 0
+                && maxProgress == 0
+                && activeRecipe == null
+                && activeOperation.isEmpty()) {
             return;
         }
         progress = 0;
         maxProgress = 0;
         activeRecipe = null;
+        activeOperation = new CompoundTag();
         activeToolIdentity = ItemStack.EMPTY;
         activeInputIdentity = ItemStack.EMPTY;
         setChanged();
@@ -398,6 +435,10 @@ public final class ManualWorkshopBlockEntity
                 "ActiveRecipe",
                 Recipe.KEY_CODEC
         ).orElse(null);
+        activeOperation = input.read(
+                "ActiveOperation",
+                CompoundTag.CODEC
+        ).orElseGet(CompoundTag::new);
         activeToolIdentity = identityOf(items.get(TOOL_SLOT));
         activeInputIdentity = identityOf(items.get(INPUT_SLOT));
     }
@@ -410,6 +451,13 @@ public final class ManualWorkshopBlockEntity
         output.putInt("MaxProgress", maxProgress);
         if (activeRecipe != null) {
             output.store("ActiveRecipe", Recipe.KEY_CODEC, activeRecipe);
+        }
+        if (!activeOperation.isEmpty()) {
+            output.store(
+                    "ActiveOperation",
+                    CompoundTag.CODEC,
+                    activeOperation
+            );
         }
     }
 

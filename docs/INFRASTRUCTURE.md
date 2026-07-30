@@ -94,7 +94,9 @@ A blocked output pauses without consuming input or durability; changing the
 recipe, tool, or input resets progress. Completion, input consumption, output,
 and tool damage happen as one successful operation, including when the tool
 breaks on that operation. Breaking the block drops all three inventory slots
-and discards partial progress. Hoppers cannot insert or extract.
+and discards partial progress. A datapack reload preserves partial work only
+when the recipe ID and complete operation definition are unchanged; changing
+or removing that definition resets progress. Hoppers cannot insert or extract.
 
 ### Boundaries
 

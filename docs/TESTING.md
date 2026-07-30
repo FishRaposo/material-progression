@@ -59,7 +59,9 @@ Add a shared helper only after at least two tests need the same operation.
 
 GameTests must exercise real registries, recipes, inventories, blocks, and
 server ticks. Test-only setup remains in fixtures; production classes should
-not gain methods solely to support tests.
+not gain methods solely to support tests. Reload-sensitive behavior must use
+the real `RecipeManager` reload application path, and ticker wiring must have
+at least one sequence-driven test that advances through level ticks.
 
 ## Adding a behavior
 

@@ -9,14 +9,18 @@ import dev.fishraposo.materialprogression.world.level.block.entity.ManualWorksho
 import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.GameType;
@@ -205,6 +209,7 @@ public final class WorkshopGameTests {
                 new PlantCase(Items.POPPY, 1),
                 new PlantCase(Items.OAK_SAPLING, 2),
                 new PlantCase(Items.SUNFLOWER, 2),
+                new PlantCase(Items.PITCHER_PLANT, 2),
                 new PlantCase(Items.WHEAT, 2),
                 new PlantCase(Items.CACTUS, 3),
                 new PlantCase(Items.SUGAR_CANE, 3),
@@ -508,6 +513,238 @@ public final class WorkshopGameTests {
 
     @GameTest
     @EmptyTemplate(value = "3x3x3", floor = true)
+    @TestHolder(description = "Same-ID recipe definition changes reset persisted partial work")
+    static void sameIdDefinitionChangesResetPersistedProgress(
+            ExtendedGameTestHelper helper
+    ) {
+        ResourceKey<Recipe<?>> key = rockSharpeningKey();
+        ManualWorkshopRecipe original = workshopRecipe(helper, key);
+        WorkshopFixture workshop = WorkshopFixture.place(helper)
+                .tool(ModItems.FLINT_KNIFE.get())
+                .input(ModItems.ROCK.get());
+        workshop.tick(20);
+
+        CompoundTag saved = workshop.entity().saveWithFullMetadata(
+                helper.getLevel().registryAccess()
+        );
+        BlockEntity loaded = BlockEntity.loadStatic(
+                workshop.entity().getBlockPos(),
+                workshop.entity().getBlockState(),
+                saved,
+                helper.getLevel().registryAccess()
+        );
+        helper.assertTrue(
+                loaded instanceof ManualWorkshopBlockEntity,
+                "Serialized workshop did not reload for recipe-change test"
+        );
+        workshop = WorkshopFixture.attach(
+                helper,
+                (ManualWorkshopBlockEntity) loaded
+        );
+
+        Ingredient rockTag = freshTagIngredient("c", "rocks");
+        Ingredient knifeTag = freshTagIngredient(
+                "c",
+                "tools/knives"
+        );
+        try (WorkshopRecipeReloadFixture reload =
+                     WorkshopRecipeReloadFixture.capture(helper)) {
+            reload.replace(
+                    key,
+                    replacementRecipe(
+                            original,
+                            rockTag,
+                            knifeTag,
+                            Items.DIAMOND,
+                            2,
+                            40,
+                            1
+                    )
+            );
+            workshop.tick(1);
+            assertRestarted(helper, workshop, 40, "result");
+            workshop.tick(9);
+
+            reload.replace(
+                    key,
+                    replacementRecipe(
+                            original,
+                            rockTag,
+                            knifeTag,
+                            Items.DIAMOND,
+                            2,
+                            80,
+                            1
+                    )
+            );
+            workshop.tick(1);
+            assertRestarted(helper, workshop, 80, "processing time");
+            workshop.tick(9);
+
+            reload.replace(
+                    key,
+                    replacementRecipe(
+                            original,
+                            rockTag,
+                            knifeTag,
+                            Items.DIAMOND,
+                            2,
+                            80,
+                            3
+                    )
+            );
+            workshop.tick(1);
+            assertRestarted(helper, workshop, 80, "tool damage");
+            workshop.tick(9);
+
+            reload.replace(
+                    key,
+                    replacementRecipe(
+                            original,
+                            Ingredient.of(ModItems.ROCK.get()),
+                            knifeTag,
+                            Items.DIAMOND,
+                            2,
+                            80,
+                            3
+                    )
+            );
+            workshop.tick(1);
+            assertRestarted(helper, workshop, 80, "input ingredient");
+            workshop.tick(9);
+
+            reload.replace(
+                    key,
+                    replacementRecipe(
+                            original,
+                            Ingredient.of(ModItems.ROCK.get()),
+                            Ingredient.of(ModItems.FLINT_KNIFE.get()),
+                            Items.DIAMOND,
+                            2,
+                            80,
+                            3
+                    )
+            );
+            workshop.tick(1);
+            assertRestarted(helper, workshop, 80, "tool ingredient");
+        }
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "3x3x3", floor = true)
+    @TestHolder(description = "Definition-equivalent reloads preserve partial work")
+    static void equivalentDefinitionReloadPreservesProgress(
+            ExtendedGameTestHelper helper
+    ) {
+        ResourceKey<Recipe<?>> key = rockSharpeningKey();
+        ManualWorkshopRecipe original = workshopRecipe(helper, key);
+        WorkshopFixture workshop = WorkshopFixture.place(helper)
+                .tool(ModItems.FLINT_KNIFE.get())
+                .input(ModItems.ROCK.get());
+        workshop.tick(20);
+
+        try (WorkshopRecipeReloadFixture reload =
+                     WorkshopRecipeReloadFixture.capture(helper)) {
+            reload.replace(
+                    key,
+                    replacementRecipe(
+                            original,
+                            freshTagIngredient("c", "rocks"),
+                            freshTagIngredient("c", "tools/knives"),
+                            ModItems.FLINT_SHARD.get(),
+                            2,
+                            40,
+                            1
+                    )
+            );
+            workshop.tick(1);
+            helper.assertTrue(
+                    workshop.progress() == 21
+                            && workshop.maxProgress() == 40,
+                    "Equivalent recipe reload discarded valid partial work"
+            );
+        }
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "3x3x3", floor = true)
+    @TestHolder(description = "Recipe removal resets work before a later reload")
+    static void recipeRemovalAndReloadCannotResumeProgress(
+            ExtendedGameTestHelper helper
+    ) {
+        ResourceKey<Recipe<?>> key = rockSharpeningKey();
+        ManualWorkshopRecipe original = workshopRecipe(helper, key);
+        WorkshopFixture workshop = WorkshopFixture.place(helper)
+                .tool(ModItems.FLINT_KNIFE.get())
+                .input(ModItems.ROCK.get());
+        workshop.tick(20);
+
+        try (WorkshopRecipeReloadFixture reload =
+                     WorkshopRecipeReloadFixture.capture(helper)) {
+            reload.remove(key);
+            workshop.tick(1);
+            helper.assertTrue(
+                    workshop.progress() == 0
+                            && workshop.maxProgress() == 0,
+                    "Removed recipe retained partial Workshop progress"
+            );
+
+            reload.replace(key, original);
+            workshop.tick(1);
+            helper.assertTrue(
+                    workshop.progress() == 1
+                            && workshop.maxProgress() == 40,
+                    "Reloaded recipe resumed removed partial work"
+            );
+        }
+        helper.succeed();
+    }
+
+    @GameTest(timeoutTicks = 60)
+    @EmptyTemplate(value = "3x3x3", floor = true)
+    @TestHolder(description = "Registered Workshop ticker completes processing on level ticks")
+    static void registeredTickerCompletesOnLevelTicks(
+            ExtendedGameTestHelper helper
+    ) {
+        WorkshopFixture workshop = WorkshopFixture.place(helper)
+                .tool(ModItems.FLINT_KNIFE.get())
+                .input(ModItems.ROCK.get());
+
+        helper.startSequence()
+                .thenIdle(39)
+                .thenExecute(() -> {
+                    GameTestSupport.assertEmpty(
+                            helper,
+                            workshop.output(),
+                            "Natural-tick output before tick 40"
+                    );
+                    helper.assertTrue(
+                            workshop.progress() == 39,
+                            "Registered ticker did not advance once per level tick"
+                    );
+                })
+                .thenIdle(1)
+                .thenExecute(() -> {
+                    GameTestSupport.assertStack(
+                            helper,
+                            workshop.output(),
+                            ModItems.FLINT_SHARD.get(),
+                            2,
+                            "Natural-tick Workshop output"
+                    );
+                    GameTestSupport.assertEmpty(
+                            helper,
+                            workshop.input(),
+                            "Natural-tick Workshop input"
+                    );
+                })
+                .thenSucceed();
+    }
+
+    @GameTest
+    @EmptyTemplate(value = "3x3x3", floor = true)
     @TestHolder(description = "Workshop menu synchronizes progress data")
     static void menuReadsSynchronizedProgress(
             ExtendedGameTestHelper helper
@@ -705,5 +942,92 @@ public final class WorkshopGameTests {
     }
 
     private record ProcessCase(Item input, Item output) {
+    }
+
+    private static ResourceKey<Recipe<?>> rockSharpeningKey() {
+        return ResourceKey.create(
+                Registries.RECIPE,
+                Identifier.fromNamespaceAndPath(
+                        MaterialProgression.MOD_ID,
+                        "manual_workshop_rock_sharpening"
+                )
+        );
+    }
+
+    private static ManualWorkshopRecipe workshopRecipe(
+            ExtendedGameTestHelper helper,
+            ResourceKey<Recipe<?>> key
+    ) {
+        RecipeHolder<?> holder = helper.getLevel()
+                .recipeAccess()
+                .byKey(key)
+                .orElseThrow();
+        if (!(holder.value() instanceof ManualWorkshopRecipe recipe)) {
+            throw new IllegalStateException(
+                    "Recipe is not a Manual Workshop recipe: "
+                            + key.identifier()
+            );
+        }
+        return recipe;
+    }
+
+    private static Ingredient freshTagIngredient(
+            String namespace,
+            String path
+    ) {
+        TagKey<Item> tag = TagKey.create(
+                Registries.ITEM,
+                Identifier.fromNamespaceAndPath(namespace, path)
+        );
+        return Ingredient.of(BuiltInRegistries.ITEM.getOrThrow(tag));
+    }
+
+    private static ManualWorkshopRecipe replacementRecipe(
+            ManualWorkshopRecipe original,
+            Ingredient ingredient,
+            Ingredient tool,
+            Item result,
+            int resultCount,
+            int processingTime,
+            int toolDamage
+    ) {
+        return new ManualWorkshopRecipe(
+                new Recipe.CommonInfo(original.showNotification()),
+                ingredient,
+                tool,
+                new ItemStackTemplate(result, resultCount),
+                processingTime,
+                toolDamage
+        );
+    }
+
+    private static void assertRestarted(
+            ExtendedGameTestHelper helper,
+            WorkshopFixture workshop,
+            int expectedMaximum,
+            String changedField
+    ) {
+        helper.assertTrue(
+                workshop.progress() == 1
+                        && workshop.maxProgress() == expectedMaximum,
+                "Same-ID " + changedField
+                        + " change did not restart partial work"
+        );
+        GameTestSupport.assertEmpty(
+                helper,
+                workshop.output(),
+                "Output after same-ID " + changedField + " change"
+        );
+        GameTestSupport.assertStack(
+                helper,
+                workshop.input(),
+                ModItems.ROCK.get(),
+                1,
+                "Input after same-ID " + changedField + " change"
+        );
+        helper.assertTrue(
+                workshop.tool().getDamageValue() == 0,
+                "Tool changed before restarted operation completed"
+        );
     }
 }

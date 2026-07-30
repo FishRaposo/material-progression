@@ -40,6 +40,15 @@ final class WorkshopFixture {
         );
     }
 
+    static WorkshopFixture attach(
+            ExtendedGameTestHelper helper,
+            ManualWorkshopBlockEntity entity
+    ) {
+        helper.getLevel().removeBlockEntity(entity.getBlockPos());
+        helper.getLevel().setBlockEntity(entity);
+        return new WorkshopFixture(helper, entity);
+    }
+
     ManualWorkshopBlockEntity entity() {
         return entity;
     }
@@ -90,6 +99,10 @@ final class WorkshopFixture {
 
     int progress() {
         return entity.progress();
+    }
+
+    int maxProgress() {
+        return entity.maxProgress();
     }
 
     void tick(int times) {

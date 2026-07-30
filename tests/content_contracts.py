@@ -290,6 +290,7 @@ WORKSHOP_PLANT_TAGS = {
         "minecraft:lilac",
         "minecraft:peony",
         "minecraft:rose_bush",
+        "minecraft:pitcher_plant",
         "minecraft:wheat",
     ],
     "fiber_3": ["minecraft:cactus", "minecraft:sugar_cane"],
