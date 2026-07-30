@@ -10,6 +10,7 @@ import dev.fishraposo.materialprogression.registry.ModItems;
 import dev.fishraposo.materialprogression.registry.ModFeatures;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
+import dev.fishraposo.materialprogression.stone.GeologyDimensionProfileReloadListener;
 import dev.fishraposo.materialprogression.stone.StoneFamilyReloadListener;
 import dev.fishraposo.materialprogression.stone.GeologyFeedbackEvents;
 import dev.fishraposo.materialprogression.stone.GeologyMiningEvents;
@@ -44,6 +45,7 @@ public final class MaterialProgression {
         ExternalLooseRockDrops.register();
         LooseRockInvalidationEvents.register();
         PlacedRawStoneEvents.register();
+        GeologyDimensionProfileReloadListener.register();
         StoneFamilyReloadListener.register();
     }
 }

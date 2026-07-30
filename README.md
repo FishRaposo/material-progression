@@ -99,7 +99,8 @@ complete opening/geology development slice contains:
 - Four-Rock cobbling: four identical mapped Rocks produce their family cobble,
   while mixed or unmapped compatible Rocks produce vanilla Cobblestone
 - Geological resistance determined by dimension depth, family, exposure, and
-  whether the raw stone was player placed
+  whether the raw stone was player placed, with reloadable depth profiles for
+  arbitrary non-built-in dimensions
 - Partial raw-stone drops: two or three family Rocks with a correct tool, four
   with Fortune, the raw block with Silk Touch, and nothing with an insufficient
   tool
@@ -112,10 +113,8 @@ complete opening/geology development slice contains:
 - Recipe unlocks, five opening-progression advancements, localized tooltips,
   and throttled action-bar guidance
 
-One promised extension point still blocks the final 0.2.0 release:
-datapack-configurable depth profiles for dimensions other than the Overworld,
-Nether, and End. Arbitrary third-party stone-family definitions with external
-Rocks, raw blocks, cobbles, Loose Rocks, drops, and geology are implemented.
+Arbitrary third-party stone-family definitions and custom-dimension geology
+profiles are implemented through public datapack interfaces.
 
 Ore samples, geological deposits, prospecting, pottery, expanded storage and
 hoppers, shallow logistics, bonsai, bulk crafting, and expanded metallurgy are

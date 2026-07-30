@@ -145,6 +145,46 @@ Compatible Rocks that only join `#c:rocks` still participate in the custom
 four-Rock cobbling recipe and resolve to vanilla Cobblestone when they have no
 registered family mapping.
 
+## Geology dimension-profile data interface
+
+The public `material_progression:geology_dimension_profile` reload type reads
+files under `data/<namespace>/geology_dimension_profile/`. Each resource targets
+one arbitrary non-built-in dimension:
+
+```json
+{
+  "dimension": "example:moon",
+  "bands": [
+    {"minimum_y": 96, "level": 0},
+    {"minimum_y": 32, "level": 1},
+    {"minimum_y": 0, "level": 2},
+    {"level": 3}
+  ]
+}
+```
+
+Bands are evaluated in declaration order. `minimum_y` is inclusive
+(`y >= minimum_y`), thresholds must be strictly descending, and the last band
+must be a catch-all without `minimum_y`. Every `level` must be from 0 through 3.
+An empty list, an early or missing catch-all, duplicate or ascending thresholds,
+an invalid dimension ID, or a level outside that range rejects the resource
+reload with a profile-specific error.
+
+Resolved resources may target each dimension only once. Two winning resources
+that name the same dimension reject the complete reload as duplicate dimension
+ownership. Standard resource-pack precedence selects the winning definition
+when packs provide the same resource ID. The exact Overworld, Nether, and End
+bands remain immutable built-in rules and profile resources cannot override
+them. A failed reload leaves the last valid custom profile snapshot active.
+Removing a profile on a later successful reload restores that dimension's L0
+fallback, and stopping the server clears all custom profiles so definitions
+cannot leak between worlds.
+
+The resolved base is read from an immutable in-memory snapshot; JSON is never
+parsed while mining. Family resistance and exposure are then applied normally,
+so external stone families use the same custom dimension bands. Player-placed
+raw stone remains L0 regardless of the dimension profile.
+
 ## Manual Workshop recipe interface
 
 `material_progression:manual_workshop` is a public recipe type and serializer.

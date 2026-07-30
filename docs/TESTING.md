@@ -38,6 +38,8 @@ The opening/geology contracts cover:
   Netherrack-only Soul Sand/Soul Soil cover interface
 - Models, blockstates, translations, loot, smelting, mining tags, and recipes
 - Shared-tag inputs and the single custom four-Rock cobbling recipe
+- The registered custom-dimension profile schema, immutable built-in bands,
+  transactional validation, and absence of stale release-blocker wording
 - The Manual Workshop serializer and complete operation catalog
 - Opening advancements, Recipe Book rewards, localized feedback, and tooltips
 - Production-JAR exclusion of development-only GameTest code
@@ -75,6 +77,11 @@ GameTests are grouped by gameplay system under
 - Geology-focused tests verify depth bands, modifiers, exposure, correct-tool
   drops, Fortune, Silk Touch, config toggles, persistent placed-stone markers,
   and piston transfer.
+- `GeologyDimensionProfileGameTests` drives the real retained reload listener
+  through custom-dimension boundaries, immediate replacement, removal,
+  duplicate ownership, malformed schema retention, built-in protection, family
+  and exposure shifts, clamping, and unconfigured L0 fallback. Its global
+  profile mutation runs in an isolated batch.
 - Tool tests verify Plant Fiber harvesting and Knife/Hammer/Saw category
   behavior.
 - Workshop tests verify recipe matching, timing, persistence, output blocking,
@@ -84,7 +91,7 @@ GameTests are grouped by gameplay system under
   throttled log hints, the Dense-geology advancement, the dedicated Manual
   Workshop recipe category, and real inventory-triggered Recipe Book unlocks.
 
-The current opening branch runs 129 live GameTests. Treat that count as a
+The current opening branch runs 130 live GameTests. Treat that count as a
 snapshot, not a reason to avoid adding the next regression test.
 
 GameTests must use real registries, recipes, inventories, blocks, and server

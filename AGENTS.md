@@ -67,6 +67,7 @@ Code currently implements:
   across the Overworld, Nether, and End plus tree/shrub-aware Overworld Sticks
 - Geological resistance by dimension, depth, family, exposure, and natural
   versus player-placed origin
+- Reloadable geological depth profiles for arbitrary non-built-in dimensions
 - Rock, flint shards, and the flint hatchet, plus Plant Fiber and Flint/Bronze
   Knives, Hammers, and Saws
 - A default-enabled log-only axe requirement with a server opt-out; Saws
@@ -78,8 +79,6 @@ Code currently implements:
 - Reusable Python resource contracts and NeoForge GameTests
 - A reproducible installable JAR under `dist/`
 
-Datapack-configurable depth profiles for other dimensions are a required gap in
-the complete opening/geology pass and must be fixed before the 0.2.0 release.
 Expanded storage and hoppers, bonsai, pottery, ore samples, deposits and
 prospecting, the bulk-crafting table, and expanded metallurgy remain documented
 later work. Do not describe planned behavior as shipped behavior.

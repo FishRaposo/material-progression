@@ -250,8 +250,8 @@ obstacles into resources.
 
 The opening fixes sixteen built-in stone families, four geological resistance
 levels, arbitrary third-party family extension, and a first Bronze-access
-relationship for testing. Datapack-configurable depth profiles for other
-dimensions remain required pre-release extension work. Bonsai, hopper variants,
+relationship for testing. Datapack-configurable depth profiles extend the same
+access rules to arbitrary non-built-in dimensions. Bonsai, hopper variants,
 larger chests, bulk-crafting upgrades, pottery, samples, deposits, prospecting,
-and expanded metallurgy remain open later systems. The implemented Bronze
-slice is still an experiment used to learn what the final loop should be.
+and expanded metallurgy remain open later systems. The implemented Bronze slice
+is still an experiment used to learn what the final loop should be.

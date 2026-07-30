@@ -3,8 +3,8 @@
 > **Status: implemented opening slice.** The sixteen built-in stone families,
 > their Loose Rocks, cobbles, fragment drops, and geological resistance ship in
 > the development tree. Arbitrary third-party family registration is also
-> implemented. Datapack-configurable depth profiles for other dimensions remain
-> a required pre-0.2.0 gap.
+> implemented, together with datapack-configurable depth profiles for arbitrary
+> non-built-in dimensions.
 
 ## Why geology is foundational
 
@@ -58,10 +58,17 @@ The built-in depth bases are:
 - **Nether:** L0 at Y96 and above; L1 from Y95 through Y64; L2 from Y63 through
   Y32; L3 at Y31 and below.
 - **End:** enclosed End Stone begins at L2.
-- **Other dimensions:** currently resolve to L0.
+- **Other dimensions:** use their reloadable geology dimension profile, or L0
+  at every height when no profile targets that dimension. This unconfigured
+  fallback is deterministic and requires no empty profile resource.
 
-The last rule is not the finished compatibility promise. Datapack-configurable
-depth profiles for other dimensions must be implemented before 0.2.0.
+The core Overworld, Nether, and End rules are immutable built-ins so a datapack
+cannot silently change the opening's baseline. The public
+`material_progression:geology_dimension_profile` data interface targets any
+other dimension ID without a code change. Its ordered, inclusive Y thresholds
+resolve a base level before family resistance and exposure are applied. The
+complete schema, validation rules, and authoring example are in
+[Compatibility policy](COMPATIBILITY.md).
 
 Raw stone placed by a player always mines at L0, while still fragmenting into
 Rocks. A compact persistent chunk attachment records these positions. Saving

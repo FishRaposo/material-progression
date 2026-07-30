@@ -74,9 +74,8 @@ The first geology implementation now resolves:
 - Correct-tool, Fortune, Silk Touch, and incorrect-tool drops
 - Persistent placed-stone markers with removal and piston transfer
 - Independent resistance and fragment-drop server toggles
-
-Other dimensions currently resolve to L0. The promised datapack-configurable
-depth profiles for those dimensions are required before 0.2.0.
+- Reloadable depth profiles for arbitrary non-built-in dimensions, with L0 as
+  the unconfigured fallback
 
 The reloadable stone-family schema accepts arbitrary additional namespaced
 family IDs with externally registered Rocks, raw blocks, and cobbles. It
@@ -261,9 +260,8 @@ This may remain in the core mod or become a separate compatible module.
 The local 0.2.0 target is the complete opening/geology slice. Before the release
 workflow may synchronize version and JAR, it still requires:
 
-1. Datapack-configurable other-dimension depth profiles
-2. A 20-30 minute survival playtest through Bronze and Dense geology
-3. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
+1. A 20-30 minute survival playtest through Bronze and Dense geology
+2. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
 
 Do not push, merge, or move `main` without explicit authorization.
 
@@ -280,7 +278,7 @@ test with the production change. The current harness has two layers:
   drops, placed-stone persistence, primitive tools, Manual Workshop behavior,
   discoverability, configuration, and gameplay tags.
 
-The opening branch currently runs 129 live GameTests. Future pottery, samples,
+The opening branch currently runs 130 live GameTests. Future pottery, samples,
 deposits, prospecting, bonsai, logistics, bulk crafting, and expanded metallurgy
 must extend the suite when they are introduced. Tests must not pretend that a
 documented but unimplemented feature exists.

@@ -112,7 +112,7 @@ public final class GeologyTierResolver {
         if (dimension == Level.END) {
             return 2;
         }
-        return 0;
+        return GeologyDimensionProfileCatalog.baseLevel(dimension, y);
     }
 
     private static boolean isExposed(ServerLevel level, BlockPos pos) {
