@@ -1,9 +1,8 @@
 # Material Progression
 
-> **Development build:** the opening/geology vertical slice is implemented, but
-> values and content remain subject to survival playtesting. The tracked
-> installable JAR remains the last synchronized release until the 0.2.0 release
-> workflow is completed.
+> **Local 0.2.0 release candidate:** the complete opening/geology vertical
+> slice and its synchronized installable JAR are ready for client inspection
+> and survival playtesting. Values and content remain subject to that evidence.
 
 Material Progression is an open-source experiment in rebuilding Minecraft's
 progression around the thing its name promises: mining a world whose shape
@@ -126,7 +125,7 @@ Item visuals currently reuse vanilla textures as development placeholders.
 
 ## Install
 
-Download [Material Progression 0.1.0](dist/material-progression-0.1.0.jar) and
+Download [Material Progression 0.2.0](dist/material-progression-0.2.0.jar) and
 place it in the `mods` directory of a Minecraft 26.2 NeoForge instance.
 
 This prototype currently requires:

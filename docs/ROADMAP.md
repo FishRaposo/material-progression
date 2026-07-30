@@ -257,8 +257,9 @@ This may remain in the core mod or become a separate compatible module.
 
 ## Release planning
 
-The local 0.2.0 target is the complete opening/geology slice. Before the release
-workflow may synchronize version and JAR, it still requires:
+The local 0.2.0 release candidate is the complete opening/geology slice. Its
+versioned source and installable JAR are synchronized locally. Before
+publishing or integrating the candidate, it still requires:
 
 1. A 20-30 minute survival playtest through Bronze and Dense geology
 2. Client inspection of Workshop rendering, UI, sounds, particles, and feedback

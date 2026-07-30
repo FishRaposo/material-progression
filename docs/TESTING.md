@@ -77,11 +77,11 @@ GameTests are grouped by gameplay system under
 - Geology-focused tests verify depth bands, modifiers, exposure, correct-tool
   drops, Fortune, Silk Touch, config toggles, persistent placed-stone markers,
   and piston transfer.
-- `GeologyDimensionProfileGameTests` drives the real retained reload listener
-  through custom-dimension boundaries, immediate replacement, removal,
-  duplicate ownership, malformed schema retention, built-in protection, family
-  and exposure shifts, clamping, and unconfigured L0 fallback. Its global
-  profile mutation runs in an isolated batch.
+- `GeologyDimensionProfileGameTests` drives production reload-listener
+  preparation and application through custom-dimension boundaries, immediate
+  replacement, removal, duplicate ownership, malformed schema retention,
+  built-in protection, family and exposure shifts, clamping, and unconfigured
+  L0 fallback. Its global profile mutation runs in an isolated batch.
 - Tool tests verify Plant Fiber harvesting and Knife/Hammer/Saw category
   behavior.
 - Workshop tests verify recipe matching, timing, persistence, output blocking,
@@ -110,8 +110,9 @@ in a future harness that can safely unload the containing chunk.
 
 Server GameTests cannot judge the Manual Workshop's client rendering, UI
 clarity, sound balance, particle restraint, translated text presentation, or
-the feel of the opening. Before 0.2.0, run a real client and complete a 20-30
-minute survival path through Bronze and a Dense-geology encounter.
+the feel of the opening. Before publishing 0.2.0, run a real client and
+complete a 20-30 minute survival path through Bronze and a Dense-geology
+encounter.
 
 ## Adding behavior
 

@@ -178,4 +178,4 @@ intermediate tools expand access in visible steps, Stone identity survives
 through Rocks and cobbles, and building remains comfortable. Automated tests
 establish deterministic behavior; a 20-30 minute survival run through Bronze
 and Dense geology remains the required balance and discoverability check before
-release.
+publishing 0.2.0.
