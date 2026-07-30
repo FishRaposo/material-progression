@@ -157,12 +157,18 @@ public final class GroundStickFeatureGameTests {
 
     @GameTest
     @EmptyTemplate(value = "9x9x8")
-    @TestHolder(description = "Ground Sticks never replace their shrub anchor")
-    static void replaceableShrubAtCandidateSurvives(
+    @TestHolder(description = "Ground Sticks never replace a replaceable anchor")
+    static void replaceableTaggedBushAtCandidateSurvives(
             ExtendedGameTestHelper helper
     ) {
         prepareFlatGround(helper, 1, 7);
-        helper.setBlock(CENTER, Blocks.SWEET_BERRY_BUSH);
+        helper.setBlock(CENTER, Blocks.BUSH);
+        var anchorState = helper.getBlockState(CENTER);
+        helper.assertTrue(
+                anchorState.canBeReplaced(),
+                "Bush precondition failed: target is not replaceable"
+        );
+        assertAnchorTagged(helper, CENTER, "replaceable Bush");
 
         boolean placed = placeFeature(
                 helper,
@@ -170,7 +176,8 @@ public final class GroundStickFeatureGameTests {
                 CENTER,
                 46L
         );
-        helper.assertBlockPresent(Blocks.SWEET_BERRY_BUSH, CENTER);
+        helper.assertBlockPresent(Blocks.BUSH, CENTER);
+        helper.assertBlockNotPresent(ModBlocks.GROUND_STICK.get(), CENTER);
         helper.assertFalse(
                 placed,
                 "feature replaced its tagged shrub anchor"
