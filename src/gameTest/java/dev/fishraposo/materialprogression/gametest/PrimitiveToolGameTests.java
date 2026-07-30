@@ -7,6 +7,7 @@ import dev.fishraposo.materialprogression.stone.GeologyTier;
 import dev.fishraposo.materialprogression.stone.GeologyToolCapability;
 import java.util.List;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -46,11 +47,12 @@ public final class PrimitiveToolGameTests {
         MaterialProgressionGameTestMod.addSentinelDropAt(
                 helper.absolutePos(BLOCK_POS)
         );
+        ItemStack knife = ModItems.FLINT_KNIFE.get().getDefaultInstance();
 
         breakBlock(
                 helper,
                 BLOCK_POS,
-                ModItems.FLINT_KNIFE.get().getDefaultInstance(),
+                knife,
                 GameType.SURVIVAL
         );
 
@@ -63,6 +65,11 @@ public final class PrimitiveToolGameTests {
                 1,
                 itemCount(helper, BLOCK_POS, Items.STICK),
                 "preserved sentinel drop count"
+        );
+        helper.assertValueEqual(
+                1,
+                knife.getDamageValue(),
+                "short-grass Flint Knife damage"
         );
         helper.succeed();
     }
@@ -81,11 +88,12 @@ public final class PrimitiveToolGameTests {
                 helper.absolutePos(BLOCK_POS),
                 Block.UPDATE_ALL
         );
+        ItemStack knife = ModItems.BRONZE_KNIFE.get().getDefaultInstance();
 
         breakBlock(
                 helper,
                 BLOCK_POS,
-                ModItems.BRONZE_KNIFE.get().getDefaultInstance(),
+                knife,
                 GameType.SURVIVAL
         );
 
@@ -96,6 +104,84 @@ public final class PrimitiveToolGameTests {
         );
         helper.assertBlockPresent(Blocks.AIR, BLOCK_POS);
         helper.assertBlockPresent(Blocks.AIR, BLOCK_POS.above());
+        helper.assertValueEqual(
+                1,
+                knife.getDamageValue(),
+                "lower-half tall-grass Bronze Knife damage"
+        );
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Breaking upper tall grass adds two Fiber once and damages one Knife once")
+    static void upperTallGrassAddsTwoFiberAndOneKnifeDamage(
+            ExtendedGameTestHelper helper
+    ) {
+        resetEventFixtures(helper);
+        helper.setBlock(BLOCK_POS.below(), Blocks.DIRT);
+        DoublePlantBlock.placeAt(
+                helper.getLevel(),
+                Blocks.TALL_GRASS.defaultBlockState(),
+                helper.absolutePos(BLOCK_POS),
+                Block.UPDATE_ALL
+        );
+        ItemStack knife = ModItems.FLINT_KNIFE.get().getDefaultInstance();
+
+        breakBlock(
+                helper,
+                BLOCK_POS.above(),
+                knife,
+                GameType.SURVIVAL
+        );
+
+        helper.assertValueEqual(
+                2,
+                itemCount(helper, BLOCK_POS, ModItems.PLANT_FIBER.get()),
+                "upper-half tall-grass Plant Fiber count"
+        );
+        helper.assertBlockPresent(Blocks.AIR, BLOCK_POS);
+        helper.assertBlockPresent(Blocks.AIR, BLOCK_POS.above());
+        helper.assertValueEqual(
+                1,
+                knife.getDamageValue(),
+                "upper-half tall-grass Flint Knife damage"
+        );
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "A shared-tag Knife may break on the final successful Fiber harvest")
+    static void sharedKnifeFinalDamageStillProducesFiber(
+            ExtendedGameTestHelper helper
+    ) {
+        resetEventFixtures(helper);
+        placeShortGrass(helper);
+        ItemStack knife =
+                MaterialProgressionGameTestMod.SHARED_KNIFE.get()
+                        .getDefaultInstance();
+        knife.setDamageValue(knife.getMaxDamage() - 1);
+        ServerPlayer player = playerHolding(
+                helper,
+                knife,
+                GameType.SURVIVAL
+        );
+
+        boolean broken = player.gameMode.destroyBlock(
+                helper.absolutePos(BLOCK_POS)
+        );
+
+        helper.assertTrue(broken, "shared-tag Knife did not break short grass");
+        helper.assertValueEqual(
+                1,
+                itemCount(helper, BLOCK_POS, ModItems.PLANT_FIBER.get()),
+                "final-operation Plant Fiber count"
+        );
+        helper.assertTrue(
+                player.getMainHandItem().isEmpty(),
+                "shared-tag Knife survived its final successful operation"
+        );
         helper.succeed();
     }
 
@@ -107,10 +193,11 @@ public final class PrimitiveToolGameTests {
     ) {
         resetEventFixtures(helper);
         placeShortGrass(helper);
+        ItemStack nonKnife = ModItems.FLINT_SAW.get().getDefaultInstance();
         breakBlock(
                 helper,
                 BLOCK_POS,
-                new ItemStack(Items.STICK),
+                nonKnife,
                 GameType.SURVIVAL
         );
         helper.assertValueEqual(
@@ -118,12 +205,19 @@ public final class PrimitiveToolGameTests {
                 itemCount(helper, BLOCK_POS, ModItems.PLANT_FIBER.get()),
                 "non-knife Fiber count"
         );
+        helper.assertValueEqual(
+                0,
+                nonKnife.getDamageValue(),
+                "non-knife damage"
+        );
 
         placeShortGrass(helper);
+        ItemStack creativeKnife =
+                ModItems.FLINT_KNIFE.get().getDefaultInstance();
         breakBlock(
                 helper,
                 BLOCK_POS,
-                ModItems.FLINT_KNIFE.get().getDefaultInstance(),
+                creativeKnife,
                 GameType.CREATIVE
         );
         helper.assertValueEqual(
@@ -131,15 +225,22 @@ public final class PrimitiveToolGameTests {
                 itemCount(helper, BLOCK_POS, ModItems.PLANT_FIBER.get()),
                 "creative Fiber count"
         );
+        helper.assertValueEqual(
+                0,
+                creativeKnife.getDamageValue(),
+                "creative Knife damage"
+        );
 
         placeShortGrass(helper);
         MaterialProgressionGameTestMod.cancelNextBreakAt(
                 helper.absolutePos(BLOCK_POS)
         );
+        ItemStack canceledKnife =
+                ModItems.FLINT_KNIFE.get().getDefaultInstance();
         boolean broken = breakBlock(
                 helper,
                 BLOCK_POS,
-                ModItems.FLINT_KNIFE.get().getDefaultInstance(),
+                canceledKnife,
                 GameType.SURVIVAL
         );
         helper.assertFalse(broken, "canceled short-grass break succeeded");
@@ -148,6 +249,31 @@ public final class PrimitiveToolGameTests {
                 0,
                 itemCount(helper, BLOCK_POS, ModItems.PLANT_FIBER.get()),
                 "canceled-break Fiber count"
+        );
+        helper.assertValueEqual(
+                0,
+                canceledKnife.getDamageValue(),
+                "canceled-break Knife damage"
+        );
+
+        helper.setBlock(BLOCK_POS, Blocks.FERN);
+        ItemStack noBonusKnife =
+                ModItems.FLINT_KNIFE.get().getDefaultInstance();
+        breakBlock(
+                helper,
+                BLOCK_POS,
+                noBonusKnife,
+                GameType.SURVIVAL
+        );
+        helper.assertValueEqual(
+                0,
+                itemCount(helper, BLOCK_POS, ModItems.PLANT_FIBER.get()),
+                "ineligible-plant Fiber count"
+        );
+        helper.assertValueEqual(
+                0,
+                noBonusKnife.getDamageValue(),
+                "ineligible-plant Knife damage"
         );
         helper.succeed();
     }
@@ -355,9 +481,19 @@ public final class PrimitiveToolGameTests {
             ItemStack tool,
             GameType gameType
     ) {
-        var player = helper.makeTickingMockServerPlayerInLevel(gameType);
-        player.setItemInHand(InteractionHand.MAIN_HAND, tool);
+        ServerPlayer player = playerHolding(helper, tool, gameType);
         return player.gameMode.destroyBlock(helper.absolutePos(pos));
+    }
+
+    private static ServerPlayer playerHolding(
+            ExtendedGameTestHelper helper,
+            ItemStack tool,
+            GameType gameType
+    ) {
+        ServerPlayer player =
+                helper.makeTickingMockServerPlayerInLevel(gameType);
+        player.setItemInHand(InteractionHand.MAIN_HAND, tool);
+        return player;
     }
 
     private static int itemCount(

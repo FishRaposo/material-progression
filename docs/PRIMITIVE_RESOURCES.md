@@ -282,8 +282,11 @@ so the first hatchet never requires a workshop or a knife.
 The implemented opening includes Flint and Bronze Knives. Both preserve normal
 plant loot and add one Plant Fiber from short grass or two from a single
 two-block tall grass. Recognition uses the reloadable knife behavior tag rather
-than an item identity list. Flint has 64 durability; Bronze has 325 durability.
-Bronze improves longevity without changing the field Fiber yield.
+than an item identity list. Each successful Fiber-producing plant break costs
+the Knife one durability, including one total durability when either half of
+tall grass is broken; the Fiber still drops when that operation breaks the
+Knife. Flint has 64 durability; Bronze has 325 durability. Bronze improves
+longevity without changing the field Fiber yield.
 
 Knives may later continue through copper, tin, iron, silver, and other
 materials, but a complete recolored family is not required unless those

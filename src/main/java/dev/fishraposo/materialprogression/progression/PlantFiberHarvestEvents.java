@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.progression;
 
 import dev.fishraposo.materialprogression.registry.ModItems;
 import dev.fishraposo.materialprogression.registry.ModTags;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -35,6 +36,13 @@ public final class PlantFiberHarvestEvents {
             return;
         }
 
+        ItemStack knife = player.getMainHandItem();
+        if (!knife.is(event.getTool().getItem())
+                || !knife.is(ModTags.KNIVES)
+                || !knife.isDamageableItem()) {
+            return;
+        }
+
         event.getDrops().add(new ItemEntity(
                 event.getLevel(),
                 event.getPos().getX() + 0.5,
@@ -42,5 +50,6 @@ public final class PlantFiberHarvestEvents {
                 event.getPos().getZ() + 0.5,
                 new ItemStack(ModItems.PLANT_FIBER.get(), count)
         ));
+        knife.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
     }
 }

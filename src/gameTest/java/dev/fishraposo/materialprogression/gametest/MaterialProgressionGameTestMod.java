@@ -47,6 +47,11 @@ public final class MaterialProgressionGameTestMod {
             );
     static final DeferredItem<Item> UNKNOWN_ROCK =
             ITEMS.registerSimpleItem("unknown_rock");
+    static final DeferredItem<Item> SHARED_KNIFE =
+            ITEMS.registerItem(
+                    "shared_knife",
+                    properties -> new Item(properties.durability(4))
+            );
     private static BlockPos canceledPlacement;
     private static BlockPos canceledLivingDestruction;
     private static BlockPos canceledNeighborNotify;
