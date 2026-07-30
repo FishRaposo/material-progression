@@ -5,8 +5,10 @@ import dev.fishraposo.materialprogression.progression.HarvestRuleEvents;
 import dev.fishraposo.materialprogression.registry.ModBlockEntities;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
 import dev.fishraposo.materialprogression.registry.ModItems;
+import dev.fishraposo.materialprogression.registry.ModFeatures;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
+import dev.fishraposo.materialprogression.stone.StoneFamilyReloadListener;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
@@ -22,10 +24,12 @@ public final class MaterialProgression {
         ModBlockEntities.register(modBus);
         ModMenus.register(modBus);
         ModRecipes.register(modBus);
+        ModFeatures.register(modBus);
         container.registerConfig(
                 ModConfig.Type.SERVER,
                 MaterialProgressionConfig.SPEC
         );
         HarvestRuleEvents.register();
+        StoneFamilyReloadListener.register();
     }
 }

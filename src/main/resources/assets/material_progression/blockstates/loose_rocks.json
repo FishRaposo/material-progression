@@ -1,21 +1,20 @@
 {
   "variants": {
-    "": [
-      {
-        "model": "material_progression:block/loose_rocks"
-      },
-      {
-        "model": "material_progression:block/loose_rocks",
-        "y": 90
-      },
-      {
-        "model": "material_progression:block/loose_rocks",
-        "y": 180
-      },
-      {
-        "model": "material_progression:block/loose_rocks",
-        "y": 270
-      }
-    ]
+    "family=stone": [{"model":"material_progression:block/loose_rocks/stone"},{"model":"material_progression:block/loose_rocks/stone","y":90},{"model":"material_progression:block/loose_rocks/stone","y":180},{"model":"material_progression:block/loose_rocks/stone","y":270}],
+    "family=granite": [{"model":"material_progression:block/loose_rocks/granite"},{"model":"material_progression:block/loose_rocks/granite","y":90},{"model":"material_progression:block/loose_rocks/granite","y":180},{"model":"material_progression:block/loose_rocks/granite","y":270}],
+    "family=diorite": [{"model":"material_progression:block/loose_rocks/diorite"},{"model":"material_progression:block/loose_rocks/diorite","y":90},{"model":"material_progression:block/loose_rocks/diorite","y":180},{"model":"material_progression:block/loose_rocks/diorite","y":270}],
+    "family=andesite": [{"model":"material_progression:block/loose_rocks/andesite"},{"model":"material_progression:block/loose_rocks/andesite","y":90},{"model":"material_progression:block/loose_rocks/andesite","y":180},{"model":"material_progression:block/loose_rocks/andesite","y":270}],
+    "family=deepslate": [{"model":"material_progression:block/loose_rocks/deepslate"},{"model":"material_progression:block/loose_rocks/deepslate","y":90},{"model":"material_progression:block/loose_rocks/deepslate","y":180},{"model":"material_progression:block/loose_rocks/deepslate","y":270}],
+    "family=tuff": [{"model":"material_progression:block/loose_rocks/tuff"},{"model":"material_progression:block/loose_rocks/tuff","y":90},{"model":"material_progression:block/loose_rocks/tuff","y":180},{"model":"material_progression:block/loose_rocks/tuff","y":270}],
+    "family=calcite": [{"model":"material_progression:block/loose_rocks/calcite"},{"model":"material_progression:block/loose_rocks/calcite","y":90},{"model":"material_progression:block/loose_rocks/calcite","y":180},{"model":"material_progression:block/loose_rocks/calcite","y":270}],
+    "family=dripstone": [{"model":"material_progression:block/loose_rocks/dripstone"},{"model":"material_progression:block/loose_rocks/dripstone","y":90},{"model":"material_progression:block/loose_rocks/dripstone","y":180},{"model":"material_progression:block/loose_rocks/dripstone","y":270}],
+    "family=sulfur": [{"model":"material_progression:block/loose_rocks/sulfur"},{"model":"material_progression:block/loose_rocks/sulfur","y":90},{"model":"material_progression:block/loose_rocks/sulfur","y":180},{"model":"material_progression:block/loose_rocks/sulfur","y":270}],
+    "family=cinnabar": [{"model":"material_progression:block/loose_rocks/cinnabar"},{"model":"material_progression:block/loose_rocks/cinnabar","y":90},{"model":"material_progression:block/loose_rocks/cinnabar","y":180},{"model":"material_progression:block/loose_rocks/cinnabar","y":270}],
+    "family=sandstone": [{"model":"material_progression:block/loose_rocks/sandstone"},{"model":"material_progression:block/loose_rocks/sandstone","y":90},{"model":"material_progression:block/loose_rocks/sandstone","y":180},{"model":"material_progression:block/loose_rocks/sandstone","y":270}],
+    "family=red_sandstone": [{"model":"material_progression:block/loose_rocks/red_sandstone"},{"model":"material_progression:block/loose_rocks/red_sandstone","y":90},{"model":"material_progression:block/loose_rocks/red_sandstone","y":180},{"model":"material_progression:block/loose_rocks/red_sandstone","y":270}],
+    "family=netherrack": [{"model":"material_progression:block/loose_rocks/netherrack"},{"model":"material_progression:block/loose_rocks/netherrack","y":90},{"model":"material_progression:block/loose_rocks/netherrack","y":180},{"model":"material_progression:block/loose_rocks/netherrack","y":270}],
+    "family=basalt": [{"model":"material_progression:block/loose_rocks/basalt"},{"model":"material_progression:block/loose_rocks/basalt","y":90},{"model":"material_progression:block/loose_rocks/basalt","y":180},{"model":"material_progression:block/loose_rocks/basalt","y":270}],
+    "family=blackstone": [{"model":"material_progression:block/loose_rocks/blackstone"},{"model":"material_progression:block/loose_rocks/blackstone","y":90},{"model":"material_progression:block/loose_rocks/blackstone","y":180},{"model":"material_progression:block/loose_rocks/blackstone","y":270}],
+    "family=end_stone": [{"model":"material_progression:block/loose_rocks/end_stone"},{"model":"material_progression:block/loose_rocks/end_stone","y":90},{"model":"material_progression:block/loose_rocks/end_stone","y":180},{"model":"material_progression:block/loose_rocks/end_stone","y":270}]
   }
 }

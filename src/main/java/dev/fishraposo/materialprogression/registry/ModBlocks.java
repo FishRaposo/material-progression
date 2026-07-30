@@ -3,6 +3,7 @@ package dev.fishraposo.materialprogression.registry;
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.level.block.CrusherBlock;
 import dev.fishraposo.materialprogression.world.level.block.GroundResourceBlock;
+import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -57,10 +58,10 @@ public final class ModBlocks {
     public static final DeferredBlock<Block> COBBLED_BLACKSTONE = cobbled("cobbled_blackstone", MapColor.STONE, 3.0F);
     public static final DeferredBlock<Block> COBBLED_END_STONE = cobbled("cobbled_end_stone", MapColor.STONE, 2.0F);
 
-    public static final DeferredBlock<GroundResourceBlock> LOOSE_ROCKS =
+    public static final DeferredBlock<LooseRocksBlock> LOOSE_ROCKS =
             BLOCKS.registerBlock(
                     "loose_rocks",
-                    GroundResourceBlock::new,
+                    LooseRocksBlock::new,
                     properties -> properties
                             .mapColor(MapColor.STONE)
                             .replaceable()

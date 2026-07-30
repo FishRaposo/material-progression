@@ -1,11 +1,4 @@
 {
-  "type": "minecraft:simple_block",
-  "config": {
-    "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "material_progression:loose_rocks"
-      }
-    }
-  }
+  "type": "material_progression:loose_rocks",
+  "config": {}
 }

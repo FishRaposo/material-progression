@@ -129,10 +129,8 @@ SHIPPED_BLOCKS = {
 WORLD_ONLY_BLOCKS = {"ground_stick", "loose_rocks"}
 
 PRIMITIVE_RECIPES = {
-    "cobblestone_from_rocks": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": ["#c:rocks"] * 4,
-        "result": {"id": "minecraft:cobblestone"},
+    "rock_cobbling": {
+        "type": "material_progression:rock_cobbling",
     },
     "flint_hatchet": {
         "type": "minecraft:crafting_shaped",
@@ -154,7 +152,6 @@ PRIMITIVE_RECIPES = {
 
 SURFACE_WORLDGEN_FEATURES = {
     "ground_stick": "material_progression:ground_stick",
-    "loose_rocks": "material_progression:loose_rocks",
 }
 
 CRUSHING_RECIPES = {

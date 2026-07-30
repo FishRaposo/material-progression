@@ -1,19 +1,21 @@
 {
   "type": "minecraft:block",
   "pools": [
-    {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "material_progression:rock"
-        }
-      ],
-      "functions": [
-        {
-          "function": "minecraft:explosion_decay"
-        }
-      ]
-    }
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"stone"}}],"entries":[{"type":"minecraft:item","name":"material_progression:rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"granite"}}],"entries":[{"type":"minecraft:item","name":"material_progression:granite_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"diorite"}}],"entries":[{"type":"minecraft:item","name":"material_progression:diorite_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"andesite"}}],"entries":[{"type":"minecraft:item","name":"material_progression:andesite_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"deepslate"}}],"entries":[{"type":"minecraft:item","name":"material_progression:deepslate_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"tuff"}}],"entries":[{"type":"minecraft:item","name":"material_progression:tuff_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"calcite"}}],"entries":[{"type":"minecraft:item","name":"material_progression:calcite_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"dripstone"}}],"entries":[{"type":"minecraft:item","name":"material_progression:dripstone_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"sulfur"}}],"entries":[{"type":"minecraft:item","name":"material_progression:sulfur_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"cinnabar"}}],"entries":[{"type":"minecraft:item","name":"material_progression:cinnabar_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"sandstone"}}],"entries":[{"type":"minecraft:item","name":"material_progression:sandstone_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"red_sandstone"}}],"entries":[{"type":"minecraft:item","name":"material_progression:red_sandstone_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"netherrack"}}],"entries":[{"type":"minecraft:item","name":"material_progression:netherrack_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"basalt"}}],"entries":[{"type":"minecraft:item","name":"material_progression:basalt_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"blackstone"}}],"entries":[{"type":"minecraft:item","name":"material_progression:blackstone_rock"}]},
+    {"rolls":1,"conditions":[{"condition":"minecraft:block_state_property","block":"material_progression:loose_rocks","properties":{"family":"end_stone"}}],"entries":[{"type":"minecraft:item","name":"material_progression:end_stone_rock"}]}
   ]
 }

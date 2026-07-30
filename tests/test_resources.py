@@ -445,6 +445,192 @@ class ResourceContractTests(unittest.TestCase):
                 )
                 self.assertEqual(cobbled, loot["pools"][0]["entries"][0]["name"])
 
+    def test_runtime_stone_family_definitions_are_complete_and_literal(self):
+        family_dir = DATA / "stone_family"
+        self.assertEqual(
+            set(STONE_FAMILIES),
+            TREE.names_matching(family_dir, "*.json"),
+        )
+        resistance_modifiers = {
+            "soft": 0.75,
+            "standard": 1.0,
+            "hard": 1.5,
+        }
+        for family, contract in STONE_FAMILIES.items():
+            with self.subTest(family=family):
+                self.assertEqual(
+                    {
+                        "source_block_tag": (
+                            f"#material_progression:stone_sources/{family}"
+                        ),
+                        "rock_item_tag": f"#c:rocks/{family}",
+                        "cobbled_block": contract["cobbled_block"],
+                        "raw_block": contract["raw_block"],
+                        "loose_rock_surface_block_tag": (
+                            "#material_progression:"
+                            f"loose_rock_surfaces/{family}"
+                        ),
+                        "resistance": {
+                            "tier": contract["resistance"],
+                            "modifier": resistance_modifiers[
+                                contract["resistance"]
+                            ],
+                        },
+                    },
+                    TREE.load_json(family_dir / f"{family}.json"),
+                )
+
+    def test_loose_rocks_are_family_stateful_and_use_custom_worldgen(self):
+        blockstate = TREE.load_json(
+            ASSETS / "blockstates" / "loose_rocks.json"
+        )
+        self.assertEqual(
+            {f"family={family}" for family in STONE_FAMILIES},
+            set(blockstate["variants"]),
+        )
+        for family, variants in blockstate["variants"].items():
+            with self.subTest(blockstate_family=family):
+                self.assertEqual(4, len(variants))
+                expected_model = (
+                    "material_progression:block/loose_rocks/"
+                    f"{family.removeprefix('family=')}"
+                )
+                self.assertEqual(
+                    {expected_model},
+                    {variant["model"] for variant in variants},
+                )
+
+        loot = TREE.load_json(
+            DATA / "loot_table" / "blocks" / "loose_rocks.json"
+        )
+        self.assertEqual(len(STONE_FAMILIES), len(loot["pools"]))
+        expected_drops = {
+            family: (
+                "material_progression:rock"
+                if family == "stone"
+                else f"material_progression:{family}_rock"
+            )
+            for family in STONE_FAMILIES
+        }
+        actual_drops = {}
+        for pool in loot["pools"]:
+            condition = pool["conditions"][0]
+            self.assertEqual(
+                "minecraft:block_state_property",
+                condition["condition"],
+            )
+            self.assertEqual(
+                "material_progression:loose_rocks",
+                condition["block"],
+            )
+            family = condition["properties"]["family"]
+            actual_drops[family] = pool["entries"][0]["name"]
+            self.assertNotIn("functions", pool)
+        self.assertEqual(expected_drops, actual_drops)
+
+        configured = TREE.load_json(
+            DATA / "worldgen" / "configured_feature" / "loose_rocks.json"
+        )
+        self.assertEqual(
+            {"type": "material_progression:loose_rocks", "config": {}},
+            configured,
+        )
+        self.assertNotIn("minecraft:simple_block", json.dumps(configured))
+
+        expected_placed = {
+            "loose_rocks_surface",
+            "loose_rocks_caves",
+            "loose_rocks_nether",
+            "loose_rocks_end",
+        }
+        self.assertEqual(
+            expected_placed,
+            {
+                path.stem
+                for path in (
+                    DATA / "worldgen" / "placed_feature"
+                ).glob("loose_rocks*.json")
+            },
+        )
+        for name in expected_placed:
+            placed = TREE.load_json(
+                DATA / "worldgen" / "placed_feature" / f"{name}.json"
+            )
+            self.assertEqual(
+                "material_progression:loose_rocks",
+                placed["feature"],
+            )
+            placement_types = {
+                placement["type"] for placement in placed["placement"]
+            }
+            self.assertIn("minecraft:in_square", placement_types)
+            self.assertIn("minecraft:biome", placement_types)
+            self.assertNotIn("minecraft:would_survive", json.dumps(placed))
+            vertical_placement = (
+                "minecraft:heightmap"
+                if name in {"loose_rocks_surface", "loose_rocks_end"}
+                else "minecraft:height_range"
+            )
+            self.assertIn(vertical_placement, placement_types)
+
+        expected_modifiers = {
+            "add_loose_rocks_surface": (
+                "#minecraft:is_overworld",
+                "material_progression:loose_rocks_surface",
+            ),
+            "add_loose_rocks_caves": (
+                "#minecraft:is_overworld",
+                "material_progression:loose_rocks_caves",
+            ),
+            "add_loose_rocks_nether": (
+                "#minecraft:is_nether",
+                "material_progression:loose_rocks_nether",
+            ),
+            "add_loose_rocks_end": (
+                "#minecraft:is_end",
+                "material_progression:loose_rocks_end",
+            ),
+        }
+        self.assertFalse((
+            DATA / "neoforge" / "biome_modifier" / "add_loose_rocks.json"
+        ).exists())
+        for name, (biomes, feature) in expected_modifiers.items():
+            modifier = TREE.load_json(
+                DATA / "neoforge" / "biome_modifier" / f"{name}.json"
+            )
+            self.assertEqual("neoforge:add_features", modifier["type"])
+            self.assertEqual(biomes, modifier["biomes"])
+            self.assertEqual(feature, modifier["features"])
+            self.assertEqual("vegetal_decoration", modifier["step"])
+
+        ground_stick_modifier = TREE.load_json(
+            DATA / "neoforge" / "biome_modifier" / "add_ground_stick.json"
+        )
+        self.assertEqual(
+            "#minecraft:is_overworld",
+            ground_stick_modifier["biomes"],
+        )
+
+    def test_dynamic_cobbling_has_one_non_competing_recipe(self):
+        recipe_names = {
+            path.stem for path in (DATA / "recipe").glob("*rock*.json")
+        }
+        self.assertIn("rock_cobbling", recipe_names)
+        self.assertNotIn("cobblestone_from_rocks", recipe_names)
+        self.assertEqual(
+            {"type": "material_progression:rock_cobbling"},
+            TREE.recipe("rock_cobbling"),
+        )
+        all_recipes = [
+            TREE.load_json(path)
+            for path in (DATA / "recipe").glob("*.json")
+        ]
+        generic_four_rock_recipes = [
+            recipe for recipe in all_recipes
+            if recipe.get("ingredients") == ["#c:rocks"] * 4
+        ]
+        self.assertEqual([], generic_four_rock_recipes)
+
     def test_tin_worldgen_resources_form_a_complete_chain(self):
         configured = TREE.load_json(
             DATA / "worldgen" / "configured_feature" / "tin_ore.json"

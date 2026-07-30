@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.item.crafting.CrushingRecipe;
+import dev.fishraposo.materialprogression.world.item.crafting.RockCobblingRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -27,6 +28,15 @@ public final class ModRecipes {
             RECIPE_SERIALIZERS.register(
                     "crushing",
                     () -> new RecipeSerializer<>(CrushingRecipe.MAP_CODEC, CrushingRecipe.STREAM_CODEC)
+            );
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<RockCobblingRecipe>>
+            ROCK_COBBLING_SERIALIZER = RECIPE_SERIALIZERS.register(
+                    "rock_cobbling",
+                    () -> new RecipeSerializer<>(
+                            RockCobblingRecipe.MAP_CODEC,
+                            RockCobblingRecipe.STREAM_CODEC
+                    )
             );
 
     private ModRecipes() {
