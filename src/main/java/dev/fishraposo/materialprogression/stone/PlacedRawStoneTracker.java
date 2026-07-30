@@ -29,14 +29,12 @@ public final class PlacedRawStoneTracker {
             }
             return false;
         }
-        if (PlacedRawStoneEvents.hasPendingPlayerPlacement(
+        return PlacedRawStoneEvents.isEffectivelyMarked(
                 level,
                 pos,
-                expectedState
-        )) {
-            return true;
-        }
-        return markers != null && markers.contains(pos);
+                expectedState,
+                markers != null && markers.contains(pos)
+        );
     }
 
     public static void mark(ServerLevel level, BlockPos pos) {

@@ -2,10 +2,15 @@ package dev.fishraposo.materialprogression.gametest;
 
 import com.mojang.serialization.JsonOps;
 import dev.fishraposo.materialprogression.registry.ModDataAttachments;
+import dev.fishraposo.materialprogression.stone.GeologyTierResolver;
 import dev.fishraposo.materialprogression.stone.PlacedRawStoneMarkers;
 import dev.fishraposo.materialprogression.stone.PlacedRawStoneTracker;
+import dev.fishraposo.materialprogression.stone.StoneFamily;
+import dev.fishraposo.materialprogression.stone.StoneFamilyDefinition;
+import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
@@ -15,6 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -280,6 +286,18 @@ public final class PlacedRawStoneGameTests {
         );
         helper.assertBlockPresent(Blocks.AIR, ROOT);
         helper.setBlock(ROOT, Blocks.STONE);
+        helper.assertFalse(
+                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                "identical replacement was immediately classified by the old marker"
+        );
+        helper.assertTrue(
+                GeologyTierResolver.resolve(
+                        helper.getLevel(),
+                        absolute,
+                        helper.getBlockState(ROOT)
+                ).orElseThrow().level() > 0,
+                "identical direct replacement was not immediately natural"
+        );
 
         helper.runAfterDelay(1, () -> {
             helper.assertBlockPresent(Blocks.STONE, ROOT);
@@ -289,6 +307,118 @@ public final class PlacedRawStoneGameTests {
             );
             helper.succeed();
         });
+    }
+
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
+    @TestHolder(description = "A later player placement creates a new marker generation")
+    static void playerPlacementAfterSameStateReplacementCreatesMarker(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos support = ROOT.below();
+        helper.setBlock(support, Blocks.COBBLESTONE);
+        helper.setBlock(ROOT, Blocks.STONE);
+        BlockPos absolute = helper.absolutePos(ROOT);
+        PlacedRawStoneTracker.mark(helper.getLevel(), absolute);
+        ServerPlayer player = player(helper, GameType.CREATIVE);
+
+        helper.assertTrue(
+                player.gameMode.destroyBlock(absolute),
+                "ordered-generation removal was rejected"
+        );
+        helper.setBlock(ROOT, Blocks.STONE);
+        helper.setBlock(ROOT, Blocks.AIR);
+        placeStone(helper, player, support);
+
+        helper.assertTrue(
+                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                "later player placement was not immediately classified as placed"
+        );
+        helper.runAfterDelay(1, () -> {
+            helper.assertTrue(
+                    hasStoredMarker(helper, absolute),
+                    "later player placement did not persist its new marker"
+            );
+            helper.succeed();
+        });
+    }
+
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
+    @TestHolder(description = "A real vetoed break retains its placed marker")
+    static void vetoedBreakRetainsMarker(
+            ExtendedGameTestHelper helper
+    ) {
+        Map<Identifier, StoneFamilyDefinition> original =
+                StoneFamilyCatalogFixture.replaceRawBlock(
+                        helper,
+                        StoneFamily.STONE,
+                        MaterialProgressionGameTestMod.VETO_RAW_STONE.get()
+                );
+        BlockPos absolute = helper.absolutePos(ROOT);
+        try {
+            helper.setBlock(
+                    ROOT,
+                    MaterialProgressionGameTestMod.VETO_RAW_STONE.get()
+            );
+            PlacedRawStoneTracker.mark(helper.getLevel(), absolute);
+            helper.assertTrue(
+                    hasStoredMarker(helper, absolute),
+                    "veto fixture did not start with a stored marker"
+            );
+            ServerPlayer player = player(helper, GameType.SURVIVAL);
+            player.setItemInHand(
+                    InteractionHand.MAIN_HAND,
+                    new ItemStack(Items.DIAMOND_PICKAXE)
+            );
+
+            helper.assertTrue(
+                    player.gameMode.destroyBlock(absolute),
+                    "vetoed real break path did not complete"
+            );
+            helper.assertBlockPresent(
+                    MaterialProgressionGameTestMod.VETO_RAW_STONE.get(),
+                    ROOT
+            );
+        } finally {
+            StoneFamilyCatalogFixture.publish(helper, original);
+        }
+
+        helper.runAfterDelay(1, () -> {
+            helper.assertTrue(
+                    hasStoredMarker(helper, absolute),
+                    "vetoed removal lost its stored marker"
+            );
+            helper.succeed();
+        });
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Level unload discards pending marker operations")
+    static void levelUnloadClearsPendingOperations(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos support = ROOT.below();
+        helper.setBlock(support, Blocks.COBBLESTONE);
+        BlockPos absolute = helper.absolutePos(ROOT);
+        placeStone(helper, player(helper, GameType.SURVIVAL), support);
+        helper.assertTrue(
+                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                "unload fixture did not start with a pending placement"
+        );
+        helper.assertFalse(
+                hasStoredMarker(helper, absolute),
+                "unload fixture unexpectedly persisted before tick post"
+        );
+
+        NeoForge.EVENT_BUS.post(new LevelEvent.Unload(helper.getLevel()));
+
+        helper.assertFalse(
+                PlacedRawStoneTracker.isMarked(helper.getLevel(), absolute),
+                "level unload retained a pending placement"
+        );
+        helper.succeed();
     }
 
     @GameTest(timeoutTicks = 20)

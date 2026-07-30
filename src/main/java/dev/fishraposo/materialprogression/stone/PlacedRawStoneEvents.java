@@ -14,8 +14,10 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.level.PistonEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 public final class PlacedRawStoneEvents {
@@ -30,6 +32,9 @@ public final class PlacedRawStoneEvents {
     public static void register() {
         NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onPlaced);
         NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onBlockBroken);
+        NeoForge.EVENT_BUS.addListener(
+                PlacedRawStoneEvents::onNeighborNotify
+        );
         NeoForge.EVENT_BUS.addListener(
                 PlacedRawStoneEvents::onFluidPlacedBlock
         );
@@ -47,6 +52,8 @@ public final class PlacedRawStoneEvents {
         NeoForge.EVENT_BUS.addListener(
                 PlacedRawStoneEvents::onLevelTickPost
         );
+        NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onLevelUnload);
+        NeoForge.EVENT_BUS.addListener(PlacedRawStoneEvents::onServerStopped);
     }
 
     private static void onPlaced(BlockEvent.EntityPlaceEvent event) {
@@ -80,6 +87,18 @@ public final class PlacedRawStoneEvents {
         if (!event.isCanceled()
                 && event.getLevel() instanceof ServerLevel level) {
             queueBreak(level, event);
+        }
+    }
+
+    private static void onNeighborNotify(
+            BlockEvent.NeighborNotifyEvent event
+    ) {
+        if (event.getLevel() instanceof ServerLevel level) {
+            observeMutation(
+                    level,
+                    event.getPos(),
+                    event.getState()
+            );
         }
     }
 
@@ -195,13 +214,29 @@ public final class PlacedRawStoneEvents {
 
     private static void onLevelTickPost(LevelTickEvent.Post event) {
         if (event.getLevel() instanceof ServerLevel level) {
-            PISTON_MOVES.keySet().removeIf(key -> key.level() == level);
+            clearPistonMoves(level);
             List<PendingMarkerUpdate> updates =
                     MARKER_UPDATES.remove(level);
             if (updates != null) {
                 updates.forEach(update -> update.apply(level));
             }
         }
+    }
+
+    private static void onLevelUnload(LevelEvent.Unload event) {
+        if (event.getLevel() instanceof ServerLevel level) {
+            clearPistonMoves(level);
+            MARKER_UPDATES.remove(level);
+        }
+    }
+
+    private static void onServerStopped(ServerStoppedEvent event) {
+        PISTON_MOVES.clear();
+        MARKER_UPDATES.clear();
+    }
+
+    private static void clearPistonMoves(ServerLevel level) {
+        PISTON_MOVES.keySet().removeIf(key -> key.level() == level);
     }
 
     private static void queuePlacement(
@@ -226,11 +261,17 @@ public final class PlacedRawStoneEvents {
             ServerLevel level,
             BreakBlockEvent event
     ) {
+        boolean placedBeforeMutation = PlacedRawStoneTracker.isMarked(
+                level,
+                event.getPos(),
+                event.getState()
+        );
         queueUpdate(
                 level,
                 PendingMarkerUpdate.breakBlock(
                         event.getPos(),
                         event.getState(),
+                        placedBeforeMutation,
                         event::isCanceled
                 )
         );
@@ -257,26 +298,60 @@ public final class PlacedRawStoneEvents {
         ).add(update);
     }
 
-    static boolean hasPendingPlayerPlacement(
+    private static void observeMutation(
             ServerLevel level,
             BlockPos pos,
-            BlockState expectedState
+            BlockState observedState
     ) {
         List<PendingMarkerUpdate> updates = MARKER_UPDATES.get(level);
         if (updates == null) {
-            return false;
+            return;
         }
         for (int index = updates.size() - 1; index >= 0; index--) {
             PendingMarkerUpdate update = updates.get(index);
+            if (update.observeMutationAt(pos, observedState)) {
+                return;
+            }
+        }
+    }
+
+    static boolean isEffectivelyMarked(
+            ServerLevel level,
+            BlockPos pos,
+            BlockState expectedState,
+            boolean storedMarker
+    ) {
+        List<PendingMarkerUpdate> updates = MARKER_UPDATES.get(level);
+        if (updates == null) {
+            return storedMarker;
+        }
+        boolean marked = storedMarker;
+        Boolean removedStateWasMarked = null;
+        for (PendingMarkerUpdate update : updates) {
             if (!update.pos().equals(pos) || update.isCanceled()) {
                 continue;
             }
-            if (update.placement()
-                    && update.expectedState().equals(expectedState)) {
-                return update.playerPlacement();
+            if (update.placement()) {
+                if (update.expectedState().equals(expectedState)) {
+                    marked = update.playerPlacement();
+                    removedStateWasMarked = null;
+                }
+            } else if (update.mutationObserved()) {
+                if (update.breakBlock()
+                        && update.expectedState().equals(expectedState)) {
+                    removedStateWasMarked =
+                            update.placedBeforeMutation();
+                } else {
+                    removedStateWasMarked = null;
+                }
+                marked = false;
             }
         }
-        return false;
+        if (!level.getBlockState(pos).equals(expectedState)
+                && removedStateWasMarked != null) {
+            return removedStateWasMarked;
+        }
+        return marked;
     }
 
     private record PistonKey(
@@ -311,6 +386,8 @@ public final class PlacedRawStoneEvents {
             boolean placement,
             boolean playerPlacement,
             boolean breakBlock,
+            boolean placedBeforeMutation,
+            MutationObservation mutationObservation,
             BooleanSupplier canceled
     ) {
         private static PendingMarkerUpdate placement(
@@ -325,6 +402,8 @@ public final class PlacedRawStoneEvents {
                     true,
                     playerPlacement,
                     false,
+                    false,
+                    null,
                     canceled
             );
         }
@@ -339,6 +418,8 @@ public final class PlacedRawStoneEvents {
                     false,
                     false,
                     false,
+                    false,
+                    new MutationObservation(),
                     () -> false
             );
         }
@@ -346,6 +427,7 @@ public final class PlacedRawStoneEvents {
         private static PendingMarkerUpdate breakBlock(
                 BlockPos pos,
                 BlockState originalState,
+                boolean placedBeforeMutation,
                 BooleanSupplier canceled
         ) {
             return new PendingMarkerUpdate(
@@ -354,12 +436,33 @@ public final class PlacedRawStoneEvents {
                     false,
                     false,
                     true,
+                    placedBeforeMutation,
+                    new MutationObservation(),
                     canceled
             );
         }
 
         private boolean isCanceled() {
             return canceled.getAsBoolean();
+        }
+
+        private boolean mutationObserved() {
+            return mutationObservation != null
+                    && mutationObservation.observed();
+        }
+
+        private boolean observeMutationAt(
+                BlockPos changedPos,
+                BlockState observedState
+        ) {
+            if (mutationObservation == null
+                    || mutationObservation.observed()
+                    || !pos.equals(changedPos)
+                    || expectedState.equals(observedState)) {
+                return false;
+            }
+            mutationObservation.observe();
+            return true;
         }
 
         private void apply(ServerLevel level) {
@@ -382,10 +485,21 @@ public final class PlacedRawStoneEvents {
                 } else {
                     PlacedRawStoneTracker.clear(level, pos);
                 }
-            } else if (breakBlock
-                    || !currentState.equals(expectedState)) {
+            } else if (mutationObserved()) {
                 PlacedRawStoneTracker.clear(level, pos);
             }
+        }
+    }
+
+    private static final class MutationObservation {
+        private boolean observed;
+
+        private boolean observed() {
+            return observed;
+        }
+
+        private void observe() {
+            observed = true;
         }
     }
 }
