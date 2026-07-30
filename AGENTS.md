@@ -64,7 +64,7 @@ Code currently implements:
 - Sixteen raw-stone families, family Rocks, family cobbles, and partial raw-stone
   drops
 - Loose-rock and ground-stick world generation, including family-aware Rocks
-  across the Overworld, Nether, and End
+  across the Overworld, Nether, and End plus tree/shrub-aware Overworld Sticks
 - Geological resistance by dimension, depth, family, exposure, and natural
   versus player-placed origin
 - Rock, flint shards, and the flint hatchet, plus Plant Fiber and Flint/Bronze
@@ -78,12 +78,11 @@ Code currently implements:
 - Reusable Python resource contracts and NeoForge GameTests
 - A reproducible installable JAR under `dist/`
 
-Tree- and shrub-aware Ground Stick density and datapack-configurable depth
-profiles for other dimensions are required gaps in the complete
-opening/geology pass and must be fixed before the 0.2.0 release. Expanded
-storage and hoppers, bonsai, pottery, ore samples, deposits and prospecting, the
-bulk-crafting table, and expanded metallurgy remain documented later work. Do
-not describe planned behavior as shipped behavior.
+Datapack-configurable depth profiles for other dimensions are a required gap in
+the complete opening/geology pass and must be fixed before the 0.2.0 release.
+Expanded storage and hoppers, bonsai, pottery, ore samples, deposits and
+prospecting, the bulk-crafting table, and expanded metallurgy remain documented
+later work. Do not describe planned behavior as shipped behavior.
 
 The current dependency order is:
 

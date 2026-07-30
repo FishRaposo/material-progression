@@ -94,7 +94,8 @@ complete opening/geology development slice contains:
   families, and End Stone; sixteen Rock items; and matching family cobbles
 - Loose-rock and ground-stick world generation, with family-aware Loose Rocks
   that resolve their supporting geology instead of falling back to generic
-  Stone Rock
+  Stone Rock and Overworld Ground Sticks concentrated around tagged trees and
+  shrubs
 - Four-Rock cobbling: four identical mapped Rocks produce their family cobble,
   while mixed or unmapped compatible Rocks produce vanilla Cobblestone
 - Geological resistance determined by dimension depth, family, exposure, and
@@ -111,11 +112,10 @@ complete opening/geology development slice contains:
 - Recipe unlocks, five opening-progression advancements, localized tooltips,
   and throttled action-bar guidance
 
-Two promised extension points still block the final 0.2.0 release: genuinely
-tree/shrub-aware Ground Stick density and datapack-configurable depth profiles
-for dimensions other than the Overworld, Nether, and End. Arbitrary
-third-party stone-family definitions with external Rocks, raw blocks, cobbles,
-Loose Rocks, drops, and geology are implemented.
+One promised extension point still blocks the final 0.2.0 release:
+datapack-configurable depth profiles for dimensions other than the Overworld,
+Nether, and End. Arbitrary third-party stone-family definitions with external
+Rocks, raw blocks, cobbles, Loose Rocks, drops, and geology are implemented.
 
 Ore samples, geological deposits, prospecting, pottery, expanded storage and
 hoppers, shallow logistics, bonsai, bulk crafting, and expanded metallurgy are

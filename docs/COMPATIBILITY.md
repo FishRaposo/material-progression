@@ -50,6 +50,19 @@ behavior boundaries that consume those shared categories.
 Ground Sticks yield the ordinary vanilla Stick. Generic recipes consume
 `#c:rods/wooden`.
 
+Ground Stick density consumes the reloadable block tag
+`#material_progression:ground_stick_anchors`. It ships with Overworld natural
+logs, leaves, Azalea and Flowering Azalea, Sweet Berry Bush, Bush, Firefly Bush,
+and Dead Bush. Datapacks may extend the tag with compatible tree or shrub
+anchors without replacing the configured feature.
+
+The `material_progression:ground_stick` configured-feature codec exposes
+`to_place`, `anchor_tag`, `attempts` (1-32), `horizontal_spread` (0-16),
+`surface_vertical_range` (0-8), `anchor_horizontal_radius` (1-8),
+`anchor_vertical_radius` (0-4), `near_chance` (0-1), and
+`background_chance` (0-1). The near chance must not be lower than the background
+chance. Searches never force-load chunks.
+
 ## Stone-family data interface
 
 Each file under `data/<namespace>/stone_family/` declares:

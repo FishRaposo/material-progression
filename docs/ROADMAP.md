@@ -45,9 +45,8 @@ The shipped slice contains:
   Workshop, and three Sticks per Plank
 - Five opening advancements, operation unlock rewards, localized tooltips, and
   geological requirement hints
-
-Ground Sticks still use broad clustered Overworld placement. Genuine density
-tuning around trees and shrubs is a required pre-0.2.0 fix.
+- Overworld-only Ground Sticks with bounded, datapack-extensible tree/shrub
+  anchor detection and sparse background placement
 
 ## Candidate experiment: cave-biome resources
 
@@ -262,10 +261,9 @@ This may remain in the core mod or become a separate compatible module.
 The local 0.2.0 target is the complete opening/geology slice. Before the release
 workflow may synchronize version and JAR, it still requires:
 
-1. Tree/shrub-aware Ground Stick density
-2. Datapack-configurable other-dimension depth profiles
-3. A 20-30 minute survival playtest through Bronze and Dense geology
-4. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
+1. Datapack-configurable other-dimension depth profiles
+2. A 20-30 minute survival playtest through Bronze and Dense geology
+3. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
 
 Do not push, merge, or move `main` without explicit authorization.
 

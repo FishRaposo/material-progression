@@ -8,12 +8,12 @@
       }
     },
     "anchor_tag": "#material_progression:ground_stick_anchors",
-    "attempts": 12,
-    "horizontal_spread": 7,
+    "attempts": 4,
+    "horizontal_spread": 2,
     "surface_vertical_range": 4,
     "anchor_horizontal_radius": 5,
     "anchor_vertical_radius": 3,
-    "near_chance": 0.55,
-    "background_chance": 0.02
+    "near_chance": 1.0,
+    "background_chance": 0.0
   }
 }

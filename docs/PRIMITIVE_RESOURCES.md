@@ -3,9 +3,8 @@
 > **Status: partially implemented.** Family-aware loose rocks, ground sticks,
 > Rock and flint-shard conversions, partial raw-stone drops, the flint hatchet,
 > the default-enabled log-only axe requirement, Plant Fiber, and Flint/Bronze
-> Knives, Hammers, Saws, and Manual Workshop processing now ship.
-> Tree/shrub-aware Ground Stick density is a required pre-0.2.0 implementation
-> gap, not an accepted later feature.
+> Knives, Hammers, Saws, Manual Workshop processing, and tree/shrub-aware
+> Ground Stick density now ship.
 
 ## Purpose
 
@@ -94,12 +93,30 @@ events are outside this reactive boundary. This explicit boundary avoids
 perpetual block polling while covering ordinary survival-world changes.
 
 Loose Rocks generate on family-correct Overworld surfaces and cave floors, with
-sparse Nether and End placement. Ground Sticks remain Overworld-only and retain
-broad clustered placement so the bootstrap is not biome-gated. The required
-tree/shrub-aware density rule has not yet been implemented. Both use the
-reusable surface-resource placement design
-recorded in
-[the ground-resource design](superpowers/specs/2026-07-28-ground-resources-design.md).
+sparse Nether and End placement. Ground Sticks remain Overworld-only. Their
+custom configured feature makes 12 candidate attempts within a
+seven-block candidate spread. Each candidate searches no farther than
+five horizontal blocks and three vertical blocks for a tree or shrub anchor.
+It has a 55 percent placement chance near an anchor and a 2 percent background
+chance elsewhere.
+These are first-pass, playtest-tunable values intended to make fallen Sticks
+noticeably more common near vegetation without creating carpets or biome-gating
+the bootstrap.
+
+The reloadable `#material_progression:ground_stick_anchors` block tag contains
+Overworld natural logs, leaves, Azalea and Flowering Azalea, Sweet Berry Bush,
+Bush, Firefly Bush, and Dead Bush. Datapacks may extend that behavior boundary;
+ordinary flowers and crops are deliberately not shrubs. Candidate and anchor
+searches check only already-loaded chunks. The placed feature selects the
+surface height, then each offset candidate checks at most four blocks above or
+below that origin for uneven terrain; all radii, attempts, spread, and
+probabilities are codec-bounded. Surface-height resolution plus the
+Overworld-only biome modifier prevents generic cave, Nether, or End Stick
+placement. Ground Sticks remain finite world objects: they do not regenerate,
+drop one vanilla Stick, and break when their support is removed.
+
+Both ground resources use the reusable surface-resource placement design
+recorded in [the ground-resource design](superpowers/specs/2026-07-28-ground-resources-design.md).
 
 ## Configurable tree punching
 

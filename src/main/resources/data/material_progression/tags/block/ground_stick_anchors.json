@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:overworld_natural_logs",
+    "#minecraft:leaves",
+    "minecraft:azalea",
+    "minecraft:flowering_azalea",
+    "minecraft:sweet_berry_bush",
+    "minecraft:bush",
+    "minecraft:firefly_bush",
+    "minecraft:dead_bush"
+  ]
+}

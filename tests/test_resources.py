@@ -138,18 +138,41 @@ class ResourceContractTests(unittest.TestCase):
                 modifier = TREE.load_json(
                     DATA / "neoforge" / "biome_modifier" / f"add_{name}.json"
                 )
-                self.assertEqual("minecraft:simple_block", configured["type"])
+                if name == "ground_stick":
+                    self.assertEqual(
+                        "material_progression:ground_stick",
+                        configured["type"],
+                    )
+                else:
+                    self.assertEqual(
+                        "minecraft:simple_block",
+                        configured["type"],
+                    )
                 encoded = json.dumps(configured, sort_keys=True)
                 self.assertIn(block_id, encoded)
                 placement_types = [
                     placement["type"]
                     for placement in placed["placement"]
                 ]
-                self.assertIn("minecraft:random_offset", placement_types)
-                self.assertIn(
-                    "minecraft:block_predicate_filter",
-                    placement_types,
-                )
+                if name == "ground_stick":
+                    self.assertIn("minecraft:heightmap", placement_types)
+                    self.assertNotIn(
+                        "minecraft:random_offset",
+                        placement_types,
+                    )
+                    self.assertNotIn(
+                        "minecraft:block_predicate_filter",
+                        placement_types,
+                    )
+                else:
+                    self.assertIn(
+                        "minecraft:random_offset",
+                        placement_types,
+                    )
+                    self.assertIn(
+                        "minecraft:block_predicate_filter",
+                        placement_types,
+                    )
                 self.assertEqual(
                     f"material_progression:{name}",
                     placed["feature"],

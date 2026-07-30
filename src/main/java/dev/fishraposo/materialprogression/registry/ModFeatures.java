@@ -1,7 +1,9 @@
 package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
+import dev.fishraposo.materialprogression.world.level.levelgen.feature.GroundStickFeature;
 import dev.fishraposo.materialprogression.world.level.levelgen.feature.LooseRocksFeature;
+import dev.fishraposo.materialprogression.world.level.levelgen.feature.configurations.GroundStickConfiguration;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
@@ -20,6 +22,12 @@ public final class ModFeatures {
             LOOSE_ROCKS = FEATURES.register(
                     "loose_rocks",
                     () -> new LooseRocksFeature(NoneFeatureConfiguration.CODEC)
+            );
+
+    public static final DeferredHolder<Feature<?>, Feature<GroundStickConfiguration>>
+            GROUND_STICK = FEATURES.register(
+                    "ground_stick",
+                    () -> new GroundStickFeature(GroundStickConfiguration.CODEC)
             );
 
     private ModFeatures() {
