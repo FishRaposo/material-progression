@@ -111,11 +111,11 @@ complete opening/geology development slice contains:
 - Recipe unlocks, five opening-progression advancements, localized tooltips,
   and throttled action-bar guidance
 
-Three promised extension points still block the final 0.2.0 release: arbitrary
-third-party stone-family definitions, genuinely tree/shrub-aware Ground Stick
-density, and datapack-configurable depth profiles for dimensions other than the
-Overworld, Nether, and End. The current code is intentionally documented as
-incomplete on those boundaries rather than presenting them as deferred design.
+Two promised extension points still block the final 0.2.0 release: genuinely
+tree/shrub-aware Ground Stick density and datapack-configurable depth profiles
+for dimensions other than the Overworld, Nether, and End. Arbitrary
+third-party stone-family definitions with external Rocks, raw blocks, cobbles,
+Loose Rocks, drops, and geology are implemented.
 
 Ore samples, geological deposits, prospecting, pottery, expanded storage and
 hoppers, shallow logistics, bonsai, bulk crafting, and expanded metallurgy are

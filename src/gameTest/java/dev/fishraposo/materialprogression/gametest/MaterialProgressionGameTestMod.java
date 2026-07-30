@@ -45,8 +45,46 @@ public final class MaterialProgressionGameTestMod {
                             .mapColor(net.minecraft.world.level.material.MapColor.STONE)
                             .strength(1.5F)
             );
+    static final DeferredBlock<Block> EXTERNAL_RAW_STONE =
+            BLOCKS.registerSimpleBlock(
+                    "external_raw_stone",
+                    properties -> properties
+                            .mapColor(net.minecraft.world.level.material.MapColor.STONE)
+                            .requiresCorrectToolForDrops()
+                            .strength(1.5F)
+            );
+    static final DeferredBlock<Block> EXTERNAL_DIRECT_SURFACE =
+            BLOCKS.registerSimpleBlock(
+                    "external_direct_surface",
+                    properties -> properties
+                            .mapColor(net.minecraft.world.level.material.MapColor.STONE)
+                            .strength(1.5F)
+            );
+    static final DeferredBlock<Block> EXTERNAL_COBBLE =
+            BLOCKS.registerSimpleBlock(
+                    "external_cobble",
+                    properties -> properties
+                            .mapColor(net.minecraft.world.level.material.MapColor.STONE)
+                            .requiresCorrectToolForDrops()
+                            .strength(1.5F)
+            );
     static final DeferredItem<Item> UNKNOWN_ROCK =
             ITEMS.registerSimpleItem("unknown_rock");
+    static final DeferredItem<Item> EXTERNAL_ROCK =
+            ITEMS.registerSimpleItem("external_rock");
+    static final DeferredItem<Item> EXTERNAL_ROCK_ALTERNATE =
+            ITEMS.registerSimpleItem("external_rock_alternate");
+    static final DeferredItem<?> VETO_RAW_STONE_ITEM =
+            ITEMS.registerSimpleBlockItem("veto_raw_stone", VETO_RAW_STONE);
+    static final DeferredItem<?> EXTERNAL_RAW_STONE_ITEM =
+            ITEMS.registerSimpleBlockItem("external_raw_stone", EXTERNAL_RAW_STONE);
+    static final DeferredItem<?> EXTERNAL_DIRECT_SURFACE_ITEM =
+            ITEMS.registerSimpleBlockItem(
+                    "external_direct_surface",
+                    EXTERNAL_DIRECT_SURFACE
+            );
+    static final DeferredItem<?> EXTERNAL_COBBLE_ITEM =
+            ITEMS.registerSimpleBlockItem("external_cobble", EXTERNAL_COBBLE);
     static final DeferredItem<Item> SHARED_KNIFE =
             ITEMS.registerItem(
                     "shared_knife",

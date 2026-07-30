@@ -1,15 +1,12 @@
 package dev.fishraposo.materialprogression.stone;
 
 import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
-import dev.fishraposo.materialprogression.registry.ModBlocks;
-import java.util.List;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
@@ -63,7 +60,7 @@ public final class GeologyMiningEvents {
                 || !(event.getBreaker() instanceof Player player)) {
             return;
         }
-        var entry = StoneFamilyCatalog.get().byRaw(event.getState());
+        var entry = StoneFamilyCatalog.get().bySource(event.getState());
         if (entry.isEmpty()) {
             return;
         }
@@ -102,30 +99,16 @@ public final class GeologyMiningEvents {
             return;
         }
 
-        List<ItemStack> familyRock = Block.getDrops(
-                ModBlocks.LOOSE_ROCKS.get()
-                        .defaultBlockState()
-                        .setValue(
-                                dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock.FAMILY,
-                                entry.orElseThrow().family()
-                        ),
-                event.getLevel(),
-                event.getPos(),
-                null,
-                player,
-                tool
-        );
-        if (familyRock.size() != 1 || familyRock.getFirst().isEmpty()) {
-            return;
-        }
-
         int fortune = tool.getEnchantmentLevel(
                 enchantments.getOrThrow(Enchantments.FORTUNE)
         );
         int count = fortune > 0
                 ? 4
                 : 2 + event.getLevel().getRandom().nextInt(2);
-        ItemStack drop = familyRock.getFirst().copyWithCount(count);
+        ItemStack drop = new ItemStack(
+                entry.orElseThrow().rockItem(),
+                count
+        );
         event.getDrops().clear();
         event.getDrops().add(new ItemEntity(
                 event.getLevel(),

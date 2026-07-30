@@ -38,23 +38,31 @@ public record StoneFamilyDefinition(
                             .forGetter(StoneFamilyDefinition::resistance)
             ).apply(instance, StoneFamilyDefinition::new));
 
-    public record Resistance(StoneResistance tier, float modifier) {
+    public record Resistance(int modifier) {
         public static final Codec<Resistance> CODEC =
                 RecordCodecBuilder.create(instance -> instance.group(
-                        StoneResistance.CODEC
-                                .fieldOf("tier")
-                                .forGetter(Resistance::tier),
-                        Codec.FLOAT
+                        Codec.INT
                                 .fieldOf("modifier")
                                 .forGetter(Resistance::modifier)
                 ).apply(instance, Resistance::new));
 
         public Resistance {
-            if (!Float.isFinite(modifier) || modifier <= 0.0F) {
+            if (modifier < -3 || modifier > 3) {
                 throw new IllegalArgumentException(
-                        "Stone resistance modifier must be finite and positive"
+                        "Stone resistance modifier must be within the supported "
+                                + "additive tier range -3 through 3"
                 );
             }
+        }
+
+        public StoneResistance tier() {
+            if (modifier < 0) {
+                return StoneResistance.SOFT;
+            }
+            if (modifier > 0) {
+                return StoneResistance.HARD;
+            }
+            return StoneResistance.STANDARD;
         }
     }
 }

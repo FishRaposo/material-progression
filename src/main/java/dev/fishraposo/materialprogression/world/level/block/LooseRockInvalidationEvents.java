@@ -5,6 +5,7 @@ import dev.fishraposo.materialprogression.stone.StoneFamilyResolver;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.util.BlockSnapshot;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
@@ -122,10 +123,14 @@ public final class LooseRockInvalidationEvents {
 
         for (int offset = 1; offset <= MAX_ROCK_OFFSET; offset++) {
             BlockPos candidate = changedPos.above(offset);
-            if (level.getBlockState(candidate).is(ModBlocks.LOOSE_ROCKS.get())) {
+            BlockState candidateState = level.getBlockState(candidate);
+            if (candidateState.is(ModBlocks.LOOSE_ROCKS.get())
+                    || candidateState.is(
+                            ModBlocks.EXTERNAL_LOOSE_ROCKS.get()
+                    )) {
                 level.scheduleTick(
                         candidate,
-                        ModBlocks.LOOSE_ROCKS.get(),
+                        candidateState.getBlock(),
                         REVALIDATION_DELAY_TICKS
                 );
             }

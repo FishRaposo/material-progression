@@ -18,7 +18,7 @@ public final class GeologyTierResolver {
             BlockState state
     ) {
         Optional<StoneFamilyCatalog.Entry> raw =
-                StoneFamilyCatalog.get().byRaw(state);
+                StoneFamilyCatalog.get().bySource(state);
         if (raw.isEmpty()) {
             return Optional.empty();
         }
@@ -28,8 +28,8 @@ public final class GeologyTierResolver {
         StoneFamilyCatalog.Entry entry = raw.orElseThrow();
         return Optional.of(naturalTier(
                 level.dimension(),
-                entry.family(),
-                entry.resistance().tier(),
+                entry.id(),
+                entry.resistance().modifier(),
                 pos.getY(),
                 isExposed(level, pos)
         ));
@@ -42,20 +42,47 @@ public final class GeologyTierResolver {
             int y,
             boolean exposed
     ) {
+        return naturalTier(
+                dimension,
+                family.id(),
+                resistance.modifier(),
+                y,
+                exposed
+        );
+    }
+
+    public static GeologyTier naturalTier(
+            ResourceKey<Level> dimension,
+            net.minecraft.resources.Identifier family,
+            StoneResistance resistance,
+            int y,
+            boolean exposed
+    ) {
+        return naturalTier(
+                dimension,
+                family,
+                resistance.modifier(),
+                y,
+                exposed
+        );
+    }
+
+    public static GeologyTier naturalTier(
+            ResourceKey<Level> dimension,
+            net.minecraft.resources.Identifier family,
+            int familyModifier,
+            int y,
+            boolean exposed
+    ) {
         int base = baseLevel(dimension, family, y);
-        int familyShift = switch (resistance) {
-            case SOFT -> -1;
-            case STANDARD -> 0;
-            case HARD -> 1;
-        };
         return GeologyTier.clamped(
-                base + familyShift - (exposed ? 1 : 0)
+                base + familyModifier - (exposed ? 1 : 0)
         );
     }
 
     private static int baseLevel(
             ResourceKey<Level> dimension,
-            StoneFamily family,
+            net.minecraft.resources.Identifier family,
             int y
     ) {
         if (dimension == Level.OVERWORLD) {

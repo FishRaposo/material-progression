@@ -8,6 +8,7 @@ import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.stone.GeologyTier;
 import dev.fishraposo.materialprogression.stone.GeologyTierResolver;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
+import dev.fishraposo.materialprogression.stone.StoneFamilyCatalog;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -101,7 +102,9 @@ public final class DiscoverabilityGameTests {
             ExtendedGameTestHelper helper
     ) {
         Component geology = FeedbackMessages.insufficientGeology(
-                StoneFamily.CINNABAR,
+                StoneFamilyCatalog.get()
+                        .byFamily(StoneFamily.CINNABAR)
+                        .orElseThrow(),
                 GeologyTier.LEVEL_2
         );
         TranslatableContents outer = translatable(

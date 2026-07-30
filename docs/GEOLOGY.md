@@ -2,9 +2,9 @@
 
 > **Status: implemented opening slice.** The sixteen built-in stone families,
 > their Loose Rocks, cobbles, fragment drops, and geological resistance ship in
-> the development tree. Arbitrary third-party family registration and
-> datapack-configurable depth profiles for other dimensions are required
-> pre-0.2.0 gaps.
+> the development tree. Arbitrary third-party family registration is also
+> implemented. Datapack-configurable depth profiles for other dimensions remain
+> a required pre-0.2.0 gap.
 
 ## Why geology is foundational
 
@@ -92,8 +92,12 @@ the custom recipe; there are no competing generic and family recipes.
 
 ## Family-aware Loose Rocks
 
-Loose Rocks store their resolved family in block state and drop exactly one
-matching Rock. They break and drop when their support becomes invalid.
+Built-in Loose Rocks store their resolved family in block state. Arbitrary
+external families use a synchronized block entity that stores the namespaced
+family ID and exact Rock stack because datapacks cannot extend a block-state
+enum. Both representations render the matching Rock, drop exactly one on
+normal breaks and explosions, and break and drop when their support becomes
+invalid.
 
 Support resolves in this order:
 
@@ -125,12 +129,16 @@ transformations, explosions, living-entity destruction, and pistons. Commands,
 structure loading, and mod code that writes blocks without those events are
 outside this reactive boundary.
 
-The definitions under `data/material_progression/stone_family/` expose the
-current reloadable schema and tag boundaries. Reload validation is atomic and
-rejects duplicate raw-source or direct-surface membership with a clear error.
-The current catalog, however, deliberately accepts only the sixteen built-in
-family IDs. Supporting arbitrary third-party family IDs and externally
-registered Rocks/cobbles is a required release blocker, not later optional work.
+Definitions under `data/<namespace>/stone_family/` expose the reloadable schema
+and tag boundaries. The catalog retains the required sixteen built-ins and
+accepts arbitrary additional namespaced IDs with externally registered Rock,
+raw, and cobbled objects. External family blocks persist and synchronize their
+identity, and loaded blocks reconcile changed or removed family definitions
+after a successful reload. Reload validation is atomic and rejects missing or
+ambiguous Rock tags, unregistered objects, invalid resistance ranges, and
+duplicate raw, cobbled, Rock, source, or direct-surface ownership with a clear
+error. The complete authoring contract is in
+[Compatibility policy](COMPATIBILITY.md).
 
 ## Discoverability
 

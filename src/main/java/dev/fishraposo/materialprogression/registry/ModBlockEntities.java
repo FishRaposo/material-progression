@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.level.block.entity.CrusherBlockEntity;
+import dev.fishraposo.materialprogression.world.level.block.entity.ExternalLooseRockBlockEntity;
 import dev.fishraposo.materialprogression.world.level.block.entity.ManualWorkshopBlockEntity;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -27,6 +28,17 @@ public final class ModBlockEntities {
             () -> new BlockEntityType<>(
                     ManualWorkshopBlockEntity::new,
                     ModBlocks.MANUAL_WORKSHOP.get()
+            )
+    );
+
+    public static final DeferredHolder<
+            BlockEntityType<?>,
+            BlockEntityType<ExternalLooseRockBlockEntity>
+    > EXTERNAL_LOOSE_ROCKS = BLOCK_ENTITIES.register(
+            "external_loose_rocks",
+            () -> new BlockEntityType<>(
+                    ExternalLooseRockBlockEntity::new,
+                    ModBlocks.EXTERNAL_LOOSE_ROCKS.get()
             )
     );
 

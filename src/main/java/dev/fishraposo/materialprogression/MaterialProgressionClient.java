@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression;
 
 import dev.fishraposo.materialprogression.client.CrusherScreen;
+import dev.fishraposo.materialprogression.client.ExternalLooseRockRenderer;
 import dev.fishraposo.materialprogression.client.ManualWorkshopRenderer;
 import dev.fishraposo.materialprogression.client.ManualWorkshopScreen;
 import dev.fishraposo.materialprogression.registry.ModBlockEntities;
@@ -31,6 +32,10 @@ public final class MaterialProgressionClient {
         event.registerBlockEntityRenderer(
                 ModBlockEntities.MANUAL_WORKSHOP.get(),
                 ManualWorkshopRenderer::new
+        );
+        event.registerBlockEntityRenderer(
+                ModBlockEntities.EXTERNAL_LOOSE_ROCKS.get(),
+                ExternalLooseRockRenderer::new
         );
     }
 }

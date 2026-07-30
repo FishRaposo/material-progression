@@ -460,7 +460,7 @@ public final class PlacedRawStoneEvents {
                 // therefore remain natural.
                 if (playerPlacement
                         && StoneFamilyCatalog.get()
-                                .byRaw(currentState)
+                                .bySource(currentState)
                                 .isPresent()) {
                     PlacedRawStoneTracker.mark(level, pos);
                 } else {

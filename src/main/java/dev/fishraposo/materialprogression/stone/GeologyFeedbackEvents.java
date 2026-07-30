@@ -34,7 +34,7 @@ public final class GeologyFeedbackEvents {
                 event.getPos(),
                 state
         );
-        var family = StoneFamilyCatalog.get().byRaw(state);
+        var family = StoneFamilyCatalog.get().bySource(state);
         if (tier.isEmpty()
                 || family.isEmpty()
                 || GeologyToolCapability.canMine(
@@ -53,7 +53,7 @@ public final class GeologyFeedbackEvents {
 
         player.sendOverlayMessage(
                 FeedbackMessages.insufficientGeology(
-                        family.orElseThrow().family(),
+                        family.orElseThrow(),
                         tier.orElseThrow()
                 )
         );

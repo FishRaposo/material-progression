@@ -1,7 +1,7 @@
 package dev.fishraposo.materialprogression.progression;
 
 import dev.fishraposo.materialprogression.stone.GeologyTier;
-import dev.fishraposo.materialprogression.stone.StoneFamily;
+import dev.fishraposo.materialprogression.stone.StoneFamilyCatalog;
 import net.minecraft.network.chat.Component;
 
 public final class FeedbackMessages {
@@ -15,7 +15,7 @@ public final class FeedbackMessages {
     }
 
     public static Component insufficientGeology(
-            StoneFamily family,
+            StoneFamilyCatalog.Entry family,
             GeologyTier tier
     ) {
         return Component.translatable(
@@ -24,10 +24,7 @@ public final class FeedbackMessages {
                         "message.material_progression.geology.tier."
                                 + tier.level()
                 ),
-                Component.translatable(
-                        "stone_family.material_progression."
-                                + family.getSerializedName()
-                ),
+                family.displayName(),
                 Component.translatable(
                         "message.material_progression.geology.capability."
                                 + tier.level()

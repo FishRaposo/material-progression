@@ -28,7 +28,7 @@ public final class StoneFamilyResolver {
                     level,
                     supportPos,
                     catalog,
-                    StoneFamily.NETHERRACK
+                    StoneFamily.NETHERRACK.id()
             );
         }
         if (!support.is(ModTags.LOOSE_ROCK_COVER)) {
@@ -49,13 +49,14 @@ public final class StoneFamilyResolver {
             BlockGetter level,
             BlockPos supportPos,
             StoneFamilyCatalog catalog,
-            StoneFamily required
+            net.minecraft.resources.Identifier required
     ) {
         for (int depth = 1; depth <= COVER_SCAN_DEPTH; depth++) {
             Optional<StoneFamilyCatalog.Entry> family = catalog.bySource(
                     level.getBlockState(supportPos.below(depth))
             );
-            if (family.isPresent() && family.orElseThrow().family() == required) {
+            if (family.isPresent()
+                    && family.orElseThrow().id().equals(required)) {
                 return family;
             }
         }

@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression.registry;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.world.level.block.CrusherBlock;
+import dev.fishraposo.materialprogression.world.level.block.ExternalLooseRocksBlock;
 import dev.fishraposo.materialprogression.world.level.block.GroundResourceBlock;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
 import dev.fishraposo.materialprogression.world.level.block.ManualWorkshopBlock;
@@ -73,6 +74,20 @@ public final class ModBlocks {
             BLOCKS.registerBlock(
                     "loose_rocks",
                     LooseRocksBlock::new,
+                    properties -> properties
+                            .mapColor(MapColor.STONE)
+                            .replaceable()
+                            .noCollision()
+                            .strength(0.2F)
+                            .sound(SoundType.STONE)
+                            .pushReaction(PushReaction.DESTROY)
+                            .offsetType(BlockBehaviour.OffsetType.XZ)
+            );
+
+    public static final DeferredBlock<ExternalLooseRocksBlock>
+            EXTERNAL_LOOSE_ROCKS = BLOCKS.registerBlock(
+                    "external_loose_rocks",
+                    ExternalLooseRocksBlock::new,
                     properties -> properties
                             .mapColor(MapColor.STONE)
                             .replaceable()

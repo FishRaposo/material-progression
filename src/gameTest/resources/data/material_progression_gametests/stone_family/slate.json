@@ -1,0 +1,10 @@
+{
+  "source_block_tag": "#material_progression_gametests:stone_sources/slate",
+  "rock_item_tag": "#c:rocks/slate",
+  "cobbled_block": "material_progression_gametests:external_cobble",
+  "raw_block": "material_progression_gametests:external_raw_stone",
+  "loose_rock_surface_block_tag": "#material_progression_gametests:loose_rock_surfaces/slate",
+  "resistance": {
+    "modifier": 1
+  }
+}

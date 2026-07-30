@@ -15,6 +15,7 @@ import dev.fishraposo.materialprogression.stone.GeologyFeedbackEvents;
 import dev.fishraposo.materialprogression.stone.GeologyMiningEvents;
 import dev.fishraposo.materialprogression.stone.PlacedRawStoneEvents;
 import dev.fishraposo.materialprogression.world.level.block.LooseRockInvalidationEvents;
+import dev.fishraposo.materialprogression.world.level.block.ExternalLooseRockDrops;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
@@ -40,6 +41,7 @@ public final class MaterialProgression {
         PlantFiberHarvestEvents.register();
         GeologyFeedbackEvents.register();
         GeologyMiningEvents.register();
+        ExternalLooseRockDrops.register();
         LooseRockInvalidationEvents.register();
         PlacedRawStoneEvents.register();
         StoneFamilyReloadListener.register();

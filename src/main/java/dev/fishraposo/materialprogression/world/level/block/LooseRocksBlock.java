@@ -60,7 +60,8 @@ public final class LooseRocksBlock extends BushBlock {
             return true;
         }
         return StoneFamilyResolver.resolveSupport(level, supportPos)
-                .map(entry -> entry.family() == state.getValue(FAMILY))
+                .flatMap(entry -> entry.builtInFamily())
+                .map(family -> family == state.getValue(FAMILY))
                 .orElse(false);
     }
 

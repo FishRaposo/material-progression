@@ -184,7 +184,7 @@ public final class StoneFamilyGameTests {
                 "resistance tier"
         );
         helper.assertValueEqual(
-                1.0F,
+                0,
                 granite.resistance().modifier(),
                 "resistance modifier"
         );
@@ -678,7 +678,7 @@ public final class StoneFamilyGameTests {
         helper.assertTrue(resolved.isPresent(), "support did not resolve a family");
         helper.assertValueEqual(
                 expected,
-                resolved.orElseThrow().family(),
+                resolved.orElseThrow().builtInFamily().orElseThrow(),
                 "resolved support family"
         );
         helper.assertTrue(

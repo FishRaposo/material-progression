@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "material_progression_gametests:external_raw_stone",
+    "material_progression_gametests:external_cobble"
+  ]
+}

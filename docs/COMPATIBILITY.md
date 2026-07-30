@@ -52,26 +52,28 @@ Ground Sticks yield the ordinary vanilla Stick. Generic recipes consume
 
 ## Stone-family data interface
 
-Each built-in file under `data/material_progression/stone_family/` declares:
+Each file under `data/<namespace>/stone_family/` declares:
 
 ```json
 {
   "source_block_tag": "#material_progression:stone_sources/cinnabar",
   "rock_item_tag": "#c:rocks/cinnabar",
   "cobbled_block": "material_progression:cobbled_cinnabar",
-  "raw_block": "material_progression:cinnabar_block",
+  "raw_block": "minecraft:cinnabar",
   "loose_rock_surface_block_tag":
     "#material_progression:loose_rock_surfaces/cinnabar",
   "resistance": {
-    "tier": "standard",
-    "modifier": 1.0
+    "modifier": 0
   }
 }
 ```
 
-The resistance tier is `soft`, `standard`, or `hard`. The matching modifiers
-are currently `0.75`, `1.0`, and `1.5`; runtime geology converts the profile to
-the family tier shift described in [Underground and Geology](GEOLOGY.md).
+The resource ID is the family ID. `resistance.modifier` is the additive integer
+applied directly to the dimension/depth tier before exposure reduction and
+clamping. It must be from `-3` through `3`. The built-in soft, standard, and
+hard classifications use `-1`, `0`, and `1` respectively; third-party values
+outside that built-in set remain valid and classify by sign for diagnostics.
+See [Underground and Geology](GEOLOGY.md) for the complete formula.
 
 The public behavior tags are:
 
@@ -87,20 +89,41 @@ nearest registered raw family, while `loose_rock_netherrack_cover` scans the
 same eight-block range but accepts only the Netherrack family. Soul Sand and
 Soul Soil ship in the latter so they cannot surface Basalt or Blackstone Rocks.
 
-Reload validation stages the complete catalog atomically. Duplicate source
-membership and duplicate direct-surface membership are rejected with a clear
-reload error.
+The catalog requires the sixteen built-in definitions and also accepts
+arbitrary third-party family IDs under any namespace. A third-party family may
+name externally registered Rock, raw-stone, and cobbled objects. Its Rock
+family tag must resolve to exactly one registered item, and that tag must also
+be included by `#c:rocks`. Raw and cobbled blocks must be registered, distinct,
+and have block items. Source and direct-surface tags must exist, be non-empty,
+and include the declared raw block.
 
-This interface is not yet fully extensible. The runtime catalog currently
-requires exactly the sixteen built-in IDs and rejects unknown family IDs because
-Loose Rock block state is bound to the built-in family enum. Allowing datapacks
-to define arbitrary third-party families using externally registered Rock and
-cobbled objects is a required pre-0.2.0 fix. Do not claim that the schema
-currently provides that promised extension.
+Raw blocks, cobbled blocks, Rock items, source membership, and direct-surface
+membership may each belong to only one family. Reload validation stages the
+complete resolved catalog transactionally before publishing it, so any missing
+tag, ambiguous Rock tag, unregistered object, invalid modifier, or ownership
+conflict rejects the reload without replacing the last valid catalog. Standard
+resource-pack precedence applies when multiple packs provide the same family
+resource ID: the winning resource is validated as that single family
+definition.
 
-Compatible Rocks from other mods can already join `#c:rocks`. They participate
-in the custom four-Rock cobbling recipe and resolve to vanilla Cobblestone when
-they have no registered family mapping.
+The sixteen built-ins use the compact `family` block state on
+`material_progression:loose_rocks`. External IDs use the non-obtainable
+`material_progression:external_loose_rocks` runtime block with a persistent,
+client-synchronized block entity containing the exact family ID and Rock
+stack. It renders and drops that configured Rock, including support
+invalidation and explosions. A successful catalog reload reconciles loaded
+external blocks once: a changed Rock mapping updates the stored/rendered item;
+a removed or now-incompatible family drops the previously stored Rock and
+removes the block.
+
+Feedback looks up `stone_family.<namespace>.<path>`, with `/` in the path
+converted to `.`, and supplies a readable path-derived fallback. Third-party
+packs may localize that key but do not need a translation for safe server
+feedback.
+
+Compatible Rocks that only join `#c:rocks` still participate in the custom
+four-Rock cobbling recipe and resolve to vanilla Cobblestone when they have no
+registered family mapping.
 
 ## Manual Workshop recipe interface
 
@@ -170,5 +193,6 @@ For every new material or material form:
 9. Run `./gradlew headlessTest`.
 
 The contract suite rejects direct Material Progression material IDs in generic
-recipe inputs, verifies the common-tag catalog, checks the sixteen family
-definitions, and ensures GameTest code remains outside the production JAR.
+recipe inputs, verifies the common-tag catalog, checks the sixteen shipped
+definitions and third-party runtime boundary, and ensures GameTest code remains
+outside the production JAR.

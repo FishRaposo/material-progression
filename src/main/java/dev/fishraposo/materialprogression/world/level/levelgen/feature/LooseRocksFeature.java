@@ -3,8 +3,10 @@ package dev.fishraposo.materialprogression.world.level.levelgen.feature;
 import com.mojang.serialization.Codec;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
+import dev.fishraposo.materialprogression.stone.StoneFamilyCatalog;
 import dev.fishraposo.materialprogression.stone.StoneFamilyResolver;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
+import dev.fishraposo.materialprogression.world.level.block.entity.ExternalLooseRockBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,21 +34,44 @@ public final class LooseRocksFeature extends Feature<NoneFeatureConfiguration> {
         }
 
         return StoneFamilyResolver.resolveSupport(context.level(), supportPos)
-                .map(entry -> placeResolved(context, position, entry.family()))
+                .map(entry -> placeResolved(context, position, entry))
                 .orElse(false);
     }
 
     private static boolean placeResolved(
             FeaturePlaceContext<NoneFeatureConfiguration> context,
             BlockPos position,
-            StoneFamily family
+            StoneFamilyCatalog.Entry entry
     ) {
-        return context.level().setBlock(
+        if (entry.builtInFamily().isPresent()) {
+            return context.level().setBlock(
+                    position,
+                    ModBlocks.LOOSE_ROCKS.get()
+                            .defaultBlockState()
+                            .setValue(
+                                    LooseRocksBlock.FAMILY,
+                                    entry.builtInFamily().orElseThrow()
+                            ),
+                    2
+            );
+        }
+        if (!context.level().setBlock(
                 position,
-                ModBlocks.LOOSE_ROCKS.get()
-                        .defaultBlockState()
-                        .setValue(LooseRocksBlock.FAMILY, family),
+                ModBlocks.EXTERNAL_LOOSE_ROCKS.get().defaultBlockState(),
+                2
+        )) {
+            return false;
+        }
+        if (context.level().getBlockEntity(position)
+                instanceof ExternalLooseRockBlockEntity rocks) {
+            rocks.initialize(entry);
+            return true;
+        }
+        context.level().setBlock(
+                position,
+                net.minecraft.world.level.block.Blocks.AIR.defaultBlockState(),
                 2
         );
+        return false;
     }
 }

@@ -582,9 +582,9 @@ class ResourceContractTests(unittest.TestCase):
             TREE.names_matching(family_dir, "*.json"),
         )
         resistance_modifiers = {
-            "soft": 0.75,
-            "standard": 1.0,
-            "hard": 1.5,
+            "soft": -1,
+            "standard": 0,
+            "hard": 1,
         }
         for family, contract in STONE_FAMILIES.items():
             with self.subTest(family=family):
@@ -601,7 +601,6 @@ class ResourceContractTests(unittest.TestCase):
                             f"loose_rock_surfaces/{family}"
                         ),
                         "resistance": {
-                            "tier": contract["resistance"],
                             "modifier": resistance_modifiers[
                                 contract["resistance"]
                             ],

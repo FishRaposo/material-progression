@@ -79,10 +79,10 @@ The first geology implementation now resolves:
 Other dimensions currently resolve to L0. The promised datapack-configurable
 depth profiles for those dimensions are required before 0.2.0.
 
-The reloadable stone-family schema validates duplicate sources and direct
-surfaces, but the runtime currently rejects family IDs outside the sixteen
-built-ins. Arbitrary third-party families using externally registered Rocks and
-cobbles are the third required pre-release fix.
+The reloadable stone-family schema accepts arbitrary additional namespaced
+family IDs with externally registered Rocks, raw blocks, and cobbles. It
+validates the resolved catalog transactionally and supports external families
+through cobbling, Loose Rocks, drops, rendering, and geological resistance.
 
 ## Current playtest: access progression
 
@@ -262,11 +262,10 @@ This may remain in the core mod or become a separate compatible module.
 The local 0.2.0 target is the complete opening/geology slice. Before the release
 workflow may synchronize version and JAR, it still requires:
 
-1. Arbitrary third-party stone-family support
-2. Tree/shrub-aware Ground Stick density
-3. Datapack-configurable other-dimension depth profiles
-4. A 20-30 minute survival playtest through Bronze and Dense geology
-5. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
+1. Tree/shrub-aware Ground Stick density
+2. Datapack-configurable other-dimension depth profiles
+3. A 20-30 minute survival playtest through Bronze and Dense geology
+4. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
 
 Do not push, merge, or move `main` without explicit authorization.
 

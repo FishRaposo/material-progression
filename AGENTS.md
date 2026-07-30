@@ -78,13 +78,12 @@ Code currently implements:
 - Reusable Python resource contracts and NeoForge GameTests
 - A reproducible installable JAR under `dist/`
 
-Tree- and shrub-aware Ground Stick density, arbitrary third-party stone-family
-definitions, and datapack-configurable depth profiles for other dimensions are
-required gaps in the complete opening/geology pass and must be fixed before the
-0.2.0 release. Expanded storage and hoppers, bonsai, pottery, ore samples,
-deposits and prospecting, the bulk-crafting table, and expanded metallurgy
-remain documented later work. Do not describe planned behavior as shipped
-behavior.
+Tree- and shrub-aware Ground Stick density and datapack-configurable depth
+profiles for other dimensions are required gaps in the complete
+opening/geology pass and must be fixed before the 0.2.0 release. Expanded
+storage and hoppers, bonsai, pottery, ore samples, deposits and prospecting, the
+bulk-crafting table, and expanded metallurgy remain documented later work. Do
+not describe planned behavior as shipped behavior.
 
 The current dependency order is:
 

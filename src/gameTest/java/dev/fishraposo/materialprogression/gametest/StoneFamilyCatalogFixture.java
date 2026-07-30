@@ -81,15 +81,13 @@ final class StoneFamilyCatalogFixture {
         };
     }
 
-    private static Map<Identifier, StoneFamilyDefinition> definitionsFrom(
+    static Map<Identifier, StoneFamilyDefinition> definitionsFrom(
             StoneFamilyCatalog catalog
     ) {
         Map<Identifier, StoneFamilyDefinition> definitions = new HashMap<>();
-        for (StoneFamily family : StoneFamily.values()) {
-            StoneFamilyCatalog.Entry entry =
-                    catalog.byFamily(family).orElseThrow();
+        for (StoneFamilyCatalog.Entry entry : catalog.entries()) {
             definitions.put(
-                    family.id(),
+                    entry.id(),
                     new StoneFamilyDefinition(
                             entry.sourceBlockTag(),
                             entry.rockItemTag(),

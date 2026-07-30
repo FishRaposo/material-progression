@@ -23,7 +23,7 @@ public final class PlacedRawStoneTracker {
         PlacedRawStoneMarkers markers = chunk.getExistingDataOrNull(
                 ModDataAttachments.PLACED_RAW_STONES
         );
-        if (StoneFamilyCatalog.get().byRaw(expectedState).isEmpty()) {
+        if (StoneFamilyCatalog.get().bySource(expectedState).isEmpty()) {
             if (markers != null && markers.contains(pos)) {
                 clear(level, pos);
             }
@@ -38,7 +38,7 @@ public final class PlacedRawStoneTracker {
     }
 
     public static void mark(ServerLevel level, BlockPos pos) {
-        if (StoneFamilyCatalog.get().byRaw(level.getBlockState(pos)).isEmpty()) {
+        if (StoneFamilyCatalog.get().bySource(level.getBlockState(pos)).isEmpty()) {
             clear(level, pos);
             return;
         }

@@ -53,7 +53,7 @@ public final class RockCobblingRecipe extends CustomRecipe {
             }
             if (matching == null) {
                 matching = family.orElseThrow();
-            } else if (matching.family() != family.orElseThrow().family()) {
+            } else if (!matching.id().equals(family.orElseThrow().id())) {
                 return new ItemStack(Items.COBBLESTONE);
             }
         }

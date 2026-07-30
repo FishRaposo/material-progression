@@ -125,6 +125,7 @@ SHIPPED_ITEMS = {
 SHIPPED_BLOCKS = {
     "crusher",
     "deepslate_tin_ore",
+    "external_loose_rocks",
     "ground_stick",
     "loose_rocks",
     "manual_workshop",
@@ -135,7 +136,11 @@ SHIPPED_BLOCKS = {
     if contract["cobbled_block"].startswith("material_progression:")
 }
 
-WORLD_ONLY_BLOCKS = {"ground_stick", "loose_rocks"}
+WORLD_ONLY_BLOCKS = {
+    "external_loose_rocks",
+    "ground_stick",
+    "loose_rocks",
+}
 
 PRIMITIVE_RECIPES = {
     "bronze_hammer": {
