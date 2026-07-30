@@ -234,11 +234,64 @@ public final class StoneFamilyGameTests {
 
     @GameTest
     @EmptyTemplate
-    @TestHolder(description = "Soul sand resolves netherrack only through the downward scan")
-    static void soulSandScansToNetherrack(ExtendedGameTestHelper helper) {
-        helper.setBlock(ROOT, Blocks.NETHERRACK);
-        helper.setBlock(ROOT.above(), Blocks.SOUL_SAND);
-        assertResolvedSupport(helper, ROOT.above(), StoneFamily.NETHERRACK);
+    @TestHolder(description = "Configured worldgen resolves soul cover only to Netherrack")
+    static void configuredFeatureSoulCoverResolvesNetherrack(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos soulSand = ROOT.above(2);
+        helper.setBlock(soulSand.below(), Blocks.NETHERRACK);
+        helper.setBlock(soulSand, Blocks.SOUL_SAND);
+        helper.setBlock(soulSand.above(), Blocks.AIR);
+        assertConfiguredPlacement(
+                helper,
+                soulSand.above(),
+                StoneFamily.NETHERRACK,
+                "Soul Sand over Netherrack"
+        );
+
+        BlockPos soulSoil = ROOT.above(6);
+        helper.setBlock(soulSoil.below(), Blocks.BASALT);
+        helper.setBlock(soulSoil.below(2), Blocks.BLACKSTONE);
+        helper.setBlock(soulSoil.below(3), Blocks.NETHERRACK);
+        helper.setBlock(soulSoil.below(4), Blocks.NETHERRACK);
+        helper.setBlock(soulSoil, Blocks.SOUL_SOIL);
+        helper.setBlock(soulSoil.above(), Blocks.AIR);
+        assertConfiguredPlacement(
+                helper,
+                soulSoil.above(),
+                StoneFamily.NETHERRACK,
+                "Soul Soil scans past non-Netherrack to nearest Netherrack"
+        );
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Configured worldgen rejects soul cover over non-Netherrack")
+    static void configuredFeatureSoulCoverRejectsOtherFamilies(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos soulSand = ROOT.above(3);
+        helper.setBlock(soulSand.below(), Blocks.BASALT);
+        helper.setBlock(soulSand.below(2), Blocks.BASALT);
+        helper.setBlock(soulSand, Blocks.SOUL_SAND);
+        helper.setBlock(soulSand.above(), Blocks.AIR);
+        helper.assertFalse(
+                placeFeature(helper, soulSand.above()),
+                "Soul Sand resolved Basalt within the cover scan"
+        );
+        helper.assertBlockPresent(Blocks.AIR, soulSand.above());
+
+        BlockPos soulSoil = ROOT.above(7);
+        helper.setBlock(soulSoil.below(), Blocks.BLACKSTONE);
+        helper.setBlock(soulSoil.below(2), Blocks.BLACKSTONE);
+        helper.setBlock(soulSoil, Blocks.SOUL_SOIL);
+        helper.setBlock(soulSoil.above(), Blocks.AIR);
+        helper.assertFalse(
+                placeFeature(helper, soulSoil.above()),
+                "Soul Soil resolved Blackstone within the cover scan"
+        );
+        helper.assertBlockPresent(Blocks.AIR, soulSoil.above());
         helper.succeed();
     }
 

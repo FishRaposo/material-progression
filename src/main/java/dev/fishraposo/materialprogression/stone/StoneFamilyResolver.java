@@ -23,6 +23,14 @@ public final class StoneFamilyResolver {
         if (direct.isPresent()) {
             return direct;
         }
+        if (support.is(ModTags.LOOSE_ROCK_NETHERRACK_COVER)) {
+            return scanForFamily(
+                    level,
+                    supportPos,
+                    catalog,
+                    StoneFamily.NETHERRACK
+            );
+        }
         if (!support.is(ModTags.LOOSE_ROCK_COVER)) {
             return Optional.empty();
         }
@@ -31,6 +39,23 @@ public final class StoneFamilyResolver {
                     level.getBlockState(supportPos.below(depth))
             );
             if (family.isPresent()) {
+                return family;
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<StoneFamilyCatalog.Entry> scanForFamily(
+            BlockGetter level,
+            BlockPos supportPos,
+            StoneFamilyCatalog catalog,
+            StoneFamily required
+    ) {
+        for (int depth = 1; depth <= COVER_SCAN_DEPTH; depth++) {
+            Optional<StoneFamilyCatalog.Entry> family = catalog.bySource(
+                    level.getBlockState(supportPos.below(depth))
+            );
+            if (family.isPresent() && family.orElseThrow().family() == required) {
                 return family;
             }
         }

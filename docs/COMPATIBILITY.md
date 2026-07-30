@@ -78,8 +78,14 @@ The public behavior tags are:
 - `#material_progression:stone_sources/<family>`
 - `#material_progression:loose_rock_surfaces/<family>`
 - `#material_progression:loose_rock_cover`
+- `#material_progression:loose_rock_netherrack_cover`
 - block and item `#c:cobblestones/<family>` plus their parents
 - `#c:rocks/<family>` plus `#c:rocks`
+
+The two cover tags are intentionally disjoint. `loose_rock_cover` scans for the
+nearest registered raw family, while `loose_rock_netherrack_cover` scans the
+same eight-block range but accepts only the Netherrack family. Soul Sand and
+Soul Soil ship in the latter so they cannot surface Basalt or Blackstone Rocks.
 
 Reload validation stages the complete catalog atomically. Duplicate source
 membership and duplicate direct-surface membership are rejected with a clear

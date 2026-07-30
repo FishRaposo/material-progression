@@ -481,8 +481,7 @@ class ResourceContractTests(unittest.TestCase):
                 "minecraft:dirt", "minecraft:coarse_dirt", "minecraft:rooted_dirt",
                 "minecraft:grass_block", "minecraft:podzol", "minecraft:mycelium",
                 "minecraft:gravel", "minecraft:snow", "minecraft:snow_block",
-                "minecraft:sand", "minecraft:red_sand", "minecraft:soul_sand",
-                "minecraft:soul_soil",
+                "minecraft:sand", "minecraft:red_sand",
             },
             set(TREE.load_json(
                 DATA / "tags" / "block" / "loose_rock_cover.json"
@@ -511,6 +510,25 @@ class ResourceContractTests(unittest.TestCase):
                 DATA / "tags" / "block" / "loose_rock_surfaces.json"
             )["values"]),
         )
+
+    def test_soul_cover_has_a_netherrack_only_resolution_interface(self):
+        self.assertEqual(
+            {"minecraft:soul_sand", "minecraft:soul_soil"},
+            set(TREE.load_json(
+                DATA / "tags" / "block"
+                / "loose_rock_netherrack_cover.json"
+            )["values"]),
+        )
+        mod_tags = (
+            ROOT / "src" / "main" / "java" / "dev" / "fishraposo"
+            / "materialprogression" / "registry" / "ModTags.java"
+        ).read_text(encoding="utf-8")
+        resolver = (
+            ROOT / "src" / "main" / "java" / "dev" / "fishraposo"
+            / "materialprogression" / "stone" / "StoneFamilyResolver.java"
+        ).read_text(encoding="utf-8")
+        self.assertIn("LOOSE_ROCK_NETHERRACK_COVER", mod_tags)
+        self.assertIn("ModTags.LOOSE_ROCK_NETHERRACK_COVER", resolver)
         self.assertFalse((
             DATA / "tags" / "block" / "loose_rock_surface.json"
         ).exists())

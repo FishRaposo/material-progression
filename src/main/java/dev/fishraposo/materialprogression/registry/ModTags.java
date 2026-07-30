@@ -16,6 +16,8 @@ public final class ModTags {
             blockTag("incorrect_for_flint_tool");
     public static final TagKey<Block> LOOSE_ROCK_COVER =
             blockTag("loose_rock_cover");
+    public static final TagKey<Block> LOOSE_ROCK_NETHERRACK_COVER =
+            blockTag("loose_rock_netherrack_cover");
 
     public static final TagKey<Item> FLINT_SHARDS =
             commonItemTag("flint_shards");

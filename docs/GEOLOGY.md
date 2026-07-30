@@ -99,14 +99,20 @@ Support resolves in this order:
 
 1. An explicit direct surface mapping selects its family.
 2. On approved natural cover, the resolver searches downward up to eight blocks
-   for the nearest raw family.
+   using that cover tag's filter. Generic soil, gravel, snow, and sand cover
+   select the nearest raw family. The dedicated Netherrack-cover tag accepts
+   only Netherrack and scans past Basalt, Blackstone, or other raw families.
 3. Placement is skipped when no family resolves. There is no generic Stone
    fallback.
 
 Required direct mappings include Sand to Sandstone Rock, Red Sand to Red
 Sandstone Rock, and every raw stone to its matching Rock. Natural soil and
 gravel cover resolve the nearest Overworld geology beneath them. Soul Sand and
-Soul Soil produce Netherrack Rock only when Netherrack resolves below.
+Soul Soil belong only to
+`#material_progression:loose_rock_netherrack_cover`: they produce Netherrack
+Rock when the nearest Netherrack within eight blocks resolves below, and place
+nothing over Basalt, Blackstone, or any other geology when no Netherrack is in
+range.
 
 World generation places family-correct Loose Rocks on Overworld surfaces and
 cave floors, with sparse Nether and End placement. The cave set includes
