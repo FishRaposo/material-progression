@@ -54,8 +54,10 @@ GameTests are grouped by gameplay system under
 - `CrusherGameTests` verifies fuel processing and sided inventory.
 - `PrimitiveGameTests` verifies ground-resource support and drops.
 - `LogHarvestGameTests` verifies the configurable log-only tool rule.
-- `StoneFamilyGameTests` verifies all-family direct support, cover resolution,
-  Nether/End behavior, no-fallback placement, support changes, and cobbling.
+- `StoneFamilyGameTests` drives the registered Loose Rocks configured feature
+  across all sixteen raw supports, direct Sand surfaces, covered sources, named
+  cave/Nether/End supports, and the no-family case, then verifies support
+  changes and cobbling behavior.
 - Geology-focused tests verify depth bands, modifiers, exposure, correct-tool
   drops, Fortune, Silk Touch, config toggles, persistent placed-stone markers,
   and piston transfer.
@@ -65,10 +67,10 @@ GameTests are grouped by gameplay system under
   recipe reset, atomic completion and breakage, wood-species preservation, and
   automation rejection.
 - `DiscoverabilityGameTests` verifies localized lore, structured feedback,
-  throttled log hints, the Dense-geology advancement, and the dedicated Manual
-  Workshop recipe category.
+  throttled log hints, the Dense-geology advancement, the dedicated Manual
+  Workshop recipe category, and real inventory-triggered Recipe Book unlocks.
 
-The current opening branch runs 102 live GameTests. Treat that count as a
+The current opening branch runs 105 live GameTests. Treat that count as a
 snapshot, not a reason to avoid adding the next regression test.
 
 GameTests must use real registries, recipes, inventories, blocks, and server

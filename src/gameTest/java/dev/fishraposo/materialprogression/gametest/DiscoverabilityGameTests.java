@@ -8,17 +8,21 @@ import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.stone.GeologyTier;
 import dev.fishraposo.materialprogression.stone.GeologyTierResolver;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.NeoForge;
@@ -302,6 +306,52 @@ public final class DiscoverabilityGameTests {
         helper.succeed();
     }
 
+    @GameTest(timeoutTicks = 20)
+    @EmptyTemplate
+    @TestHolder(description = "Flint discovery unlocks only its shard recipe")
+    static void flintInventoryUnlocksOnlyFlintShardRecipe(
+            ExtendedGameTestHelper helper
+    ) {
+        ServerPlayer player = player(
+                helper,
+                GameType.SURVIVAL,
+                ItemStack.EMPTY
+        );
+        ResourceKey<Recipe<?>> flintShardRecipe = recipeKey(
+                "flint_shard_from_flint"
+        );
+        ResourceKey<Recipe<?>> rockShardRecipe = recipeKey(
+                "flint_shard_from_rock"
+        );
+        helper.assertFalse(
+                player.getRecipeBook().contains(flintShardRecipe),
+                "Flint shard recipe was already known"
+        );
+        helper.assertFalse(
+                player.getRecipeBook().contains(rockShardRecipe),
+                "Rock shard recipe was already known"
+        );
+
+        ItemStack acquiredFlint = new ItemStack(Items.FLINT);
+        player.getInventory().add(acquiredFlint);
+        CriteriaTriggers.INVENTORY_CHANGED.trigger(
+                player,
+                player.getInventory(),
+                acquiredFlint
+        );
+
+        helper.succeedWhen(() -> {
+            helper.assertTrue(
+                    player.getRecipeBook().contains(flintShardRecipe),
+                    "Flint inventory did not unlock its shard recipe"
+            );
+            helper.assertFalse(
+                    player.getRecipeBook().contains(rockShardRecipe),
+                    "Flint inventory unlocked the Rock sharpening recipe"
+            );
+        });
+    }
+
     private static void assertLore(
             ExtendedGameTestHelper helper,
             ItemStack stack,
@@ -361,6 +411,16 @@ public final class DiscoverabilityGameTests {
         );
         player.setItemInHand(InteractionHand.MAIN_HAND, held);
         return player;
+    }
+
+    private static ResourceKey<Recipe<?>> recipeKey(String path) {
+        return ResourceKey.create(
+                Registries.RECIPE,
+                Identifier.fromNamespaceAndPath(
+                        MaterialProgression.MOD_ID,
+                        path
+                )
+        );
     }
 
     private static void postStart(

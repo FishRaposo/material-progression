@@ -1,16 +1,20 @@
 package dev.fishraposo.materialprogression.gametest;
 
+import dev.fishraposo.materialprogression.MaterialProgression;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
-import dev.fishraposo.materialprogression.registry.ModFeatures;
 import dev.fishraposo.materialprogression.registry.ModItems;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
 import dev.fishraposo.materialprogression.stone.StoneFamilyCatalog;
 import dev.fishraposo.materialprogression.stone.StoneFamilyResolver;
 import dev.fishraposo.materialprogression.stone.StoneResistance;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
+import java.util.List;
 import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -19,11 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
@@ -40,21 +43,115 @@ public final class StoneFamilyGameTests {
 
     @GameTest
     @EmptyTemplate
-    @TestHolder(description = "Direct stone-family supports resolve without fallback")
-    static void directFamilySupport(ExtendedGameTestHelper helper) {
-        var catalog = StoneFamilyCatalog.get();
-        for (StoneFamily family : StoneFamily.values()) {
-            var entry = catalog.byFamily(family).orElseThrow();
-            helper.setBlock(ROOT, entry.rawBlock());
-            assertResolvedSupport(helper, ROOT, family);
+    @TestHolder(description = "Configured worldgen places every required family")
+    static void configuredFeaturePlacesEveryRequiredFamily(
+            ExtendedGameTestHelper helper
+    ) {
+        List<PlacementCase> cases = List.of(
+                new PlacementCase("Overworld Stone", Blocks.STONE, StoneFamily.STONE),
+                new PlacementCase("Overworld Granite", Blocks.GRANITE, StoneFamily.GRANITE),
+                new PlacementCase("Overworld Diorite", Blocks.DIORITE, StoneFamily.DIORITE),
+                new PlacementCase("Overworld Andesite", Blocks.ANDESITE, StoneFamily.ANDESITE),
+                new PlacementCase("cave Deepslate", Blocks.DEEPSLATE, StoneFamily.DEEPSLATE),
+                new PlacementCase("cave Tuff", Blocks.TUFF, StoneFamily.TUFF),
+                new PlacementCase("cave Calcite", Blocks.CALCITE, StoneFamily.CALCITE),
+                new PlacementCase(
+                        "cave Dripstone",
+                        Blocks.DRIPSTONE_BLOCK,
+                        StoneFamily.DRIPSTONE
+                ),
+                new PlacementCase("cave Sulfur", Blocks.SULFUR, StoneFamily.SULFUR),
+                new PlacementCase("cave Cinnabar", Blocks.CINNABAR, StoneFamily.CINNABAR),
+                new PlacementCase(
+                        "raw Sandstone",
+                        Blocks.SANDSTONE,
+                        StoneFamily.SANDSTONE
+                ),
+                new PlacementCase(
+                        "raw Red Sandstone",
+                        Blocks.RED_SANDSTONE,
+                        StoneFamily.RED_SANDSTONE
+                ),
+                new PlacementCase(
+                        "Nether Netherrack",
+                        Blocks.NETHERRACK,
+                        StoneFamily.NETHERRACK
+                ),
+                new PlacementCase("Nether Basalt", Blocks.BASALT, StoneFamily.BASALT),
+                new PlacementCase(
+                        "Nether Blackstone",
+                        Blocks.BLACKSTONE,
+                        StoneFamily.BLACKSTONE
+                ),
+                new PlacementCase(
+                        "End End Stone",
+                        Blocks.END_STONE,
+                        StoneFamily.END_STONE
+                ),
+                new PlacementCase(
+                        "Sand direct surface",
+                        Blocks.SAND,
+                        StoneFamily.SANDSTONE
+                ),
+                new PlacementCase(
+                        "Red Sand direct surface",
+                        Blocks.RED_SAND,
+                        StoneFamily.RED_SANDSTONE
+                )
+        );
+        for (PlacementCase placement : cases) {
+            helper.setBlock(ROOT, placement.support());
+            helper.setBlock(ROOT.above(), Blocks.AIR);
+            assertConfiguredPlacement(
+                    helper,
+                    ROOT.above(),
+                    placement.expected(),
+                    placement.label()
+            );
         }
-        helper.setBlock(ROOT, Blocks.GRANITE);
-        assertResolvedSupport(helper, ROOT, StoneFamily.GRANITE);
-        helper.setBlock(ROOT, Blocks.SAND);
-        assertResolvedSupport(helper, ROOT, StoneFamily.SANDSTONE);
-        helper.setBlock(ROOT, Blocks.RED_SAND);
-        assertResolvedSupport(helper, ROOT, StoneFamily.RED_SANDSTONE);
+        helper.succeed();
+    }
 
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Configured worldgen scans Dirt and Gravel cover")
+    static void configuredFeatureUsesNearestFamilyBelowCover(
+            ExtendedGameTestHelper helper
+    ) {
+        List<CoverPlacementCase> cases = List.of(
+                new CoverPlacementCase(
+                        "Dirt over Granite",
+                        Blocks.DIRT,
+                        Blocks.GRANITE,
+                        StoneFamily.GRANITE
+                ),
+                new CoverPlacementCase(
+                        "Gravel over Tuff",
+                        Blocks.GRAVEL,
+                        Blocks.TUFF,
+                        StoneFamily.TUFF
+                )
+        );
+        for (CoverPlacementCase placement : cases) {
+            helper.setBlock(ROOT, Blocks.STONE);
+            helper.setBlock(ROOT.above(), placement.nearestSource());
+            helper.setBlock(ROOT.above(2), placement.cover());
+            helper.setBlock(ROOT.above(3), Blocks.AIR);
+            assertConfiguredPlacement(
+                    helper,
+                    ROOT.above(3),
+                    placement.expected(),
+                    placement.label()
+            );
+        }
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Stone-family catalog lookups stay identity-safe")
+    static void catalogLookupsHaveNoFallback(ExtendedGameTestHelper helper) {
+        var catalog = StoneFamilyCatalog.get();
         var granite = catalog.byFamily(StoneFamily.GRANITE).orElseThrow();
         helper.assertValueEqual(
                 granite,
@@ -558,15 +655,56 @@ public final class StoneFamilyGameTests {
             BlockPos position
     ) {
         var level = helper.getLevel();
-        return ModFeatures.LOOSE_ROCKS.get().place(
-                new FeaturePlaceContext<>(
-                        Optional.empty(),
-                        level,
-                        level.getChunkSource().getGenerator(),
-                        RandomSource.create(42L),
-                        helper.absolutePos(position),
-                        NoneFeatureConfiguration.INSTANCE
+        ResourceKey<ConfiguredFeature<?, ?>> key = ResourceKey.create(
+                Registries.CONFIGURED_FEATURE,
+                Identifier.fromNamespaceAndPath(
+                        MaterialProgression.MOD_ID,
+                        "loose_rocks"
                 )
         );
+        ConfiguredFeature<?, ?> configuredFeature = level.registryAccess()
+                .lookupOrThrow(Registries.CONFIGURED_FEATURE)
+                .get(key)
+                .orElseThrow()
+                .value();
+        return configuredFeature.place(
+                level,
+                level.getChunkSource().getGenerator(),
+                RandomSource.create(42L),
+                helper.absolutePos(position)
+        );
+    }
+
+    private static void assertConfiguredPlacement(
+            ExtendedGameTestHelper helper,
+            BlockPos position,
+            StoneFamily expected,
+            String label
+    ) {
+        helper.assertTrue(
+                placeFeature(helper, position),
+                label + " configured feature rejected placement"
+        );
+        helper.assertBlockPresent(ModBlocks.LOOSE_ROCKS.get(), position);
+        helper.assertBlockProperty(
+                position,
+                LooseRocksBlock.FAMILY,
+                expected
+        );
+    }
+
+    private record PlacementCase(
+            String label,
+            Block support,
+            StoneFamily expected
+    ) {
+    }
+
+    private record CoverPlacementCase(
+            String label,
+            Block cover,
+            Block nearestSource,
+            StoneFamily expected
+    ) {
     }
 }

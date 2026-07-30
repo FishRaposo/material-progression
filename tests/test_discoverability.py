@@ -60,6 +60,10 @@ PROGRESSION_ADVANCEMENTS = {
 }
 
 RECIPE_UNLOCKS = {
+    "primitive/flint_shard_from_flint": {
+        "items": ["minecraft:flint"],
+        "recipes": ["material_progression:flint_shard_from_flint"],
+    },
     "primitive/rocks": {
         "items": ["#c:rocks"],
         "recipes": [

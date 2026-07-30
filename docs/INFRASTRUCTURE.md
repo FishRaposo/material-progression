@@ -363,10 +363,14 @@ The desired distinction is:
 - A bonsai supplies slow background drops.
 - Hoppers and hopper variants automate collection and movement.
 
-The current preference is to preserve vanilla's baseline wood output. Workshop
-sawing is an optional efficiency reward, not the restoration of output removed
-at the beginning. Exact saw materials, recipes, yields, and durability remain
-undecided.
+The implemented first pass preserves vanilla's baseline wood output. Flint and
+Bronze Saws are the selected materials: both turn a true Log or stem into six
+matching Planks, a Bamboo Block into three Bamboo Planks, and one Plank into
+three Sticks. Flint has 64 durability and Bronze has 325; Bronze buys
+longevity, not extra yield. Workshop sawing is therefore an optional efficiency
+reward, not the restoration of output removed at the beginning. Future Saw
+materials and balance changes remain open, but these first-pass recipes, yields,
+and durability values are implemented rather than undecided.
 
 See [Primitive Resources and Tools](PRIMITIVE_RESOURCES.md) for the larger
 relationship between wood, flint, knives, plant fiber, and metallurgy.
