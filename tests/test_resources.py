@@ -376,16 +376,32 @@ class ResourceContractTests(unittest.TestCase):
                 DATA / "tags" / "block" / "loose_rock_cover.json"
             )["values"]),
         )
+        for family, contract in STONE_FAMILIES.items():
+            with self.subTest(loose_rock_surface=family):
+                expected_surface = [contract["raw_block"]]
+                if family == "sandstone":
+                    expected_surface.append("minecraft:sand")
+                if family == "red_sandstone":
+                    expected_surface.append("minecraft:red_sand")
+                self.assertEqual(
+                    expected_surface,
+                    TREE.load_json(
+                        DATA / "tags" / "block" / "loose_rock_surfaces"
+                        / f"{family}.json"
+                    )["values"],
+                )
         self.assertEqual(
             {
-                *(contract["raw_block"] for contract in STONE_FAMILIES.values()),
-                "minecraft:sand",
-                "minecraft:red_sand",
+                f"#material_progression:loose_rock_surfaces/{family}"
+                for family in STONE_FAMILIES
             },
             set(TREE.load_json(
-                DATA / "tags" / "block" / "loose_rock_surface.json"
+                DATA / "tags" / "block" / "loose_rock_surfaces.json"
             )["values"]),
         )
+        self.assertFalse((
+            DATA / "tags" / "block" / "loose_rock_surface.json"
+        ).exists())
 
         mod_cobbled = {
             contract["cobbled_block"]
