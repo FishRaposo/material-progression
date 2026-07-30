@@ -45,12 +45,15 @@ public final class ExternalLooseRockBlockEntity extends BlockEntity {
             BlockState state,
             ExternalLooseRockBlockEntity rocks
     ) {
+        long catalogVersion = StoneFamilyCatalog.version();
         if (!(level instanceof ServerLevel serverLevel)
-                || rocks.observedCatalogVersion
-                        == StoneFamilyCatalog.version()) {
+                || rocks.observedCatalogVersion == catalogVersion) {
             return;
         }
-        rocks.observedCatalogVersion = StoneFamilyCatalog.version();
+        // External Loose Rocks are sparse. Their steady-state ticker is one
+        // version comparison; catalog and support resolution happen only
+        // after a successful family reload.
+        rocks.observedCatalogVersion = catalogVersion;
         if (rocks.family == null || rocks.rock.isEmpty()) {
             serverLevel.removeBlock(pos, false);
             return;
@@ -63,14 +66,19 @@ public final class ExternalLooseRockBlockEntity extends BlockEntity {
             return;
         }
         StoneFamilyCatalog.Entry entry = current.orElseThrow();
+        if (!state.canSurvive(serverLevel, pos)) {
+            // destroyBlock must observe the previously stored Rock when the
+            // new family definition no longer accepts this support.
+            serverLevel.destroyBlock(pos, true);
+            return;
+        }
+
         ItemStack updatedRock = new ItemStack(entry.rockItem());
+        rocks.family = entry.id();
         if (!ItemStack.isSameItemSameComponents(rocks.rock, updatedRock)) {
             rocks.rock = updatedRock;
             rocks.setChanged();
             rocks.sync();
-        }
-        if (!state.canSurvive(serverLevel, pos)) {
-            serverLevel.destroyBlock(pos, true);
         }
     }
 

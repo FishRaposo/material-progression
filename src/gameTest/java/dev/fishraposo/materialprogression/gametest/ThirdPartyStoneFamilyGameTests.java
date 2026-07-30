@@ -1,7 +1,9 @@
 package dev.fishraposo.materialprogression.gametest;
 
 import dev.fishraposo.materialprogression.MaterialProgression;
+import dev.fishraposo.materialprogression.progression.FeedbackMessages;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
+import dev.fishraposo.materialprogression.stone.GeologyTier;
 import dev.fishraposo.materialprogression.stone.GeologyTierResolver;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
 import dev.fishraposo.materialprogression.stone.StoneFamilyCatalog;
@@ -15,6 +17,7 @@ import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -27,6 +30,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -259,6 +263,141 @@ public final class ThirdPartyStoneFamilyGameTests {
     }
 
     @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "External sources preserve geology drops and localized family feedback")
+    static void externalSourceUsesGenericGeologyPaths(
+            ExtendedGameTestHelper helper
+    ) {
+        ConfigFixture.setEnableGeologicalHardness(helper, true);
+        ConfigFixture.setEnableStoneRockDrops(helper, true);
+        StoneFamilyCatalog.Entry entry = StoneFamilyCatalog.get()
+                .byId(FAMILY_ID)
+                .orElseThrow();
+        GeologyTier tier = GeologyTierResolver.naturalTier(
+                net.minecraft.world.level.Level.OVERWORLD,
+                entry.id(),
+                entry.resistance().modifier(),
+                48,
+                false
+        );
+        helper.assertValueEqual(2, tier.level(), "external family resistance tier");
+
+        TranslatableContents feedback = (TranslatableContents)
+                FeedbackMessages.insufficientGeology(entry, tier).getContents();
+        helper.assertValueEqual(
+                "message.material_progression.geology.insufficient",
+                feedback.getKey(),
+                "external geology feedback key"
+        );
+        helper.assertTrue(
+                feedback.getArgs()[1] instanceof Component,
+                "external geology family argument was not a component"
+        );
+        TranslatableContents familyName = (TranslatableContents)
+                ((Component) feedback.getArgs()[1]).getContents();
+        helper.assertValueEqual(
+                "stone_family.material_progression_gametests.slate",
+                familyName.getKey(),
+                "external geology family translation key"
+        );
+        helper.assertValueEqual(
+                "Slate",
+                familyName.getFallback(),
+                "external geology family fallback"
+        );
+
+        var player = helper.makeTickingMockServerPlayerInLevel(GameType.SURVIVAL);
+
+        helper.setBlock(ROOT, MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get());
+        ItemStack fortune = new ItemStack(Items.DIAMOND_PICKAXE);
+        enchant(helper, fortune, Enchantments.FORTUNE);
+        player.setItemInHand(InteractionHand.MAIN_HAND, fortune);
+        helper.assertTrue(
+                player.gameMode.destroyBlock(helper.absolutePos(ROOT)),
+                "Fortune external source could not be mined"
+        );
+        helper.assertValueEqual(
+                4,
+                itemCount(helper, ROOT, MaterialProgressionGameTestMod.EXTERNAL_ROCK.get()),
+                "Fortune external Rock count"
+        );
+        helper.assertValueEqual(
+                0,
+                itemCount(
+                        helper,
+                        ROOT,
+                        MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get().asItem()
+                ),
+                "Fortune external raw-block count"
+        );
+        clearNearbyItems(helper, ROOT);
+
+        helper.setBlock(ROOT, MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get());
+        ItemStack silkTouch = new ItemStack(Items.DIAMOND_PICKAXE);
+        enchant(helper, silkTouch, Enchantments.SILK_TOUCH);
+        player.setItemInHand(InteractionHand.MAIN_HAND, silkTouch);
+        helper.assertTrue(
+                player.gameMode.destroyBlock(helper.absolutePos(ROOT)),
+                "Silk Touch external source could not be mined"
+        );
+        helper.assertValueEqual(
+                1,
+                itemCount(
+                        helper,
+                        ROOT,
+                        MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get().asItem()
+                ),
+                "Silk Touch external raw-block count"
+        );
+        helper.assertValueEqual(
+                0,
+                itemCount(helper, ROOT, MaterialProgressionGameTestMod.EXTERNAL_ROCK.get()),
+                "Silk Touch external Rock count"
+        );
+        clearNearbyItems(helper, ROOT);
+
+        helper.setBlock(ROOT, MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get());
+        player.setItemInHand(
+                InteractionHand.MAIN_HAND,
+                new ItemStack(Items.IRON_SWORD)
+        );
+        player.gameMode.destroyBlock(helper.absolutePos(ROOT));
+        helper.assertValueEqual(
+                0,
+                allItemCount(helper, ROOT),
+                "wrong-tool external drop count"
+        );
+        clearNearbyItems(helper, ROOT);
+
+        helper.setBlock(ROOT, MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get());
+        for (net.minecraft.core.Direction direction
+                : net.minecraft.core.Direction.values()) {
+            helper.setBlock(ROOT.relative(direction), Blocks.STONE);
+        }
+        helper.setBlock(ROOT, MaterialProgressionGameTestMod.EXTERNAL_RAW_STONE.get());
+        helper.assertValueEqual(
+                3,
+                GeologyTierResolver.resolve(
+                        helper.getLevel(),
+                        helper.absolutePos(ROOT),
+                        helper.getBlockState(ROOT)
+                ).orElseThrow().level(),
+                "enclosed external geology tier"
+        );
+        player.setItemInHand(
+                InteractionHand.MAIN_HAND,
+                new ItemStack(Items.STONE_PICKAXE)
+        );
+        player.gameMode.destroyBlock(helper.absolutePos(ROOT));
+        helper.assertValueEqual(
+                0,
+                allItemCount(helper, ROOT),
+                "insufficient-tool external drop count"
+        );
+        helper.succeed();
+    }
+
+    @GameTest
     @EmptyTemplate(value = "5x5x5")
     @TestHolder(description = "External Rock drops do not duplicate for player, creative, or explosion breaks")
     static void externalLooseRockDropPathsAreExact(
@@ -386,6 +525,78 @@ public final class ThirdPartyStoneFamilyGameTests {
                 }
                 helper.succeed();
             });
+        });
+    }
+
+    @GameTest(
+            timeoutTicks = 60,
+            batch = "stone_family_incompatible_reload"
+    )
+    @EmptyTemplate
+    @TestHolder(description = "An incompatible family reload drops the previously stored Rock")
+    static void incompatibleReloadDropsPreviouslyStoredRock(
+            ExtendedGameTestHelper helper
+    ) {
+        Map<Identifier, StoneFamilyDefinition> original =
+                StoneFamilyCatalogFixture.definitionsFrom(
+                        StoneFamilyCatalog.get()
+                );
+        StoneFamilyDefinition external = original.get(FAMILY_ID);
+        helper.setBlock(
+                ROOT,
+                MaterialProgressionGameTestMod.EXTERNAL_DIRECT_SURFACE.get()
+        );
+        helper.assertTrue(
+                placeFeature(helper, ROOT.above()),
+                "external direct-surface placement failed"
+        );
+        assertExternalIdentity(helper, ROOT.above());
+
+        Map<Identifier, StoneFamilyDefinition> changed = replacing(
+                original,
+                externalWith(
+                        external,
+                        external.sourceBlockTag(),
+                        TagKey.create(
+                                Registries.ITEM,
+                                Identifier.parse("c:rocks/slate_alternate")
+                        ),
+                        external.cobbledBlock(),
+                        external.rawBlock(),
+                        blockTag(
+                                "loose_rock_surfaces/slate_raw_only"
+                        ),
+                        external.resistance()
+                )
+        );
+        StoneFamilyCatalogFixture.publish(helper, changed);
+        helper.runAfterDelay(2, () -> {
+            try {
+                helper.assertBlockPresent(Blocks.AIR, ROOT.above());
+                helper.assertValueEqual(
+                        1,
+                        itemCount(
+                                helper,
+                                ROOT.above(),
+                                MaterialProgressionGameTestMod
+                                        .EXTERNAL_ROCK.get()
+                        ),
+                        "previously stored external Rock count"
+                );
+                helper.assertValueEqual(
+                        0,
+                        itemCount(
+                                helper,
+                                ROOT.above(),
+                                MaterialProgressionGameTestMod
+                                        .EXTERNAL_ROCK_ALTERNATE.get()
+                        ),
+                        "replacement external Rock count"
+                );
+            } finally {
+                StoneFamilyCatalogFixture.publish(helper, original);
+            }
+            helper.succeed();
         });
     }
 
@@ -667,6 +878,18 @@ public final class ThirdPartyStoneFamilyGameTests {
         return new ItemStack(MaterialProgressionGameTestMod.EXTERNAL_ROCK.get());
     }
 
+    private static void enchant(
+            ExtendedGameTestHelper helper,
+            ItemStack stack,
+            net.minecraft.resources.ResourceKey<net.minecraft.world.item.enchantment.Enchantment> key
+    ) {
+        var enchantment = helper.getLevel()
+                .registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT)
+                .getOrThrow(key);
+        stack.enchant(enchantment, 1);
+    }
+
     private static boolean placeFeature(
             ExtendedGameTestHelper helper,
             BlockPos position
@@ -705,6 +928,21 @@ public final class ThirdPartyStoneFamilyGameTests {
                 )
                 .stream()
                 .filter(entity -> entity.getItem().is(item))
+                .mapToInt(entity -> entity.getItem().getCount())
+                .sum();
+    }
+
+    private static int allItemCount(
+            ExtendedGameTestHelper helper,
+            BlockPos pos
+    ) {
+        BlockPos absolute = helper.absolutePos(pos);
+        return helper.getLevel()
+                .getEntitiesOfClass(
+                        ItemEntity.class,
+                        AABB.ofSize(Vec3.atCenterOf(absolute), 4.0, 4.0, 4.0)
+                )
+                .stream()
                 .mapToInt(entity -> entity.getItem().getCount())
                 .sum();
     }

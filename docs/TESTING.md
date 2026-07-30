@@ -63,8 +63,10 @@ GameTests are grouped by gameplay system under
 - `ThirdPartyStoneFamilyGameTests` verifies external registry objects and
   namespaced family IDs through reload validation, cobbling, direct and covered
   placement, persistence, support invalidation, exact player/explosion drops,
-  creative suppression, geology, fallback names, and changed/removed-family
-  reconciliation. Delayed global-catalog mutation runs in an isolated batch.
+  creative suppression, Fortune and Silk Touch, capability rejection,
+  structured fallback names, and changed/removed/incompatible-family
+  reconciliation without replacing the Rock stored before a reload. Delayed
+  global-catalog mutation runs in an isolated batch.
 - Geology-focused tests verify depth bands, modifiers, exposure, correct-tool
   drops, Fortune, Silk Touch, config toggles, persistent placed-stone markers,
   and piston transfer.
@@ -77,7 +79,7 @@ GameTests are grouped by gameplay system under
   throttled log hints, the Dense-geology advancement, the dedicated Manual
   Workshop recipe category, and real inventory-triggered Recipe Book unlocks.
 
-The current opening branch runs 115 live GameTests. Treat that count as a
+The current opening branch runs 117 live GameTests. Treat that count as a
 snapshot, not a reason to avoid adding the next regression test.
 
 GameTests must use real registries, recipes, inventories, blocks, and server
