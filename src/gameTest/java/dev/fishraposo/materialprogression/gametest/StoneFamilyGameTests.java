@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
@@ -289,6 +290,153 @@ public final class StoneFamilyGameTests {
                     "piston did not move the source"
             );
             helper.assertBlockPresent(Blocks.AIR, source.above(2));
+        });
+    }
+
+    @GameTest(timeoutTicks = 60)
+    @EmptyTemplate
+    @TestHolder(description = "Fluid-created source changes invalidate covered loose rocks")
+    static void fluidPlacementInvalidatesCoveredLooseRocks(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos fluidTarget = ROOT.above();
+        BlockPos support = ROOT.above(2);
+        BlockPos looseRocks = ROOT.above(3);
+        helper.setBlock(ROOT.below(), Blocks.DIAMOND_BLOCK);
+        helper.setBlock(ROOT, Blocks.GRANITE);
+        helper.setBlock(fluidTarget, Blocks.LAVA);
+        helper.setBlock(support, Blocks.DIRT);
+        helper.setBlock(
+                looseRocks,
+                ModBlocks.LOOSE_ROCKS.get()
+                        .defaultBlockState()
+                        .setValue(LooseRocksBlock.FAMILY, StoneFamily.GRANITE)
+        );
+        helper.assertTrue(
+                helper.getBlockState(looseRocks).canSurvive(
+                        helper.getLevel(),
+                        helper.absolutePos(looseRocks)
+                ),
+                "fluid fixture loose rocks were stale before mutation"
+        );
+
+        helper.runAfterDelay(
+                1,
+                () -> {
+                    helper.setBlock(fluidTarget.north(), Blocks.WATER);
+                    helper.getLevel().neighborChanged(
+                            helper.absolutePos(fluidTarget),
+                            Blocks.WATER,
+                            null
+                    );
+                }
+        );
+        helper.succeedWhen(() -> {
+            helper.assertBlockPresent(Blocks.GRANITE, ROOT);
+            helper.assertBlockPresent(Blocks.STONE, fluidTarget);
+            helper.assertBlockPresent(Blocks.DIRT, support);
+            helper.assertBlockPresent(Blocks.AIR, looseRocks);
+        });
+    }
+
+    @GameTest(timeoutTicks = 60)
+    @EmptyTemplate
+    @TestHolder(description = "Explosion source destruction invalidates protected covered loose rocks")
+    static void explosionInvalidatesProtectedCoveredLooseRocks(
+            ExtendedGameTestHelper helper
+    ) {
+        helper.setBlock(ROOT.below(), Blocks.DIAMOND_BLOCK);
+        helper.setBlock(ROOT, Blocks.GRANITE);
+        helper.setBlock(ROOT.above(), Blocks.DIRT);
+        helper.setBlock(
+                ROOT.above(2),
+                ModBlocks.LOOSE_ROCKS.get()
+                        .defaultBlockState()
+                        .setValue(LooseRocksBlock.FAMILY, StoneFamily.GRANITE)
+        );
+
+        helper.runAfterDelay(1, () -> {
+            BlockPos source = helper.absolutePos(ROOT);
+            helper.getLevel().explode(
+                    null,
+                    source.getX() + 0.5,
+                    source.getY() + 0.5,
+                    source.getZ() + 0.5,
+                    2.0F,
+                    Level.ExplosionInteraction.BLOCK
+            );
+        });
+        helper.succeedWhen(() -> {
+            helper.assertBlockPresent(Blocks.AIR, ROOT);
+            helper.assertBlockPresent(Blocks.DIRT, ROOT.above());
+            helper.assertBlockPresent(Blocks.AIR, ROOT.above(2));
+        });
+    }
+
+    @GameTest(timeoutTicks = 100)
+    @EmptyTemplate
+    @TestHolder(description = "Sticky-piston retraction invalidates source and destination columns")
+    static void stickyPistonRetractionInvalidatesBothColumns(
+            ExtendedGameTestHelper helper
+    ) {
+        BlockPos piston = ROOT.west();
+        BlockPos destination = ROOT;
+        BlockPos source = ROOT.east();
+        helper.setBlock(
+                piston,
+                Blocks.STICKY_PISTON.defaultBlockState()
+                        .setValue(
+                                PistonBaseBlock.FACING,
+                                helper.getAbsoluteDirection(Direction.EAST)
+                        )
+        );
+        helper.setBlock(piston.above(), Blocks.REDSTONE_BLOCK);
+        helper.getLevel().neighborChanged(
+                helper.absolutePos(piston),
+                Blocks.REDSTONE_BLOCK,
+                null
+        );
+
+        helper.runAfterDelay(4, () -> {
+            helper.assertBlockProperty(
+                    piston,
+                    PistonBaseBlock.EXTENDED,
+                    true
+            );
+            helper.setBlock(source, Blocks.GRANITE);
+            helper.setBlock(source.above(), Blocks.DIRT);
+            helper.setBlock(
+                    source.above(2),
+                    ModBlocks.LOOSE_ROCKS.get()
+                            .defaultBlockState()
+                            .setValue(
+                                    LooseRocksBlock.FAMILY,
+                                    StoneFamily.GRANITE
+                            )
+            );
+            helper.setBlock(destination.above(), Blocks.DIRT);
+            helper.setBlock(
+                    destination.above(2),
+                    ModBlocks.LOOSE_ROCKS.get()
+                            .defaultBlockState()
+                            .setValue(
+                                    LooseRocksBlock.FAMILY,
+                                    StoneFamily.STONE
+                            )
+            );
+
+            helper.setBlock(piston.above(), Blocks.AIR);
+            helper.getLevel().neighborChanged(
+                    helper.absolutePos(piston),
+                    Blocks.AIR,
+                    null
+            );
+        });
+        helper.succeedWhen(() -> {
+            helper.assertBlockPresent(Blocks.AIR, source);
+            helper.assertBlockPresent(Blocks.GRANITE, destination);
+            helper.assertBlockPresent(Blocks.AIR, source.above(2));
+            helper.assertBlockPresent(Blocks.AIR, destination.above(2));
         });
     }
 

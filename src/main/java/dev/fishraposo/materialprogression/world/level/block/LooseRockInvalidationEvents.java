@@ -87,13 +87,19 @@ public final class LooseRockInvalidationEvents {
     }
 
     private static void onPistonMove(PistonEvent.Pre event) {
+        invalidateAbove(event.getLevel(), event.getPos());
+        invalidateAbove(event.getLevel(), event.getFaceOffsetPos());
+        if (event.getPistonMoveType() == PistonEvent.PistonMoveType.RETRACT) {
+            invalidateAbove(
+                    event.getLevel(),
+                    event.getFaceOffsetPos().relative(event.getDirection())
+            );
+        }
+
         var resolver = event.getStructureHelper();
         if (resolver == null || !resolver.resolve()) {
             return;
         }
-
-        invalidateAbove(event.getLevel(), event.getPos());
-        invalidateAbove(event.getLevel(), event.getFaceOffsetPos());
         for (BlockPos source : resolver.getToPush()) {
             invalidateAbove(event.getLevel(), source);
             invalidateAbove(
