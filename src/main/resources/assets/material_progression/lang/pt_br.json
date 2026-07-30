@@ -35,6 +35,7 @@
   "item.material_progression.copper_dust": "Pó de Cobre",
   "item.material_progression.bronze_dust": "Pó de Bronze",
   "item.material_progression.bronze_ingot": "Barra de Bronze",
+  "item.material_progression.plant_fiber": "Fibra Vegetal",
   "item.material_progression.rock": "Pedra",
   "item.material_progression.granite_rock": "Pedra de Granito",
   "item.material_progression.diorite_rock": "Pedra de Diorito",
@@ -53,6 +54,9 @@
   "item.material_progression.end_stone_rock": "Pedra de Pedra do End",
   "item.material_progression.flint_shard": "Lasca de Sílex",
   "item.material_progression.flint_hatchet": "Machadinha de Sílex",
+  "item.material_progression.flint_knife": "Faca de Sílex",
+  "item.material_progression.flint_hammer": "Martelo de Sílex",
+  "item.material_progression.flint_saw": "Serra de Sílex",
   "item.material_progression.tin_sword": "Espada de Estanho",
   "item.material_progression.tin_pickaxe": "Picareta de Estanho",
   "item.material_progression.tin_axe": "Machado de Estanho",
@@ -62,5 +66,8 @@
   "item.material_progression.bronze_pickaxe": "Picareta de Bronze",
   "item.material_progression.bronze_axe": "Machado de Bronze",
   "item.material_progression.bronze_shovel": "Pá de Bronze",
-  "item.material_progression.bronze_hoe": "Enxada de Bronze"
+  "item.material_progression.bronze_hoe": "Enxada de Bronze",
+  "item.material_progression.bronze_knife": "Faca de Bronze",
+  "item.material_progression.bronze_hammer": "Martelo de Bronze",
+  "item.material_progression.bronze_saw": "Serra de Bronze"
 }

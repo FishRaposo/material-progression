@@ -1,11 +1,11 @@
 # Primitive Resources and Tools
 
-> **Status: partially implemented.** Loose rocks, ground sticks, Rock and flint
-> shard conversions, the flint hatchet, and the default-enabled log-only axe
-> requirement now ship. The knife, plant fiber, stone-drop replacement,
-> tree-adjacent density tuning, yields beyond the opening conversions, and the
-> complete primitive tool roster remain subject to implementation and
-> playtesting.
+> **Status: partially implemented.** Family-aware loose rocks, ground sticks,
+> Rock and flint-shard conversions, partial raw-stone drops, the flint hatchet,
+> the default-enabled log-only axe requirement, Plant Fiber, and Flint/Bronze
+> Knives, Hammers, and Saws now ship. Tree-adjacent stick-density tuning,
+> workshop processing, and expanded plant yields remain subject to
+> implementation and playtesting.
 
 ## Purpose
 
@@ -279,9 +279,14 @@ replaces No Tree Punching-like right-click knife recipes; it does not gate the
 basic resource. A Rock can always be sharpened through the shapeless 2x2 recipe,
 so the first hatchet never requires a workshop or a knife.
 
-Knives may continue through copper, tin, bronze, iron, silver, and other
-materials. Better knife materials could change durability, cutting speed, fiber
-yield, or crafting utility. A complete knife family is not required unless those
+The implemented opening includes Flint and Bronze Knives. Both preserve normal
+plant loot and add one Plant Fiber from short grass or two from a single
+two-block tall grass. Recognition uses the reloadable knife behavior tag rather
+than an item identity list. Flint has 64 durability; Bronze has 325 durability.
+Bronze improves longevity without changing the field Fiber yield.
+
+Knives may later continue through copper, tin, iron, silver, and other
+materials, but a complete recolored family is not required unless those
 differences justify it.
 
 ## Plant fiber and string
@@ -305,8 +310,11 @@ The system should remain simple:
 - Fiber costs should preserve spiders and cobwebs as valuable string sources.
 - Ordinary hand-breaking may keep vanilla drops while the knife supplies fiber.
 
-Exact plants, drop chances, fiber-to-string ratios, and recipe interactions are
-undecided.
+The first implemented field contract is deliberately narrow and deterministic:
+short grass yields one Fiber, tall grass yields two, and three
+`#c:fibers/plant` craft shapelessly into one String. Workshop plant processing
+will broaden the accepted plants and yields without replacing these field
+drops.
 
 ## Saws and active wood efficiency
 
@@ -324,10 +332,11 @@ Those are complementary tools rather than replacements for one another. A saw
 can harvest like an axe in the field and rewards active forestry through
 higher-yield workshop processing; a bonsai supports the workshop passively.
 
-The current direction preserves vanilla's four-plank baseline. A workshop saw
-turns each log into more than four planks and turns planks into more sticks than
-ordinary crafting. Exact bonus yields, saw recipes, valid materials, and
-durability remain unresolved.
+Vanilla's four-plank inventory-crafting baseline is preserved. Flint and Bronze
+Saws are real axe alternatives in the field and both satisfy the configured log
+harvest rule. Workshop processing will provide the separately visible
+efficiency bonus; no ordinary log recipe is replaced. Flint has 64 durability
+and Bronze has 325 durability, while both will use the same workshop yield.
 
 The preferred interface is the workshop block rather than a crafting recipe
 that silently damages a reusable saw. The player installs the saw, supplies the
@@ -347,10 +356,13 @@ The initial tool set follows one shared rule:
 | Hammer | Pickaxe alternative | Stone to gravel; gravel to sand |
 | Saw | Axe alternative | Better plank and stick yield |
 
-The field roles make each item independently usable. The workshop roles are
-their intended identities: controlled transformations and better recovery from
-materials already gathered. Tool material can change durability and speed, but
-does not need an arbitrary yield multiplier for every tier.
+The field roles make each item independently usable. Flint Hammers carry
+stone-level geology capability and Bronze Hammers carry iron-level capability,
+reaching Dense geology but not Deep geology. Both also use the real pickaxe
+Tool component for ordinary blocks. The workshop roles remain their intended
+processing identities: controlled transformations and better recovery from
+materials already gathered. Tool material changes durability and capability,
+not processing yield.
 
 ## Selective influence from No Tree Punching
 

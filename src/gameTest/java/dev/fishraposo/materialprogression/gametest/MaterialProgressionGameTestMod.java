@@ -2,9 +2,11 @@ package dev.fishraposo.materialprogression.gametest;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -20,6 +22,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.BlockDropsEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -49,6 +52,7 @@ public final class MaterialProgressionGameTestMod {
     private static BlockPos canceledNeighborNotify;
     private static BlockPos canceledBreak;
     private static BlockPos nestedCanceledBreakMutation;
+    private static BlockPos sentinelDrop;
 
     public MaterialProgressionGameTestMod(IEventBus modBus, ModContainer container) {
         BLOCKS.register(modBus);
@@ -60,6 +64,10 @@ public final class MaterialProgressionGameTestMod {
         NeoForge.EVENT_BUS.addListener(
                 EventPriority.HIGHEST,
                 MaterialProgressionGameTestMod::configureFluidFixture
+        );
+        NeoForge.EVENT_BUS.addListener(
+                EventPriority.HIGHEST,
+                MaterialProgressionGameTestMod::addTargetedSentinelDrop
         );
         NeoForge.EVENT_BUS.addListener(
                 EventPriority.HIGHEST,
@@ -105,12 +113,35 @@ public final class MaterialProgressionGameTestMod {
         nestedCanceledBreakMutation = pos.immutable();
     }
 
+    static void cancelNextBreakAt(BlockPos pos) {
+        canceledBreak = pos.immutable();
+    }
+
+    static void addSentinelDropAt(BlockPos pos) {
+        sentinelDrop = pos.immutable();
+    }
+
     static void clearCancellations() {
         canceledPlacement = null;
         canceledLivingDestruction = null;
         canceledNeighborNotify = null;
         canceledBreak = null;
         nestedCanceledBreakMutation = null;
+        sentinelDrop = null;
+    }
+
+    private static void addTargetedSentinelDrop(BlockDropsEvent event) {
+        if (!event.getPos().equals(sentinelDrop)) {
+            return;
+        }
+        sentinelDrop = null;
+        event.getDrops().add(new ItemEntity(
+                event.getLevel(),
+                event.getPos().getX() + 0.5,
+                event.getPos().getY() + 0.5,
+                event.getPos().getZ() + 0.5,
+                new ItemStack(Items.STICK)
+        ));
     }
 
     private static void cancelTargetedPlacement(

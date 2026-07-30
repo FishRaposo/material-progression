@@ -19,6 +19,8 @@ public final class ModTags {
 
     public static final TagKey<Item> FLINT_SHARDS =
             commonItemTag("flint_shards");
+    public static final TagKey<Item> FIBERS_PLANT =
+            commonItemTag("fibers/plant");
     public static final TagKey<Item> INGOTS_TIN =
             commonItemTag("ingots/tin");
     public static final TagKey<Item> INGOTS_BRONZE =
@@ -29,6 +31,10 @@ public final class ModTags {
             itemTag("crusher_inputs");
     public static final TagKey<Item> HAMMERS =
             itemTag("hammers");
+    public static final TagKey<Item> KNIVES =
+            itemTag("knives");
+    public static final TagKey<Item> SAWS =
+            itemTag("saws");
 
     private ModTags() {
     }

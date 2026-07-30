@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "material_progression:flint_saw",
+    "material_progression:bronze_saw"
+  ]
+}

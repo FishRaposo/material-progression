@@ -27,6 +27,7 @@ COMMON_ITEM_TAGS = {
     "dusts/bronze": ["material_progression:bronze_dust"],
     "dusts/copper": ["material_progression:copper_dust"],
     "dusts/tin": ["material_progression:tin_dust"],
+    "fibers/plant": ["material_progression:plant_fiber"],
     "ingots/bronze": ["material_progression:bronze_ingot"],
     "ingots/tin": ["material_progression:tin_ingot"],
     "flint_shards": ["material_progression:flint_shard"],
@@ -51,7 +52,10 @@ class ResourceContractTests(unittest.TestCase):
         hammer_tag = TREE.load_json(
             DATA / "tags" / "item" / "hammers.json"
         )
-        self.assertEqual({"replace": False, "values": []}, hammer_tag)
+        self.assertEqual(
+            {"replace": False, "values": ["#c:tools/hammers"]},
+            hammer_tag,
+        )
 
         expected_messages = {
             "config.material_progression.server.enableGeologicalHardness",
@@ -207,17 +211,34 @@ class ResourceContractTests(unittest.TestCase):
             value.removeprefix("material_progression:")
             for value in mining["values"]
         }
+        sword_tools = {
+            "tin_sword",
+            "bronze_sword",
+            "flint_knife",
+            "bronze_knife",
+        }
         self.assertEqual(
-            all_tools - {"tin_sword", "bronze_sword"},
+            all_tools - sword_tools,
             mining_tools,
         )
 
         expected_by_type = {
-            "axes": {"flint_hatchet", "tin_axe", "bronze_axe"},
+            "axes": {
+                "flint_hatchet",
+                "flint_saw",
+                "tin_axe",
+                "bronze_axe",
+                "bronze_saw",
+            },
             "hoes": {"tin_hoe", "bronze_hoe"},
-            "pickaxes": {"tin_pickaxe", "bronze_pickaxe"},
+            "pickaxes": {
+                "flint_hammer",
+                "tin_pickaxe",
+                "bronze_pickaxe",
+                "bronze_hammer",
+            },
             "shovels": {"tin_shovel", "bronze_shovel"},
-            "swords": {"tin_sword", "bronze_sword"},
+            "swords": sword_tools,
         }
         for tag, expected_tools in expected_by_type.items():
             with self.subTest(tag=tag):
@@ -265,6 +286,7 @@ class ResourceContractTests(unittest.TestCase):
                 "#c:dusts/tin",
             },
             "ingots": {"#c:ingots/bronze", "#c:ingots/tin"},
+            "fibers": {"#c:fibers/plant"},
             "ores": {"#c:ores/tin"},
             "raw_materials": {"#c:raw_materials/tin"},
         }
@@ -313,7 +335,62 @@ class ResourceContractTests(unittest.TestCase):
         private_item_tags = TREE.names_matching(
             DATA / "tags" / "item", "*.json"
         )
-        self.assertEqual({"crusher_inputs", "hammers"}, private_item_tags)
+        self.assertEqual(
+            {"crusher_inputs", "hammers", "knives", "saws"},
+            private_item_tags,
+        )
+
+    def test_workshop_tool_interfaces_are_shared_and_behavior_tagged(self):
+        expected = {
+            "hammers": {
+                "material_progression:flint_hammer",
+                "material_progression:bronze_hammer",
+            },
+            "knives": {
+                "material_progression:flint_knife",
+                "material_progression:bronze_knife",
+            },
+            "saws": {
+                "material_progression:flint_saw",
+                "material_progression:bronze_saw",
+            },
+        }
+        shared_tool_root = TREE.load_json(
+            COMMON_DATA / "tags" / "item" / "tools.json"
+        )
+        self.assertEqual(
+            {f"#c:tools/{tool}" for tool in expected},
+            set(shared_tool_root["values"]),
+        )
+
+        for tool, items in expected.items():
+            with self.subTest(tool=tool):
+                shared = TREE.load_json(
+                    COMMON_DATA / "tags" / "item" / "tools"
+                    / f"{tool}.json"
+                )
+                self.assertEqual(items, set(shared["values"]))
+                behavior = TREE.load_json(
+                    DATA / "tags" / "item" / f"{tool}.json"
+                )
+                self.assertEqual(
+                    {"replace": False, "values": [f"#c:tools/{tool}"]},
+                    behavior,
+                )
+
+    def test_ordinary_log_crafting_is_not_overridden(self):
+        minecraft_recipe_root = (
+            RESOURCES / "data" / "minecraft" / "recipe"
+        )
+        self.assertFalse(minecraft_recipe_root.exists())
+        for recipe_path in sorted((DATA / "recipe").glob("*.json")):
+            result = TREE.load_json(recipe_path).get("result", {})
+            with self.subTest(recipe=recipe_path.stem):
+                self.assertFalse(
+                    result.get("id", "").endswith("_planks"),
+                    "Workshop wood efficiency must not replace inventory "
+                    "log crafting",
+                )
 
     def test_stone_family_static_resources_preserve_material_identity(self):
         expected_resistance = {

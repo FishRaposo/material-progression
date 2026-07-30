@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "#c:fibers/plant",
+    "#c:fibers/plant",
+    "#c:fibers/plant"
+  ],
+  "result": {
+    "id": "minecraft:string"
+  }
+}

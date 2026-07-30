@@ -1,8 +1,7 @@
 {
+  "replace": false,
   "values": [
     "material_progression:flint_knife",
-    "material_progression:tin_sword",
-    "material_progression:bronze_sword",
     "material_progression:bronze_knife"
   ]
 }

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "material_progression:flint_hatchet",
+    "material_progression:flint_hammer",
+    "material_progression:flint_saw",
     "material_progression:tin_pickaxe",
     "material_progression:tin_axe",
     "material_progression:tin_shovel",
@@ -9,6 +11,8 @@
     "material_progression:bronze_pickaxe",
     "material_progression:bronze_axe",
     "material_progression:bronze_shovel",
-    "material_progression:bronze_hoe"
+    "material_progression:bronze_hoe",
+    "material_progression:bronze_hammer",
+    "material_progression:bronze_saw"
   ]
 }

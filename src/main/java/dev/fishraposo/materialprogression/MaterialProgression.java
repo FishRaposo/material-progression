@@ -2,6 +2,7 @@ package dev.fishraposo.materialprogression;
 
 import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
 import dev.fishraposo.materialprogression.progression.HarvestRuleEvents;
+import dev.fishraposo.materialprogression.progression.PlantFiberHarvestEvents;
 import dev.fishraposo.materialprogression.registry.ModBlockEntities;
 import dev.fishraposo.materialprogression.registry.ModBlocks;
 import dev.fishraposo.materialprogression.registry.ModDataAttachments;
@@ -36,6 +37,7 @@ public final class MaterialProgression {
                 MaterialProgressionConfig.SPEC
         );
         HarvestRuleEvents.register();
+        PlantFiberHarvestEvents.register();
         GeologyFeedbackEvents.register();
         GeologyMiningEvents.register();
         LooseRockInvalidationEvents.register();

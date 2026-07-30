@@ -54,6 +54,7 @@ public final class ModItems {
     public static final DeferredItem<Item> COPPER_DUST = ITEMS.registerSimpleItem("copper_dust");
     public static final DeferredItem<Item> BRONZE_DUST = ITEMS.registerSimpleItem("bronze_dust");
     public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
+    public static final DeferredItem<Item> PLANT_FIBER = ITEMS.registerSimpleItem("plant_fiber");
     public static final DeferredItem<Item> ROCK = ITEMS.registerSimpleItem("rock");
     public static final DeferredItem<Item> GRANITE_ROCK = ITEMS.registerSimpleItem("granite_rock");
     public static final DeferredItem<Item> DIORITE_ROCK = ITEMS.registerSimpleItem("diorite_rock");
@@ -74,6 +75,18 @@ public final class ModItems {
 
     public static final DeferredItem<AxeItem> FLINT_HATCHET = ITEMS.registerItem(
             "flint_hatchet", properties -> new AxeItem(FLINT, 5.0F, -3.2F, properties)
+    );
+    public static final DeferredItem<Item> FLINT_KNIFE = ITEMS.registerItem(
+            "flint_knife",
+            properties -> new Item(properties.sword(FLINT, 1.0F, -1.8F))
+    );
+    public static final DeferredItem<Item> FLINT_HAMMER = ITEMS.registerItem(
+            "flint_hammer",
+            properties -> new Item(properties.pickaxe(FLINT, 2.0F, -3.0F))
+    );
+    public static final DeferredItem<AxeItem> FLINT_SAW = ITEMS.registerItem(
+            "flint_saw",
+            properties -> new AxeItem(FLINT, 4.0F, -2.8F, properties)
     );
 
     public static final DeferredItem<Item> TIN_SWORD = ITEMS.registerItem(
@@ -107,6 +120,18 @@ public final class ModItems {
     public static final DeferredItem<HoeItem> BRONZE_HOE = ITEMS.registerItem(
             "bronze_hoe", properties -> new HoeItem(BRONZE, -2.0F, -1.0F, properties)
     );
+    public static final DeferredItem<Item> BRONZE_KNIFE = ITEMS.registerItem(
+            "bronze_knife",
+            properties -> new Item(properties.sword(BRONZE, 1.0F, -1.8F))
+    );
+    public static final DeferredItem<Item> BRONZE_HAMMER = ITEMS.registerItem(
+            "bronze_hammer",
+            properties -> new Item(properties.pickaxe(BRONZE, 2.0F, -3.0F))
+    );
+    public static final DeferredItem<AxeItem> BRONZE_SAW = ITEMS.registerItem(
+            "bronze_saw",
+            properties -> new AxeItem(BRONZE, 4.0F, -2.8F, properties)
+    );
 
     public static final DeferredItem<?> CRUSHER = ITEMS.registerSimpleBlockItem("crusher", ModBlocks.CRUSHER);
     public static final DeferredItem<?> TIN_ORE = ITEMS.registerSimpleBlockItem("tin_ore", ModBlocks.TIN_ORE);
@@ -129,13 +154,15 @@ public final class ModItems {
 
     private static final List<DeferredItem<? extends Item>> MATERIAL_ITEMS = List.of(
             RAW_TIN, TIN_INGOT, TIN_DUST, COPPER_DUST, BRONZE_DUST, BRONZE_INGOT,
+            PLANT_FIBER,
             ROCK, GRANITE_ROCK, DIORITE_ROCK, ANDESITE_ROCK, DEEPSLATE_ROCK,
             TUFF_ROCK, CALCITE_ROCK, DRIPSTONE_ROCK, SULFUR_ROCK,
             CINNABAR_ROCK, SANDSTONE_ROCK, RED_SANDSTONE_ROCK,
             NETHERRACK_ROCK, BASALT_ROCK, BLACKSTONE_ROCK, END_STONE_ROCK,
-            FLINT_SHARD, FLINT_HATCHET,
+            FLINT_SHARD, FLINT_HATCHET, FLINT_KNIFE, FLINT_HAMMER, FLINT_SAW,
             TIN_SWORD, TIN_PICKAXE, TIN_AXE, TIN_SHOVEL, TIN_HOE,
-            BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE
+            BRONZE_SWORD, BRONZE_PICKAXE, BRONZE_AXE, BRONZE_SHOVEL, BRONZE_HOE,
+            BRONZE_KNIFE, BRONZE_HAMMER, BRONZE_SAW
     );
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MAIN_TAB =

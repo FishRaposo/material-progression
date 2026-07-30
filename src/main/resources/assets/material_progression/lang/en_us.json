@@ -35,6 +35,7 @@
   "item.material_progression.copper_dust": "Copper Dust",
   "item.material_progression.bronze_dust": "Bronze Dust",
   "item.material_progression.bronze_ingot": "Bronze Ingot",
+  "item.material_progression.plant_fiber": "Plant Fiber",
   "item.material_progression.rock": "Rock",
   "item.material_progression.granite_rock": "Granite Rock",
   "item.material_progression.diorite_rock": "Diorite Rock",
@@ -53,6 +54,9 @@
   "item.material_progression.end_stone_rock": "End Stone Rock",
   "item.material_progression.flint_shard": "Flint Shard",
   "item.material_progression.flint_hatchet": "Flint Hatchet",
+  "item.material_progression.flint_knife": "Flint Knife",
+  "item.material_progression.flint_hammer": "Flint Hammer",
+  "item.material_progression.flint_saw": "Flint Saw",
   "item.material_progression.tin_sword": "Tin Sword",
   "item.material_progression.tin_pickaxe": "Tin Pickaxe",
   "item.material_progression.tin_axe": "Tin Axe",
@@ -62,5 +66,8 @@
   "item.material_progression.bronze_pickaxe": "Bronze Pickaxe",
   "item.material_progression.bronze_axe": "Bronze Axe",
   "item.material_progression.bronze_shovel": "Bronze Shovel",
-  "item.material_progression.bronze_hoe": "Bronze Hoe"
+  "item.material_progression.bronze_hoe": "Bronze Hoe",
+  "item.material_progression.bronze_knife": "Bronze Knife",
+  "item.material_progression.bronze_hammer": "Bronze Hammer",
+  "item.material_progression.bronze_saw": "Bronze Saw"
 }

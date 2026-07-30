@@ -66,11 +66,23 @@ Current examples:
 | Bronze dust | `#c:dusts/bronze` |
 | Raw tin | `#c:raw_materials/tin` |
 | Tin ore blocks and items | `#c:ores/tin` |
+| Plant fiber | `#c:fibers/plant` and parent `#c:fibers` |
+| Knives | `#c:tools/knives` and parent `#c:tools` |
+| Hammers | `#c:tools/hammers` and parent `#c:tools` |
+| Saws | `#c:tools/saws` and parent `#c:tools` |
 
 Tool items also belong to the established vanilla category tags such as
 `#minecraft:pickaxes`, `#minecraft:axes`, `#minecraft:shovels`,
 `#minecraft:hoes`, and `#minecraft:swords`. NeoForge's broader tool tags build
-on those categories.
+on those categories. Hammers join `#minecraft:pickaxes`, saws join
+`#minecraft:axes`, and knives join `#minecraft:swords` because they carry the
+corresponding real Tool component and field actions, not merely for recipe
+classification.
+
+The private `material_progression:knives`, `hammers`, and `saws` tags are
+reloadable behavior boundaries. Each consumes its shared `c:tools/...`
+category, so datapacks may refine Material Progression behavior while other
+mods can publish compatible tools through the shared interface.
 
 ## Consuming compatible content
 

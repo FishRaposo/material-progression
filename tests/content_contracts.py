@@ -88,16 +88,23 @@ STONE_FAMILIES = {
 SHIPPED_ITEMS = {
     "bronze_axe",
     "bronze_dust",
+    "bronze_hammer",
     "bronze_hoe",
     "bronze_ingot",
+    "bronze_knife",
     "bronze_pickaxe",
+    "bronze_saw",
     "bronze_shovel",
     "bronze_sword",
     "copper_dust",
     "crusher",
     "deepslate_tin_ore",
     "flint_hatchet",
+    "flint_hammer",
+    "flint_knife",
+    "flint_saw",
     "flint_shard",
+    "plant_fiber",
     "raw_tin",
     "rock",
     "tin_axe",
@@ -129,6 +136,27 @@ SHIPPED_BLOCKS = {
 WORLD_ONLY_BLOCKS = {"ground_stick", "loose_rocks"}
 
 PRIMITIVE_RECIPES = {
+    "bronze_hammer": {
+        "type": "minecraft:crafting_shaped",
+        "category": "equipment",
+        "pattern": ["III", " S ", " S "],
+        "key": {"I": "#c:ingots/bronze", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:bronze_hammer"},
+    },
+    "bronze_knife": {
+        "type": "minecraft:crafting_shaped",
+        "category": "equipment",
+        "pattern": ["I", "S"],
+        "key": {"I": "#c:ingots/bronze", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:bronze_knife"},
+    },
+    "bronze_saw": {
+        "type": "minecraft:crafting_shaped",
+        "category": "equipment",
+        "pattern": ["III", "S S"],
+        "key": {"I": "#c:ingots/bronze", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:bronze_saw"},
+    },
     "rock_cobbling": {
         "type": "material_progression:rock_cobbling",
     },
@@ -137,6 +165,27 @@ PRIMITIVE_RECIPES = {
         "pattern": ["RS", " S"],
         "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
         "result": {"id": "material_progression:flint_hatchet"},
+    },
+    "flint_hammer": {
+        "type": "minecraft:crafting_shaped",
+        "category": "equipment",
+        "pattern": ["RRR", " S ", " S "],
+        "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_hammer"},
+    },
+    "flint_knife": {
+        "type": "minecraft:crafting_shaped",
+        "category": "equipment",
+        "pattern": ["R", "S"],
+        "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_knife"},
+    },
+    "flint_saw": {
+        "type": "minecraft:crafting_shaped",
+        "category": "equipment",
+        "pattern": ["RRR", "S S"],
+        "key": {"R": "#c:flint_shards", "S": "#c:rods/wooden"},
+        "result": {"id": "material_progression:flint_saw"},
     },
     "flint_shard_from_flint": {
         "type": "minecraft:crafting_shapeless",
@@ -147,6 +196,11 @@ PRIMITIVE_RECIPES = {
         "type": "minecraft:crafting_shapeless",
         "ingredients": ["#c:rocks"],
         "result": {"id": "material_progression:flint_shard"},
+    },
+    "plant_fiber_to_string": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": ["#c:fibers/plant"] * 3,
+        "result": {"id": "minecraft:string"},
     },
 }
 
@@ -218,6 +272,9 @@ SMELTING_RECIPES = {
 TOOL_FAMILIES = {
     "flint": {
         "flint_hatchet",
+        "flint_hammer",
+        "flint_knife",
+        "flint_saw",
     },
     "tin": {
         "tin_sword",
@@ -232,5 +289,8 @@ TOOL_FAMILIES = {
         "bronze_axe",
         "bronze_shovel",
         "bronze_hoe",
+        "bronze_hammer",
+        "bronze_knife",
+        "bronze_saw",
     },
 }
