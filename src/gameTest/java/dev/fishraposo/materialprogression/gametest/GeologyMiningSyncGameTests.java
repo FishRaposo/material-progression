@@ -131,11 +131,13 @@ public final class GeologyMiningSyncGameTests {
                 cache.adjustSpeed(12.0F, first, true, 12L),
                 "old target remained active"
         );
+        GeologyMiningSnapshotRequest afterTargetMismatch =
+                cache.continueTarget(second, true, 12L).orElseThrow();
         helper.assertTrue(
-                !cache.hasTarget(),
-                "old target mismatch did not clear the cache"
+                afterTargetMismatch.requestId() > secondRequest.requestId(),
+                "old target mismatch did not start a fresh request generation"
         );
-        secondRequest = cache.beginTarget(second, true, 12L);
+        secondRequest = afterTargetMismatch;
 
         GeologyMiningTarget wrongState = target(
                 Level.OVERWORLD.identifier(),
@@ -233,11 +235,12 @@ public final class GeologyMiningSyncGameTests {
                 cache.adjustSpeed(12.0F, changedState, true, expiredAt),
                 "block-state-mismatched target used a cached divisor"
         );
+        GeologyMiningSnapshotRequest afterStateMismatch =
+                cache.continueTarget(second, true, expiredAt).orElseThrow();
         helper.assertTrue(
-                !cache.hasTarget(),
-                "block-state-mismatched target did not clear the cache"
+                afterStateMismatch.requestId() > refresh.requestId(),
+                "block-state mismatch did not start a fresh request generation"
         );
-        cache.beginTarget(second, true, expiredAt);
 
         GeologyMiningTarget otherDimension = target(
                 Level.NETHER.identifier(),
@@ -249,16 +252,25 @@ public final class GeologyMiningSyncGameTests {
                 cache.adjustSpeed(12.0F, otherDimension, true, expiredAt),
                 "dimension-mismatched target used a cached divisor"
         );
+        GeologyMiningSnapshotRequest afterDimensionMismatch =
+                cache.continueTarget(second, true, expiredAt).orElseThrow();
         helper.assertTrue(
-                !cache.hasTarget(),
-                "dimension-mismatched target did not clear the cache"
+                afterDimensionMismatch.requestId()
+                        > afterStateMismatch.requestId(),
+                "dimension mismatch did not start a fresh request generation"
         );
         cache.clear();
-        helper.assertTrue(!cache.hasTarget(), "disconnect clear retained a target");
         helper.assertValueEqual(
                 12.0F,
                 cache.adjustSpeed(12.0F, second, true, expiredAt),
                 "cleared cache still changed speed"
+        );
+        GeologyMiningSnapshotRequest afterDisconnectClear =
+                cache.continueTarget(second, true, expiredAt).orElseThrow();
+        helper.assertTrue(
+                afterDisconnectClear.requestId()
+                        > afterDimensionMismatch.requestId(),
+                "disconnect clear did not start a fresh request generation"
         );
         helper.succeed();
     }

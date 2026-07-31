@@ -121,10 +121,6 @@ public final class GeologyMiningPredictionCache {
         }
     }
 
-    public boolean hasTarget() {
-        return target != null;
-    }
-
     private long allocateRequestId() {
         long allocated = nextRequestId;
         if (nextRequestId == Long.MAX_VALUE) {
