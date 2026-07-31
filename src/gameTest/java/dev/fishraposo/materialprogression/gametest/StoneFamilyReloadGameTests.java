@@ -72,6 +72,54 @@ public final class StoneFamilyReloadGameTests {
         helper.succeed();
     }
 
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(
+            description = "Every family source must join the synchronized source parent"
+    )
+    static void sourceOutsideAggregateIsRejected(
+            ExtendedGameTestHelper helper
+    ) {
+        Identifier externalId = Identifier.fromNamespaceAndPath(
+                MaterialProgressionGameTestMod.MOD_ID,
+                "slate"
+        );
+        StoneFamilyCatalog published = StoneFamilyCatalog.get();
+        Map<Identifier, StoneFamilyDefinition> definitions =
+                definitionsFrom(published);
+        StoneFamilyDefinition external = definitions.get(externalId);
+        definitions.put(
+                externalId,
+                new StoneFamilyDefinition(
+                        external.looseRockSurfaceBlockTag(),
+                        external.rockItemTag(),
+                        external.cobbledBlock(),
+                        external.rawBlock(),
+                        external.looseRockSurfaceBlockTag(),
+                        external.resistance()
+                )
+        );
+
+        boolean rejected = false;
+        try {
+            listener(helper).apply(definitions, null, Profiler.get());
+        } catch (IllegalStateException expected) {
+            rejected = expected.getMessage().contains(
+                    "material_progression:stone_sources"
+            );
+        }
+
+        helper.assertTrue(
+                rejected,
+                "family source outside the synchronized aggregate was accepted"
+        );
+        helper.assertTrue(
+                StoneFamilyCatalog.get() == published,
+                "aggregate membership failure changed the published catalog"
+        );
+        helper.succeed();
+    }
+
     private static StoneFamilyReloadListener listener(
             ExtendedGameTestHelper helper
     ) {

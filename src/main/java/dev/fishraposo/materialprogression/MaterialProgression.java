@@ -11,6 +11,7 @@ import dev.fishraposo.materialprogression.registry.ModFeatures;
 import dev.fishraposo.materialprogression.registry.ModMenus;
 import dev.fishraposo.materialprogression.registry.ModRecipes;
 import dev.fishraposo.materialprogression.stone.GeologyDimensionProfileReloadListener;
+import dev.fishraposo.materialprogression.stone.GeologyMiningNetwork;
 import dev.fishraposo.materialprogression.stone.StoneFamilyReloadListener;
 import dev.fishraposo.materialprogression.stone.GeologyFeedbackEvents;
 import dev.fishraposo.materialprogression.stone.GeologyMiningEvents;
@@ -34,6 +35,7 @@ public final class MaterialProgression {
         ModMenus.register(modBus);
         ModRecipes.register(modBus);
         ModFeatures.register(modBus);
+        GeologyMiningNetwork.register(modBus);
         container.registerConfig(
                 ModConfig.Type.SERVER,
                 MaterialProgressionConfig.SPEC

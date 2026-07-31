@@ -84,6 +84,25 @@ STONE_FAMILIES = {
     },
 }
 
+FAMILY_ROCK_MODELS = {
+    "rock": "minecraft:block/cobblestone",
+    "granite_rock": "minecraft:block/granite",
+    "diorite_rock": "minecraft:block/diorite",
+    "andesite_rock": "minecraft:block/andesite",
+    "deepslate_rock": "minecraft:block/deepslate",
+    "tuff_rock": "minecraft:block/tuff",
+    "calcite_rock": "minecraft:block/calcite",
+    "dripstone_rock": "minecraft:block/dripstone_block",
+    "sulfur_rock": "minecraft:block/sulfur",
+    "cinnabar_rock": "minecraft:block/cinnabar",
+    "sandstone_rock": "minecraft:block/sandstone",
+    "red_sandstone_rock": "minecraft:block/red_sandstone",
+    "netherrack_rock": "minecraft:block/netherrack",
+    "basalt_rock": "minecraft:block/basalt",
+    "blackstone_rock": "minecraft:block/blackstone",
+    "end_stone_rock": "minecraft:block/end_stone",
+}
+
 
 SHIPPED_ITEMS = {
     "bronze_axe",

@@ -81,6 +81,11 @@ GameTests are grouped by gameplay system under
 - Geology-focused tests verify depth bands, modifiers, exposure, correct-tool
   drops, Fortune, Silk Touch, config toggles, persistent placed-stone markers,
   and piston transfer.
+- `GeologyMiningSyncGameTests` verifies the server-authoritative snapshot
+  boundary, exact L0-L3 divisors, candidate-only pending behavior, target,
+  block-state and dimension matching, timeout refresh, out-of-order rejection,
+  disconnect clearing, placed L0, the hardness toggle, external-family
+  resolution, and bounded payload codec round trips.
 - `GeologyDimensionProfileGameTests` drives production reload-listener
   preparation and application through custom-dimension boundaries, immediate
   replacement, removal, duplicate ownership, malformed schema retention,
@@ -95,7 +100,7 @@ GameTests are grouped by gameplay system under
   throttled log hints, the Dense-geology advancement, the dedicated Manual
   Workshop recipe category, and real inventory-triggered Recipe Book unlocks.
 
-The current opening branch runs 131 live GameTests. Treat that count as a
+The current opening branch runs 137 live GameTests. Treat that count as a
 snapshot, not a reason to avoid adding the next regression test.
 
 GameTests must use real registries, recipes, inventories, blocks, and server
@@ -103,6 +108,11 @@ ticks. Test-only setup stays in fixtures; production classes must not gain
 methods solely for tests. Reload-sensitive behavior uses the real
 `RecipeManager` application path, and ticker wiring has sequence-driven tests
 that advance level ticks.
+
+The `client`, `server`, and `data` development runs load only the production
+mod. The separate GameTest mod and NeoForge Test Framework are enabled only for
+`runGameTestServer`; neither is part of a production-shaped client launch or
+the installable JAR.
 
 ## Known verification boundaries
 
@@ -117,6 +127,15 @@ clarity, sound balance, particle restraint, translated text presentation, or
 the feel of the opening. Before publishing 0.2.0, run a real client and
 complete a 20-30 minute survival path through Bronze and a Dense-geology
 encounter.
+
+Client mining prediction also needs a physical-client check. Launch
+`./gradlew runClient`, join a world, and compare the mining-crack progression of
+an exposed L0 family block, enclosed L1-L3 blocks, and one player-placed raw
+block. Repeat once after toggling geological hardness and once after a datapack
+reload. The server-authoritative snapshot should replace the conservative
+pending result within one round trip; a held target refreshes after 20 ticks.
+Dedicated-server GameTests prove the authoritative resolver and the pure cache,
+but cannot render crack animation timing.
 
 ## Adding behavior
 

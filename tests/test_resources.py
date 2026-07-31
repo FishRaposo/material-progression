@@ -4,6 +4,7 @@ from pathlib import Path
 
 from content_contracts import (
     CRUSHING_RECIPES,
+    FAMILY_ROCK_MODELS,
     PRIMITIVE_RECIPES,
     SHIPPED_BLOCKS,
     SHIPPED_ITEMS,
@@ -48,6 +49,24 @@ COMMON_BLOCK_TAGS = {
 
 
 class ResourceContractTests(unittest.TestCase):
+    def test_family_rock_item_models_resolve_to_vanilla_block_models(self):
+        self.assertEqual(16, len(FAMILY_ROCK_MODELS))
+        for item, expected_model in FAMILY_ROCK_MODELS.items():
+            with self.subTest(item=item):
+                definition = TREE.load_json(
+                    ASSETS / "items" / f"{item}.json"
+                )
+                self.assertEqual(
+                    {
+                        "model": {
+                            "type": "minecraft:model",
+                            "model": expected_model,
+                        }
+                    },
+                    definition,
+                )
+                self.assertTrue(expected_model.startswith("minecraft:block/"))
+
     def test_geology_feedback_and_hammer_extension_are_localized_and_tagged(self):
         hammer_tag = TREE.load_json(
             DATA / "tags" / "item" / "hammers.json"

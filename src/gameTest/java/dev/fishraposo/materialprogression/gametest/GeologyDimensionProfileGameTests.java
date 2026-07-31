@@ -2,6 +2,10 @@ package dev.fishraposo.materialprogression.gametest;
 
 import dev.fishraposo.materialprogression.stone.GeologyDimensionProfileDefinition;
 import dev.fishraposo.materialprogression.stone.GeologyDimensionProfileReloadListener;
+import dev.fishraposo.materialprogression.stone.GeologyMiningPredictionCache;
+import dev.fishraposo.materialprogression.stone.GeologyMiningSnapshotPayload;
+import dev.fishraposo.materialprogression.stone.GeologyMiningSnapshotRequest;
+import dev.fishraposo.materialprogression.stone.GeologyMiningTarget;
 import dev.fishraposo.materialprogression.stone.GeologyTier;
 import dev.fishraposo.materialprogression.stone.GeologyTierResolver;
 import dev.fishraposo.materialprogression.stone.StoneFamily;
@@ -24,6 +28,8 @@ import net.minecraft.server.packs.resources.MultiPackResourceManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.Profiler;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.testframework.annotation.ForEachTest;
 import net.neoforged.testframework.annotation.TestHolder;
 import net.neoforged.testframework.gametest.EmptyTemplate;
@@ -110,6 +116,50 @@ public final class GeologyDimensionProfileGameTests {
                             false
                     ).level(),
                     "external family custom-dimension geology tier"
+            );
+            GeologyMiningPredictionCache prediction =
+                    new GeologyMiningPredictionCache();
+            GeologyMiningTarget customTarget = new GeologyMiningTarget(
+                    CUSTOM_DIMENSION.identifier(),
+                    net.minecraft.core.BlockPos.ZERO,
+                    Block.getId(Blocks.STONE.defaultBlockState())
+            );
+            GeologyMiningSnapshotRequest predictionRequest =
+                    prediction.beginTarget(customTarget, true, 10L);
+            helper.assertTrue(
+                    prediction.accept(
+                            GeologyMiningSnapshotPayload.resolved(
+                                    predictionRequest,
+                                    true,
+                                    java.util.Optional.of(
+                                            GeologyTierResolver.naturalTier(
+                                                    CUSTOM_DIMENSION,
+                                                    Identifier
+                                                            .fromNamespaceAndPath(
+                                                                    MaterialProgressionGameTestMod.MOD_ID,
+                                                                    "slate"
+                                                            ),
+                                                    2,
+                                                    32,
+                                                    false
+                                            )
+                                    ),
+                                    1L,
+                                    1L
+                            ),
+                            11L
+                    ),
+                    "custom-dimension snapshot was rejected"
+            );
+            helper.assertValueEqual(
+                    2.0F,
+                    prediction.adjustSpeed(
+                            12.0F,
+                            customTarget,
+                            true,
+                            11L
+                    ),
+                    "custom-dimension external-family predicted speed"
             );
 
             assertTier(helper, Level.OVERWORLD, 49, 0, false, 0);

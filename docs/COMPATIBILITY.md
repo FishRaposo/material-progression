@@ -97,6 +97,7 @@ See [Underground and Geology](GEOLOGY.md) for the complete formula.
 
 The public behavior tags are:
 
+- `#material_progression:stone_sources`
 - `#material_progression:stone_sources/<family>`
 - `#material_progression:loose_rock_surfaces/<family>`
 - `#material_progression:loose_rock_cover`
@@ -116,6 +117,15 @@ family tag must resolve to exactly one registered item, and that tag must also
 be included by `#c:rocks`. Raw and cobbled blocks must be registered, distinct,
 and have block items. Source and direct-surface tags must exist, be non-empty,
 and include the declared raw block.
+
+Every resolved member of a family's source tag must also belong to the
+synchronized `#material_progression:stone_sources` parent tag. Datapacks should
+include their family source tag from that parent, just as subtype material tags
+join their shared parent. Block tags are synchronized to clients, so this
+parent is the proof that a newly targeted block can safely use conservative
+L3 mining prediction while its exact server-authoritative tier snapshot is in
+flight. Missing parent membership rejects the complete family reload
+transactionally instead of creating a client-prediction gap.
 
 Raw blocks, cobbled blocks, Rock items, source membership, and direct-surface
 membership may each belong to only one family. Resources are decoded strictly

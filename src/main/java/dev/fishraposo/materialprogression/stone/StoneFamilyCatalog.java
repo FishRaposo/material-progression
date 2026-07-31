@@ -101,8 +101,16 @@ public final class StoneFamilyCatalog {
                 ModTags.ROCKS,
                 tagContext
         );
+        requireLoaded(
+                Identifier.parse("material_progression:stone_sources"),
+                "synchronized source parent tag",
+                ModTags.STONE_SOURCES,
+                tagContext
+        );
         Collection<Holder<Item>> sharedRocks =
                 tagContext.getTag(ModTags.ROCKS);
+        Collection<Holder<Block>> synchronizedSources =
+                tagContext.getTag(ModTags.STONE_SOURCES);
 
         definitions.entrySet().stream()
                 .sorted(Comparator.comparing(entry -> entry.getKey().toString()))
@@ -202,6 +210,20 @@ public final class StoneFamilyCatalog {
                                         + " is absent from "
                                         + definition.sourceBlockTag()
                         );
+                    }
+                    for (Holder<Block> source : sourceTag) {
+                        if (!synchronizedSources.contains(source)) {
+                            throw invalid(
+                                    id,
+                                    "source block "
+                                            + source.value()
+                                            + " from "
+                                            + definition.sourceBlockTag()
+                                            + " is absent from synchronized "
+                                            + "source parent tag "
+                                            + ModTags.STONE_SOURCES
+                            );
+                        }
                     }
                     if (!directSurfaceTag.contains(rawHolder)) {
                         throw invalid(

@@ -80,6 +80,33 @@ The independent server options `enableGeologicalHardness` and
 `enableStoneRockDrops` let a world disable resistance or fragment drops without
 coupling the two systems.
 
+### Client mining prediction
+
+The server remains authoritative for harvest capability, break progress, and
+drops. A physical client requests a server-authoritative snapshot when it
+starts mining a block. The response is tied to a monotonic request generation,
+dimension, position, and exact runtime block-state ID, and carries the resolved
+tier, the hardness toggle, and the current stone-family and dimension-profile
+catalog revisions. External families, custom dimensions, exposure, and
+player-placed L0 markers therefore use the same server resolver instead of
+being approximated from client constants.
+
+There is necessarily a network round trip before a remote server can answer.
+During that pending window, only blocks in the synchronized
+`#material_progression:stone_sources` parent tag use the conservative L3
+divisor; unrelated blocks remain at normal speed. Every valid family must place
+all of its source blocks in that parent, so supported built-in and third-party
+families receive the safe pending behavior. The exact snapshot then applies one
+of the L0-L3 divisors once. Snapshots expire after 20 ticks while mining is held,
+which bounds how long a current target can retain an old datapack, config, block
+state, exposure, or placed-marker result.
+
+Changing the target, block state, dimension, or connection invalidates the
+snapshot. Request generations prevent delayed or out-of-order packets from
+affecting a newer target. On a high-latency connection, the first mining-crack
+frame on a tagged family can therefore be slower than its eventual tier, never
+faster; the dedicated server remains authoritative throughout.
+
 ## Raw-stone drops and cobbling
 
 When stone-fragment drops are enabled, mining a raw family block gives:
@@ -142,9 +169,10 @@ accepts arbitrary additional namespaced IDs with externally registered Rock,
 raw, and cobbled objects. External family blocks persist and synchronize their
 identity, and loaded blocks reconcile changed or removed family definitions
 after a successful reload. Reload validation is atomic and rejects missing or
-ambiguous Rock tags, unregistered objects, invalid resistance ranges, and
-duplicate raw, cobbled, Rock, source, or direct-surface ownership with a clear
-error. The complete authoring contract is in
+ambiguous Rock tags, unregistered objects, invalid resistance ranges, source
+blocks missing from the synchronized source parent, and duplicate raw, cobbled,
+Rock, source, or direct-surface ownership with a clear error. The complete
+authoring contract is in
 [Compatibility policy](COMPATIBILITY.md).
 
 ## Discoverability

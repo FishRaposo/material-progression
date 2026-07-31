@@ -279,7 +279,7 @@ test with the production change. The current harness has two layers:
   drops, placed-stone persistence, primitive tools, Manual Workshop behavior,
   discoverability, configuration, and gameplay tags.
 
-The opening branch currently runs 130 live GameTests. Future pottery, samples,
+The opening branch currently runs 137 live GameTests. Future pottery, samples,
 deposits, prospecting, bonsai, logistics, bulk crafting, and expanded metallurgy
 must extend the suite when they are introduced. Tests must not pretend that a
 documented but unimplemented feature exists.
