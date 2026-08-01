@@ -1,1 +1,3 @@
-{"model":{"type":"minecraft:model","model":"minecraft:block/calcite"}}
+{
+  "model": {"type": "minecraft:model", "model": "material_progression:item/calcite_rock"}
+}

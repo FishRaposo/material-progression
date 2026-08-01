@@ -1,1 +1,3 @@
-{"model":{"type":"minecraft:model","model":"minecraft:block/netherrack"}}
+{
+  "model": {"type": "minecraft:model", "model": "material_progression:item/netherrack_rock"}
+}

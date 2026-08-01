@@ -1,1 +1,3 @@
-{"model":{"type":"minecraft:model","model":"minecraft:block/end_stone"}}
+{
+  "model": {"type": "minecraft:model", "model": "material_progression:item/cobbled_end_stone"}
+}

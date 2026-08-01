@@ -1,1 +1,3 @@
-{"model":{"type":"minecraft:model","model":"minecraft:block/cinnabar"}}
+{
+  "model": {"type": "minecraft:model", "model": "material_progression:item/cinnabar_rock"}
+}

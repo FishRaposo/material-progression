@@ -1,1 +1,3 @@
-{"model":{"type":"minecraft:model","model":"minecraft:block/red_sandstone"}}
+{
+  "model": {"type": "minecraft:model", "model": "material_progression:item/red_sandstone_rock"}
+}

@@ -15,6 +15,7 @@ from content_contracts import (
 )
 from support.png import assert_native_item_sprite, read_rgba8_png
 from support.resources import ResourceTree
+from tools.generate_item_art import encode_rgba_png, make_sprite
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -122,16 +123,21 @@ class ItemArtContractTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 assert_native_item_sprite(opaque_corner)
 
-    def test_rocks_have_local_models_and_native_sprites(self):
-        rocks = {
-            item
-            for item in AUTHORED_ITEM_GROUPS["rocks_and_cobbles"]
-            if item == "rock" or item.endswith("_rock")
-        }
-        self.assertEqual(16, len(rocks))
-        for item in rocks:
+    def test_rocks_and_cobbles_have_local_models_and_native_sprites(self):
+        rocks_and_cobbles = AUTHORED_ITEM_GROUPS["rocks_and_cobbles"]
+        self.assertEqual(30, len(rocks_and_cobbles))
+        for item in rocks_and_cobbles:
             with self.subTest(item=item):
                 self.assert_local_item_model_and_native_sprite(item)
+
+    def test_rocks_and_cobbles_match_deterministic_generator(self):
+        rocks_and_cobbles = AUTHORED_ITEM_GROUPS["rocks_and_cobbles"]
+        self.assertEqual(30, len(rocks_and_cobbles))
+        for item in rocks_and_cobbles:
+            with self.subTest(item=item):
+                expected = encode_rgba_png(make_sprite(item))
+                actual = (ASSETS / "textures" / "item" / f"{item}.png").read_bytes()
+                self.assertEqual(expected, actual)
 
     def test_ground_resource_assets_are_unchanged(self):
         import hashlib

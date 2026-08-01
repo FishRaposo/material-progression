@@ -1,1 +1,3 @@
-{"model":{"type":"minecraft:model","model":"minecraft:block/sulfur"}}
+{
+  "model": {"type": "minecraft:model", "model": "material_progression:item/cobbled_sulfur"}
+}

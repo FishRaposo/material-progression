@@ -1,1 +1,3 @@
-{"model":{"type":"minecraft:model","model":"minecraft:block/tuff"}}
+{
+  "model": {"type": "minecraft:model", "model": "material_progression:item/tuff_rock"}
+}
