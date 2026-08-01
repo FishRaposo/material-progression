@@ -60,6 +60,8 @@ class DistributionContractTests(unittest.TestCase):
             build,
             "the tracked JAR must not depend on host-specific DEFLATE output",
         )
+        self.assertIn("filePermissions { unix(\"644\") }", build)
+        self.assertIn("dirPermissions { unix(\"755\") }", build)
 
     def assert_archive_excludes_testing_content(
         self,

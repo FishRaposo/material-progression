@@ -45,6 +45,8 @@ tasks.withType(AbstractArchiveTask).configureEach {
     preserveFileTimestamps = false
     reproducibleFileOrder = true
     entryCompression = org.gradle.api.tasks.bundling.ZipEntryCompression.STORED
+    filePermissions { unix("644") }
+    dirPermissions { unix("755") }
 }
 
 // Mojang ships Java 25 to end users in 26.2, so mods should target Java 25.
