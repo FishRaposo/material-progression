@@ -211,6 +211,97 @@ def _rows(*ranges: tuple[int, int, int]) -> set[tuple[int, int]]:
     }
 
 
+# Each tool uses a distinct role silhouette.  The handle and binding remain
+# constant across tiers; only the head or blade receives the material palette.
+TOOL_SILHOUETTES: dict[str, dict[str, frozenset[tuple[int, int]]]] = {
+    "axe": {
+        "head": frozenset(_rows((2, 5, 7), (3, 4, 8), (4, 3, 8), (5, 3, 7), (6, 4, 6), (7, 5, 6), (7, 7, 7), (8, 8, 8))),
+        "base": frozenset(_rows((3, 5, 7), (4, 4, 7), (5, 4, 6))),
+        "highlight": frozenset({(5, 3), (6, 3), (4, 4)}),
+        "accent": frozenset({(7, 5), (6, 6)}),
+    },
+    "hatchet": {
+        "head": frozenset(_rows((3, 6, 7), (4, 5, 8), (5, 4, 8), (6, 4, 7), (7, 5, 6), (7, 8, 8), (8, 8, 8))),
+        "base": frozenset(_rows((4, 6, 7), (5, 5, 7), (6, 5, 6))),
+        "highlight": frozenset({(6, 4), (5, 5), (6, 5)}),
+        "accent": frozenset({(8, 5), (7, 6)}),
+    },
+    "hammer": {
+        "head": frozenset(_rows((3, 4, 9), (4, 3, 9), (5, 3, 8), (6, 5, 7), (7, 7, 8), (8, 8, 8))),
+        "base": frozenset(_rows((4, 4, 8), (5, 5, 7))),
+        "highlight": frozenset({(4, 4), (5, 4), (6, 4)}),
+        "accent": frozenset({(8, 4), (7, 5)}),
+    },
+    "knife": {
+        "head": frozenset(_rows((2, 7, 7), (3, 6, 8), (4, 6, 8), (5, 7, 8), (6, 8, 8), (7, 9, 9), (8, 9, 9))),
+        "base": frozenset(_rows((3, 7, 7), (4, 7, 8), (5, 8, 8))),
+        "highlight": frozenset({(7, 3), (7, 4), (8, 4)}),
+        "accent": frozenset({(6, 4), (7, 5)}),
+    },
+    "pickaxe": {
+        "head": frozenset(_rows((3, 3, 11), (4, 4, 10), (5, 5, 9), (6, 6, 8), (7, 7, 8), (8, 8, 8))),
+        "base": frozenset(_rows((4, 5, 9), (5, 6, 8))),
+        "highlight": frozenset({(4, 4), (5, 4), (6, 4), (7, 4)}),
+        "accent": frozenset({(9, 4), (10, 4), (8, 5)}),
+    },
+    "saw": {
+        "head": frozenset(_rows((4, 3, 9), (5, 3, 10), (6, 4, 10), (7, 6, 10), (8, 9, 10)) | {(3, 5), (5, 6), (7, 7), (9, 8)}),
+        "base": frozenset(_rows((5, 4, 9), (6, 5, 9))),
+        "highlight": frozenset({(3, 4), (4, 4), (5, 4), (6, 4)}),
+        "accent": frozenset({(3, 5), (5, 6), (7, 7), (9, 8)}),
+    },
+    "hoe": {
+        "head": frozenset(_rows((3, 6, 8), (4, 7, 9), (5, 8, 9), (6, 9, 9), (7, 9, 9), (8, 8, 8))),
+        "base": frozenset({(7, 4), (8, 4), (8, 5), (9, 5)}),
+        "highlight": frozenset({(6, 3), (7, 3), (7, 4)}),
+        "accent": frozenset({(9, 5)}),
+    },
+    "shovel": {
+        "head": frozenset(_rows((2, 6, 7), (3, 5, 8), (4, 4, 9), (5, 4, 9), (6, 5, 9), (7, 6, 9), (8, 7, 8), (9, 8, 8))),
+        "base": frozenset(_rows((3, 6, 7), (4, 5, 8), (5, 5, 8), (6, 6, 8))),
+        "highlight": frozenset({(6, 3), (5, 4), (6, 4)}),
+        "accent": frozenset({(9, 5), (8, 6)}),
+    },
+    "sword": {
+        "head": frozenset(_rows((2, 7, 7), (3, 6, 8), (4, 6, 8), (5, 7, 9), (6, 7, 9), (7, 8, 9), (8, 9, 9), (9, 6, 10), (10, 9, 9))),
+        "base": frozenset(_rows((3, 7, 7), (4, 7, 8), (5, 8, 8), (9, 7, 9))),
+        "highlight": frozenset({(7, 3), (7, 4), (8, 4), (8, 5)}),
+        "accent": frozenset({(6, 9), (10, 9)}),
+    },
+}
+
+TOOL_MATERIALS: dict[str, Palette] = {
+    "flint": ((31, 37, 42, 255), (61, 71, 79, 255), (113, 127, 135, 255), (151, 160, 161, 255)),
+    "tin": ((53, 84, 101, 255), (92, 138, 159, 255), (156, 194, 204, 255), (202, 222, 220, 255)),
+    "bronze": ((96, 67, 28, 255), (159, 113, 45, 255), (211, 165, 79, 255), (237, 197, 111, 255)),
+}
+
+_TOOL_HANDLE_SHADOW = frozenset({
+    (8, 9), (9, 9), (9, 10), (10, 10), (10, 11), (11, 11),
+    (11, 12), (12, 12), (12, 13), (13, 13), (13, 14), (14, 14),
+})
+_TOOL_HANDLE_BASE = frozenset({
+    (8, 10), (9, 10), (9, 11), (10, 11), (10, 12), (11, 12),
+    (11, 13), (12, 13), (12, 14), (13, 14),
+})
+_TOOL_BINDING = frozenset({(8, 8), (9, 8), (9, 9), (10, 9)})
+
+
+def _tool_sprite(role: str, material: str) -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    head_shadow, head_base, head_highlight, head_accent = TOOL_MATERIALS[material]
+    silhouette = TOOL_SILHOUETTES[role]
+    _paint(pixels, head_shadow, set(silhouette["head"]))
+    _paint(pixels, head_base, set(silhouette["base"]))
+    _paint(pixels, head_highlight, set(silhouette["highlight"]))
+    if head_accent is not None:
+        _paint(pixels, head_accent, set(silhouette["accent"]))
+    _paint(pixels, (54, 32, 19, 255), set(_TOOL_HANDLE_SHADOW))
+    _paint(pixels, (127, 78, 42, 255), set(_TOOL_HANDLE_BASE))
+    _paint(pixels, (188, 154, 98, 255), set(_TOOL_BINDING))
+    return tuple(tuple(row) for row in pixels)
+
+
 def _flint_shard_sprite() -> tuple[tuple[RGBA, ...], ...]:
     pixels = _item_canvas()
     shadow: RGBA = (38, 43, 49, 255)
@@ -492,6 +583,9 @@ def make_sprite(item_id: str) -> tuple[tuple[RGBA, ...], ...]:
     }
     if item_id in material_sprites:
         return material_sprites[item_id]()
+    material, separator, role = item_id.partition("_")
+    if separator and material in TOOL_MATERIALS and role in TOOL_SILHOUETTES:
+        return _tool_sprite(role, material)
     family = _family_for(item_id)
     return _cobble_sprite(family) if item_id.startswith("cobbled_") else _rock_sprite(family)
 
@@ -645,6 +739,7 @@ def write_group(group: str, assets_root: Path) -> None:
     atlas_names = {
         "rocks_and_cobbles": "rocks-and-cobbles.png",
         "materials_and_workstations": "materials-and-workstations.png",
+        "tools": "tools.png",
     }
     if group in atlas_names:
         _write_atlas(item_ids, ROOT / "build" / "item-art" / atlas_names[group])

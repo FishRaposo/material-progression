@@ -14,6 +14,7 @@ from content_contracts import (
     AUTHORED_FULL_BLOCKS,
     AUTHORED_FULL_BLOCK_FACE_TEXTURES,
     AUTHORED_ITEM_GROUPS,
+    SHIPPED_ITEMS,
     WORLD_RESOURCE_ASSET_HASHES,
 )
 from support.png import assert_native_item_sprite, read_rgba8_png
@@ -174,6 +175,29 @@ class ItemArtContractTests(unittest.TestCase):
                 expected = encode_rgba_png(make_sprite(item))
                 actual = (ASSETS / "textures" / "item" / f"{item}.png").read_bytes()
                 self.assertEqual(expected, actual)
+
+    def test_tools_have_local_models_and_native_sprites(self):
+        tools = AUTHORED_ITEM_GROUPS["tools"]
+        self.assertEqual(17, len(tools))
+        for item in tools:
+            with self.subTest(item=item):
+                self.assert_local_item_model_and_native_sprite(item)
+
+    def test_tools_match_deterministic_generator(self):
+        tools = AUTHORED_ITEM_GROUPS["tools"]
+        self.assertEqual(17, len(tools))
+        for item in tools:
+            with self.subTest(item=item):
+                expected = encode_rgba_png(make_sprite(item))
+                actual = (ASSETS / "textures" / "item" / f"{item}.png").read_bytes()
+                self.assertEqual(expected, actual)
+
+    def test_every_shipped_item_uses_authored_local_art(self):
+        authored_items = set().union(*AUTHORED_ITEM_GROUPS.values())
+        self.assertEqual(SHIPPED_ITEMS, authored_items)
+        for item in SHIPPED_ITEMS:
+            with self.subTest(item=item):
+                self.assert_local_item_model_and_native_sprite(item)
 
     def test_full_blocks_use_local_models_and_tileable_native_surfaces(self):
         """Catch a block reverting to a vanilla model or non-tileable texture."""
