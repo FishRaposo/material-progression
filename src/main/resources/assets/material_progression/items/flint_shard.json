@@ -1,6 +1,3 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/flint"
-  }
+  "model": {"type": "minecraft:model", "model": "material_progression:item/flint_shard"}
 }

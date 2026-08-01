@@ -30,3 +30,25 @@ and their item definitions. It also writes the ignored ten-column review atlas
 to `build/item-art/rocks-and-cobbles.png`. Do not use the generator for Ground
 Stick or Loose Rock world assets; those assets are intentionally preserved as
 their existing world-facing art.
+
+## Generated material and workstation inventory art
+
+The material/workstation group uses the same deterministic generator while
+giving each progression form a distinct silhouette: ore is a host-stone chip
+with blue-gray veins, raw tin is a rough cluster, dust is three granular piles,
+and ingots are cast bars. Flint is a single angled chip, Plant Fiber is three
+pale-green strands, and the Crusher and Manual Workshop are compact physical
+machines with their crushing gap or tool recess visible at inventory scale.
+Their inventory sprites deliberately differ from their opaque world block
+faces, which makes block pickups read cleanly in a crowded inventory.
+
+Regenerate the group with:
+
+```powershell
+python tools/generate_item_art.py --group materials_and_workstations
+```
+
+This command writes all twelve local sprites, their generated-item models, and
+their item definitions. It also writes the ignored ten-column review atlas to
+`build/item-art/materials-and-workstations.png`. Ground Stick and Loose Rock
+world assets remain outside this group and must not be regenerated.

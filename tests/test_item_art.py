@@ -4,6 +4,7 @@ import tempfile
 import unittest
 import zlib
 from pathlib import Path
+from unittest import mock
 
 TESTS = Path(__file__).resolve().parent
 if str(TESTS) not in sys.path:
@@ -112,6 +113,19 @@ class ItemArtContractTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 read_rgba8_png(corrupted_crc)
 
+    def test_encoder_uses_a_fixed_deflate_stream(self):
+        """PNG bytes must not vary with the host zlib compressor release."""
+        pixels = tuple(
+            tuple((x * 16, y * 16, 127, 255) for x in range(16))
+            for y in range(16)
+        )
+        expected = encode_rgba_png(pixels)
+        with mock.patch(
+            "tools.generate_item_art.zlib.compress",
+            side_effect=AssertionError("PNG encoder must not call zlib.compress"),
+        ):
+            self.assertEqual(expected, encode_rgba_png(pixels))
+
     def test_native_item_sprite_rejects_missing_content_or_opaque_corners(self):
         with tempfile.TemporaryDirectory() as temporary_directory:
             directory = Path(temporary_directory)
@@ -136,6 +150,26 @@ class ItemArtContractTests(unittest.TestCase):
         rocks_and_cobbles = AUTHORED_ITEM_GROUPS["rocks_and_cobbles"]
         self.assertEqual(30, len(rocks_and_cobbles))
         for item in rocks_and_cobbles:
+            with self.subTest(item=item):
+                expected = encode_rgba_png(make_sprite(item))
+                actual = (ASSETS / "textures" / "item" / f"{item}.png").read_bytes()
+                self.assertEqual(expected, actual)
+
+    def test_materials_and_workstations_have_local_models_and_native_sprites(self):
+        materials_and_workstations = AUTHORED_ITEM_GROUPS[
+            "materials_and_workstations"
+        ]
+        self.assertEqual(12, len(materials_and_workstations))
+        for item in materials_and_workstations:
+            with self.subTest(item=item):
+                self.assert_local_item_model_and_native_sprite(item)
+
+    def test_materials_and_workstations_match_deterministic_generator(self):
+        materials_and_workstations = AUTHORED_ITEM_GROUPS[
+            "materials_and_workstations"
+        ]
+        self.assertEqual(12, len(materials_and_workstations))
+        for item in materials_and_workstations:
             with self.subTest(item=item):
                 expected = encode_rgba_png(make_sprite(item))
                 actual = (ASSETS / "textures" / "item" / f"{item}.png").read_bytes()

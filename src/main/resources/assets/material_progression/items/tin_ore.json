@@ -1,6 +1,3 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:block/iron_ore"
-  }
+  "model": {"type": "minecraft:model", "model": "material_progression:item/tin_ore"}
 }

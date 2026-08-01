@@ -193,6 +193,140 @@ def _ore_block_sprite(host_family: str) -> tuple[tuple[RGBA, ...], ...]:
     return _tile(core)
 
 
+def _item_canvas() -> list[list[RGBA]]:
+    return [[TRANSPARENT for _ in range(16)] for _ in range(16)]
+
+
+def _paint(pixels: list[list[RGBA]], color: RGBA, coordinates: set[tuple[int, int]]) -> None:
+    for x, y in coordinates:
+        if 0 <= x < 16 and 0 <= y < 16:
+            pixels[y][x] = color
+
+
+def _rows(*ranges: tuple[int, int, int]) -> set[tuple[int, int]]:
+    return {
+        (x, y)
+        for y, start, end in ranges
+        for x in range(start, end + 1)
+    }
+
+
+def _flint_shard_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow: RGBA = (38, 43, 49, 255)
+    base: RGBA = (72, 80, 89, 255)
+    highlight: RGBA = (126, 137, 145, 255)
+    _paint(pixels, shadow, _rows((3, 7, 8), (4, 6, 9), (5, 5, 10), (6, 5, 10), (7, 4, 10), (8, 4, 9), (9, 5, 8), (10, 5, 7), (11, 6, 6)))
+    _paint(pixels, base, _rows((5, 7, 8), (6, 6, 9), (7, 5, 9), (8, 5, 8), (9, 6, 7)))
+    _paint(pixels, highlight, {(7, 5), (6, 6), (7, 6), (5, 7)})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _plant_fiber_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow: RGBA = (71, 106, 55, 255)
+    base: RGBA = (122, 166, 88, 255)
+    highlight: RGBA = (179, 207, 132, 255)
+    strands = (
+        ((4, 11), (5, 10), (5, 9), (6, 8), (6, 7), (7, 6), (7, 5)),
+        ((7, 12), (8, 11), (8, 10), (9, 9), (9, 8), (10, 7), (10, 6)),
+        ((9, 12), (10, 11), (10, 10), (11, 9), (11, 8), (12, 7)),
+    )
+    for strand in strands:
+        _paint(pixels, shadow, set(strand))
+    _paint(pixels, base, {(5, 10), (6, 8), (7, 6), (8, 11), (9, 9), (10, 7), (10, 11), (11, 9)})
+    _paint(pixels, highlight, {(7, 5), (10, 6), (12, 7)})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _dust_sprite(palette: Palette) -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow, base, highlight, accent = palette
+    piles = (
+        _rows((7, 3, 5), (8, 2, 6), (9, 2, 6), (10, 3, 5)),
+        _rows((8, 7, 9), (9, 6, 10), (10, 6, 10), (11, 7, 9)),
+        _rows((10, 10, 12), (11, 9, 13), (12, 9, 13), (13, 10, 12)),
+    )
+    for pile in piles:
+        _paint(pixels, shadow, pile)
+    _paint(pixels, base, {(3, 8), (4, 8), (5, 8), (4, 9), (7, 9), (8, 9), (9, 9), (8, 10), (10, 11), (11, 11), (12, 11), (11, 12)})
+    _paint(pixels, highlight, {(3, 7), (7, 8), (10, 10)})
+    if accent is not None:
+        _paint(pixels, accent, {(5, 9), (9, 10), (12, 12)})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _ingot_sprite(palette: Palette) -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow, base, highlight, accent = palette
+    _paint(pixels, shadow, _rows((5, 3, 10), (6, 2, 11), (7, 2, 12), (8, 3, 12), (9, 4, 11), (10, 5, 10), (11, 5, 9)))
+    _paint(pixels, base, _rows((6, 4, 10), (7, 3, 11), (8, 4, 11), (9, 5, 10)))
+    _paint(pixels, highlight, {(4, 6), (5, 6), (6, 6), (7, 6), (5, 7), (6, 7), (7, 7)})
+    if accent is not None:
+        _paint(pixels, accent, {(11, 8), (10, 9)})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _raw_tin_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow: RGBA = (54, 79, 91, 255)
+    base: RGBA = (95, 137, 151, 255)
+    highlight: RGBA = (157, 191, 198, 255)
+    clusters = (
+        _rows((5, 4, 6), (6, 3, 7), (7, 3, 7), (8, 4, 6)),
+        _rows((8, 7, 9), (9, 6, 10), (10, 6, 10), (11, 7, 9)),
+        _rows((10, 4, 6), (11, 3, 7), (12, 4, 6)),
+    )
+    for cluster in clusters:
+        _paint(pixels, shadow, cluster)
+    _paint(pixels, base, {(4, 6), (5, 6), (6, 6), (5, 7), (7, 9), (8, 9), (9, 9), (8, 10), (4, 11), (5, 11), (6, 11), (5, 12)})
+    _paint(pixels, highlight, {(4, 5), (7, 8), (4, 10)})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _ore_item_sprite(host: Palette) -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow, base, highlight, _ = host
+    vein_shadow: RGBA = (54, 88, 108, 255)
+    vein_base: RGBA = (95, 142, 166, 255)
+    vein_highlight: RGBA = (155, 191, 204, 255)
+    _paint(pixels, shadow, _rows((3, 5, 10), (4, 4, 11), (5, 3, 12), (6, 3, 12), (7, 2, 12), (8, 2, 11), (9, 3, 11), (10, 4, 10), (11, 5, 9)))
+    _paint(pixels, base, _rows((4, 6, 10), (5, 5, 11), (6, 4, 11), (7, 4, 11), (8, 3, 10), (9, 4, 9), (10, 5, 8)))
+    _paint(pixels, highlight, {(5, 5), (6, 5), (4, 6), (4, 7), (9, 4)})
+    _paint(pixels, vein_shadow, {(6, 6), (7, 6), (7, 7), (9, 7), (9, 8), (5, 9), (6, 9), (6, 10)})
+    _paint(pixels, vein_base, {(6, 5), (7, 5), (8, 6), (8, 7), (9, 6), (5, 8), (5, 10), (6, 8)})
+    _paint(pixels, vein_highlight, {(7, 5), (8, 6), (5, 8)})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _crusher_item_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    dark: RGBA = (31, 37, 39, 255)
+    stone: RGBA = (67, 76, 77, 255)
+    highlight: RGBA = (110, 121, 116, 255)
+    aperture: RGBA = (17, 20, 21, 255)
+    _paint(pixels, dark, _rows((3, 5, 10), (4, 4, 11), (5, 3, 12), (6, 3, 12), (7, 3, 12), (8, 3, 12), (9, 4, 11), (10, 4, 11), (11, 5, 10), (12, 5, 10)))
+    _paint(pixels, stone, _rows((4, 6, 10), (5, 5, 11), (6, 4, 11), (7, 4, 11), (8, 4, 11), (9, 5, 10), (10, 5, 10), (11, 6, 9)))
+    _paint(pixels, highlight, {(5, 5), (6, 5), (7, 5), (8, 5), (4, 6), (4, 7)})
+    _paint(pixels, aperture, _rows((7, 7, 9), (8, 6, 10), (9, 6, 10), (10, 7, 9)))
+    _paint(pixels, dark, {(7, 8), (8, 8), (9, 8)})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _manual_workshop_item_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    dark: RGBA = (49, 31, 21, 255)
+    wood: RGBA = (112, 70, 40, 255)
+    highlight: RGBA = (171, 113, 65, 255)
+    recess: RGBA = (38, 25, 18, 255)
+    _paint(pixels, dark, _rows((4, 4, 10), (5, 3, 11), (6, 3, 12), (7, 3, 12), (8, 4, 11), (9, 4, 11), (10, 5, 10), (11, 5, 10), (12, 6, 9)))
+    _paint(pixels, wood, _rows((4, 5, 10), (5, 4, 11), (6, 4, 11), (7, 4, 11), (8, 5, 10)))
+    _paint(pixels, highlight, {(5, 4), (6, 4), (7, 4), (8, 4), (4, 5), (4, 6)})
+    _paint(pixels, recess, _rows((6, 7, 9), (7, 6, 10), (8, 6, 10)))
+    _paint(pixels, dark, {(7, 7), (8, 7), (9, 7)})
+    return tuple(tuple(row) for row in pixels)
+
+
 def _crusher_front_sprite() -> tuple[tuple[RGBA, ...], ...]:
     core: list[list[RGBA]] = []
     dressed_dark: RGBA = (37, 42, 45, 255)
@@ -341,13 +475,47 @@ def make_block_sprite(block_id: str) -> tuple[tuple[RGBA, ...], ...]:
 
 
 def make_sprite(item_id: str) -> tuple[tuple[RGBA, ...], ...]:
-    """Return a deterministic 16x16 RGBA sprite for one geological item."""
+    """Return a deterministic 16x16 RGBA sprite for one authored item."""
+    material_sprites = {
+        "flint_shard": _flint_shard_sprite,
+        "plant_fiber": _plant_fiber_sprite,
+        "copper_dust": lambda: _dust_sprite(((111, 54, 30, 255), (185, 94, 49, 255), (234, 145, 82, 255), None)),
+        "raw_tin": _raw_tin_sprite,
+        "tin_dust": lambda: _dust_sprite(((59, 91, 105, 255), (105, 148, 164, 255), (166, 196, 202, 255), None)),
+        "tin_ingot": lambda: _ingot_sprite(((63, 96, 111, 255), (109, 151, 167, 255), (174, 204, 211, 255), None)),
+        "bronze_dust": lambda: _dust_sprite(((102, 75, 32, 255), (164, 124, 55, 255), (211, 171, 91, 255), None)),
+        "bronze_ingot": lambda: _ingot_sprite(((97, 70, 30, 255), (158, 116, 49, 255), (212, 169, 82, 255), None)),
+        "tin_ore": lambda: _ore_item_sprite(PALETTES["stone"]),
+        "deepslate_tin_ore": lambda: _ore_item_sprite(PALETTES["deepslate"]),
+        "crusher": _crusher_item_sprite,
+        "manual_workshop": _manual_workshop_item_sprite,
+    }
+    if item_id in material_sprites:
+        return material_sprites[item_id]()
     family = _family_for(item_id)
     return _cobble_sprite(family) if item_id.startswith("cobbled_") else _rock_sprite(family)
 
 
 def _png_chunk(kind: bytes, payload: bytes) -> bytes:
     return struct.pack(">I", len(payload)) + kind + payload + struct.pack(">I", zlib.crc32(kind + payload) & 0xFFFFFFFF)
+
+
+def _stored_zlib(payload: bytes) -> bytes:
+    """Encode a zlib stream with fixed stored-DEFLATE blocks.
+
+    PNG compression output varies across supported zlib releases.  The sprites
+    are tiny, so a compact stream is less valuable than byte-identical output
+    from every Python runtime used by the project.
+    """
+    encoded = bytearray(b"\x78\x01")
+    for offset in range(0, len(payload), 0xFFFF):
+        block = payload[offset:offset + 0xFFFF]
+        encoded.append(1 if offset + len(block) == len(payload) else 0)
+        encoded.extend(struct.pack("<H", len(block)))
+        encoded.extend(struct.pack("<H", (~len(block)) & 0xFFFF))
+        encoded.extend(block)
+    encoded.extend(struct.pack(">I", zlib.adler32(payload) & 0xFFFFFFFF))
+    return bytes(encoded)
 
 
 def encode_rgba_png(rows: tuple[tuple[RGBA, ...], ...]) -> bytes:
@@ -363,7 +531,7 @@ def encode_rgba_png(rows: tuple[tuple[RGBA, ...], ...]) -> bytes:
                 raise ValueError("PNG pixels must be RGBA bytes")
             raw_rows.extend(pixel)
     header = struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
-    return b"\x89PNG\r\n\x1a\n" + _png_chunk(b"IHDR", header) + _png_chunk(b"IDAT", zlib.compress(bytes(raw_rows))) + _png_chunk(b"IEND", b"")
+    return b"\x89PNG\r\n\x1a\n" + _png_chunk(b"IHDR", header) + _png_chunk(b"IDAT", _stored_zlib(bytes(raw_rows))) + _png_chunk(b"IEND", b"")
 
 
 def _write_item_assets(item_id: str, assets_root: Path) -> None:
@@ -474,8 +642,12 @@ def write_group(group: str, assets_root: Path) -> None:
         raise ValueError(f"Unknown authored item group {group!r}") from error
     for item_id in item_ids:
         _write_item_assets(item_id, assets_root)
-    if group == "rocks_and_cobbles":
-        _write_atlas(item_ids, ROOT / "build" / "item-art" / "rocks-and-cobbles.png")
+    atlas_names = {
+        "rocks_and_cobbles": "rocks-and-cobbles.png",
+        "materials_and_workstations": "materials-and-workstations.png",
+    }
+    if group in atlas_names:
+        _write_atlas(item_ids, ROOT / "build" / "item-art" / atlas_names[group])
 
 
 def main() -> None:

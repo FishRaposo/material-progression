@@ -1,6 +1,3 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "material_progression:block/manual_workshop"
-  }
+  "model": {"type": "minecraft:model", "model": "material_progression:item/manual_workshop"}
 }
