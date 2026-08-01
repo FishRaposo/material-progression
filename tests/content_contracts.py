@@ -121,6 +121,49 @@ SHIPPED_ITEMS = {
     if contract["cobbled_block"].startswith("material_progression:")
 }
 
+TOOLTIP_KEY_BY_ITEM = {
+    **{
+        "rock" if family == "stone" else f"{family}_rock":
+        "tooltip.material_progression.rock"
+        for family in STONE_FAMILIES
+    },
+    **{
+        f"cobbled_{family}": "tooltip.material_progression.cobble"
+        for family, contract in STONE_FAMILIES.items()
+        if contract["cobbled_block"].startswith("material_progression:")
+    },
+    "raw_tin": "tooltip.material_progression.raw_tin",
+    "tin_ingot": "tooltip.material_progression.tin_ingot",
+    "tin_dust": "tooltip.material_progression.tin_dust",
+    "copper_dust": "tooltip.material_progression.copper_dust",
+    "bronze_dust": "tooltip.material_progression.bronze_dust",
+    "bronze_ingot": "tooltip.material_progression.bronze_ingot",
+    "plant_fiber": "tooltip.material_progression.plant_fiber",
+    "flint_shard": "tooltip.material_progression.flint_shard",
+    "flint_hatchet": "tooltip.material_progression.flint_hatchet",
+    "flint_knife": "tooltip.material_progression.knife",
+    "flint_hammer": "tooltip.material_progression.hammer",
+    "flint_saw": "tooltip.material_progression.saw",
+    "tin_ore": "tooltip.material_progression.tin_ore",
+    "deepslate_tin_ore": "tooltip.material_progression.tin_ore",
+    "crusher": "tooltip.material_progression.crusher",
+    "manual_workshop": "tooltip.material_progression.manual_workshop",
+    **{
+        item: "tooltip.material_progression.tin_tool"
+        for item in {"tin_sword", "tin_pickaxe", "tin_axe", "tin_shovel", "tin_hoe"}
+    },
+    **{
+        item: "tooltip.material_progression.bronze_tool"
+        for item in {
+            "bronze_sword", "bronze_pickaxe", "bronze_axe", "bronze_shovel", "bronze_hoe"
+        }
+    },
+    "bronze_knife": "tooltip.material_progression.knife",
+    "bronze_hammer": "tooltip.material_progression.hammer",
+    "bronze_saw": "tooltip.material_progression.saw",
+}
+assert set(TOOLTIP_KEY_BY_ITEM) == SHIPPED_ITEMS
+
 AUTHORED_ITEM_GROUPS = {
     "rocks_and_cobbles": {
         "rock", "granite_rock", "diorite_rock", "andesite_rock",

@@ -2,7 +2,12 @@ import json
 import unittest
 from pathlib import Path
 
-from content_contracts import STONE_FAMILIES, WORKSHOP_RECIPES
+from content_contracts import (
+    SHIPPED_ITEMS,
+    STONE_FAMILIES,
+    TOOLTIP_KEY_BY_ITEM,
+    WORKSHOP_RECIPES,
+)
 from support.resources import ResourceTree
 
 
@@ -316,20 +321,32 @@ class DiscoverabilityContractTests(unittest.TestCase):
         source = (JAVA / "registry" / "ModItems.java").read_text(
             encoding="utf-8"
         )
-        for key in (
-            "tooltip.material_progression.rock",
-            "tooltip.material_progression.flint_shard",
-            "tooltip.material_progression.plant_fiber",
-            "tooltip.material_progression.flint_hatchet",
-            "tooltip.material_progression.knife",
-            "tooltip.material_progression.hammer",
-            "tooltip.material_progression.saw",
-            "tooltip.material_progression.manual_workshop",
-        ):
+        self.assertEqual(SHIPPED_ITEMS, set(TOOLTIP_KEY_BY_ITEM))
+        for language in ("en_us", "pt_br"):
+            translations = TREE.load_json(
+                ASSETS / "lang" / f"{language}.json"
+            )
+            for key in set(TOOLTIP_KEY_BY_ITEM.values()):
+                with self.subTest(language=language, tooltip=key):
+                    self.assertIn(key, translations)
+                    self.assertTrue(translations[key].strip())
+
+        for key in set(TOOLTIP_KEY_BY_ITEM.values()):
             with self.subTest(tooltip=key):
                 self.assertIn(key, source)
         self.assertIn("DataComponents.LORE", source)
         self.assertIn("ItemLore", source)
+
+        translations = TREE.load_json(ASSETS / "lang" / "en_us.json")
+        self.assertEqual(
+            "Sharpen any Rock into a Flint Shard; four Rocks make Cobblestone, "
+            "matching Rocks preserve their family.",
+            translations["tooltip.material_progression.rock"],
+        )
+        self.assertEqual(
+            "A buildable stone aggregate; smelt it to restore its raw stone.",
+            translations["tooltip.material_progression.cobble"],
+        )
 
     def test_workshop_uses_a_dedicated_recipe_book_category(self):
         recipe_source = (
