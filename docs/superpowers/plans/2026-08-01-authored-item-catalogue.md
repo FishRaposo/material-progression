@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace every Material Progression inventory placeholder with an original 16 by 16 sprite, while preserving the existing Loose Rock and Ground Stick world visuals exactly.
+**Goal:** Replace every Material Progression inventory and full-block placeholder with original vanilla-adjacent 16 by 16 art, while preserving the existing Loose Rock and Ground Stick world visuals exactly and explaining every denied modded harvest.
 
-**Architecture:** A checked-in standard-library Python source catalog creates original RGBA sprites and local generated-item models. Fast contracts validate each resource path, exact PNG encoding, opaque content and transparent corners. World-space ground-resource JSON assets receive SHA-256 regression guards and are not edited.
+**Architecture:** A checked-in standard-library Python source catalog creates original RGBA item sprites, tileable block surfaces, and local resource models. Fast contracts validate each resource path, exact PNG encoding, opaque content and transparent corners. World-space ground-resource JSON assets receive SHA-256 regression guards and are not edited. Denied geology harvests converge on a single localized, throttled action-bar feedback path.
 
 **Tech Stack:** Minecraft 26.2, NeoForge 26.2.0.35-beta, Java 25, Gradle, Python `unittest`, PNG via `struct` and `zlib`, JSON resources, and the built-in image generator for original visual studies.
 
@@ -14,10 +14,10 @@
 - Cover all 59 current `assets/material_progression/items/*.json` definitions; do not pre-create unimplemented items.
 - Create original 16 by 16 RGBA PNG sprites with hard pixel edges, transparent corners, no anti-aliasing, no gradients, and no copied reference art.
 - Use a local `material_progression:item/<id>` model for every shipped inventory item; no final item definition may reference a `minecraft:` model.
-- Keep world block textures and models independent from block-item sprites.
+- Give every mod-owned full block a local identifiable world texture and model. Keep the existing Ground Stick and Loose Rock world assets byte-for-byte unchanged.
 - Future shipped item definitions must automatically be required to use the same local texture convention.
 - Every current mod-owned item needs concise localized lore that names its real use, processing path, or material-tier role. Every Rock lore line must name both Flint-Shard sharpening and four-Rock cobbling.
-- Do not add runtime dependencies, gameplay changes, registrations, recipes, tags, or balance changes.
+- Do not add runtime dependencies, registrations, recipes, tags, or balance changes. Feedback changes may only make existing no-drop rules explicit.
 - Rebuild and validate the versioned JAR under `dist/` after changing production resources.
 
 ---
@@ -201,7 +201,7 @@ Run:
 python tools/generate_item_art.py --group rocks_and_cobbles
 ~~~
 
-The command must create one PNG, one generated-item model, and one local-model item definition per group member. It must never write under `blockstates/` or `models/block/`.
+The command must create one PNG, one generated-item model, and one local-model item definition per group member. It must not alter existing Ground Stick or Loose Rock files.
 
 - [ ] **Step 5: Verify and commit**
 
@@ -216,7 +216,64 @@ git commit -m "feat: author rock and cobble inventory art"
 
 Generate an untracked nearest-neighbor 10-column atlas at `build/item-art/rocks-and-cobbles.png` and inspect family distinction at native and 8x scale before committing.
 
-### Task 3: Material, ore, and workstation inventory art
+### Task 3: Identifiable custom block surfaces
+
+**Files:**
+
+- Modify: `tools/generate_item_art.py`
+- Create: `src/main/resources/assets/material_progression/textures/block/*.png`
+- Modify: custom-cobble blockstates and block models, `tin_ore`,
+  `deepslate_tin_ore`, `crusher`, and `manual_workshop` block resources
+- Modify: `tests/test_item_art.py` and/or `tests/test_resources.py`
+
+**Interfaces:**
+
+- Consumes: the stone-family palette catalog and the unchanged-ground hash
+  baseline from Task 1.
+- Produces: local, tileable 16 by 16 RGBA block surfaces and local models for
+  all fourteen custom cobbles plus Tin Ore, Deepslate Tin Ore, Crusher, and
+  Manual Workshop.
+
+- [ ] **Step 1: Write and run the failing full-block resource contract**
+
+Create a literal `AUTHORED_FULL_BLOCKS` catalog for the fourteen custom cobbles,
+Tin Ore, Deepslate Tin Ore, Crusher, and Manual Workshop. Assert their
+blockstates resolve to local block models, each model resolves to a local
+`material_progression:block/*` texture, and every texture is a valid tileable
+16 by 16 RGBA PNG. Continue to assert the Ground Stick and Loose Rock hashes.
+
+Run the focused test and confirm it fails because current block resources use
+vanilla raw-block, ore, furnace, or crafting-table textures.
+
+- [ ] **Step 2: Render the block grammar**
+
+Extend the checked-in generator with a tileable block renderer. Render each
+custom cobble as two-to-four family-coloured stone fragments separated by dark
+joint pixels; make Basalt and Blackstone visibly darker than Standard families,
+and keep Calcite, Sandstone, and Dripstone lighter. Render Tin Ore and
+Deepslate Tin Ore with their host material and sparse blue-gray Tin veins.
+Render Crusher as dark dressed stone with a central crushing aperture and
+Manual Workshop as a timber working surface with a tool recess and darker base.
+Do not edit the existing Ground Stick or Loose Rock files.
+
+- [ ] **Step 3: Generate, wire, inspect, and commit**
+
+Generate all eighteen block textures, replace placeholder block model and
+blockstate references with local models, and create an untracked nearest-neighbor
+atlas at `build/item-art/blocks.png`. Inspect it at native and 8x scale: each
+family must remain recognizable, cobbles must read as assembled rocks, and hard
+families must be visibly lower-value.
+
+Run:
+
+~~~powershell
+python -m unittest tests.test_item_art -v
+python -m unittest tests.test_resources -v
+git add tools/generate_item_art.py tests src/main/resources/assets/material_progression
+git commit -m "feat: author identifiable geology and workstation blocks"
+~~~
+
+### Task 4: Material, ore, and workstation inventory art
 
 **Files:**
 
@@ -258,7 +315,7 @@ git commit -m "feat: author material and workstation inventory art"
 
 Create an untracked `build/item-art/materials-and-workstations.png` atlas and inspect that ore, raw material, dust, and ingot are distinguishable at 16 pixels.
 
-### Task 4: Flint, Tin, and Bronze tool inventory art
+### Task 5: Flint, Tin, and Bronze tool inventory art
 
 **Files:**
 
@@ -315,7 +372,7 @@ git commit -m "feat: author flint tin and bronze tool art"
 
 Expected: all 59 item definitions resolve locally; no `minecraft:block/*` or `minecraft:item/*` placeholder remains.
 
-### Task 5: Complete useful-tooltip coverage
+### Task 6: Complete useful-tooltip coverage
 
 **Files:**
 
@@ -439,7 +496,55 @@ git commit -m "feat: explain every shipped item with lore"
 
 Expected: all lore keys are translated, all 59 items are covered, and every Rock mentions both Flint Shards and cobbling.
 
-### Task 6: Future-art policy, client inspection, and release synchronization
+### Task 7: Explain every denied mod-owned harvest
+
+**Files:**
+
+- Modify: `src/main/java/dev/fishraposo/materialprogression/stone/GeologyFeedbackEvents.java`
+- Modify: `src/main/java/dev/fishraposo/materialprogression/stone/GeologyMiningEvents.java`
+- Modify: `src/main/java/dev/fishraposo/materialprogression/stone/FeedbackMessages.java`
+- Modify: localized language files
+- Modify: focused GameTests and `tests` source contracts
+
+**Interfaces:**
+
+- Consumes: existing log-punch feedback, `GeologyToolCapability`, server
+  toggles, and the raw-stone no-drop rule.
+- Produces: one throttled localized action-bar warning for every denied raw
+  stone harvest, including when geological hardness is disabled but raw-stone
+  drops still require an appropriate Pickaxe or Hammer.
+
+- [ ] **Step 1: Audit and write red tests for every no-drop path**
+
+Locate every production `event.getDrops().clear()` and every harvest denial.
+Classify replacement/drop-redirection paths separately from true no-drop paths.
+Add a fast source contract that rejects a true modded no-drop path without a
+named feedback route. Add GameTests for: insufficient dense capability with
+hardness enabled; wrong tool with hardness disabled and Stone Rock drops
+enabled; log rule feedback; and capable tools producing drops without a false
+warning.
+
+- [ ] **Step 2: Converge denied harvests on explicit feedback**
+
+Keep the existing detailed message such as “Dense Cinnabar — iron-level
+Pickaxe or Hammer required.” Add an explicit generic correct-tool message for
+the hardness-disabled raw-stone-drop branch, e.g. “Stone — a Pickaxe or Hammer
+is required.” Ensure messages send on the server at left-click start, are
+localized in English and Brazilian Portuguese, throttle per player, respect
+creative mode, and remain independent of successful custom loose-rock drop
+replacement.
+
+- [ ] **Step 3: Run focused tests and commit**
+
+Run the focused contracts and GameTests, then `./gradlew.bat contractTest`.
+Commit with:
+
+~~~powershell
+git add src/main/java src/main/resources/assets/material_progression/lang src/gameTest tests
+git commit -m "fix: explain denied geology harvests"
+~~~
+
+### Task 8: Future-art policy, client inspection, and release synchronization
 
 **Files:**
 
@@ -457,7 +562,13 @@ Expected: all lore keys are translated, all 59 items are covered, and every Rock
 
 - [ ] **Step 1: Document the permanent future-item requirement**
 
-Add to `AGENTS.md`: every shipped inventory item needs an original local 16 by 16 texture and a local generated-item model; vanilla models are not final art. Link `docs/ITEM_ART.md` from README and replace its statement that visuals reuse vanilla placeholders. Record in `docs/INSPIRATIONS.md` that NTP, Divergent Underground, and TerraFirmaCraft inform visual readability/material identity only and no sprites are copied. Add the focused art-contract command to `docs/TESTING.md`.
+Add to `AGENTS.md`: every shipped inventory item and full block needs original
+local 16 by 16 art; vanilla models are not final art. Link `docs/ITEM_ART.md`
+from README and replace its statement that visuals reuse vanilla placeholders.
+Record in `docs/INSPIRATIONS.md` that NTP, Divergent Underground, and
+TerraFirmaCraft inform visual readability/material identity only and no sprites
+are copied. Add the focused art and no-silent-drop contract commands to
+`docs/TESTING.md`.
 
 - [ ] **Step 2: Run contract and build gates**
 
@@ -478,7 +589,12 @@ Run:
 ./gradlew.bat runClient --no-daemon --no-problems-report
 ~~~
 
-Inspect creative-tab items, recipe outputs, Workshop/Crusher slots, and advancement icons in a throwaway world. Confirm ground Rocks and Sticks are unchanged, no missing-texture sprite appears, and inventory corners remain transparent. Record only concrete art corrections in `docs/ITEM_ART.md`; do not alter gameplay.
+Inspect creative-tab items, recipe outputs, Workshop/Crusher slots, advancement
+icons, and each custom full block in a throwaway world. Confirm ground Rocks
+and Sticks are unchanged, no missing-texture sprite appears, inventory corners
+remain transparent, and hard/soft cobbles are distinguishable. Verify an
+insufficient pick or hammer displays its requirement before a no-drop harvest.
+Record only concrete art corrections in `docs/ITEM_ART.md`.
 
 - [ ] **Step 4: Synchronize the release artifact and run the full gate**
 

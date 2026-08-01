@@ -9,9 +9,11 @@ with original, native-resolution Minecraft item art. The result should feel
 vanilla-adjacent in the way that No Tree Punching's primitive tools are readable
 at a glance, while making the mod's geological material families unmistakable.
 
-The pass is inventory-only. The existing world-space Loose Rock and Ground Stick
-models, textures, placement, collision, and loot behavior are explicitly
-preserved. They already communicate the opening loop successfully.
+The pass covers the complete current visual surface: every inventory item and
+every mod-owned full block receives original local art. The existing world-space
+Loose Rock and Ground Stick models, textures, placement, collision, and loot
+behavior are explicitly preserved byte-for-byte. They already communicate the
+opening loop successfully.
 
 Inventory discoverability is part of the pass. Every current mod-owned item
 receives concise localized lore. It must state a real use, processing path, or
@@ -35,6 +37,8 @@ The first catalogue covers every one of the 59 current
 - Crusher and Manual Workshop block items
 - One localized, useful tooltip for each of those 59 items in both English and
   Brazilian Portuguese
+- 18 current full-block surfaces: the fourteen custom cobbles, Tin Ore,
+  Deepslate Tin Ore, Crusher, and Manual Workshop
 
 Future content is not pre-created. Instead, this document establishes a stable
 art contract that every future item must satisfy before it is considered shipped.
@@ -63,6 +67,11 @@ pixel edges, no anti-aliasing, and a restrained vanilla-adjacent palette.
 - **Infrastructure:** Crusher and Manual Workshop are compact isometric-like
   item sprites with a recognisable working surface or mechanism, not borrowed
   vanilla block icons.
+- **Block surfaces:** cobbles are tileable clusters of family-correct fragments,
+  not recoloured raw blocks. Hard families use darker, lower-value palettes;
+  soft families remain visibly lighter. Tin ore keeps a readable blue-gray vein
+  in its appropriate Stone or Deepslate host. Crusher and Workshop are distinct
+  working blocks without borrowing a vanilla furnace or crafting-table texture.
 
 The shared rules are: dark selective outline, one readable light source from
 the upper left, stronger contrast at the outer silhouette than in interior
@@ -73,11 +82,14 @@ texture, and no text, gradients, photorealism, or glossy modern rendering.
 1. Add a local `textures/item/<id>.png` sprite for every current mod-owned item.
 2. Replace every placeholder item declaration with a local item model reference.
 3. Add `models/item/<id>.json` generated-item models that map each declaration
-   to its matching local sprite. Block-item sprites are intentionally independent
-   from world block textures; no existing block model or world texture changes.
-4. Establish a documented palette/category sheet for future artists and content
+   to its matching local sprite. Block-item sprites may be independent from the
+   corresponding world block texture.
+4. Add local 16 by 16 tileable block textures and local block models for every
+   current mod-owned full block, while retaining existing Loose Rock and Ground
+   Stick world assets exactly.
+5. Establish a documented palette/category sheet for future artists and content
    authors. Future item declarations must use the same local-texture convention.
-5. Use generated visual studies only as original art-direction input; curate and
+6. Use generated visual studies only as original art-direction input; curate and
    validate the final sprites as exact native-resolution assets before they enter
    the resource pack.
 6. Register all lore through the existing `DataComponents.LORE` helper and
@@ -99,13 +111,19 @@ texture, and no text, gradients, photorealism, or glossy modern rendering.
   by this pass.
 - A resource contract rejects missing local textures, placeholder vanilla item
   references, wrong texture dimensions, and invalid alpha encoding.
+- Every custom full block resolves to a local texture and no longer presents a
+  placeholder vanilla raw-block, ore, furnace, or crafting-table face.
+- Every path that deliberately denies a mod-owned harvest gives a throttled
+  localized action-bar explanation of the required tool before it can produce
+  no drops.
 - The normal resource, build, distribution, and GameTest checks remain green;
   the rebuilt `dist/` JAR contains the new sprites and no test-only content.
 
 ## Out of scope
 
 - Changes to Loose Rock or Ground Stick world visuals
-- New gameplay, recipes, item registrations, tags, or balance changes
+- New gameplay, recipes, item registrations, tags, or balance changes beyond
+  making existing denied-harvest outcomes explicitly visible
 - Replacing vanilla assets globally
 - Assets for unimplemented future items
 - Resource-pack configuration or an external art dependency
@@ -113,7 +131,8 @@ texture, and no text, gradients, photorealism, or glossy modern rendering.
 
 ## Verification plan
 
-Begin with failing contracts for the local-texture catalog and image dimensions.
+Begin with failing contracts for the local-texture catalog, block surfaces, and
+image dimensions.
 After adding the assets and model mappings, run the focused contracts, then
 `contractTest`, `build`, `runGameTestServer`, and `headlessTest`. Inspect the
 client inventory, creative tabs, recipe book, workshop inventory, and block-item
