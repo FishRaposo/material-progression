@@ -67,7 +67,7 @@ class DistributionContractTests(unittest.TestCase):
         self.assertIn("java-version: '25.0.3+9'", workflow)
         self.assertIn("distribution: 'temurin'", workflow)
 
-    def test_tracked_jar_preserves_source_resource_bytes(self):
+    def test_tracked_jar_contains_lf_normalized_source_resources(self):
         mod_version = read_property("mod_version")
         archive_path = DIST / f"material-progression-{mod_version}.jar"
 
@@ -77,10 +77,11 @@ class DistributionContractTests(unittest.TestCase):
                     continue
                 entry = resource.relative_to(MAIN_RESOURCES).as_posix()
                 self.assertIn(entry, archive.namelist())
+                expected = resource.read_bytes().replace(b"\r\n", b"\n")
                 self.assertEqual(
-                    resource.read_bytes(),
+                    expected,
                     archive.read(entry),
-                    f"tracked JAR transformed resource bytes for {entry}",
+                    f"tracked JAR did not normalize {entry} to LF",
                 )
 
     def test_production_artifact_inputs_are_checked_out_with_lf_line_endings(self):
@@ -107,6 +108,12 @@ class DistributionContractTests(unittest.TestCase):
         )
         self.assertIn("filePermissions { unix(\"644\") }", build)
         self.assertIn("dirPermissions { unix(\"755\") }", build)
+
+    def test_resource_processing_normalizes_json_to_lf(self):
+        build = BUILD_GRADLE.read_text(encoding="utf-8")
+
+        self.assertIn('filesMatching("**/*.json")', build)
+        self.assertIn('FixCrLfFilter.CrLf.newInstance("lf")', build)
 
     def assert_archive_excludes_testing_content(
         self,

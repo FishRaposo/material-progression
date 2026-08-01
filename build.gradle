@@ -1,3 +1,5 @@
+import org.apache.tools.ant.filters.FixCrLfFilter
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -47,6 +49,15 @@ tasks.withType(AbstractArchiveTask).configureEach {
     entryCompression = org.gradle.api.tasks.bundling.ZipEntryCompression.STORED
     filePermissions { unix("644") }
     dirPermissions { unix("755") }
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    filesMatching("**/*.json") {
+        filter(
+                FixCrLfFilter,
+                eol: FixCrLfFilter.CrLf.newInstance("lf")
+        )
+    }
 }
 
 // Mojang ships Java 25 to end users in 26.2, so mods should target Java 25.
