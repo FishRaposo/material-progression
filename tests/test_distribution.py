@@ -52,6 +52,15 @@ class DistributionContractTests(unittest.TestCase):
             "the tracked production archive must remain byte-for-byte opaque to Git",
         )
 
+    def test_production_jar_uses_platform_independent_archive_entries(self):
+        build = BUILD_GRADLE.read_text(encoding="utf-8")
+
+        self.assertIn(
+            "entryCompression = org.gradle.api.tasks.bundling.ZipEntryCompression.STORED",
+            build,
+            "the tracked JAR must not depend on host-specific DEFLATE output",
+        )
+
     def assert_archive_excludes_testing_content(
         self,
         archive: zipfile.ZipFile,
