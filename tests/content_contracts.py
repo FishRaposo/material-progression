@@ -141,6 +141,55 @@ SHIPPED_ITEMS = {
     if contract["cobbled_block"].startswith("material_progression:")
 }
 
+AUTHORED_ITEM_GROUPS = {
+    "rocks_and_cobbles": {
+        "rock", "granite_rock", "diorite_rock", "andesite_rock",
+        "deepslate_rock", "tuff_rock", "calcite_rock", "dripstone_rock",
+        "sulfur_rock", "cinnabar_rock", "sandstone_rock",
+        "red_sandstone_rock", "netherrack_rock", "basalt_rock",
+        "blackstone_rock", "end_stone_rock",
+        "cobbled_andesite", "cobbled_basalt", "cobbled_blackstone",
+        "cobbled_calcite", "cobbled_cinnabar", "cobbled_diorite",
+        "cobbled_dripstone", "cobbled_end_stone", "cobbled_granite",
+        "cobbled_netherrack", "cobbled_red_sandstone",
+        "cobbled_sandstone", "cobbled_sulfur", "cobbled_tuff",
+    },
+    "materials_and_workstations": {
+        "flint_shard", "plant_fiber", "copper_dust", "raw_tin", "tin_dust",
+        "tin_ingot", "bronze_dust", "bronze_ingot", "tin_ore",
+        "deepslate_tin_ore", "crusher", "manual_workshop",
+    },
+    "tools": {
+        "flint_hatchet", "flint_hammer", "flint_knife", "flint_saw",
+        "tin_axe", "tin_hoe", "tin_pickaxe", "tin_shovel", "tin_sword",
+        "bronze_axe", "bronze_hammer", "bronze_hoe", "bronze_knife",
+        "bronze_pickaxe", "bronze_saw", "bronze_shovel", "bronze_sword",
+    },
+}
+assert set().union(*AUTHORED_ITEM_GROUPS.values()) == SHIPPED_ITEMS
+
+WORLD_RESOURCE_ASSET_HASHES = {
+    "blockstates/ground_stick.json": "225de9ab49ed1e8927ad153822ed8f6ba6e41270ab93654918e2988d2de8f226",
+    "blockstates/loose_rocks.json": "9e71acbab30bb2767e4cb82039f7835877ad923dc1f2c7916218e0b89d9c35e2",
+    "models/block/ground_stick.json": "7dea14663e4123cacfd2a56669e70d5f77f44f133e040d4a52028dadfafcd9d8",
+    "models/block/loose_rocks/andesite.json": "16a3d7d88447f08fc24d71e05a2906da318d0b7b57c23c63106b61da66e1fd7c",
+    "models/block/loose_rocks/basalt.json": "cdfb8687e3d938ddd34ca21596a17b5e3febdc608155e8f41ec702c47d3db648",
+    "models/block/loose_rocks/blackstone.json": "6009c1f2680bdffa001173e429d163fb8f004798b259ab47996fc18803827207",
+    "models/block/loose_rocks/calcite.json": "705e74033c8fef8cd5a13998bd6427decaeda84b669d1ee401744f136dcb1b42",
+    "models/block/loose_rocks/cinnabar.json": "06e9c39088fc0b8a1e3dfb9821132ca9fa5a57bb3ca7e293de7d94c52f6e31d7",
+    "models/block/loose_rocks/deepslate.json": "503312d0e2bb9f76bf62ba1349cf1367ba266effbca12d45674e534e579ee6aa",
+    "models/block/loose_rocks/diorite.json": "0713d63cf730407edfbfeadfd70d5dbfb340440a14dda8f105f0a84bbf905bc1",
+    "models/block/loose_rocks/dripstone.json": "02158d83bef828bb02829a25f4edcd64443d0bc7b8e2255d2a8da20dd4236fb1",
+    "models/block/loose_rocks/end_stone.json": "b3a3b83491015eb63aaf9af82b07b49792acdca060aac533bcbfa44ca1f1ef4d",
+    "models/block/loose_rocks/granite.json": "ceb7e0d5e8c660f8da37a24b9b3ffad5d9a751617280bbb1d1ee15cbb5dbb663",
+    "models/block/loose_rocks/netherrack.json": "4922071c1d4586818437e84a06752d9b7beafdab6cf7fcc1016429ababada01b",
+    "models/block/loose_rocks/red_sandstone.json": "f02f0f6f795f6a65823a7fccfa9407f268c7103a1b9863e5093c7568b9e08f44",
+    "models/block/loose_rocks/sandstone.json": "7b625c9481f9ed6c782d6382f2629604d6c6dc378fa26d2c7c0471a664658281",
+    "models/block/loose_rocks/stone.json": "7e3811ccdf82a7312cae49f8959c57999225811aff5d258a2fa5f0c57937286e",
+    "models/block/loose_rocks/sulfur.json": "e4e264102ac33048a81983fe12d8ad16fd734a74a6def73478d26f0eff504054",
+    "models/block/loose_rocks/tuff.json": "49e3eb03d5a07a661d323168bfe88f0a3d107d5de31135d6d71d6e7ead9ab613",
+}
+
 SHIPPED_BLOCKS = {
     "crusher",
     "deepslate_tin_ore",

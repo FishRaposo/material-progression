@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 from content_contracts import (
+    AUTHORED_ITEM_GROUPS,
     CRUSHING_RECIPES,
     FAMILY_ROCK_MODELS,
     PRIMITIVE_RECIPES,
@@ -107,7 +108,9 @@ class ResourceContractTests(unittest.TestCase):
         english = TREE.load_json(ASSETS / "lang" / "en_us.json")
         portuguese = TREE.load_json(ASSETS / "lang" / "pt_br.json")
         item_models = TREE.names_matching(ASSETS / "items", "*.json")
-        self.assertEqual(SHIPPED_ITEMS, item_models)
+        authored_items = set().union(*AUTHORED_ITEM_GROUPS.values())
+        self.assertEqual(SHIPPED_ITEMS, authored_items)
+        self.assertEqual(authored_items, item_models)
 
         for item in SHIPPED_ITEMS:
             with self.subTest(item=item):
