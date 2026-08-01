@@ -10,12 +10,14 @@ if str(TESTS) not in sys.path:
     sys.path.insert(0, str(TESTS))
 
 from content_contracts import (
+    AUTHORED_FULL_BLOCKS,
+    AUTHORED_FULL_BLOCK_FACE_TEXTURES,
     AUTHORED_ITEM_GROUPS,
     WORLD_RESOURCE_ASSET_HASHES,
 )
 from support.png import assert_native_item_sprite, read_rgba8_png
 from support.resources import ResourceTree
-from tools.generate_item_art import encode_rgba_png, make_sprite
+from tools.generate_item_art import encode_rgba_png, make_block_sprite, make_sprite
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -138,6 +140,78 @@ class ItemArtContractTests(unittest.TestCase):
                 expected = encode_rgba_png(make_sprite(item))
                 actual = (ASSETS / "textures" / "item" / f"{item}.png").read_bytes()
                 self.assertEqual(expected, actual)
+
+    def test_full_blocks_use_local_models_and_tileable_native_surfaces(self):
+        """Catch a block reverting to a vanilla model or non-tileable texture."""
+        self.assertEqual(18, len(AUTHORED_FULL_BLOCKS))
+        expected_textures = set()
+        for block in AUTHORED_FULL_BLOCKS:
+            with self.subTest(block=block):
+                local_model = f"material_progression:block/{block}"
+                blockstate = TREE.load_json(
+                    ASSETS / "blockstates" / f"{block}.json"
+                )
+                variants = blockstate["variants"].values()
+                self.assertTrue(variants)
+                self.assertTrue(
+                    all(variant["model"] == local_model for variant in variants)
+                )
+
+                model = TREE.load_json(
+                    ASSETS / "models" / "block" / f"{block}.json"
+                )
+                face_textures = AUTHORED_FULL_BLOCK_FACE_TEXTURES.get(
+                    block, {"all": block}
+                )
+                expected_textures.update(face_textures.values())
+                self.assertEqual(
+                    {
+                        "parent": (
+                            "minecraft:block/cube"
+                            if block in AUTHORED_FULL_BLOCK_FACE_TEXTURES
+                            else "minecraft:block/cube_all"
+                        ),
+                        "textures": {
+                            face: f"material_progression:block/{texture}"
+                            for face, texture in face_textures.items()
+                        },
+                    },
+                    model,
+                )
+
+                for texture in set(face_textures.values()):
+                    image = read_rgba8_png(
+                        ASSETS / "textures" / "block" / f"{texture}.png"
+                    )
+                    self.assertEqual((16, 16), (image.width, image.height))
+                    self.assertEqual(bytes([255]) * (16 * 16), image.pixels[3::4])
+                    for coordinate in range(16):
+                        self.assertEqual(
+                            image.pixels[coordinate * 4:coordinate * 4 + 4],
+                            image.pixels[(15 * 16 + coordinate) * 4:(15 * 16 + coordinate) * 4 + 4],
+                        )
+                        self.assertEqual(
+                            image.pixels[(coordinate * 16) * 4:(coordinate * 16) * 4 + 4],
+                            image.pixels[(coordinate * 16 + 15) * 4:(coordinate * 16 + 15) * 4 + 4],
+                        )
+        self.assertEqual(
+            expected_textures,
+            TREE.names_matching(ASSETS / "textures" / "block", "*.png"),
+        )
+
+    def test_full_blocks_match_deterministic_generator(self):
+        for block in AUTHORED_FULL_BLOCKS:
+            with self.subTest(block=block):
+                face_textures = AUTHORED_FULL_BLOCK_FACE_TEXTURES.get(
+                    block, {"all": block}
+                )
+                for texture in set(face_textures.values()):
+                    with self.subTest(texture=texture):
+                        expected = encode_rgba_png(make_block_sprite(texture))
+                        actual = (
+                            ASSETS / "textures" / "block" / f"{texture}.png"
+                        ).read_bytes()
+                        self.assertEqual(expected, actual)
 
     def test_ground_resource_assets_are_unchanged(self):
         import hashlib

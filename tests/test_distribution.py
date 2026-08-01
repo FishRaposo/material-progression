@@ -77,7 +77,12 @@ class DistributionContractTests(unittest.TestCase):
                     continue
                 entry = resource.relative_to(MAIN_RESOURCES).as_posix()
                 self.assertIn(entry, archive.namelist())
-                expected = resource.read_bytes().replace(b"\r\n", b"\n")
+                contents = resource.read_bytes()
+                expected = (
+                    contents.replace(b"\r\n", b"\n")
+                    if resource.suffix == ".json"
+                    else contents
+                )
                 self.assertEqual(
                     expected,
                     archive.read(entry),
@@ -96,6 +101,11 @@ class DistributionContractTests(unittest.TestCase):
             "*.jar binary",
             attributes,
             "the tracked production archive must remain byte-for-byte opaque to Git",
+        )
+        self.assertIn(
+            "*.png binary",
+            attributes,
+            "authored PNG textures must remain byte-for-byte opaque to Git",
         )
 
     def test_production_jar_uses_platform_independent_archive_entries(self):

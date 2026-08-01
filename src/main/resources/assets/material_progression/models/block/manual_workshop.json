@@ -1,8 +1,4 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
-  "textures": {
-    "bottom": "minecraft:block/oak_planks",
-    "side": "minecraft:block/crafting_table_side",
-    "top": "minecraft:block/crafting_table_top"
-  }
+  "parent": "minecraft:block/cube",
+  "textures": {"down": "material_progression:block/manual_workshop_bottom", "up": "material_progression:block/manual_workshop_top", "north": "material_progression:block/manual_workshop_side", "south": "material_progression:block/manual_workshop_side", "east": "material_progression:block/manual_workshop_side", "west": "material_progression:block/manual_workshop_side"}
 }

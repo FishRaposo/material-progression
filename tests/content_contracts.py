@@ -168,6 +168,48 @@ AUTHORED_ITEM_GROUPS = {
 }
 assert set().union(*AUTHORED_ITEM_GROUPS.values()) == SHIPPED_ITEMS
 
+# Full-cube block surfaces that must remain locally authored instead of falling
+# back to vanilla raw-stone, ore, furnace, or crafting-table art.
+AUTHORED_FULL_BLOCKS = {
+    "cobbled_granite",
+    "cobbled_diorite",
+    "cobbled_andesite",
+    "cobbled_tuff",
+    "cobbled_calcite",
+    "cobbled_dripstone",
+    "cobbled_sulfur",
+    "cobbled_cinnabar",
+    "cobbled_sandstone",
+    "cobbled_red_sandstone",
+    "cobbled_netherrack",
+    "cobbled_basalt",
+    "cobbled_blackstone",
+    "cobbled_end_stone",
+    "tin_ore",
+    "deepslate_tin_ore",
+    "crusher",
+    "manual_workshop",
+}
+
+AUTHORED_FULL_BLOCK_FACE_TEXTURES = {
+    "crusher": {
+        "down": "crusher_bottom",
+        "up": "crusher_top",
+        "north": "crusher_front",
+        "south": "crusher_side",
+        "east": "crusher_side",
+        "west": "crusher_side",
+    },
+    "manual_workshop": {
+        "down": "manual_workshop_bottom",
+        "up": "manual_workshop_top",
+        "north": "manual_workshop_side",
+        "south": "manual_workshop_side",
+        "east": "manual_workshop_side",
+        "west": "manual_workshop_side",
+    },
+}
+
 WORLD_RESOURCE_ASSET_HASHES = {
     "blockstates/ground_stick.json": "225de9ab49ed1e8927ad153822ed8f6ba6e41270ab93654918e2988d2de8f226",
     "blockstates/loose_rocks.json": "9e71acbab30bb2767e4cb82039f7835877ad923dc1f2c7916218e0b89d9c35e2",

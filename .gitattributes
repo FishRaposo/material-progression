@@ -2,6 +2,7 @@
 # packaging. The tracked installable JAR itself must remain binary.
 * text=auto eol=lf
 *.jar binary
+*.png binary
 
 # Generated resources are already produced with LF; keep that explicit for
 # tooling that handles generated paths separately.

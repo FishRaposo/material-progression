@@ -20,7 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT / "tests") not in sys.path:
     sys.path.insert(0, str(ROOT / "tests"))
 
-from content_contracts import AUTHORED_ITEM_GROUPS  # noqa: E402
+from content_contracts import (  # noqa: E402
+    AUTHORED_FULL_BLOCK_FACE_TEXTURES,
+    AUTHORED_FULL_BLOCKS,
+    AUTHORED_ITEM_GROUPS,
+)
 
 
 Palette = tuple[RGBA, RGBA, RGBA, RGBA | None]
@@ -121,6 +125,221 @@ def _cobble_sprite(family: str) -> tuple[tuple[RGBA, ...], ...]:
     return tuple(tuple(row) for row in pixels)
 
 
+def _shade(color: RGBA, numerator: int, denominator: int) -> RGBA:
+    return tuple(channel * numerator // denominator for channel in color[:3]) + (255,)
+
+
+def _tile(core: list[list[RGBA]]) -> tuple[tuple[RGBA, ...], ...]:
+    """Repeat a 15px field into a seam-free 16px texture."""
+    return tuple(
+        tuple(core[y % 15][x % 15] for x in range(16))
+        for y in range(16)
+    )
+
+
+def _cobble_block_sprite(family: str) -> tuple[tuple[RGBA, ...], ...]:
+    """Render three or four joined stone fragments for a full cube face."""
+    shadow, base, highlight, accent = PALETTES[family]
+    joint = _shade(shadow, 3, 5)
+    fragment_seeds = (
+        ((3, 3), (11, 3), (4, 10)),
+        ((3, 3), (10, 3), (11, 10), (3, 10)),
+        ((2, 4), (8, 2), (12, 8)),
+        ((3, 2), (11, 5), (6, 11), (13, 12)),
+    )
+    seed_group = fragment_seeds[ROCK_SILHOUETTES[family]]
+    core: list[list[RGBA]] = []
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            distances = sorted(
+                (abs(x - seed_x) + abs(y - seed_y), index)
+                for index, (seed_x, seed_y) in enumerate(seed_group)
+            )
+            nearest, fragment = distances[0]
+            if distances[1][0] - nearest <= 1:
+                row.append(joint)
+            elif (x + y + fragment) % 7 == 0:
+                row.append(highlight)
+            elif (x * 3 + y + fragment) % 9 == 0:
+                row.append(shadow)
+            else:
+                row.append(accent if accent is not None and (x + y) % 13 == 0 else base)
+        core.append(row)
+    return _tile(core)
+
+
+def _ore_block_sprite(host_family: str) -> tuple[tuple[RGBA, ...], ...]:
+    shadow, base, highlight, _ = PALETTES[host_family]
+    tin_shadow: RGBA = (64, 100, 122, 255)
+    tin_base: RGBA = (104, 149, 172, 255)
+    tin_highlight: RGBA = (151, 193, 207, 255)
+    veins = {(2, 3), (3, 3), (3, 4), (8, 2), (9, 2), (9, 3), (11, 10), (12, 10), (12, 11), (5, 12), (6, 12)}
+    core: list[list[RGBA]] = []
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            if (x, y) in veins:
+                row.append(tin_highlight if (x + y) % 3 == 0 else tin_base)
+            elif (x - 1, y) in veins or (x, y - 1) in veins:
+                row.append(tin_shadow)
+            elif (x * 5 + y * 3) % 11 == 0:
+                row.append(highlight)
+            elif (x * 2 + y) % 7 == 0:
+                row.append(shadow)
+            else:
+                row.append(base)
+        core.append(row)
+    return _tile(core)
+
+
+def _crusher_front_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    core: list[list[RGBA]] = []
+    dressed_dark: RGBA = (37, 42, 45, 255)
+    dressed: RGBA = (70, 78, 80, 255)
+    dressed_highlight: RGBA = (111, 119, 116, 255)
+    aperture: RGBA = (20, 23, 24, 255)
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            if 5 <= x <= 9 and 4 <= y <= 10:
+                row.append(aperture if x in (5, 9) or y in (4, 10) else (30, 34, 35, 255))
+            elif x in (0, 7, 14) or y in (0, 7, 14):
+                row.append(dressed_dark)
+            elif (x + y) % 5 == 0:
+                row.append(dressed_highlight)
+            else:
+                row.append(dressed)
+        core.append(row)
+    return _tile(core)
+
+
+def _crusher_top_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    core: list[list[RGBA]] = []
+    dark: RGBA = (33, 38, 40, 255)
+    stone: RGBA = (73, 81, 82, 255)
+    highlight: RGBA = (112, 120, 117, 255)
+    aperture: RGBA = (18, 21, 22, 255)
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            if 4 <= x <= 10 and 6 <= y <= 8:
+                row.append(aperture if x in (4, 10) or y in (6, 8) else (27, 31, 32, 255))
+            elif x in (0, 7, 14) or y in (0, 7, 14):
+                row.append(dark)
+            elif (x + y) % 5 == 0:
+                row.append(highlight)
+            else:
+                row.append(stone)
+        core.append(row)
+    return _tile(core)
+
+
+def _crusher_side_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    core: list[list[RGBA]] = []
+    dark: RGBA = (35, 40, 42, 255)
+    stone: RGBA = (68, 75, 77, 255)
+    highlight: RGBA = (103, 111, 109, 255)
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            if x in (0, 7, 14) or y in (0, 5, 10, 14):
+                row.append(dark)
+            elif (x * 2 + y) % 7 == 0:
+                row.append(highlight)
+            else:
+                row.append(stone)
+        core.append(row)
+    return _tile(core)
+
+
+def _crusher_bottom_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    core: list[list[RGBA]] = []
+    dark: RGBA = (28, 33, 35, 255)
+    stone: RGBA = (50, 58, 61, 255)
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            row.append(dark if x in (0, 5, 10, 14) or y in (0, 5, 10, 14) else stone)
+        core.append(row)
+    return _tile(core)
+
+
+def _manual_workshop_top_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    core: list[list[RGBA]] = []
+    wood_dark: RGBA = (68, 40, 22, 255)
+    wood: RGBA = (126, 78, 42, 255)
+    wood_highlight: RGBA = (173, 117, 67, 255)
+    recess: RGBA = (45, 29, 19, 255)
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            if 5 <= x <= 10 and 5 <= y <= 7:
+                row.append(recess if x not in (5, 10) else wood_dark)
+            elif y >= 11:
+                row.append(wood_dark if (x + y) % 3 else (51, 34, 24, 255))
+            elif y in (0, 4, 10) or x in (0, 14):
+                row.append(wood_dark)
+            elif (x + y) % 6 == 0:
+                row.append(wood_highlight)
+            else:
+                row.append(wood)
+        core.append(row)
+    return _tile(core)
+
+
+def _manual_workshop_side_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    core: list[list[RGBA]] = []
+    dark: RGBA = (56, 34, 21, 255)
+    wood: RGBA = (105, 63, 36, 255)
+    highlight: RGBA = (146, 93, 53, 255)
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            if y in (0, 3, 8, 13, 14) or x in (0, 14):
+                row.append(dark)
+            elif (x + y) % 7 == 0:
+                row.append(highlight)
+            else:
+                row.append(wood)
+        core.append(row)
+    return _tile(core)
+
+
+def _manual_workshop_bottom_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    core: list[list[RGBA]] = []
+    dark: RGBA = (45, 29, 20, 255)
+    grain: RGBA = (70, 42, 26, 255)
+    for y in range(15):
+        row: list[RGBA] = []
+        for x in range(15):
+            row.append(dark if x in (0, 4, 9, 14) or y in (0, 7, 14) else grain)
+        core.append(row)
+    return _tile(core)
+
+
+def make_block_sprite(block_id: str) -> tuple[tuple[RGBA, ...], ...]:
+    """Return a deterministic, opaque, tileable 16px full-block surface."""
+    if block_id.startswith("cobbled_"):
+        return _cobble_block_sprite(block_id.removeprefix("cobbled_"))
+    if block_id == "tin_ore":
+        return _ore_block_sprite("stone")
+    if block_id == "deepslate_tin_ore":
+        return _ore_block_sprite("deepslate")
+    special_sprites = {
+        "crusher_front": _crusher_front_sprite,
+        "crusher_top": _crusher_top_sprite,
+        "crusher_side": _crusher_side_sprite,
+        "crusher_bottom": _crusher_bottom_sprite,
+        "manual_workshop_top": _manual_workshop_top_sprite,
+        "manual_workshop_side": _manual_workshop_side_sprite,
+        "manual_workshop_bottom": _manual_workshop_bottom_sprite,
+    }
+    if block_id in special_sprites:
+        return special_sprites[block_id]()
+    raise ValueError(f"No block art is defined for {block_id!r}")
+
+
 def make_sprite(item_id: str) -> tuple[tuple[RGBA, ...], ...]:
     """Return a deterministic 16x16 RGBA sprite for one geological item."""
     family = _family_for(item_id)
@@ -179,8 +398,76 @@ def _write_atlas(item_ids: list[str], destination: Path) -> None:
     destination.write_bytes(encode_rgba_png(tuple(tuple(row) for row in pixels)))
 
 
+def _write_block_assets(block_id: str, assets_root: Path) -> None:
+    model = assets_root / "models" / "block" / f"{block_id}.json"
+    blockstate = assets_root / "blockstates" / f"{block_id}.json"
+    local_model = f"material_progression:block/{block_id}"
+    model.parent.mkdir(parents=True, exist_ok=True)
+    blockstate.parent.mkdir(parents=True, exist_ok=True)
+    face_textures = AUTHORED_FULL_BLOCK_FACE_TEXTURES.get(
+        block_id, {"all": block_id}
+    )
+    for texture_id in set(face_textures.values()):
+        texture = assets_root / "textures" / "block" / f"{texture_id}.png"
+        texture.parent.mkdir(parents=True, exist_ok=True)
+        texture.write_bytes(encode_rgba_png(make_block_sprite(texture_id)))
+    parent = (
+        "minecraft:block/cube"
+        if block_id in AUTHORED_FULL_BLOCK_FACE_TEXTURES
+        else "minecraft:block/cube_all"
+    )
+    model.write_text(
+        '{\n  "parent": "' + parent + '",\n  "textures": {'
+        + ", ".join(
+            '"' + face + '": "material_progression:block/' + texture + '"'
+            for face, texture in face_textures.items()
+        )
+        + "}\n}\n",
+        encoding="utf-8",
+    )
+    if block_id == "crusher":
+        variants = {
+            f"facing={facing},lit={str(lit).lower()}": {
+                "model": local_model,
+                **({"y": rotation} if rotation else {}),
+            }
+            for facing, rotation in (("north", 0), ("east", 90), ("south", 180), ("west", 270))
+            for lit in (False, True)
+        }
+    else:
+        variants = {"": {"model": local_model}}
+    import json
+    blockstate.write_text(json.dumps({"variants": variants}, indent=2) + "\n", encoding="utf-8")
+
+
+def _write_block_atlas(block_ids: list[str], destination: Path) -> None:
+    columns = 6
+    texture_ids = [
+        texture
+        for block_id in block_ids
+        for texture in sorted(set(AUTHORED_FULL_BLOCK_FACE_TEXTURES.get(
+            block_id, {"all": block_id}
+        ).values()))
+    ]
+    rows = (len(texture_ids) + columns - 1) // columns
+    pixels = [[TRANSPARENT for _ in range(columns * 16)] for _ in range(rows * 16)]
+    for index, texture_id in enumerate(texture_ids):
+        sprite = make_block_sprite(texture_id)
+        offset_x, offset_y = (index % columns) * 16, (index // columns) * 16
+        for y, row in enumerate(sprite):
+            pixels[offset_y + y][offset_x:offset_x + 16] = row
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_bytes(encode_rgba_png(tuple(tuple(row) for row in pixels)))
+
+
 def write_group(group: str, assets_root: Path) -> None:
     """Write local sprites, generated-item models, and item definitions."""
+    if group == "full_blocks":
+        block_ids = sorted(AUTHORED_FULL_BLOCKS)
+        for block_id in block_ids:
+            _write_block_assets(block_id, assets_root)
+        _write_block_atlas(block_ids, ROOT / "build" / "item-art" / "blocks.png")
+        return
     try:
         item_ids = sorted(AUTHORED_ITEM_GROUPS[group])
     except KeyError as error:
@@ -193,7 +480,11 @@ def write_group(group: str, assets_root: Path) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--group", required=True, choices=sorted(AUTHORED_ITEM_GROUPS))
+    parser.add_argument(
+        "--group",
+        required=True,
+        choices=[*sorted(AUTHORED_ITEM_GROUPS), "full_blocks"],
+    )
     parser.add_argument(
         "--assets-root",
         type=Path,

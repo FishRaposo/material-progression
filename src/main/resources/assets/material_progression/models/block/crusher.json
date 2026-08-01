@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {"down": "material_progression:block/crusher_bottom", "up": "material_progression:block/crusher_top", "north": "material_progression:block/crusher_front", "south": "material_progression:block/crusher_side", "east": "material_progression:block/crusher_side", "west": "material_progression:block/crusher_side"}
+}

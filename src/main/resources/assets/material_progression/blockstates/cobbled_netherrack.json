@@ -1,1 +1,7 @@
-{"variants":{"":{"model":"minecraft:block/netherrack"}}}
+{
+  "variants": {
+    "": {
+      "model": "material_progression:block/cobbled_netherrack"
+    }
+  }
+}

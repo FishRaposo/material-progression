@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/deepslate_iron_ore"
+      "model": "material_progression:block/deepslate_tin_ore"
     }
   }
 }

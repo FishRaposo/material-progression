@@ -1,1 +1,7 @@
-{"variants":{"":{"model":"minecraft:block/andesite"}}}
+{
+  "variants": {
+    "": {
+      "model": "material_progression:block/cobbled_andesite"
+    }
+  }
+}

@@ -1,1 +1,7 @@
-{"variants":{"":{"model":"minecraft:block/sandstone"}}}
+{
+  "variants": {
+    "": {
+      "model": "material_progression:block/cobbled_sandstone"
+    }
+  }
+}
