@@ -58,6 +58,18 @@ For example, bulk crafting combines CraftingTable IV's output-first interface,
 the Crafting Station's local inventory boundary, and Furnus's upgrade vocabulary,
 but its recursive recipe planner is a Material Progression system of its own.
 
+## Item-art study boundary
+
+The item-art baseline in [Item Art Direction and Reference Baseline](ITEM_ART.md)
+uses No Tree Punching, TerraFirmaCraft, and Divergent Underground only to study
+category readability: loose material, clustered cobble, primitive cutting
+tools, and family distinction. The authoritative study sources are the public
+[No Tree Punching source](https://github.com/alcatrazEscapee/no-tree-punching),
+[TerraFirmaCraft source](https://github.com/TerraFirmaCraft/TerraFirmaCraft),
+and [Divergent Underground source](https://github.com/cleverpanda/Divergent-Underground).
+Their assets remain local, ignored research material; no reference or vanilla
+pixels are bundled, traced, or otherwise used as Material Progression art.
+
 ## Opening/geology implementation lineage
 
 The implemented opening pass used the references selectively:

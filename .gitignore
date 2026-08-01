@@ -43,3 +43,6 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+### Local research (never package or commit) ###
+research/reference-assets/

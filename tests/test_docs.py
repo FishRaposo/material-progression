@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 TEXT_SUFFIXES = {".gradle", ".java", ".json", ".md", ".properties", ".yml", ".yaml"}
-IGNORED_DIRECTORIES = {".git", ".gradle", "build", "repo", "run"}
+IGNORED_DIRECTORIES = {".git", ".gradle", "build", "repo", "run", "research"}
 
 
 def repository_files():

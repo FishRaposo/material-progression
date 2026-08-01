@@ -52,3 +52,64 @@ This command writes all twelve local sprites, their generated-item models, and
 their item definitions. It also writes the ignored ten-column review atlas to
 `build/item-art/materials-and-workstations.png`. Ground Stick and Loose Rock
 world assets remain outside this group and must not be regenerated.
+
+## Reference study boundary
+
+The local study checkout lives only at `research/reference-assets/` and is
+ignored by Git. It may contain No Tree Punching, TerraFirmaCraft, and Divergent
+Underground source and assets for private comparison; none of those files may
+be imported into `src/`, `dist/`, generated resources, documentation images, or
+release artifacts. A reference can explain a role, contrast, or readability
+problem. It cannot supply a silhouette, pixel arrangement, palette, or texture
+to trace.
+
+The vanilla comparison input is the Minecraft 26.2 client archive resolved by
+the local Gradle/NeoForge runtime cache. One developer machine discovered it
+under its Gradle cache; locate it on the active machine instead of recording or
+depending on that machine-specific path:
+
+```powershell
+Get-ChildItem "$env:USERPROFILE\.gradle\caches\neoformruntime\artifacts" `
+  -Filter "minecraft_26.2_client.jar" -File -Recurse
+```
+
+If the archive is not present, run a normal Gradle task such as
+`./gradlew classes` to resolve the project runtime, then repeat the search. If
+the cache layout differs, use Gradle's resolved local runtime archive without
+copying it into the repository. Study its entries in place (for example
+`assets/minecraft/textures/item/flint.png`, `iron_ingot.png`, `raw_iron.png`,
+and `stick.png`); do not extract or copy vanilla assets into this repository.
+The archive is a local development input, not a project dependency or shipped
+resource.
+
+The ignored `research/reference-assets/item-art-comparison.html` sheet is a
+review aid. It renders only current Material Progression sprites by relative
+path and records study provenance as text. It intentionally renders no
+third-party or vanilla pixels.
+
+## Reference-baseline rubric
+
+The study confirmed four durable readability checks in addition to the rules
+above:
+
+- Ground resources must be compact at inventory scale: one uneven chip for a
+  Rock and two to four separated but clustered chips for a cobble item.
+- A stone family is identified by its small material palette and internal plane
+  breaks, not a borrowed outline. Its Rock and cobbled forms should read as the
+  same material and different objects.
+- A tool needs a recognizable handle plus a separate working edge or head;
+  material variants retain that category silhouette while changing their
+  working material.
+- Dust, fiber, shards, ingots, and workstation blocks require different mass,
+  spacing, and negative space so they do not collapse into one icon category.
+
+Before accepting an item-art change, inspect it at native scale and at the
+inventory-scale nearest-neighbour zoom used by the comparison sheet. Confirm
+that the silhouette identifies its category before color; upper-left lighting
+and lower/right depth read without a full outline; palettes have no soft or
+interpolated pixels; and every visible decision is justified by this rubric,
+not a reference sprite. The PNG contract remains the mechanical check for 16
+by 16 RGBA, meaningful opaque content, and transparent corners.
+
+An original generated image may serve as a non-shipping mood study, but it is
+not an asset source and must not be copied into the resource pack.
