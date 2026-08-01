@@ -71,6 +71,7 @@ Read the complete living design:
 - [Primitive resources and tools](docs/PRIMITIVE_RESOURCES.md)
 - [Metallurgy and material families](docs/METALLURGY.md)
 - [Workshop infrastructure and automation](docs/INFRASTRUCTURE.md)
+- [Shipped recipe catalogue](docs/RECIPES.md)
 - [Enchantability and magical metallurgy](docs/ENCHANTING.md)
 - [Development directions](docs/ROADMAP.md)
 - [Testing toolkit](docs/TESTING.md)
