@@ -10,6 +10,8 @@ PROPERTIES = ROOT / "gradle.properties"
 DIST = ROOT / "dist"
 BUILD_GRADLE = ROOT / "build.gradle"
 GIT_ATTRIBUTES = ROOT / ".gitattributes"
+BUILD_WORKFLOW = ROOT / ".github" / "workflows" / "build.yml"
+MAIN_RESOURCES = ROOT / "src" / "main" / "resources"
 FORBIDDEN_TEST_MARKERS = (
     "gametest",
     "testframework",
@@ -38,6 +40,49 @@ def read_property(name: str) -> str:
 
 
 class DistributionContractTests(unittest.TestCase):
+    def test_distribution_verifier_identifies_the_exact_archive_difference(self):
+        build = BUILD_GRADLE.read_text(encoding="utf-8")
+
+        self.assertIn("missing from freshly built JAR", build)
+        self.assertIn("missing from tracked distribution JAR", build)
+        self.assertIn("fresh SHA-256", build)
+        self.assertIn("tracked SHA-256", build)
+
+    def test_ci_preserves_the_fresh_jar_before_distribution_verification(self):
+        workflow = BUILD_WORKFLOW.read_text(encoding="utf-8")
+
+        upload_step = "name: Upload freshly built mod JAR"
+        verify_step = "name: Verify installable mod JAR"
+        self.assertIn(upload_step, workflow)
+        self.assertIn("path: build/libs/*.jar", workflow)
+        self.assertLess(
+            workflow.index(upload_step),
+            workflow.index(verify_step),
+            "CI must preserve the fresh JAR even when distribution verification fails",
+        )
+
+    def test_ci_pins_the_canonical_release_jdk(self):
+        workflow = BUILD_WORKFLOW.read_text(encoding="utf-8")
+
+        self.assertIn("java-version: '25.0.3+9'", workflow)
+        self.assertIn("distribution: 'temurin'", workflow)
+
+    def test_tracked_jar_preserves_source_resource_bytes(self):
+        mod_version = read_property("mod_version")
+        archive_path = DIST / f"material-progression-{mod_version}.jar"
+
+        with zipfile.ZipFile(archive_path) as archive:
+            for resource in sorted(MAIN_RESOURCES.rglob("*")):
+                if not resource.is_file() or resource.suffix == ".bbmodel":
+                    continue
+                entry = resource.relative_to(MAIN_RESOURCES).as_posix()
+                self.assertIn(entry, archive.namelist())
+                self.assertEqual(
+                    resource.read_bytes(),
+                    archive.read(entry),
+                    f"tracked JAR transformed resource bytes for {entry}",
+                )
+
     def test_production_artifact_inputs_are_checked_out_with_lf_line_endings(self):
         attributes = GIT_ATTRIBUTES.read_text(encoding="utf-8")
 

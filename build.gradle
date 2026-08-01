@@ -196,22 +196,53 @@ def distributionJar = layout.projectDirectory.file(
 )
 def builtJar = tasks.named('jar').flatMap { it.archiveFile }
 
-def archiveContentsMatch = { File first, File second ->
-    def firstArchive = new java.util.zip.ZipFile(first)
-    def secondArchive = new java.util.zip.ZipFile(second)
-    try {
-        def firstEntries = firstArchive.entries().toList().findAll { !it.directory }
-        def secondEntries = secondArchive.entries().toList().findAll { !it.directory }
-        def firstNames = firstEntries.collect { it.name }.sort()
-        def secondNames = secondEntries.collect { it.name }.sort()
+def sha256 = { byte[] contents ->
+    java.security.MessageDigest.getInstance("SHA-256")
+            .digest(contents)
+            .encodeHex()
+            .toString()
+}
 
-        firstNames == secondNames && firstNames.every { name ->
-            firstArchive.getInputStream(firstArchive.getEntry(name)).bytes ==
-                    secondArchive.getInputStream(secondArchive.getEntry(name)).bytes
+def archiveContentDifference = { File fresh, File tracked ->
+    def freshArchive = new java.util.zip.ZipFile(fresh)
+    def trackedArchive = new java.util.zip.ZipFile(tracked)
+    try {
+        def freshNames = freshArchive.entries().toList()
+                .findAll { !it.directory }
+                .collect { it.name }
+                .toSet()
+        def trackedNames = trackedArchive.entries().toList()
+                .findAll { !it.directory }
+                .collect { it.name }
+                .toSet()
+
+        def missingFromFresh = (trackedNames - freshNames).sort()
+        if (!missingFromFresh.isEmpty()) {
+            return "${missingFromFresh.first()} is missing from freshly built JAR"
         }
+
+        def missingFromTracked = (freshNames - trackedNames).sort()
+        if (!missingFromTracked.isEmpty()) {
+            return "${missingFromTracked.first()} is missing from tracked distribution JAR"
+        }
+
+        for (String name : freshNames.sort()) {
+            def freshContents = freshArchive.getInputStream(
+                    freshArchive.getEntry(name)
+            ).bytes
+            def trackedContents = trackedArchive.getInputStream(
+                    trackedArchive.getEntry(name)
+            ).bytes
+            if (freshContents != trackedContents) {
+                return "${name} differs (fresh SHA-256 ${sha256(freshContents)}, " +
+                        "tracked SHA-256 ${sha256(trackedContents)})"
+            }
+        }
+
+        return null
     } finally {
-        firstArchive.close()
-        secondArchive.close()
+        freshArchive.close()
+        trackedArchive.close()
     }
 }
 
@@ -244,9 +275,11 @@ tasks.register('verifyDistributionJar') {
         }
 
         def built = builtJar.get().asFile
-        if (!archiveContentsMatch(built, expected)) {
+        def difference = archiveContentDifference(built, expected)
+        if (difference != null) {
             throw new GradleException(
-                    "${expected.name} is stale; run ./gradlew syncDistributionJar"
+                    "${expected.name} is stale: ${difference}; " +
+                            "run ./gradlew syncDistributionJar"
             )
         }
     }
