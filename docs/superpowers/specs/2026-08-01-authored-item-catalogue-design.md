@@ -13,6 +13,11 @@ The pass is inventory-only. The existing world-space Loose Rock and Ground Stick
 models, textures, placement, collision, and loot behavior are explicitly
 preserved. They already communicate the opening loop successfully.
 
+Inventory discoverability is part of the pass. Every current mod-owned item
+receives concise localized lore. It must state a real use, processing path, or
+progression role; vanilla-obvious tools may use a shared material-tier line, but
+unfamiliar forms must name their useful interaction directly.
+
 Reference mods inform readability and material identity only. No source texture,
 palette, or sprite is copied from No Tree Punching, Divergent Underground,
 TerraFirmaCraft, or any other project.
@@ -28,6 +33,8 @@ The first catalogue covers every one of the 59 current
 - Tin, Copper, and Bronze ore, raw material, dust, and ingot forms
 - Flint, Tin, and Bronze tools
 - Crusher and Manual Workshop block items
+- One localized, useful tooltip for each of those 59 items in both English and
+  Brazilian Portuguese
 
 Future content is not pre-created. Instead, this document establishes a stable
 art contract that every future item must satisfy before it is considered shipped.
@@ -73,6 +80,8 @@ texture, and no text, gradients, photorealism, or glossy modern rendering.
 5. Use generated visual studies only as original art-direction input; curate and
    validate the final sprites as exact native-resolution assets before they enter
    the resource pack.
+6. Register all lore through the existing `DataComponents.LORE` helper and
+   share translation keys only where the described use is genuinely identical.
 
 ## Acceptance criteria
 
@@ -83,6 +92,9 @@ texture, and no text, gradients, photorealism, or glossy modern rendering.
   opaque corner background.
 - Rock and cobble sprites are distinguishable by both silhouette and value, not
   only their localized name.
+- Each of the 59 items has non-empty `en_us` and `pt_br` lore attached at item
+  registration. Every Rock tooltip explicitly says that one Rock sharpens into
+  a Flint Shard as well as describing four-Rock cobbling.
 - The world-space Loose Rock and Ground Stick assets are byte-for-byte unchanged
   by this pass.
 - A resource contract rejects missing local textures, placeholder vanilla item
@@ -97,6 +109,7 @@ texture, and no text, gradients, photorealism, or glossy modern rendering.
 - Replacing vanilla assets globally
 - Assets for unimplemented future items
 - Resource-pack configuration or an external art dependency
+- Tooltips that pretend to explain an unimplemented future mechanic
 
 ## Verification plan
 

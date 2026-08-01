@@ -16,6 +16,7 @@
 - Use a local `material_progression:item/<id>` model for every shipped inventory item; no final item definition may reference a `minecraft:` model.
 - Keep world block textures and models independent from block-item sprites.
 - Future shipped item definitions must automatically be required to use the same local texture convention.
+- Every current mod-owned item needs concise localized lore that names its real use, processing path, or material-tier role. Every Rock lore line must name both Flint-Shard sharpening and four-Rock cobbling.
 - Do not add runtime dependencies, gameplay changes, registrations, recipes, tags, or balance changes.
 - Rebuild and validate the versioned JAR under `dist/` after changing production resources.
 
@@ -314,7 +315,131 @@ git commit -m "feat: author flint tin and bronze tool art"
 
 Expected: all 59 item definitions resolve locally; no `minecraft:block/*` or `minecraft:item/*` placeholder remains.
 
-### Task 5: Future-art policy, client inspection, and release synchronization
+### Task 5: Complete useful-tooltip coverage
+
+**Files:**
+
+- Modify: `src/main/java/dev/fishraposo/materialprogression/registry/ModItems.java`
+- Modify: `src/main/resources/assets/material_progression/lang/en_us.json`
+- Modify: `src/main/resources/assets/material_progression/lang/pt_br.json`
+- Modify: `tests/content_contracts.py`
+- Modify: `tests/test_discoverability.py`
+
+**Interfaces:**
+
+- Consumes: `SHIPPED_ITEMS`, the existing `withTooltip(Item.Properties, String)` helper, and `DataComponents.LORE`.
+- Produces: `TOOLTIP_KEY_BY_ITEM: dict[str, str]`, localized lore for all 59 current item IDs, and tooltip-capable simple/block item registration helpers.
+
+- [ ] **Step 1: Define and run the failing tooltip coverage contract**
+
+Add `TOOLTIP_KEY_BY_ITEM` to `tests/content_contracts.py`. Map all sixteen Rock IDs to `tooltip.material_progression.rock`; the fourteen custom cobbles to `tooltip.material_progression.cobble`; Raw Tin, Tin/Copper/Bronze Dust, Tin/Bronze Ingot, Tin ores, Crusher, and Workshop to dedicated form/machine keys; Flint Hatchet, Flint/Bronze Knife, Flint/Bronze Hammer, and Flint/Bronze Saw to their existing functional keys; Tin's ordinary tools to `tooltip.material_progression.tin_tool`; and Bronze's ordinary Sword, Pickaxe, Axe, Shovel, and Hoe to `tooltip.material_progression.bronze_tool`.
+
+Use this exact mapping shape so the catalog follows `STONE_FAMILIES` rather than
+duplicating its family list:
+
+~~~python
+TOOLTIP_KEY_BY_ITEM = {
+    **{
+        "rock" if family == "stone" else f"{family}_rock":
+        "tooltip.material_progression.rock"
+        for family in STONE_FAMILIES
+    },
+    **{
+        f"cobbled_{family}": "tooltip.material_progression.cobble"
+        for family, contract in STONE_FAMILIES.items()
+        if contract["cobbled_block"].startswith("material_progression:")
+    },
+    "raw_tin": "tooltip.material_progression.raw_tin",
+    "tin_ingot": "tooltip.material_progression.tin_ingot",
+    "tin_dust": "tooltip.material_progression.tin_dust",
+    "copper_dust": "tooltip.material_progression.copper_dust",
+    "bronze_dust": "tooltip.material_progression.bronze_dust",
+    "bronze_ingot": "tooltip.material_progression.bronze_ingot",
+    "plant_fiber": "tooltip.material_progression.plant_fiber",
+    "flint_shard": "tooltip.material_progression.flint_shard",
+    "flint_hatchet": "tooltip.material_progression.flint_hatchet",
+    "flint_knife": "tooltip.material_progression.knife",
+    "flint_hammer": "tooltip.material_progression.hammer",
+    "flint_saw": "tooltip.material_progression.saw",
+    "tin_ore": "tooltip.material_progression.tin_ore",
+    "deepslate_tin_ore": "tooltip.material_progression.tin_ore",
+    "crusher": "tooltip.material_progression.crusher",
+    "manual_workshop": "tooltip.material_progression.manual_workshop",
+    **{
+        item: "tooltip.material_progression.tin_tool"
+        for item in {"tin_sword", "tin_pickaxe", "tin_axe", "tin_shovel", "tin_hoe"}
+    },
+    **{
+        item: "tooltip.material_progression.bronze_tool"
+        for item in {"bronze_sword", "bronze_pickaxe", "bronze_axe", "bronze_shovel", "bronze_hoe"}
+    },
+    "bronze_knife": "tooltip.material_progression.knife",
+    "bronze_hammer": "tooltip.material_progression.hammer",
+    "bronze_saw": "tooltip.material_progression.saw",
+}
+assert set(TOOLTIP_KEY_BY_ITEM) == SHIPPED_ITEMS
+~~~
+
+Add a test that asserts `set(TOOLTIP_KEY_BY_ITEM) == SHIPPED_ITEMS`, each mapped key is non-empty in both language files, and each key appears in `ModItems.java`. Add exact English assertions:
+
+~~~python
+translations["tooltip.material_progression.rock"] == (
+    "Sharpen any Rock into a Flint Shard; four Rocks make Cobblestone, "
+    "matching Rocks preserve their family."
+)
+translations["tooltip.material_progression.cobble"] == (
+    "A buildable stone aggregate; smelt it to restore its raw stone."
+)
+~~~
+
+Run:
+
+~~~powershell
+python -m unittest tests.test_discoverability.DiscoverabilityContractTests.test_items_publish_the_required_localized_lore -v
+~~~
+
+Expected: FAIL because only eight existing lore keys are attached and the Rock line omits Flint-Shard sharpening.
+
+- [ ] **Step 2: Make every registration lore-capable**
+
+Replace `ITEMS.registerSimpleItem` calls for Raw Tin, Tin Ingot, Tin Dust, Copper Dust, Bronze Dust, and Bronze Ingot with `tooltipItem(name, key)`. Replace `registerSimpleBlockItem` use with an overloaded `blockItem(name, block, tooltipKey)` that creates `new BlockItem(block.get(), withTooltip(properties.useBlockDescriptionPrefix(), tooltipKey))`. Use it for Crusher, both Tin ores, and all fourteen custom cobbles. Keep the Manual Workshop's existing block-description-prefix behavior.
+
+Wrap standard Tin and Bronze tool properties in `withTooltip` before calling `.sword`, `.pickaxe`, or an item constructor. Preserve the existing role-based Knife, Hammer, Saw, and Hatchet tooltip keys; do not add duplicate tier lines to those items.
+
+- [ ] **Step 3: Add truthful localized copy**
+
+Add the following English lines and concise Brazilian Portuguese equivalents:
+
+~~~json
+"tooltip.material_progression.raw_tin": "Smelt into a Tin Ingot or crush into two Tin Dust.",
+"tooltip.material_progression.tin_dust": "Smelt into a Tin Ingot.",
+"tooltip.material_progression.copper_dust": "Smelt into a Copper Ingot.",
+"tooltip.material_progression.bronze_dust": "Smelt into a Bronze Ingot.",
+"tooltip.material_progression.tin_ingot": "Craft early metal tools.",
+"tooltip.material_progression.bronze_ingot": "Craft durable tools that can reach Dense geology.",
+"tooltip.material_progression.tin_ore": "Crush or hammer into two Tin Dust.",
+"tooltip.material_progression.crusher": "Burn fuel to crush ores and raw metals into two Dust.",
+"tooltip.material_progression.tin_tool": "An early metal tool; Bronze tools last longer.",
+"tooltip.material_progression.bronze_tool": "A durable forged Bronze tool.",
+"tooltip.material_progression.cobble": "A buildable stone aggregate; smelt it to restore its raw stone."
+~~~
+
+Update the existing Rock line to the exact string in Step 1. Retain the existing Fiber, Flint Shard, Hatchet, Knife, Hammer, Saw, and Workshop descriptions because they already state their useful function.
+
+- [ ] **Step 4: Run focused tooltip contracts and commit**
+
+Run:
+
+~~~powershell
+python -m unittest tests.test_discoverability -v
+./gradlew.bat contractTest --no-daemon --no-problems-report
+git add src/main/java/dev/fishraposo/materialprogression/registry/ModItems.java src/main/resources/assets/material_progression/lang tests/content_contracts.py tests/test_discoverability.py
+git commit -m "feat: explain every shipped item with lore"
+~~~
+
+Expected: all lore keys are translated, all 59 items are covered, and every Rock mentions both Flint Shards and cobbling.
+
+### Task 6: Future-art policy, client inspection, and release synchronization
 
 **Files:**
 
