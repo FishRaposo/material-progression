@@ -196,6 +196,25 @@ def distributionJar = layout.projectDirectory.file(
 )
 def builtJar = tasks.named('jar').flatMap { it.archiveFile }
 
+def archiveContentsMatch = { File first, File second ->
+    def firstArchive = new java.util.zip.ZipFile(first)
+    def secondArchive = new java.util.zip.ZipFile(second)
+    try {
+        def firstEntries = firstArchive.entries().toList().findAll { !it.directory }
+        def secondEntries = secondArchive.entries().toList().findAll { !it.directory }
+        def firstNames = firstEntries.collect { it.name }.sort()
+        def secondNames = secondEntries.collect { it.name }.sort()
+
+        firstNames == secondNames && firstNames.every { name ->
+            firstArchive.getInputStream(firstArchive.getEntry(name)).bytes ==
+                    secondArchive.getInputStream(secondArchive.getEntry(name)).bytes
+        }
+    } finally {
+        firstArchive.close()
+        secondArchive.close()
+    }
+}
+
 tasks.register('syncDistributionJar', Sync) {
     group = 'distribution'
     description = 'Builds and refreshes the installable mod JAR tracked in dist/.'
@@ -225,7 +244,7 @@ tasks.register('verifyDistributionJar') {
         }
 
         def built = builtJar.get().asFile
-        if (java.nio.file.Files.mismatch(built.toPath(), expected.toPath()) != -1L) {
+        if (!archiveContentsMatch(built, expected)) {
             throw new GradleException(
                     "${expected.name} is stale; run ./gradlew syncDistributionJar"
             )
