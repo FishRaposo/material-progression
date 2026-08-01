@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PROPERTIES = ROOT / "gradle.properties"
 DIST = ROOT / "dist"
 BUILD_GRADLE = ROOT / "build.gradle"
+GIT_ATTRIBUTES = ROOT / ".gitattributes"
 FORBIDDEN_TEST_MARKERS = (
     "gametest",
     "testframework",
@@ -37,6 +38,20 @@ def read_property(name: str) -> str:
 
 
 class DistributionContractTests(unittest.TestCase):
+    def test_production_artifact_inputs_are_checked_out_with_lf_line_endings(self):
+        attributes = GIT_ATTRIBUTES.read_text(encoding="utf-8")
+
+        self.assertIn(
+            "* text=auto eol=lf",
+            attributes,
+            "source and resource inputs must be normalized before JAR packaging",
+        )
+        self.assertIn(
+            "*.jar binary",
+            attributes,
+            "the tracked production archive must remain byte-for-byte opaque to Git",
+        )
+
     def assert_archive_excludes_testing_content(
         self,
         archive: zipfile.ZipFile,
