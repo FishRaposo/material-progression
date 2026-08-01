@@ -27,6 +27,53 @@ TREE = ResourceTree(ROOT, "material_progression")
 ASSETS = TREE.assets
 
 
+TOOL_ROLE_MINIMUM_MASS = {
+    "axe": (76, 52),
+    "hatchet": (64, 42),
+    "hammer": (78, 54),
+    "hoe": (58, 34),
+    "knife": (58, 34),
+    "pickaxe": (74, 52),
+    "saw": (72, 48),
+    "shovel": (70, 48),
+    "sword": (68, 42),
+}
+
+# These sparse masks capture the category-defining mass and negative space,
+# while leaving the generator free to shade and refine the larger silhouette.
+TOOL_ROLE_REQUIRED_OPAQUE = {
+    "axe": {(1, 3), (2, 5), (8, 2), (8, 7)},
+    "hatchet": {(2, 4), (4, 6), (8, 3), (8, 7)},
+    "hammer": {(1, 3), (11, 3), (3, 5), (9, 6)},
+    "hoe": {(3, 3), (10, 3), (9, 6), (9, 8)},
+    "knife": {(8, 1), (4, 4), (9, 7), (6, 9)},
+    "pickaxe": {(1, 2), (13, 2), (4, 4), (9, 7)},
+    "saw": {(2, 3), (10, 5), (4, 7), (9, 8)},
+    "shovel": {(5, 1), (2, 4), (9, 5), (8, 8)},
+    "sword": {(7, 1), (4, 4), (9, 7), (5, 9), (12, 9)},
+}
+TOOL_ROLE_REQUIRED_TRANSPARENT = {
+    "axe": {(1, 7), (3, 8)},
+    "hatchet": {(1, 7), (3, 8)},
+    "hammer": {(2, 7), (4, 8)},
+    "hoe": {(3, 6), (5, 7)},
+    "knife": {(3, 7), (4, 8)},
+    "pickaxe": {(2, 6), (4, 7)},
+    "saw": {(3, 6), (5, 7), (7, 8)},
+    "shovel": {(2, 7), (4, 8)},
+    "sword": {(3, 7), (4, 8)},
+}
+
+
+def _opaque_mask(sprite):
+    return {
+        (x, y)
+        for y, row in enumerate(sprite)
+        for x, pixel in enumerate(row)
+        if pixel[3]
+    }
+
+
 def _png_chunk(kind: bytes, payload: bytes) -> bytes:
     return (
         struct.pack(">I", len(payload))
@@ -191,6 +238,95 @@ class ItemArtContractTests(unittest.TestCase):
                 expected = encode_rgba_png(make_sprite(item))
                 actual = (ASSETS / "textures" / "item" / f"{item}.png").read_bytes()
                 self.assertEqual(expected, actual)
+
+    def test_tool_roles_have_chunky_readable_mass_and_intentional_negative_space(self):
+        """Prevent tools collapsing back into thin, color-dependent diagonals."""
+        masks_by_role = {}
+        for item in sorted(AUTHORED_ITEM_GROUPS["tools"]):
+            material, separator, role = item.partition("_")
+            self.assertTrue(separator, item)
+            self.assertIn(role, TOOL_ROLE_MINIMUM_MASS)
+            sprite = make_sprite(item)
+            mask = _opaque_mask(sprite)
+            minimum_mass, minimum_working_mass = TOOL_ROLE_MINIMUM_MASS[role]
+            working_mask = {
+                coordinate
+                for coordinate in mask
+                if coordinate[0] <= 10 and coordinate[1] <= 9
+            }
+            with self.subTest(item=item, measurement="mass"):
+                self.assertGreaterEqual(len(mask), minimum_mass)
+                self.assertGreaterEqual(len(working_mask), minimum_working_mass)
+            with self.subTest(item=item, measurement="role mask"):
+                self.assertFalse(TOOL_ROLE_REQUIRED_OPAQUE[role] - mask)
+                self.assertFalse(TOOL_ROLE_REQUIRED_TRANSPARENT[role] & mask)
+
+            xs = [x for x, _ in mask]
+            ys = [y for _, y in mask]
+            bounding_area = (max(xs) - min(xs) + 1) * (max(ys) - min(ys) + 1)
+            with self.subTest(item=item, measurement="negative space"):
+                self.assertGreaterEqual(bounding_area - len(mask), 54)
+
+            masks_by_role.setdefault(role, []).append((material, mask, sprite))
+
+        canonical_masks = {}
+        for role, variants in masks_by_role.items():
+            canonical_masks[role] = variants[0][1]
+            for material, mask, _ in variants[1:]:
+                with self.subTest(role=role, material=material):
+                    self.assertEqual(canonical_masks[role], mask)
+
+        for left_role, left_mask in canonical_masks.items():
+            for right_role, right_mask in canonical_masks.items():
+                if left_role >= right_role:
+                    continue
+                with self.subTest(left=left_role, right=right_role):
+                    minimum_difference = (
+                        8 if {left_role, right_role} == {"axe", "hatchet"} else 12
+                    )
+                    self.assertGreaterEqual(
+                        len(left_mask ^ right_mask), minimum_difference
+                    )
+
+    def test_tool_tiers_change_working_material_without_changing_role_silhouette(self):
+        """The category is shape-first; tier is a palette change within it."""
+        variants_by_role = {}
+        for item in AUTHORED_ITEM_GROUPS["tools"]:
+            material, _, role = item.partition("_")
+            variants_by_role.setdefault(role, []).append((material, make_sprite(item)))
+
+        handle_region = {(x, y) for y in range(9, 15) for x in range(8, 15)}
+        working_region = {(x, y) for y in range(1, 9) for x in range(1, 14)}
+        for role, variants in variants_by_role.items():
+            if len(variants) < 2:
+                continue
+            _, baseline = variants[0]
+            baseline_mask = _opaque_mask(baseline)
+            baseline_handle = {
+                coordinate: baseline[coordinate[1]][coordinate[0]]
+                for coordinate in handle_region & baseline_mask
+            }
+            for material, sprite in variants[1:]:
+                mask = _opaque_mask(sprite)
+                with self.subTest(role=role, material=material):
+                    self.assertEqual(baseline_mask, mask)
+                    self.assertEqual(
+                        baseline_handle,
+                        {
+                            coordinate: sprite[coordinate[1]][coordinate[0]]
+                            for coordinate in handle_region & mask
+                        },
+                    )
+                    self.assertNotEqual(
+                        {
+                            baseline[y][x]
+                            for x, y in working_region & baseline_mask
+                        },
+                        {
+                            sprite[y][x]
+                            for x, y in working_region & mask
+                        },
+                    )
 
     def test_every_shipped_item_uses_authored_local_art(self):
         authored_items = set().union(*AUTHORED_ITEM_GROUPS.values())

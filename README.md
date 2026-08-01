@@ -122,7 +122,9 @@ later slices and are not shipped.
 
 This is a test bed, not a promised MVP. The current content, balance, art,
 architecture, and even its place in the eventual progression may be replaced.
-Item visuals currently reuse vanilla textures as development placeholders.
+All current inventory sprites and full-cube block faces use deterministic,
+original 16-pixel local art. Ground Stick and Loose Rock world-facing assets
+remain preserved separately from the inventory-art generator.
 
 ## Install
 

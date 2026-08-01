@@ -26,8 +26,9 @@ python tools/generate_item_art.py --group rocks_and_cobbles
 ```
 
 The command writes the thirty local item sprites, their generated-item models,
-and their item definitions. It also writes the ignored ten-column review atlas
-to `build/item-art/rocks-and-cobbles.png`. Do not use the generator for Ground
+and their item definitions. It also writes ignored native and nearest-neighbour
+review atlases to `build/item-art/rocks-and-cobbles.png` and
+`build/item-art/rocks-and-cobbles-8x.png`. Do not use the generator for Ground
 Stick or Loose Rock world assets; those assets are intentionally preserved as
 their existing world-facing art.
 
@@ -49,9 +50,31 @@ python tools/generate_item_art.py --group materials_and_workstations
 ```
 
 This command writes all twelve local sprites, their generated-item models, and
-their item definitions. It also writes the ignored ten-column review atlas to
-`build/item-art/materials-and-workstations.png`. Ground Stick and Loose Rock
+their item definitions. It also writes ignored native and 8x review atlases to
+`build/item-art/materials-and-workstations.png` and
+`build/item-art/materials-and-workstations-8x.png`. Ground Stick and Loose Rock
 world assets remain outside this group and must not be regenerated.
+
+## Generated tool and full-block art
+
+The tool group gives each role a high-mass silhouette with a broad working head,
+a separate wooden handle, and deliberate role-specific negative space. Flint,
+Tin, and Bronze variants of the same role share an exact alpha silhouette and
+handle; only the working material changes. Regenerate the seventeen sprites and
+their native and 8x review atlases with:
+
+```powershell
+python tools/generate_item_art.py --group tools
+```
+
+The full-block group authors the complete surfaces for the fourteen local
+cobbles, two Tin ore hosts, the Crusher, and the Manual Workshop. It writes the
+native `build/item-art/blocks.png` atlas and the nearest-neighbour
+`build/item-art/blocks-8x.png` review atlas:
+
+```powershell
+python tools/generate_item_art.py --group full_blocks
+```
 
 ## Reference study boundary
 
