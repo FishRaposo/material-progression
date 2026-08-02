@@ -116,6 +116,12 @@ When stone-fragment drops are enabled, mining a raw family block gives:
 - **Silk Touch:** the original raw block.
 - **Incorrect capability:** no drop.
 
+When the mod denies a raw-stone harvest, the server sends one throttled
+action-bar explanation at mining start. Geological hardness keeps the detailed
+tier requirement; with hardness disabled, an incorrect tool instead explains
+that the family needs a Pickaxe or Hammer for Rock drops. Successful Rock-drop
+replacement never sends this warning.
+
 Cobbled and processed variants keep normal self-drops.
 
 The single `material_progression:rock_cobbling` recipe accepts exactly four

@@ -265,6 +265,7 @@ class DiscoverabilityContractTests(unittest.TestCase):
             "tooltip.material_progression.manual_workshop",
             "message.material_progression.log.requires_tool",
             "message.material_progression.geology.insufficient",
+            "message.material_progression.geology.correct_tool",
             *{
                 f"message.material_progression.geology.tier.{level}"
                 for level in range(4)
@@ -314,6 +315,18 @@ class DiscoverabilityContractTests(unittest.TestCase):
                     "Saw" if language == "en_us" else "Serra",
                     translations[
                         "message.material_progression.log.requires_tool"
+                    ],
+                )
+                self.assertIn(
+                    "Pickaxe" if language == "en_us" else "Picareta",
+                    translations[
+                        "message.material_progression.geology.correct_tool"
+                    ],
+                )
+                self.assertIn(
+                    "Hammer" if language == "en_us" else "Martelo",
+                    translations[
+                        "message.material_progression.geology.correct_tool"
                     ],
                 )
 

@@ -29,6 +29,9 @@ apply the same resource checks to every entry. Reusable filesystem and JSON
 parsing belongs in `tests/support/`; new domain contracts belong in focused
 `test_*.py` modules.
 
+The focused no-silent-harvest contract is available during iteration with
+`python -m unittest tests.test_no_silent_harvest_feedback -v`.
+
 The opening/geology contracts cover:
 
 - The exact sixteen-family catalog and soft, standard, and hard profiles

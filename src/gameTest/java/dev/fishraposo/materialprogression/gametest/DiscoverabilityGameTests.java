@@ -141,6 +141,32 @@ public final class DiscoverabilityGameTests {
                 "capability argument"
         );
 
+        TranslatableContents correctTool = translatable(
+                helper,
+                FeedbackMessages.correctToolRequired(
+                        StoneFamilyCatalog.get()
+                                .byFamily(StoneFamily.STONE)
+                                .orElseThrow()
+                ),
+                "correct-tool feedback"
+        );
+        helper.assertValueEqual(
+                "message.material_progression.geology.correct_tool",
+                correctTool.getKey(),
+                "correct-tool feedback key"
+        );
+        helper.assertValueEqual(
+                1,
+                correctTool.getArgs().length,
+                "correct-tool feedback parameter count"
+        );
+        assertTranslationArgument(
+                helper,
+                correctTool.getArgs()[0],
+                "stone_family.material_progression.stone",
+                "correct-tool family argument"
+        );
+
         TranslatableContents log = translatable(
                 helper,
                 FeedbackMessages.logRequiresTool(),

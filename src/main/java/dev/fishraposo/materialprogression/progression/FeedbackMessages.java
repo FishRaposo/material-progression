@@ -31,4 +31,13 @@ public final class FeedbackMessages {
                 )
         );
     }
+
+    public static Component correctToolRequired(
+            StoneFamilyCatalog.Entry family
+    ) {
+        return Component.translatable(
+                "message.material_progression.geology.correct_tool",
+                family.displayName()
+        );
+    }
 }

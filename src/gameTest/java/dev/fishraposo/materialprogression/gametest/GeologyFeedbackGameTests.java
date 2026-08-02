@@ -1,6 +1,7 @@
 package dev.fishraposo.materialprogression.gametest;
 
 import dev.fishraposo.materialprogression.registry.ModDataAttachments;
+import dev.fishraposo.materialprogression.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,6 +58,72 @@ public final class GeologyFeedbackGameTests {
                 now,
                 first.getData(ModDataAttachments.GEOLOGY_FEEDBACK_TICK),
                 "elapsed player's feedback tick"
+        );
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Hardness-disabled Rock denials warn for wrong tools only")
+    static void hardnessDisabledWrongToolFeedbackIsThrottled(
+            ExtendedGameTestHelper helper
+    ) {
+        ConfigFixture.setEnableGeologicalHardness(helper, false);
+        ConfigFixture.setEnableStoneRockDrops(helper, true);
+        helper.setBlock(BLOCK_POS, Blocks.STONE);
+        ServerPlayer player = player(helper);
+        player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        long now = helper.getLevel().getGameTime();
+
+        postStart(helper, player);
+        helper.assertValueEqual(
+                now,
+                player.getData(ModDataAttachments.GEOLOGY_FEEDBACK_TICK),
+                "wrong-tool generic feedback tick"
+        );
+
+        player.setData(ModDataAttachments.GEOLOGY_FEEDBACK_TICK, now - 19);
+        postStart(helper, player);
+        helper.assertValueEqual(
+                now - 19,
+                player.getData(ModDataAttachments.GEOLOGY_FEEDBACK_TICK),
+                "throttled wrong-tool generic feedback tick"
+        );
+        helper.succeed();
+    }
+
+    @GameTest
+    @EmptyTemplate
+    @TestHolder(description = "Capable tools keep Rock drops without feedback")
+    static void capableToolKeepsRocksWithoutFeedback(
+            ExtendedGameTestHelper helper
+    ) {
+        ConfigFixture.setEnableGeologicalHardness(helper, false);
+        ConfigFixture.setEnableStoneRockDrops(helper, true);
+        helper.setBlock(BLOCK_POS, Blocks.STONE);
+        ServerPlayer player = player(helper);
+        long now = helper.getLevel().getGameTime();
+
+        player.setData(ModDataAttachments.GEOLOGY_FEEDBACK_TICK, now - 20);
+        player.setItemInHand(
+                InteractionHand.MAIN_HAND,
+                new ItemStack(Items.STONE_PICKAXE)
+        );
+        postStart(helper, player);
+        helper.assertValueEqual(
+                now - 20,
+                player.getData(ModDataAttachments.GEOLOGY_FEEDBACK_TICK),
+                "capable-tool feedback tick"
+        );
+        helper.assertTrue(
+                player.gameMode.destroyBlock(helper.absolutePos(BLOCK_POS)),
+                "capable tool could not break Stone"
+        );
+        helper.assertItemEntityCountIsAtLeast(
+                ModItems.ROCK.get(),
+                BLOCK_POS,
+                2.0,
+                2
         );
         helper.succeed();
     }

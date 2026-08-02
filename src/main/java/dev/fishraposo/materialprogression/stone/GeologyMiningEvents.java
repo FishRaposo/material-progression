@@ -1,12 +1,14 @@
 package dev.fishraposo.materialprogression.stone;
 
 import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.BlockDropsEvent;
@@ -90,10 +92,12 @@ public final class GeologyMiningEvents {
                 event.getDrops().clear();
                 return;
             }
-        } else if (!player.hasCorrectToolForDrops(
-                event.getState(),
+        } else if (requiresCorrectToolForRockDrops(
                 event.getLevel(),
-                event.getPos()
+                event.getPos(),
+                event.getState(),
+                player,
+                tool
         )) {
             event.getDrops().clear();
             return;
@@ -117,5 +121,27 @@ public final class GeologyMiningEvents {
                 event.getPos().getZ() + 0.5,
                 drop
         ));
+    }
+
+    static boolean requiresCorrectToolForRockDrops(
+            ServerLevel level,
+            BlockPos pos,
+            BlockState state,
+            Player player,
+            ItemStack tool
+    ) {
+        if (MaterialProgressionConfig.enableGeologicalHardness()
+                || !MaterialProgressionConfig.enableStoneRockDrops()
+                || StoneFamilyCatalog.get().bySource(state).isEmpty()) {
+            return false;
+        }
+        var enchantments = level.registryAccess()
+                .lookupOrThrow(Registries.ENCHANTMENT);
+        if (tool.getEnchantmentLevel(
+                enchantments.getOrThrow(Enchantments.SILK_TOUCH)
+        ) > 0) {
+            return false;
+        }
+        return !player.hasCorrectToolForDrops(state, level, pos);
     }
 }

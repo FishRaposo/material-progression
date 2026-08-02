@@ -8,6 +8,7 @@
   "config.material_progression.server.enableStoneRockDrops": "Enable Stone Rock Drops",
   "message.material_progression.log.requires_tool": "Use an Axe or Saw to harvest Logs.",
   "message.material_progression.geology.insufficient": "%1$s %2$s — %3$s required",
+  "message.material_progression.geology.correct_tool": "%1$s — a Pickaxe or Hammer is required",
   "message.material_progression.geology.tier.0": "Exposed",
   "message.material_progression.geology.tier.1": "Compacted",
   "message.material_progression.geology.tier.2": "Dense",

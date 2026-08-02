@@ -62,6 +62,7 @@ class ResourceContractTests(unittest.TestCase):
             "config.material_progression.server.enableGeologicalHardness",
             "config.material_progression.server.enableStoneRockDrops",
             "message.material_progression.geology.insufficient",
+            "message.material_progression.geology.correct_tool",
             *{
                 f"message.material_progression.geology.capability.{level}"
                 for level in range(4)

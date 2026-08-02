@@ -22,21 +22,39 @@ public final class GeologyFeedbackEvents {
     private static void onLeftClick(PlayerInteractEvent.LeftClickBlock event) {
         if (event.getAction()
                         != PlayerInteractEvent.LeftClickBlock.Action.START
-                || !MaterialProgressionConfig.enableGeologicalHardness()
                 || !(event.getEntity() instanceof ServerPlayer player)
                 || player.getAbilities().instabuild) {
             return;
         }
 
         var state = player.level().getBlockState(event.getPos());
+        var level = (ServerLevel) player.level();
+        var family = StoneFamilyCatalog.get().bySource(state);
+        if (family.isEmpty()) {
+            return;
+        }
+        if (!MaterialProgressionConfig.enableGeologicalHardness()) {
+            if (!GeologyMiningEvents.requiresCorrectToolForRockDrops(
+                    level,
+                    event.getPos(),
+                    state,
+                    player,
+                    player.getMainHandItem()
+            ) || !tryAcquire(player)) {
+                return;
+            }
+            player.sendOverlayMessage(
+                    FeedbackMessages.correctToolRequired(family.orElseThrow())
+            );
+            return;
+        }
+
         var tier = GeologyTierResolver.resolve(
-                (ServerLevel) player.level(),
+                level,
                 event.getPos(),
                 state
         );
-        var family = StoneFamilyCatalog.get().bySource(state);
         if (tier.isEmpty()
-                || family.isEmpty()
                 || GeologyToolCapability.canMine(
                         player.getMainHandItem(),
                         state,

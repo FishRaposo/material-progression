@@ -8,6 +8,7 @@
   "config.material_progression.server.enableStoneRockDrops": "Ativar Queda de Pedras ao Minerar Rocha",
   "message.material_progression.log.requires_tool": "Use um Machado ou uma Serra para coletar Troncos.",
   "message.material_progression.geology.insufficient": "%1$s: %2$s — exige %3$s",
+  "message.material_progression.geology.correct_tool": "%1$s — é necessária uma Picareta ou Martelo",
   "message.material_progression.geology.tier.0": "Geologia exposta",
   "message.material_progression.geology.tier.1": "Geologia compactada",
   "message.material_progression.geology.tier.2": "Geologia densa",
