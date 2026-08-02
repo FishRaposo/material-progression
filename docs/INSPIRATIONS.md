@@ -71,6 +71,8 @@ Their assets remain local, ignored research material; no reference or vanilla
 pixels are bundled, traced, or otherwise used as Material Progression art.
 Future art must retain that boundary and meet the independent authoring and
 release-review requirements in [Item Art Direction and Reference Baseline](ITEM_ART.md).
+The pinned local study inventory and refresh boundary are recorded in
+[Asset Provenance Inventory](ASSET_PROVENANCE.md).
 
 ## Opening/geology implementation lineage
 

@@ -3,6 +3,8 @@
 Authored inventory sprites are deliberately small, physical, and legible at a
 glance. They are original Material Progression art, not copies of Minecraft or
 reference-mod artwork.
+The complete release inventory and its local-only study boundary are recorded
+in [Asset Provenance Inventory](ASSET_PROVENANCE.md).
 
 ## Durable rules
 

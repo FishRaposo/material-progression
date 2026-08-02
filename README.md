@@ -77,6 +77,7 @@ Read the complete living design:
 - [Testing toolkit](docs/TESTING.md)
 - [Compatibility policy](docs/COMPATIBILITY.md)
 - [Reference mods, source links, and credits](docs/INSPIRATIONS.md)
+- [Asset provenance inventory](docs/ASSET_PROVENANCE.md)
 
 ## Current prototype
 
