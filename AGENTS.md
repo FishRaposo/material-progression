@@ -76,6 +76,9 @@ Code currently implements:
   operations
 - Recipe unlock advancements, opening-progression advancements, localized
   tooltips, and geological capability feedback
+- Original deterministic 16-pixel art for every shipped inventory sprite and
+  each custom full-cube block face; Ground Stick and Loose Rock retain their
+  separate world-facing assets
 - Reusable Python resource contracts and NeoForge GameTests
 - A reproducible installable JAR under `dist/`
 
@@ -128,6 +131,13 @@ Every shipped item needs a model and English and Brazilian Portuguese
 translations. Every shipped block needs a blockstate and loot table. New
 gameplay behavior needs a live GameTest; new resource invariants need a fast
 contract.
+
+Future inventory or custom full-cube art must be original local 16-pixel art
+that follows `docs/ITEM_ART.md`, has native and 8x atlas review, and extends
+the literal art contract. After changing a shipped recipe resource, regenerate
+`docs/RECIPES.md` with `python tests/generate_recipe_catalogue.py --write`.
+When a player action denies a normal harvest or drop, provide concise,
+throttled feedback and cover both the denial and the successful path.
 
 ## Development workflow
 

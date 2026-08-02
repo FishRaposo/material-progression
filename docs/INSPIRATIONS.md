@@ -69,6 +69,8 @@ tools, and family distinction. The authoritative study sources are the public
 and [Divergent Underground source](https://github.com/cleverpanda/Divergent-Underground).
 Their assets remain local, ignored research material; no reference or vanilla
 pixels are bundled, traced, or otherwise used as Material Progression art.
+Future art must retain that boundary and meet the independent authoring and
+release-review requirements in [Item Art Direction and Reference Baseline](ITEM_ART.md).
 
 ## Opening/geology implementation lineage
 

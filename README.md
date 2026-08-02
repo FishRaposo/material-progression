@@ -111,7 +111,8 @@ complete opening/geology development slice contains:
 - A persistent Manual Workshop for knife, hammer, and Saw processing, including
   six matching Planks per ordinary Log and three Sticks per Plank
 - Recipe unlocks, five opening-progression advancements, localized tooltips,
-  and throttled action-bar guidance
+  and throttled action-bar guidance: blocked geology and incorrect-tool Rock
+  drops explain the missing capability instead of failing silently
 
 Arbitrary third-party stone-family definitions and custom-dimension geology
 profiles are implemented through public datapack interfaces.
@@ -124,7 +125,8 @@ This is a test bed, not a promised MVP. The current content, balance, art,
 architecture, and even its place in the eventual progression may be replaced.
 All current inventory sprites and full-cube block faces use deterministic,
 original 16-pixel local art. Ground Stick and Loose Rock world-facing assets
-remain preserved separately from the inventory-art generator.
+remain preserved separately from the inventory-art generator; see the
+[item-art direction and review rules](docs/ITEM_ART.md).
 
 ## Install
 

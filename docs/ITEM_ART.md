@@ -136,3 +136,14 @@ by 16 RGBA, meaningful opaque content, and transparent corners.
 
 An original generated image may serve as a non-shipping mood study, but it is
 not an asset source and must not be copied into the resource pack.
+
+## Future-content release requirements
+
+Every future shipped inventory item and custom full-cube block face must add
+original local art, its model or blockstate wiring, translations where
+applicable, and literal resource-contract coverage. Extend the deterministic
+generator when the asset belongs to one of its groups; otherwise document the
+authored source and add an equivalent native and 8x review atlas. Review the
+atlas before release and again in a real client inventory or world. Never
+replace the preserved Ground Stick or Loose Rock world-facing assets as a
+side-effect of inventory-art generation.

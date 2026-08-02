@@ -31,6 +31,10 @@ parsing belongs in `tests/support/`; new domain contracts belong in focused
 
 The focused no-silent-harvest contract is available during iteration with
 `python -m unittest tests.test_no_silent_harvest_feedback -v`.
+`tests/test_item_art.py` verifies the complete shipped-item catalogue, native
+16 by 16 RGBA sprites, generated output, authored block faces, and preserved
+world-resource boundary. `tests/test_recipe_catalogue.py` rejects a stale
+generated [recipe catalogue](RECIPES.md).
 
 The opening/geology contracts cover:
 
@@ -84,6 +88,10 @@ GameTests are grouped by gameplay system under
 - Geology-focused tests verify depth bands, modifiers, exposure, correct-tool
   drops, Fortune, Silk Touch, config toggles, persistent placed-stone markers,
   and piston transfer.
+- `GeologyFeedbackGameTests` verifies that denied geological harvests and
+  wrong-tool Rock-drop attempts give the appropriate per-player action-bar
+  reason at most once every 20 ticks, while a capable tool receives no denial
+  feedback and still obtains its normal drop.
 - `GeologyMiningSyncGameTests` verifies the server-authoritative snapshot
   boundary, exact L0-L3 divisors, candidate-only pending behavior, target,
   block-state and dimension matching, timeout refresh, out-of-order rejection,
@@ -129,7 +137,8 @@ Server GameTests cannot judge the Manual Workshop's client rendering, UI
 clarity, sound balance, particle restraint, translated text presentation, or
 the feel of the opening. Before publishing 0.2.0, run a real client and
 complete a 20-30 minute survival path through Bronze and a Dense-geology
-encounter.
+encounter. Inspect every new art group at native and inventory scale in that
+client run; generated atlases are a review aid, not proof of renderer output.
 
 Client mining prediction also needs a physical-client check. Launch
 `./gradlew runClient`, join a world, and compare the mining-crack progression of
