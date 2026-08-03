@@ -6,6 +6,22 @@ reference-mod artwork.
 The complete release inventory and its local-only study boundary are recorded
 in [Asset Provenance Inventory](ASSET_PROVENANCE.md).
 
+## Current public-release blocker
+
+The shipped catalogue satisfies its mechanical art contracts—original local
+16-by-16 RGBA files, deterministic generation where applicable, local models,
+and protected Ground Stick/Loose Rock world assets—but it has not yet met the
+project's subjective vanilla-baseline bar. The current inventory and full-block
+art does not consistently read as native to Minecraft's visual language.
+
+Do not treat the local 0.2.0 JAR as ready for public release until a dedicated
+art recalibration has been completed and accepted. That pass must study the
+local vanilla baseline, re-author original sprites and block faces as needed,
+review native and 8x atlases plus a real client inventory/world, and preserve
+the Ground Stick and Loose Rock world-facing assets unless a separate decision
+reopens them. Passing PNG, model, or byte-parity contracts alone is not
+acceptance of visual quality.
+
 ## Durable rules
 
 - Use 16 by 16 RGBA pixels.

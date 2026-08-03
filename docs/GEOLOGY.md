@@ -198,6 +198,19 @@ The following systems remain later slices:
 
 - Ore samples and deposits
 - Surface evidence and prospecting
+- Surface gravel ores for every ore family. These are naturally generated
+  gravel-hosted ore blocks excavated with a Shovel at the same harvest
+  capability as the corresponding stone ore; they are intended to give
+  higher-tier Shovels a real exploration role.
+- Family-hosted ore variants. Every ore that is valid in a generation region
+  should have a form for each locally valid raw-stone family, while preserving
+  the ore's material identity and never using the existence of a host variant
+  to expand that ore into an invalid dimension, biome, or depth band. This
+  explicitly includes Netherrack, Basalt, and Blackstone in valid Nether
+  regions and End Stone in valid End regions. Vanilla Nether Gold Ore is the
+  behavioral precedent for a dimension-native Netherrack host, while each
+  Material Progression variant will retain its own defined harvest, loot, and
+  generation rules.
 - Cave-biome clay and broader gravel deposits
 - Pottery and its geological resource loop
 - Expanded ore replacement and duplicate-ore governance

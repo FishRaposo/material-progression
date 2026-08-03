@@ -48,7 +48,7 @@ rather than from a known reference mod.
 | --- | --- | --- |
 | Primitive world bootstrap | TerraFirmaCraft, No Tree Punching, Pyrotech, Divergent Underground | Ground rocks and sticks; primitive sharp edges and fiber; physical early processing; stone yielding rock pieces |
 | Manual workshop | Pyrotech, MineFantasy Reforged, No Tree Punching, Better With Mods | Worktable and block interaction patterns; tool-mediated recipes; knife, hammer, and saw roles; physical processing machines |
-| Geology and ore discovery | Divergent Underground, Geolosys, TerraFirmaCraft | Resistance and cave access; deposits and surface samples; readable terrain and prospecting |
+| Geology and ore discovery | Vanilla Nether Gold Ore, Divergent Underground, Geolosys, TerraFirmaCraft | Dimension-native ore hosts; resistance and cave access; deposits and surface samples; readable terrain and prospecting |
 | Metal and alloy graph | Metallurgy, Base Metals, SimpleOres, Fusion, TerraFirmaCraft | Broad material roles; practical base metals; compact ore families; alloy expansion; composition-aware metallurgy |
 | Bulk-crafting interface | CraftingTable IV, Tinkers' Construct, Furnus | Explicit output selection; local persistent inventories; finite slotted upgrades |
 | Shallow logistics | Tinkers' Construct, Iron Chests, Better With Mods, Bonsai Trees | Adjacent inventory access; larger physical storage; hopper-like routing and local machines; compact background production |
@@ -121,6 +121,21 @@ The important ideas are:
 For this project, that is a "why is this not vanilla?" foundation rather than an
 optional side feature. Without environmental pressure, a large material graph is
 easy to bypass.
+
+## Vanilla Nether Gold Ore
+
+Vanilla Nether Gold Ore is the behavioral reference for the planned
+Netherrack-hosted ore family: a vein can visibly belong to the dimension that
+contains it instead of being represented only by an Overworld Stone form. The
+future Material Progression ore matrix extends that host-aware idea to every
+locally valid raw-stone family, including Basalt and Blackstone in the Nether
+and End Stone in the End.
+
+The precedent is deliberately narrow. It guides host readability and
+dimension-native placement, not a copied sprite, block model, loot table, drop
+rate, or source implementation. Each Material Progression ore keeps its own
+data-defined harvest requirement and material-processing identity, and a gravel
+ore remains the separately planned surface form excavated with a Shovel.
 
 ## Metallurgy before Metallurgy 4
 

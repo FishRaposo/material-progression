@@ -2,7 +2,10 @@
 
 > **Local 0.2.0 release candidate:** the complete opening/geology vertical
 > slice and its synchronized installable JAR are ready for client inspection
-> and survival playtesting. Values and content remain subject to that evidence.
+> and survival playtesting, but are **not ready for public release**. The
+> authored inventory and block art needs a further vanilla-baseline pass before
+> it can be accepted publicly. Values and content remain subject to that
+> evidence.
 
 Material Progression is an open-source experiment in rebuilding Minecraft's
 progression around the thing its name promises: mining a world whose shape

@@ -93,6 +93,51 @@ Bronze Hammers and Pickaxes reach Dense geology. The remaining question is
 balance and discoverability: complete a 20-30 minute survival run before release
 and adjust placement, durability, timings, and feedback from evidence.
 
+## Candidate experiment: surface gravel ores and family-hosted ore bodies
+
+Ore should participate in the visible geology around it rather than appearing
+only as a generic Stone block underground. This later experiment has two linked
+rules:
+
+- Every ore family receives a **gravel ore** variant. It occurs in natural
+  surface gravel deposits and is excavated with a Shovel, not a Pickaxe.
+  Its required harvest capability is the same as its corresponding stone ore,
+  so high-tier Shovels gain a meaningful exploration job rather than being
+  merely faster dirt tools.
+- Every ore family that can generate in a region receives host-block variants
+  for every raw-stone family that is valid in that region. A copper vein may
+  therefore read as copper in Granite, Tuff, Sulfur, or another locally valid
+  family rather than reverting to generic Stone Ore. A variant must not cause
+  an ore to appear in a dimension, biome, or depth band where that ore itself
+  is not valid. Nether and End geology are first-class hosts: valid Nether ore
+  forms include Netherrack, Basalt, and Blackstone, while valid End ore forms
+  include End Stone.
+
+Vanilla **Nether Gold Ore** is the behavioral precedent for the Netherrack
+case: an ore should visibly belong to its host dimension instead of pretending
+that every vein lives in Overworld Stone. Material Progression will implement
+its own current-NeoForge version and retain each ore's declared material,
+harvest capability, loot policy, and generation rules; the precedent neither
+imports vanilla assets or code nor makes Nether Gold's exact drops a universal
+rule for every Netherrack-hosted ore.
+
+This is a distribution and presentation system, not a way to add a separate
+resource for each texture. Gravel and stone variants of one ore share the ore's
+material identity, processing path, yield policy, advancement progress, and
+compatibility category. Only their host material, placement context, mining
+tool, and harvest-feedback route differ.
+
+The implementation must keep the matrix data-driven: ore definitions declare
+their valid generation domains and harvest capability, while stone-family data
+selects valid host forms. It must publish shared ore tags for every equivalent
+form, preserve Silk Touch/Fortune and denied-harvest behavior, and provide a
+localized Shovel-capability warning rather than silently yielding nothing.
+
+Playtesting should establish whether surface gravel ores create satisfying
+prospecting routes, whether their visibility is legible without becoming free
+ore, and whether every additional host form improves cave identity enough to
+justify its asset and world-generation cost.
+
 ## Candidate experiment: broader base family
 
 Only after the access loop works, evaluate additional mundane metals and alloys.
@@ -261,8 +306,12 @@ The local 0.2.0 release candidate is the complete opening/geology slice. Its
 versioned source and installable JAR are synchronized locally. Before
 publishing or integrating the candidate, it still requires:
 
-1. A 20-30 minute survival playtest through Bronze and Dense geology
-2. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
+1. A dedicated vanilla-baseline recalibration of the authored inventory and
+   full-block art. The current assets pass mechanical resource checks but do
+   not yet consistently look native to Minecraft; see [Item art](ITEM_ART.md).
+   This is a public-release blocker, not an optional polish task.
+2. A 20-30 minute survival playtest through Bronze and Dense geology
+3. Client inspection of Workshop rendering, UI, sounds, particles, and feedback
 
 Do not push, merge, or move `main` without explicit authorization.
 
