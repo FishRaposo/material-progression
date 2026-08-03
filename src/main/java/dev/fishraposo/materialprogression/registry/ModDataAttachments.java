@@ -41,6 +41,13 @@ public final class ModDataAttachments {
                     "log_feedback_tick",
                     () -> AttachmentType.builder(() -> -20L).build()
             );
+    public static final DeferredHolder<
+            AttachmentType<?>,
+            AttachmentType<Long>
+            > PROSPECTING_FEEDBACK_TICK = ATTACHMENTS.register(
+                    "prospecting_feedback_tick",
+                    () -> AttachmentType.builder(() -> -100L).build()
+            );
 
     private ModDataAttachments() {
     }

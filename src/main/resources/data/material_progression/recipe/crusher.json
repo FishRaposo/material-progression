@@ -1,17 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "key": {
-    "C": "minecraft:cobblestone",
-    "F": "minecraft:flint"
+    "C": "#c:cobblestones",
+    "P": "#minecraft:planks"
   },
   "pattern": [
     "CCC",
-    "CFC",
+    "CPC",
     "CCC"
   ],
   "result": {
-    "count": 1,
     "id": "material_progression:crusher"
-  }
+  },
+  "type": "minecraft:crafting_shaped"
 }

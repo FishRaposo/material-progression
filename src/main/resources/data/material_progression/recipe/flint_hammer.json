@@ -1,16 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
   "category": "equipment",
+  "key": {
+    "R": "#c:flint_shards",
+    "S": "#c:rods/wooden"
+  },
   "pattern": [
     "RRR",
     " S ",
     " S "
   ],
-  "key": {
-    "R": "#c:flint_shards",
-    "S": "#c:rods/wooden"
-  },
   "result": {
     "id": "material_progression:flint_hammer"
-  }
+  },
+  "type": "minecraft:crafting_shaped"
 }

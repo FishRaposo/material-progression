@@ -1,0 +1,14 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#minecraft:planks"
+  },
+  "pattern": [
+    "III",
+    "I I"
+  ],
+  "result": {
+    "id": "material_progression:wood_helmet"
+  },
+  "type": "minecraft:crafting_shaped"
+}

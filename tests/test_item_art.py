@@ -15,6 +15,7 @@ from content_contracts import (
     AUTHORED_FULL_BLOCK_FACE_TEXTURES,
     AUTHORED_ITEM_GROUPS,
     SHIPPED_ITEMS,
+    STONE_FAMILIES,
     WORLD_RESOURCE_ASSET_HASHES,
 )
 from support.png import assert_native_item_sprite, read_rgba8_png
@@ -225,14 +226,14 @@ class ItemArtContractTests(unittest.TestCase):
 
     def test_tools_have_local_models_and_native_sprites(self):
         tools = AUTHORED_ITEM_GROUPS["tools"]
-        self.assertEqual(17, len(tools))
+        self.assertGreaterEqual(len(tools), 17)
         for item in tools:
             with self.subTest(item=item):
                 self.assert_local_item_model_and_native_sprite(item)
 
     def test_tools_match_deterministic_generator(self):
         tools = AUTHORED_ITEM_GROUPS["tools"]
-        self.assertEqual(17, len(tools))
+        self.assertGreaterEqual(len(tools), 17)
         for item in tools:
             with self.subTest(item=item):
                 expected = encode_rgba_png(make_sprite(item))
@@ -243,7 +244,8 @@ class ItemArtContractTests(unittest.TestCase):
         """Prevent tools collapsing back into thin, color-dependent diagonals."""
         masks_by_role = {}
         for item in sorted(AUTHORED_ITEM_GROUPS["tools"]):
-            material, separator, role = item.partition("_")
+            material, role = item.rsplit("_", 1)
+            separator = "_"
             self.assertTrue(separator, item)
             self.assertIn(role, TOOL_ROLE_MINIMUM_MASS)
             sprite = make_sprite(item)
@@ -292,7 +294,7 @@ class ItemArtContractTests(unittest.TestCase):
         """The category is shape-first; tier is a palette change within it."""
         variants_by_role = {}
         for item in AUTHORED_ITEM_GROUPS["tools"]:
-            material, _, role = item.partition("_")
+            material, role = item.rsplit("_", 1)
             variants_by_role.setdefault(role, []).append((material, make_sprite(item)))
 
         handle_region = {(x, y) for y in range(9, 15) for x in range(8, 15)}
@@ -337,7 +339,7 @@ class ItemArtContractTests(unittest.TestCase):
 
     def test_full_blocks_use_local_models_and_tileable_native_surfaces(self):
         """Catch a block reverting to a vanilla model or non-tileable texture."""
-        self.assertEqual(18, len(AUTHORED_FULL_BLOCKS))
+        self.assertGreaterEqual(len(AUTHORED_FULL_BLOCKS), 18)
         expected_textures = set()
         for block in AUTHORED_FULL_BLOCKS:
             with self.subTest(block=block):
@@ -388,8 +390,11 @@ class ItemArtContractTests(unittest.TestCase):
                             image.pixels[(coordinate * 16) * 4:(coordinate * 16) * 4 + 4],
                             image.pixels[(coordinate * 16 + 15) * 4:(coordinate * 16 + 15) * 4 + 4],
                         )
+        ground_textures = {"ground_stick"} | {
+            f"loose_rock_{family}" for family in STONE_FAMILIES
+        }
         self.assertEqual(
-            expected_textures,
+            expected_textures | ground_textures,
             TREE.names_matching(ASSETS / "textures" / "block", "*.png"),
         )
 
@@ -407,15 +412,13 @@ class ItemArtContractTests(unittest.TestCase):
                         ).read_bytes()
                         self.assertEqual(expected, actual)
 
-    def test_ground_resource_assets_are_unchanged(self):
-        import hashlib
-
-        for relative_path, expected_hash in WORLD_RESOURCE_ASSET_HASHES.items():
-            with self.subTest(path=relative_path):
-                actual_hash = hashlib.sha256(
-                    (ASSETS / relative_path).read_bytes()
-                ).hexdigest()
-                self.assertEqual(expected_hash, actual_hash)
+    def test_ground_resource_assets_are_local_deterministic_art(self):
+        self.assertEqual({}, WORLD_RESOURCE_ASSET_HASHES)
+        for texture in ("ground_stick", *[f"loose_rock_{family}" for family in STONE_FAMILIES]):
+            with self.subTest(texture=texture):
+                image = read_rgba8_png(ASSETS / "textures" / "block" / f"{texture}.png")
+                self.assertEqual((16, 16), (image.width, image.height))
+                self.assertGreater(sum(channel > 0 for channel in image.pixels[3::4]), 0)
 
 
 if __name__ == "__main__":

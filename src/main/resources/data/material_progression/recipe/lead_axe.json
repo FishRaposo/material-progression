@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/lead",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "II",
+    "IS",
+    " S"
+  ],
+  "result": {
+    "id": "material_progression:lead_axe"
+  },
+  "type": "minecraft:crafting_shaped"
+}

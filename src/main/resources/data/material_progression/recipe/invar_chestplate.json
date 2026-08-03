@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/invar"
+  },
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "result": {
+    "id": "material_progression:invar_chestplate"
+  },
+  "type": "minecraft:crafting_shaped"
+}

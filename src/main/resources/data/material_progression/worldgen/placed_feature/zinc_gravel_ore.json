@@ -1,0 +1,28 @@
+{
+  "feature": "material_progression:zinc_gravel_ore",
+  "placement": [
+    {
+      "count": 3,
+      "type": "minecraft:count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 128
+        },
+        "min_inclusive": {
+          "absolute": 32
+        },
+        "plateau": 0,
+        "type": "minecraft:trapezoid"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

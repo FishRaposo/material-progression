@@ -1,0 +1,10 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "#c:raw_materials/nickel",
+  "result": {
+    "id": "material_progression:nickel_ingot"
+  },
+  "type": "minecraft:smelting"
+}

@@ -1,0 +1,10 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "#c:dusts/rose_gold",
+  "result": {
+    "id": "material_progression:rose_gold_ingot"
+  },
+  "type": "minecraft:smelting"
+}

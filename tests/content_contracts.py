@@ -623,3 +623,72 @@ TOOL_FAMILIES = {
         "bronze_saw",
     },
 }
+
+# Industrial metallurgy is deliberately literal here: the resource tests must
+# notice a missing host, form, recipe, translation, or inventory asset instead
+# of deriving expectations from production Java registries.
+INDUSTRIAL_ORES = {"copper", "tin", "zinc", "lead", "nickel", "silver"}
+INDUSTRIAL_HOSTS = {
+    "copper": {"stone", "granite", "diorite", "andesite", "deepslate", "tuff", "calcite", "dripstone", "sulfur", "cinnabar", "sandstone", "red_sandstone"},
+    "tin": {"stone", "granite", "diorite", "andesite", "deepslate", "tuff", "calcite", "dripstone", "sulfur", "cinnabar", "sandstone", "red_sandstone"},
+    "zinc": {"stone", "granite", "diorite", "andesite", "deepslate", "tuff", "calcite", "dripstone", "sulfur", "cinnabar", "sandstone", "red_sandstone"},
+    "lead": {"stone", "granite", "diorite", "andesite", "deepslate", "tuff", "calcite", "dripstone", "sulfur", "cinnabar", "sandstone", "red_sandstone"},
+    "nickel": {"stone", "granite", "diorite", "andesite", "deepslate", "tuff", "calcite", "dripstone", "sulfur", "cinnabar", "sandstone", "red_sandstone", "netherrack", "basalt", "blackstone"},
+    "silver": {"stone", "granite", "diorite", "andesite", "deepslate", "tuff", "calcite", "dripstone", "sulfur", "cinnabar", "sandstone", "red_sandstone", "end_stone"},
+}
+INDUSTRIAL_EQUIPMENT = {"wood", "stone", "flint", "copper", "tin", "bronze", "zinc", "lead", "steel", "brass", "nickel", "invar", "silver", "rose_gold"}
+INDUSTRIAL_STANDARD_TOOLS = {"sword", "pickaxe", "axe", "shovel", "hoe"}
+INDUSTRIAL_FIELD_TOOLS = {"knife", "hammer", "saw", "hatchet"}
+INDUSTRIAL_ARMOR = {"helmet", "chestplate", "leggings", "boots"}
+INDUSTRIAL_ORE_BLOCKS = {
+    (f"{material}_ore" if host == "stone" else f"{host}_{material}_ore")
+    for material, hosts in INDUSTRIAL_HOSTS.items()
+    for host in hosts
+} | {f"gravel_{material}_ore" for material in INDUSTRIAL_ORES}
+INDUSTRIAL_MATERIAL_ITEMS = {
+    *(f"raw_{material}" for material in {"zinc", "lead", "nickel", "silver"}),
+    *(f"{material}_dust" for material in {"zinc", "lead", "nickel", "silver", "steel", "brass", "invar", "rose_gold", "sulfur", "coal", "sulfur_coke"}),
+    *(f"{material}_ingot" for material in {"zinc", "lead", "nickel", "silver", "steel", "brass", "invar", "rose_gold"}),
+    "sulfur_coke",
+}
+INDUSTRIAL_TOOLS = {
+    f"{material}_{role}"
+    for material in INDUSTRIAL_EQUIPMENT
+    for role in ((INDUSTRIAL_FIELD_TOOLS if material in {"wood", "stone"} else INDUSTRIAL_STANDARD_TOOLS | INDUSTRIAL_FIELD_TOOLS))
+} - {"flint_knife", "flint_hammer", "flint_saw", "flint_hatchet", "tin_sword", "tin_pickaxe", "tin_axe", "tin_shovel", "tin_hoe", "bronze_sword", "bronze_pickaxe", "bronze_axe", "bronze_shovel", "bronze_hoe", "bronze_knife", "bronze_hammer", "bronze_saw"}
+INDUSTRIAL_ARMOR_ITEMS = {
+    f"{material}_{role}" for material in INDUSTRIAL_EQUIPMENT for role in INDUSTRIAL_ARMOR
+}
+
+SHIPPED_ITEMS.update(INDUSTRIAL_ORE_BLOCKS | INDUSTRIAL_MATERIAL_ITEMS | INDUSTRIAL_TOOLS | INDUSTRIAL_ARMOR_ITEMS)
+SHIPPED_BLOCKS.update(INDUSTRIAL_ORE_BLOCKS)
+AUTHORED_ITEM_GROUPS.setdefault("industrial_materials", set()).update(INDUSTRIAL_MATERIAL_ITEMS)
+AUTHORED_ITEM_GROUPS.setdefault("ore_blocks", set()).update(INDUSTRIAL_ORE_BLOCKS)
+AUTHORED_ITEM_GROUPS["tools"].update(INDUSTRIAL_TOOLS)
+AUTHORED_ITEM_GROUPS.setdefault("armor", set()).update(INDUSTRIAL_ARMOR_ITEMS)
+AUTHORED_FULL_BLOCKS.update(INDUSTRIAL_ORE_BLOCKS)
+TOOL_FAMILIES.update({
+    material: {
+        f"{material}_{role}"
+        for role in (INDUSTRIAL_FIELD_TOOLS if material in {"wood", "stone"} else INDUSTRIAL_STANDARD_TOOLS | INDUSTRIAL_FIELD_TOOLS)
+    }
+    for material in INDUSTRIAL_EQUIPMENT
+    if material not in {"flint", "tin", "bronze"}
+})
+TOOL_FAMILIES["flint"].update({f"flint_{role}" for role in INDUSTRIAL_STANDARD_TOOLS})
+TOOL_FAMILIES["tin"].update({f"tin_{role}" for role in INDUSTRIAL_FIELD_TOOLS})
+TOOL_FAMILIES["bronze"].add("bronze_hatchet")
+
+for item in INDUSTRIAL_MATERIAL_ITEMS:
+    TOOLTIP_KEY_BY_ITEM[item] = "tooltip.material_progression.sulfur_coke" if item == "sulfur_coke" else "tooltip.material_progression.tool"
+for item in INDUSTRIAL_ORE_BLOCKS:
+    TOOLTIP_KEY_BY_ITEM[item] = "tooltip.material_progression.ore"
+for item in INDUSTRIAL_TOOLS:
+    TOOLTIP_KEY_BY_ITEM[item] = "tooltip.material_progression." + item.rsplit("_", 1)[-1]
+for item in INDUSTRIAL_ARMOR_ITEMS:
+    TOOLTIP_KEY_BY_ITEM[item] = "tooltip.material_progression.armor"
+
+# The full reference-grounded art pass deliberately re-authors all world
+# props.  Determinism, model ownership, atlas review, and JAR parity now guard
+# them; historical byte hashes are no longer a product requirement.
+WORLD_RESOURCE_ASSET_HASHES = {}

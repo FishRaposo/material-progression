@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#minecraft:planks",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "III",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "id": "material_progression:wood_hammer"
+  },
+  "type": "minecraft:crafting_shaped"
+}

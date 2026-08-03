@@ -1,1 +1,1 @@
-{"parent":"material_progression:block/loose_rocks","textures":{"particle":"minecraft:block/cinnabar","rock":"minecraft:block/cinnabar"}}
+{"parent":"material_progression:block/loose_rocks","textures":{"particle":"material_progression:block/loose_rock_cinnabar","rock":"material_progression:block/loose_rock_cinnabar"}}

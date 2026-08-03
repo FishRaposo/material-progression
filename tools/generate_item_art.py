@@ -50,6 +50,31 @@ PALETTES: dict[str, Palette] = {
     "basalt": ((37, 40, 41, 255), (68, 72, 72, 255), (108, 111, 106, 255), None),
     "blackstone": ((31, 28, 35, 255), (57, 51, 62, 255), (96, 86, 101, 255), None),
     "end_stone": ((124, 122, 76, 255), (177, 176, 109, 255), (216, 212, 146, 255), None),
+    "gravel": ((71, 69, 66, 255), (117, 113, 106, 255), (157, 151, 140, 255), None),
+}
+
+# Original material palettes are deliberately small and value-led. They are
+# informed by the three local studies' readability lessons, never by copying a
+# source palette or pixel arrangement.
+METAL_PALETTES: dict[str, Palette] = {
+    "copper": ((91, 44, 27, 255), (161, 78, 43, 255), (221, 132, 74, 255), None),
+    "tin": ((42, 64, 75, 255), (84, 119, 131, 255), (146, 174, 180, 255), None),
+    "bronze": ((76, 49, 19, 255), (137, 89, 33, 255), (194, 139, 62, 255), None),
+    "zinc": ((62, 78, 73, 255), (102, 132, 119, 255), (165, 184, 164, 255), None),
+    "lead": ((48, 50, 63, 255), (79, 83, 102, 255), (123, 127, 151, 255), None),
+    "nickel": ((64, 70, 68, 255), (108, 122, 115, 255), (171, 184, 169, 255), None),
+    "silver": ((83, 88, 96, 255), (143, 150, 158, 255), (207, 211, 211, 255), None),
+    "steel": ((49, 58, 63, 255), (83, 98, 102, 255), (139, 153, 151, 255), None),
+    "brass": ((102, 76, 20, 255), (167, 127, 39, 255), (222, 184, 78, 255), None),
+    "invar": ((53, 63, 61, 255), (92, 111, 102, 255), (151, 169, 154, 255), None),
+    "rose_gold": ((113, 67, 52, 255), (183, 112, 85, 255), (235, 167, 128, 255), None),
+    "sulfur": ((90, 75, 16, 255), (169, 142, 30, 255), (226, 199, 75, 255), None),
+    "coal": ((30, 34, 38, 255), (54, 61, 65, 255), (90, 99, 101, 255), None),
+    "sulfur_coke": ((38, 36, 31, 255), (68, 63, 49, 255), (117, 104, 55, 255), None),
+}
+
+ORE_VEINS: dict[str, Palette] = {
+    **{material: palette for material, palette in METAL_PALETTES.items()},
 }
 
 # Four deliberately irregular, high-mass chips.  These are original silhouettes
@@ -217,11 +242,9 @@ def _cobble_block_sprite(family: str) -> tuple[tuple[RGBA, ...], ...]:
     return _tile(core)
 
 
-def _ore_block_sprite(host_family: str) -> tuple[tuple[RGBA, ...], ...]:
+def _ore_block_sprite(host_family: str, material: str = "tin") -> tuple[tuple[RGBA, ...], ...]:
     shadow, base, highlight, _ = PALETTES[host_family]
-    tin_shadow: RGBA = (47, 75, 88, 255)
-    tin_base: RGBA = (90, 130, 143, 255)
-    tin_highlight: RGBA = (151, 181, 187, 255)
+    vein_shadow, vein_base, vein_highlight, _ = ORE_VEINS[material]
     veins = {
         (2, 2), (3, 2), (2, 3), (3, 3), (4, 3), (3, 4),
         (9, 1), (10, 1), (9, 2), (10, 2), (11, 2), (10, 3),
@@ -233,13 +256,13 @@ def _ore_block_sprite(host_family: str) -> tuple[tuple[RGBA, ...], ...]:
         row: list[RGBA] = []
         for x in range(15):
             if (x, y) in veins:
-                row.append(tin_highlight if (x + y) % 4 in (0, 1) else tin_base)
+                row.append(vein_highlight if (x + y) % 4 in (0, 1) else vein_base)
             elif (
                 ((x - 1) % 15, y) in veins
                 or (x, (y - 1) % 15) in veins
                 or ((x + 1) % 15, y) in veins
             ):
-                row.append(tin_shadow)
+                row.append(vein_shadow)
             elif (x // 4 + y // 3) % 5 == 0:
                 row.append(highlight)
             elif (x // 3 + y // 4) % 4 == 0:
@@ -311,8 +334,19 @@ TOOL_SILHOUETTES: dict[str, dict[str, frozenset[tuple[int, int]]]] = {
 
 TOOL_MATERIALS: dict[str, Palette] = {
     "flint": ((27, 31, 35, 255), (58, 65, 70, 255), (105, 115, 119, 255), (143, 149, 146, 255)),
+    "wood": ((49, 28, 16, 255), (116, 68, 34, 255), (177, 135, 76, 255), None),
+    "stone": PALETTES["stone"],
+    "copper": METAL_PALETTES["copper"],
     "tin": ((43, 67, 78, 255), (85, 121, 133, 255), (144, 174, 181, 255), (190, 207, 207, 255)),
     "bronze": ((78, 51, 20, 255), (139, 91, 34, 255), (196, 141, 65, 255), (226, 177, 91, 255)),
+    "zinc": METAL_PALETTES["zinc"],
+    "lead": METAL_PALETTES["lead"],
+    "nickel": METAL_PALETTES["nickel"],
+    "silver": METAL_PALETTES["silver"],
+    "steel": METAL_PALETTES["steel"],
+    "brass": METAL_PALETTES["brass"],
+    "invar": METAL_PALETTES["invar"],
+    "rose_gold": METAL_PALETTES["rose_gold"],
 }
 
 _TOOL_HANDLE_SHADOW = frozenset({
@@ -449,12 +483,13 @@ def _raw_tin_sprite() -> tuple[tuple[RGBA, ...], ...]:
     return tuple(tuple(row) for row in pixels)
 
 
-def _ore_item_sprite(host: Palette) -> tuple[tuple[RGBA, ...], ...]:
+def _ore_item_sprite(
+    host: Palette,
+    vein: Palette = ((43, 70, 83, 255), (86, 127, 141, 255), (148, 177, 183, 255), None),
+) -> tuple[tuple[RGBA, ...], ...]:
     pixels = _item_canvas()
     shadow, base, highlight, _ = host
-    vein_shadow: RGBA = (43, 70, 83, 255)
-    vein_base: RGBA = (86, 127, 141, 255)
-    vein_highlight: RGBA = (148, 177, 183, 255)
+    vein_shadow, vein_base, vein_highlight, _ = vein
     _paint(pixels, shadow, _rows((2, 5, 10), (3, 3, 12), (4, 2, 13),
                                  (5, 2, 13), (6, 1, 13), (7, 1, 14),
                                  (8, 2, 14), (9, 2, 13), (10, 3, 12),
@@ -672,14 +707,98 @@ def _manual_workshop_bottom_sprite() -> tuple[tuple[RGBA, ...], ...]:
     return _tile(core)
 
 
+def _material_from_prefixed_id(item_id: str, suffix: str) -> str | None:
+    if not item_id.endswith(suffix):
+        return None
+    material = item_id.removesuffix(suffix)
+    return material if material in METAL_PALETTES else None
+
+
+def _raw_sprite(palette: Palette) -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow, base, highlight, accent = palette
+    for silhouette, origin in zip(COBBLE_CHIPS[:3], ((2, 5), (7, 8), (9, 3))):
+        _paint_chip(pixels, silhouette, origin, (shadow, base, highlight, accent), accent_budget=1)
+    return tuple(tuple(row) for row in pixels)
+
+
+def _armor_sprite(role: str, palette: Palette) -> tuple[tuple[RGBA, ...], ...]:
+    pixels = _item_canvas()
+    shadow, base, highlight, _ = palette
+    shapes = {
+        "helmet": _rows((2, 5, 10), (3, 3, 12), (4, 2, 13), (5, 2, 13), (6, 2, 13), (7, 3, 12), (8, 4, 11), (9, 5, 10), (10, 5, 10), (11, 5, 5)),
+        "chestplate": _rows((2, 4, 11), (3, 3, 12), (4, 2, 13), (5, 3, 12), (6, 3, 12), (7, 3, 12), (8, 3, 12), (9, 3, 12), (10, 4, 11), (11, 4, 11), (12, 5, 10)),
+        "leggings": _rows((2, 3, 12), (3, 3, 12), (4, 4, 11), (5, 4, 11), (6, 5, 10), (7, 5, 10), (8, 5, 10), (9, 5, 10), (10, 4, 11), (11, 3, 7), (11, 9, 12), (12, 3, 6), (12, 10, 13), (13, 3, 5), (13, 11, 14)),
+        "boots": _rows((4, 4, 8), (5, 4, 8), (6, 4, 8), (7, 4, 8), (8, 4, 8), (9, 3, 9), (10, 2, 10), (11, 2, 11), (12, 3, 12)),
+    }
+    shape = shapes[role]
+    _paint(pixels, shadow, shape)
+    interior = {(x, y) for x, y in shape if (x + 1, y) in shape and (x, y + 1) in shape}
+    _paint(pixels, base, interior)
+    _paint(pixels, highlight, {(x, y) for x, y in interior if (x - 1, y) not in interior or (x, y - 1) not in interior})
+    return tuple(tuple(row) for row in pixels)
+
+
+def _ground_stick_sprite() -> tuple[tuple[RGBA, ...], ...]:
+    pixels = [[(0, 0, 0, 0) for _ in range(16)] for _ in range(16)]
+    for offset, color in ((0, (51, 30, 17, 255)), (1, (111, 64, 32, 255)), (2, (165, 105, 56, 255))):
+        for index in range(2, 14):
+            x, y = index, 13 - index // 2 + offset
+            if 0 <= x < 16 and 0 <= y < 16:
+                pixels[y][x] = color
+    return tuple(tuple(row) for row in pixels)
+
+
+def _loose_rock_world_sprite(family: str) -> tuple[tuple[RGBA, ...], ...]:
+    pixels = [[TRANSPARENT for _ in range(16)] for _ in range(16)]
+    _paint_chip(pixels, COBBLE_CHIPS[ROCK_SILHOUETTES[family]], (5, 8), PALETTES[family], accent_budget=2)
+    return tuple(tuple(row) for row in pixels)
+
+
+def _armor_layer(palette: Palette, leggings: bool) -> tuple[tuple[RGBA, ...], ...]:
+    """Original 64x32 wearable layer, deliberately separate from inventory art."""
+    shadow, base, highlight, _ = palette
+    pixels = [[TRANSPARENT for _ in range(64)] for _ in range(32)]
+    regions = ((4, 1, 27, 17), (28, 1, 51, 17), (4, 18, 19, 31), (20, 18, 35, 31))
+    if leggings:
+        regions = ((4, 2, 19, 25), (20, 2, 35, 25), (36, 2, 51, 25), (52, 2, 63, 25))
+    for left, top, right, bottom in regions:
+        for y in range(top, bottom + 1):
+            for x in range(left, right + 1):
+                edge = x in {left, right} or y in {top, bottom}
+                pixels[y][x] = shadow if edge else base
+                if not edge and (x + y) % 13 == 0:
+                    pixels[y][x] = highlight
+    return tuple(tuple(row) for row in pixels)
+
+
+def _write_armor_layers(assets_root: Path) -> None:
+    texture_root = assets_root / "textures" / "entity" / "equipment"
+    for material in TOOL_MATERIALS:
+        (texture_root / "humanoid").mkdir(parents=True, exist_ok=True)
+        (texture_root / "humanoid_leggings").mkdir(parents=True, exist_ok=True)
+        (texture_root / "humanoid" / f"{material}.png").write_bytes(
+            encode_rgba_png(_armor_layer(TOOL_MATERIALS[material], False))
+        )
+        (texture_root / "humanoid_leggings" / f"{material}.png").write_bytes(
+            encode_rgba_png(_armor_layer(TOOL_MATERIALS[material], True))
+        )
+
+
 def make_block_sprite(block_id: str) -> tuple[tuple[RGBA, ...], ...]:
     """Return a deterministic, opaque, tileable 16px full-block surface."""
     if block_id.startswith("cobbled_"):
         return _cobble_block_sprite(block_id.removeprefix("cobbled_"))
-    if block_id == "tin_ore":
-        return _ore_block_sprite("stone")
-    if block_id == "deepslate_tin_ore":
-        return _ore_block_sprite("deepslate")
+    if block_id.startswith("gravel_") and block_id.endswith("_ore"):
+        material = block_id.removeprefix("gravel_").removesuffix("_ore")
+        return _ore_block_sprite("gravel", material)
+    if block_id.endswith("_ore"):
+        material = next((candidate for candidate in sorted(ORE_VEINS, key=len, reverse=True)
+                         if block_id == f"{candidate}_ore" or block_id.endswith(f"_{candidate}_ore")), None)
+        if material is not None:
+            prefix = "" if block_id == f"{material}_ore" else block_id.removesuffix(f"_{material}_ore")
+            host = "stone" if not prefix else prefix
+            return _ore_block_sprite(host, material)
     special_sprites = {
         "crusher_front": _crusher_front_sprite,
         "crusher_top": _crusher_top_sprite,
@@ -712,9 +831,36 @@ def make_sprite(item_id: str) -> tuple[tuple[RGBA, ...], ...]:
     }
     if item_id in material_sprites:
         return material_sprites[item_id]()
-    material, separator, role = item_id.partition("_")
-    if separator and material in TOOL_MATERIALS and role in TOOL_SILHOUETTES:
-        return _tool_sprite(role, material)
+    raw_material = _material_from_prefixed_id(item_id, "_dust")
+    if raw_material is not None:
+        return _dust_sprite(METAL_PALETTES[raw_material])
+    raw_material = _material_from_prefixed_id(item_id, "_ingot")
+    if raw_material is not None:
+        return _ingot_sprite(METAL_PALETTES[raw_material])
+    raw_material = _material_from_prefixed_id(item_id, "_raw")
+    if raw_material is not None:
+        return _raw_sprite(METAL_PALETTES[raw_material])
+    if item_id.startswith("raw_"):
+        material = item_id.removeprefix("raw_")
+        if material in METAL_PALETTES:
+            return _raw_sprite(METAL_PALETTES[material])
+    if item_id == "sulfur_coke":
+        return _raw_sprite(METAL_PALETTES["sulfur_coke"])
+    if item_id.endswith("_ore"):
+        material = next((candidate for candidate in sorted(ORE_VEINS, key=len, reverse=True)
+                         if item_id == f"{candidate}_ore" or item_id.endswith(f"_{candidate}_ore")), None)
+        if material is not None:
+            prefix = "" if item_id == f"{material}_ore" else item_id.removesuffix(f"_{material}_ore")
+            host = "gravel" if prefix == "gravel" else ("stone" if not prefix else prefix)
+            return _ore_item_sprite(PALETTES[host], ORE_VEINS[material])
+    for material in sorted(TOOL_MATERIALS, key=len, reverse=True):
+        prefix = material + "_"
+        if item_id.startswith(prefix):
+            role = item_id.removeprefix(prefix)
+            if role in TOOL_SILHOUETTES:
+                return _tool_sprite(role, material)
+            if role in {"helmet", "chestplate", "leggings", "boots"}:
+                return _armor_sprite(role, TOOL_MATERIALS[material])
     family = _family_for(item_id)
     return _cobble_sprite(family) if item_id.startswith("cobbled_") else _rock_sprite(family)
 
@@ -869,6 +1015,32 @@ def _write_block_atlas(block_ids: list[str], destination: Path) -> None:
     )
 
 
+def _write_world_resource_assets(assets_root: Path) -> None:
+    """Re-author world props while retaining their existing placement geometry."""
+    textures = assets_root / "textures" / "block"
+    textures.mkdir(parents=True, exist_ok=True)
+    (textures / "ground_stick.png").write_bytes(encode_rgba_png(_ground_stick_sprite()))
+    ground_model = assets_root / "models" / "block" / "ground_stick.json"
+    ground_model.write_text(
+        '{\n  "textures": {"particle": "material_progression:block/ground_stick", "stick": "material_progression:block/ground_stick"},\n'
+        '  "elements": [{"from": [2, 0, 7], "to": [14, 2, 9], "rotation": {"origin": [8, 1, 8], "axis": "y", "angle": 22.5}, "faces": {'
+        '"up": {"texture": "#stick"}, "down": {"texture": "#stick"}, "north": {"texture": "#stick"}, "south": {"texture": "#stick"}, "west": {"texture": "#stick"}, "east": {"texture": "#stick"}}}]\n}\n',
+        encoding="utf-8",
+    )
+    for family in ROCK_SILHOUETTES:
+        texture_id = f"loose_rock_{family}"
+        (textures / f"{texture_id}.png").write_bytes(
+            encode_rgba_png(_loose_rock_world_sprite(family))
+        )
+        model = assets_root / "models" / "block" / "loose_rocks" / f"{family}.json"
+        model.parent.mkdir(parents=True, exist_ok=True)
+        model.write_text(
+            '{"parent":"material_progression:block/loose_rocks","textures":{"particle":"material_progression:block/'
+            + texture_id + '","rock":"material_progression:block/' + texture_id + '"}}\n',
+            encoding="utf-8",
+        )
+
+
 def write_group(group: str, assets_root: Path) -> None:
     """Write local sprites, generated-item models, and item definitions."""
     if group == "full_blocks":
@@ -876,6 +1048,7 @@ def write_group(group: str, assets_root: Path) -> None:
         for block_id in block_ids:
             _write_block_assets(block_id, assets_root)
         _write_block_atlas(block_ids, ROOT / "build" / "item-art" / "blocks.png")
+        _write_world_resource_assets(assets_root)
         return
     try:
         item_ids = sorted(AUTHORED_ITEM_GROUPS[group])
@@ -883,10 +1056,15 @@ def write_group(group: str, assets_root: Path) -> None:
         raise ValueError(f"Unknown authored item group {group!r}") from error
     for item_id in item_ids:
         _write_item_assets(item_id, assets_root)
+    if group == "armor":
+        _write_armor_layers(assets_root)
     atlas_names = {
         "rocks_and_cobbles": "rocks-and-cobbles.png",
         "materials_and_workstations": "materials-and-workstations.png",
         "tools": "tools.png",
+        "industrial_materials": "industrial-materials.png",
+        "ore_blocks": "ore-blocks.png",
+        "armor": "armor.png",
     }
     if group in atlas_names:
         _write_atlas(item_ids, ROOT / "build" / "item-art" / atlas_names[group])

@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/copper",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "III",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "id": "material_progression:copper_pickaxe"
+  },
+  "type": "minecraft:crafting_shaped"
+}

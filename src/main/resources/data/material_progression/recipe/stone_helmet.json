@@ -1,0 +1,14 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:cobblestones"
+  },
+  "pattern": [
+    "III",
+    "I I"
+  ],
+  "result": {
+    "id": "material_progression:stone_helmet"
+  },
+  "type": "minecraft:crafting_shaped"
+}

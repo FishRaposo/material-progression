@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "material_progression:gravel_copper_ore",
+    "material_progression:gravel_tin_ore",
+    "material_progression:gravel_zinc_ore",
+    "material_progression:gravel_lead_ore",
+    "material_progression:gravel_nickel_ore",
+    "material_progression:gravel_silver_ore"
+  ]
+}

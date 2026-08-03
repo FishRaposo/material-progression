@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:cobblestones",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:stone_knife"
+  },
+  "type": "minecraft:crafting_shaped"
+}

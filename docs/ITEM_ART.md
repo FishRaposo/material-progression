@@ -163,5 +163,7 @@ applicable, and literal resource-contract coverage. Extend the deterministic
 generator when the asset belongs to one of its groups; otherwise document the
 authored source and add an equivalent native and 8x review atlas. Review the
 atlas before release and again in a real client inventory or world. Never
-replace the preserved Ground Stick or Loose Rock world-facing assets as a
-side-effect of inventory-art generation.
+replace the placement, collision, or model geometry of Ground Stick or Loose
+Rock world props as a side-effect of inventory-art generation. Their visual
+resources are part of the original-art catalogue and are regenerated and
+reviewed alongside the rest of the mod.

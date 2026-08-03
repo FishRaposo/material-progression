@@ -1,7 +1,18 @@
 {
-  "replace": false,
   "values": [
+    "material_progression:wood_knife",
+    "material_progression:stone_knife",
     "material_progression:flint_knife",
-    "material_progression:bronze_knife"
+    "material_progression:copper_knife",
+    "material_progression:tin_knife",
+    "material_progression:bronze_knife",
+    "material_progression:zinc_knife",
+    "material_progression:lead_knife",
+    "material_progression:steel_knife",
+    "material_progression:brass_knife",
+    "material_progression:nickel_knife",
+    "material_progression:invar_knife",
+    "material_progression:silver_knife",
+    "material_progression:rose_gold_knife"
   ]
 }

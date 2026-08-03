@@ -1,11 +1,11 @@
 {
-  "type": "material_progression:crushing",
   "category": "misc",
   "cookingtime": 200,
-  "experience": 0.0,
+  "experience": 0.1,
   "ingredient": "#c:raw_materials/tin",
   "result": {
     "count": 2,
     "id": "material_progression:tin_dust"
-  }
+  },
+  "type": "material_progression:crushing"
 }

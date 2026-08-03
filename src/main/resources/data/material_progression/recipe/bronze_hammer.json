@@ -1,16 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
   "category": "equipment",
+  "key": {
+    "I": "#c:ingots/bronze",
+    "S": "#c:rods/wooden"
+  },
   "pattern": [
     "III",
     " S ",
     " S "
   ],
-  "key": {
-    "I": "#c:ingots/bronze",
-    "S": "#c:rods/wooden"
-  },
   "result": {
     "id": "material_progression:bronze_hammer"
-  }
+  },
+  "type": "minecraft:crafting_shaped"
 }

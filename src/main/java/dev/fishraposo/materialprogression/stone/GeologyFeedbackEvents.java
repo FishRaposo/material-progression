@@ -4,6 +4,8 @@ import dev.fishraposo.materialprogression.config.MaterialProgressionConfig;
 import dev.fishraposo.materialprogression.progression.FeedbackMessages;
 import dev.fishraposo.materialprogression.progression.OpeningAdvancements;
 import dev.fishraposo.materialprogression.registry.ModDataAttachments;
+import dev.fishraposo.materialprogression.registry.ModMaterials;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.common.NeoForge;
@@ -29,6 +31,19 @@ public final class GeologyFeedbackEvents {
 
         var state = player.level().getBlockState(event.getPos());
         var level = (ServerLevel) player.level();
+        var ore = ModMaterials.oreMaterialForBlock(
+                BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath()
+        );
+        if (ore.isPresent() && !state.canHarvestBlock(level, event.getPos(), player)) {
+            if (tryAcquire(player)) {
+                player.sendOverlayMessage(FeedbackMessages.oreToolRequired(
+                        ore.orElseThrow(),
+                        BuiltInRegistries.BLOCK.getKey(state.getBlock()).getPath()
+                                .startsWith("gravel_")
+                ));
+            }
+            return;
+        }
         var family = StoneFamilyCatalog.get().bySource(state);
         if (family.isEmpty()) {
             return;

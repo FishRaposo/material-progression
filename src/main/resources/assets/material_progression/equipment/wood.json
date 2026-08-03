@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "material_progression:wood"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "material_progression:wood"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "material_progression:wood"
+      }
+    ]
+  }
+}

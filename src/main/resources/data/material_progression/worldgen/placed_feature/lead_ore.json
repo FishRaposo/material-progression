@@ -1,0 +1,28 @@
+{
+  "feature": "material_progression:lead_ore",
+  "placement": [
+    {
+      "count": 9,
+      "type": "minecraft:count"
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "height": {
+        "max_inclusive": {
+          "absolute": 96
+        },
+        "min_inclusive": {
+          "absolute": -48
+        },
+        "plateau": 0,
+        "type": "minecraft:trapezoid"
+      },
+      "type": "minecraft:height_range"
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:flint_shards",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "III",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "id": "material_progression:flint_pickaxe"
+  },
+  "type": "minecraft:crafting_shaped"
+}

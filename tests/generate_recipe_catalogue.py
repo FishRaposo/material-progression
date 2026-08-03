@@ -72,7 +72,7 @@ def requirements(recipe: dict) -> str:
         )
     if recipe_type == "material_progression:crushing":
         return (
-            f"Fuel-burning Crusher; {ticks(recipe['cookingtime'])}; any valid "
+            f"Fuel-burning Grinder; {ticks(recipe['cookingtime'])}; any valid "
             "furnace fuel."
         )
     if recipe_type == "material_progression:manual_workshop":
@@ -142,7 +142,13 @@ def render_catalogue(root: Path) -> str:
     }
     sections = [
         ("Primitive crafting and workstations", take(lambda name, _: name in primitive_names)),
-        ("Metal crafting and tools", take(lambda name, _: name == "bronze_dust" or name.startswith(("tin_", "bronze_")))),
+        (
+            "Industrial crafting, gear, armor, and alloys",
+            take(lambda name, recipe: (
+                recipe["type"].startswith("minecraft:crafting_")
+                and name not in primitive_names
+            )),
+        ),
         ("Fuel-burning Crusher processing", take(lambda _, recipe: recipe["type"] == "material_progression:crushing")),
         ("Smelting material products", take(lambda name, recipe: recipe["type"] == "minecraft:smelting" and not name.startswith("smelting_cobbled_"))),
         ("Smelting family cobbles back to raw stone", take(lambda name, _: name.startswith("smelting_cobbled_"))),
@@ -184,7 +190,7 @@ def render_catalogue(root: Path) -> str:
     lines.extend([
         "## Scope and terminology",
         "",
-        "All rows after the custom cobbling rule are **data-driven** recipe resources: they are reloadable JSON definitions. `rock_cobbling` is intentionally separate because its resource only selects a serializer; Java behaviour validates its inputs and selects its result dynamically. Manual Workshop rows consume one input, require the listed installed tool, and damage that tool only when an operation completes. The fuel-burning Crusher uses the furnace fuel model; Manual Workshop processing and crafting do not consume fuel.",
+        "All rows after the custom cobbling rule are **data-driven** recipe resources: they are reloadable JSON definitions. `rock_cobbling` is intentionally separate because its resource only selects a serializer; Java behaviour validates its inputs and selects its result dynamically. Manual Workshop rows consume one input, require the listed installed tool, and damage that tool only when an operation completes. The fuel-burning Grinder (registry ID remains `crusher`) uses the furnace fuel model; Manual Workshop processing and crafting do not consume fuel.",
         "",
     ])
     return "\n".join(lines)

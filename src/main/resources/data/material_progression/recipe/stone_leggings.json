@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:cobblestones"
+  },
+  "pattern": [
+    "III",
+    "I I",
+    "I I"
+  ],
+  "result": {
+    "id": "material_progression:stone_leggings"
+  },
+  "type": "minecraft:crafting_shaped"
+}

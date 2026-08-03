@@ -1,1 +1,1 @@
-{"parent":"material_progression:block/loose_rocks","textures":{"particle":"minecraft:block/netherrack","rock":"minecraft:block/netherrack"}}
+{"parent":"material_progression:block/loose_rocks","textures":{"particle":"material_progression:block/loose_rock_netherrack","rock":"material_progression:block/loose_rock_netherrack"}}

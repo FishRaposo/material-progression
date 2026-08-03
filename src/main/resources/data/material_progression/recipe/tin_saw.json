@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/tin",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "III",
+    "S S"
+  ],
+  "result": {
+    "id": "material_progression:tin_saw"
+  },
+  "type": "minecraft:crafting_shaped"
+}

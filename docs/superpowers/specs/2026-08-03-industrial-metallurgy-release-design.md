@@ -168,8 +168,8 @@ cost and available without metal.
 
 The base processing paths are:
 
-> Ore or Raw Metal + fuel in Grinder -> two Dust  
-> Dust + Furnace -> Ingot  
+> Ore or Raw Metal + fuel in Grinder -> two Dust
+> Dust + Furnace -> Ingot
 > Alloy Dust + Furnace -> Alloy Ingot
 
 The Grinder accepts all tag-compatible ore/raw-metal inputs. It also accepts
@@ -179,8 +179,8 @@ use rather than replacing it.
 
 Fuel preparation is optional:
 
-> Sulfur Rock -> Sulfur Dust  
-> Coal or Charcoal -> Coal Dust  
+> Sulfur Rock -> Sulfur Dust
+> Coal or Charcoal -> Coal Dust
 > Coal Dust + Sulfur Dust -> Sulfur Coke
 
 Sulfur Coke is a longer-burning Furnace and Grinder fuel. Coal and Charcoal

@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/lead"
+  },
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "result": {
+    "id": "material_progression:lead_chestplate"
+  },
+  "type": "minecraft:crafting_shaped"
+}

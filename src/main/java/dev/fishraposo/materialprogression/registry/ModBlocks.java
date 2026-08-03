@@ -6,6 +6,9 @@ import dev.fishraposo.materialprogression.world.level.block.ExternalLooseRocksBl
 import dev.fishraposo.materialprogression.world.level.block.GroundResourceBlock;
 import dev.fishraposo.materialprogression.world.level.block.LooseRocksBlock;
 import dev.fishraposo.materialprogression.world.level.block.ManualWorkshopBlock;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -29,21 +32,18 @@ public final class ModBlocks {
                     .lightLevel(state -> state.getValue(CrusherBlock.LIT) ? 13 : 0)
     );
 
-    public static final DeferredBlock<Block> TIN_ORE = BLOCKS.registerSimpleBlock(
-            "tin_ore",
-            properties -> properties
-                    .mapColor(MapColor.STONE)
-                    .requiresCorrectToolForDrops()
-                    .strength(3.0F, 3.0F)
-    );
+    private static final Map<String, DeferredBlock<Block>> ORE_BLOCKS =
+            new LinkedHashMap<>();
+    public static final DeferredBlock<Block> TIN_ORE;
+    public static final DeferredBlock<Block> DEEPSLATE_TIN_ORE;
 
-    public static final DeferredBlock<Block> DEEPSLATE_TIN_ORE = BLOCKS.registerSimpleBlock(
-            "deepslate_tin_ore",
-            properties -> properties
-                    .mapColor(MapColor.DEEPSLATE)
-                    .requiresCorrectToolForDrops()
-                    .strength(4.5F, 3.0F)
-    );
+    static {
+        for (String id : ModMaterials.oreBlockIds()) {
+            ORE_BLOCKS.put(id, oreBlock(id));
+        }
+        TIN_ORE = ore("tin_ore");
+        DEEPSLATE_TIN_ORE = ore("deepslate_tin_ore");
+    }
 
     public static final DeferredBlock<ManualWorkshopBlock> MANUAL_WORKSHOP =
             BLOCKS.registerBlock(
@@ -125,6 +125,32 @@ public final class ModBlocks {
                         .requiresCorrectToolForDrops()
                         .strength(strength)
         );
+    }
+
+    private static DeferredBlock<Block> oreBlock(String id) {
+        boolean gravel = id.startsWith("gravel_");
+        boolean deep = id.startsWith("deepslate_");
+        return BLOCKS.registerSimpleBlock(
+                id,
+                properties -> properties
+                        .mapColor(gravel ? MapColor.STONE : deep ? MapColor.DEEPSLATE : MapColor.STONE)
+                        .requiresCorrectToolForDrops()
+                        .strength(gravel ? 0.8F : deep ? 4.5F : 3.0F, 3.0F)
+                        .sound(gravel ? SoundType.GRAVEL : SoundType.STONE)
+        );
+    }
+
+    /** Returns the registered visible form for an ore/host identifier. */
+    public static DeferredBlock<Block> ore(String id) {
+        DeferredBlock<Block> block = ORE_BLOCKS.get(id);
+        if (block == null) {
+            throw new IllegalArgumentException("Unknown Material Progression ore block: " + id);
+        }
+        return block;
+    }
+
+    public static Collection<Map.Entry<String, DeferredBlock<Block>>> oreBlocks() {
+        return Map.copyOf(ORE_BLOCKS).entrySet();
     }
 
     public static void register(IEventBus modBus) {

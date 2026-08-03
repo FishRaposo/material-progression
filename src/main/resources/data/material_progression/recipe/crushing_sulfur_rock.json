@@ -1,0 +1,11 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "#c:rocks/sulfur",
+  "result": {
+    "count": 2,
+    "id": "material_progression:sulfur_dust"
+  },
+  "type": "material_progression:crushing"
+}

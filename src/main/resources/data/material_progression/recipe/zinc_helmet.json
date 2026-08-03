@@ -1,0 +1,14 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/zinc"
+  },
+  "pattern": [
+    "III",
+    "I I"
+  ],
+  "result": {
+    "id": "material_progression:zinc_helmet"
+  },
+  "type": "minecraft:crafting_shaped"
+}

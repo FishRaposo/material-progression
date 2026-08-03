@@ -1,1 +1,1 @@
-{"parent":"material_progression:block/loose_rocks","textures":{"particle":"minecraft:block/sandstone","rock":"minecraft:block/sandstone"}}
+{"parent":"material_progression:block/loose_rocks","textures":{"particle":"material_progression:block/loose_rock_sandstone","rock":"material_progression:block/loose_rock_sandstone"}}

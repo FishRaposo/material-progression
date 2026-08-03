@@ -153,10 +153,50 @@ The same test applies to every infrastructure block: material flexibility
 should make physical and progression sense. The goal is not to manufacture
 dozens of recolored machines solely to consume every ingot.
 
-Ore samples, deposits, prospecting, additional base metals and alloys, precious
-and magical families, expanded processing stages, storage, hoppers, and
-bulk-crafting components are later work. Their presence in this design does not
-make them part of the opening release.
+## Industrial metallurgy slice
+
+The industrial slice adds Zinc, Lead, Nickel, and Silver alongside Copper and
+Tin; Steel, Brass, Invar, and Rose Gold are processed alloys. Every material
+form uses shared `c:` tags, has dust/ingot processing where applicable, and
+has standard gear plus Knife, Hammer, Saw, and Hatchet. Wood and Stone add the
+field tools and full armor sets; vanilla retains their ordinary gear identity.
+
+The player-facing **Grinder** retains the `crusher` registry ID and its
+fuel-burning furnace and sided-inventory behavior. Its early recipe is eight
+compatible cobblestones around any planks. Sulfur Rock becomes Sulfur Dust;
+Coal or Charcoal becomes Coal Dust; mixed dust becomes Sulfur Coke Dust and
+smelts into optional long-burning Sulfur Coke. Coal and Charcoal remain valid
+steel carbon sources.
+
+Ore samples, deposits, advanced prospecting, fantasy metals, silvering and
+smithing-table upgrades, expanded processing stages, storage, hoppers, and
+bulk-crafting components remain later work.
+
+## Deferred and rejected material-property ideas
+
+This is a decision log, not an implementation checklist. The properties below
+are deliberately absent unless they are named in the current industrial slice.
+They should be reconsidered only when they add a visible material choice,
+preserve vanilla readability, and can be covered by a focused live test.
+
+| Idea | Decision | Revisit only when |
+| --- | --- | --- |
+| Universal mining-speed bonuses by metal | Deferred | Mining time is tuned against the full ore/geology loop; arbitrary speed inflation must not erase depth tiers. |
+| Extra ore yield from Bronze or later tools | Rejected for this slice | A separate processing or prospecting relationship creates a meaningful trade-off without making one material universally best. |
+| Passive magnetism, auto-smelting, vein mining, or inventory effects | Rejected | These bypass physical extraction, processing, and local logistics rather than expressing a material property. |
+| Generic elemental damage, resistances, or spell power | Deferred to the RPG progression mod | Enchanting and potion changes are outside this mod's mundane material scope. |
+| Silvering and smithing-table upgrades | Deferred | Silver is currently an ordinary ore. Add silver finishing only with a dedicated upgrade model, repair path, and compatibility policy. |
+| Fantasy metals and magical alloys | Deferred to a future expansion | The historical/industrial roster must first prove that each material has a durable role. |
+| More machine tiers solely to differentiate metals | Rejected for now | New machines need a distinct physical operation; recolored throughput upgrades are not enough. |
+| Material-specific armor set bonuses beyond the bounded profiles | Deferred | Add only after survival playtests show that the current heavy, responsive, hardwearing, and heat-safe identities are readable and balanced. |
+| Durability-preservation chance on every material | Rejected | It would flatten the distinction between Steel/Nickel/Invar and make durability less legible. |
+| Heat immunity | Rejected | Bronze and Invar reduce fire/lava damage; complete immunity removes ordinary hazard decisions. |
+| Knockback immunity or unrestricted movement bonuses | Rejected | Stone/Lead use bounded resistance and Brass/Rose Gold use modest responsiveness so armor does not invalidate combat or terrain. |
+| Tool abilities that reveal exact ore coordinates | Rejected | Hammer prospecting remains loaded-area, throttled, and directional; exploration should still require reading terrain. |
+
+When revisiting any entry, document its intended player decision, affected
+shared tags and extension API, interaction with vanilla gear, and a rollback
+condition before adding it to a release plan.
 
 ## Evaluation questions for every material
 

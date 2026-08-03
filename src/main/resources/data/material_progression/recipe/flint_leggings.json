@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:flint_shards"
+  },
+  "pattern": [
+    "III",
+    "I I",
+    "I I"
+  ],
+  "result": {
+    "id": "material_progression:flint_leggings"
+  },
+  "type": "minecraft:crafting_shaped"
+}

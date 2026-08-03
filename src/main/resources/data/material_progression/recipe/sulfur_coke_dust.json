@@ -1,0 +1,11 @@
+{
+  "category": "misc",
+  "ingredients": [
+    "#c:dusts/coal",
+    "#c:dusts/sulfur"
+  ],
+  "result": {
+    "id": "material_progression:sulfur_coke_dust"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

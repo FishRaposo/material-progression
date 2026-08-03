@@ -1,0 +1,10 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "#c:dusts/sulfur_coke",
+  "result": {
+    "id": "material_progression:sulfur_coke"
+  },
+  "type": "minecraft:smelting"
+}

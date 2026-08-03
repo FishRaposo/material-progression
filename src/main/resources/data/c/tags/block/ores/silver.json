@@ -1,0 +1,18 @@
+{
+  "values": [
+    "material_progression:silver_ore",
+    "material_progression:granite_silver_ore",
+    "material_progression:diorite_silver_ore",
+    "material_progression:andesite_silver_ore",
+    "material_progression:deepslate_silver_ore",
+    "material_progression:tuff_silver_ore",
+    "material_progression:calcite_silver_ore",
+    "material_progression:dripstone_silver_ore",
+    "material_progression:sulfur_silver_ore",
+    "material_progression:cinnabar_silver_ore",
+    "material_progression:sandstone_silver_ore",
+    "material_progression:red_sandstone_silver_ore",
+    "material_progression:end_stone_silver_ore",
+    "material_progression:gravel_silver_ore"
+  ]
+}

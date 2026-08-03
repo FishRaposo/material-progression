@@ -1,0 +1,12 @@
+{
+  "category": "misc",
+  "ingredients": [
+    "#c:dusts/iron",
+    "#material_progression:carbon_dusts"
+  ],
+  "result": {
+    "count": 1,
+    "id": "material_progression:steel_dust"
+  },
+  "type": "minecraft:crafting_shapeless"
+}

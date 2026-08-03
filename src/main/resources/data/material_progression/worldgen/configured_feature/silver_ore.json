@@ -1,0 +1,126 @@
+{
+  "config": {
+    "discard_chance_on_air_exposure": 0.0,
+    "size": 8,
+    "targets": [
+      {
+        "state": {
+          "Name": "material_progression:silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/stone"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:granite_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/granite"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:diorite_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/diorite"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:andesite_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/andesite"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:deepslate_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/deepslate"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:tuff_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/tuff"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:calcite_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/calcite"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:dripstone_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/dripstone"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:sulfur_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/sulfur"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:cinnabar_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/cinnabar"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:sandstone_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/sandstone"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:red_sandstone_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/red_sandstone"
+        }
+      },
+      {
+        "state": {
+          "Name": "material_progression:end_stone_silver_ore"
+        },
+        "target": {
+          "predicate_type": "minecraft:tag_match",
+          "tag": "material_progression:ore_replaceables/end_stone"
+        }
+      }
+    ]
+  },
+  "type": "minecraft:ore"
+}

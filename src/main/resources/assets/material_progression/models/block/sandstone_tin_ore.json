@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "material_progression:block/sandstone_tin_ore"
+  }
+}

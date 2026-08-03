@@ -1,7 +1,20 @@
 {
   "values": [
-    "#c:dusts/bronze",
     "#c:dusts/copper",
-    "#c:dusts/tin"
+    "#c:dusts/tin",
+    "#c:dusts/bronze",
+    "#c:dusts/zinc",
+    "#c:dusts/lead",
+    "#c:dusts/nickel",
+    "#c:dusts/silver",
+    "#c:dusts/steel",
+    "#c:dusts/brass",
+    "#c:dusts/invar",
+    "#c:dusts/rose_gold",
+    "#c:dusts/sulfur",
+    "#c:dusts/coal",
+    "#c:dusts/sulfur_coke",
+    "#c:dusts/iron",
+    "#c:dusts/gold"
   ]
 }

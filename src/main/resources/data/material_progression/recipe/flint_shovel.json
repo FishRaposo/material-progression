@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:flint_shards",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:flint_shovel"
+  },
+  "type": "minecraft:crafting_shaped"
+}

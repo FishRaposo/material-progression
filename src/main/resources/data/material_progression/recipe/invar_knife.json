@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/invar",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:invar_knife"
+  },
+  "type": "minecraft:crafting_shaped"
+}

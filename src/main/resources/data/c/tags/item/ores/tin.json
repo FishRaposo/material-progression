@@ -1,6 +1,17 @@
 {
   "values": [
     "material_progression:tin_ore",
-    "material_progression:deepslate_tin_ore"
+    "material_progression:granite_tin_ore",
+    "material_progression:diorite_tin_ore",
+    "material_progression:andesite_tin_ore",
+    "material_progression:deepslate_tin_ore",
+    "material_progression:tuff_tin_ore",
+    "material_progression:calcite_tin_ore",
+    "material_progression:dripstone_tin_ore",
+    "material_progression:sulfur_tin_ore",
+    "material_progression:cinnabar_tin_ore",
+    "material_progression:sandstone_tin_ore",
+    "material_progression:red_sandstone_tin_ore",
+    "material_progression:gravel_tin_ore"
   ]
 }

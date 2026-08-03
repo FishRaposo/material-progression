@@ -5,6 +5,9 @@
     {"id": "rocks_and_cobbles", "origin": "Material Progression original deterministic local art", "generator": "tools/generate_item_art.py", "resource_root": "src/main/resources/assets/material_progression/textures/item", "review_atlas": "build/item-art/rocks-and-cobbles-8x.png"},
     {"id": "materials_and_workstations", "origin": "Material Progression original deterministic local art", "generator": "tools/generate_item_art.py", "resource_root": "src/main/resources/assets/material_progression/textures/item", "review_atlas": "build/item-art/materials-and-workstations-8x.png"},
     {"id": "tools", "origin": "Material Progression original deterministic local art", "generator": "tools/generate_item_art.py", "resource_root": "src/main/resources/assets/material_progression/textures/item", "review_atlas": "build/item-art/tools-8x.png"},
+    {"id": "industrial_materials", "origin": "Material Progression original deterministic local art", "generator": "tools/generate_item_art.py", "resource_root": "src/main/resources/assets/material_progression/textures/item", "review_atlas": "build/item-art/industrial-materials-8x.png"},
+    {"id": "ore_blocks", "origin": "Material Progression original deterministic local art", "generator": "tools/generate_item_art.py", "resource_root": "src/main/resources/assets/material_progression/textures/item", "review_atlas": "build/item-art/ore-blocks-8x.png"},
+    {"id": "armor", "origin": "Material Progression original deterministic local art", "generator": "tools/generate_item_art.py", "resource_root": "src/main/resources/assets/material_progression/textures/item", "review_atlas": "build/item-art/armor-8x.png"},
     {"id": "full_blocks", "origin": "Material Progression original deterministic local art", "generator": "tools/generate_item_art.py", "resource_root": "src/main/resources/assets/material_progression/textures/block", "review_atlas": "build/item-art/blocks-8x.png"}
   ],
   "local_only_references": [

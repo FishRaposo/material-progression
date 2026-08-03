@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/brass",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:brass_knife"
+  },
+  "type": "minecraft:crafting_shaped"
+}

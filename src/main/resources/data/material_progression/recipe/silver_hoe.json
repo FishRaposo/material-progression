@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/silver",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "II",
+    " S",
+    " S"
+  ],
+  "result": {
+    "id": "material_progression:silver_hoe"
+  },
+  "type": "minecraft:crafting_shaped"
+}

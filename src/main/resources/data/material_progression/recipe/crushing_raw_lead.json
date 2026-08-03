@@ -1,0 +1,11 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "#c:raw_materials/lead",
+  "result": {
+    "count": 2,
+    "id": "material_progression:lead_dust"
+  },
+  "type": "material_progression:crushing"
+}

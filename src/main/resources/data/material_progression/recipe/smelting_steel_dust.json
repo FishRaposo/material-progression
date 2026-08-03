@@ -1,0 +1,10 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "#c:dusts/steel",
+  "result": {
+    "id": "material_progression:steel_ingot"
+  },
+  "type": "minecraft:smelting"
+}

@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/rose_gold",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:rose_gold_shovel"
+  },
+  "type": "minecraft:crafting_shaped"
+}

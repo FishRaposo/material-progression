@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:flint_shards",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "I",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:flint_sword"
+  },
+  "type": "minecraft:crafting_shaped"
+}

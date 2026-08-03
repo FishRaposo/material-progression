@@ -2,7 +2,17 @@
   "values": [
     "#c:ores/copper",
     "#c:ores/tin",
+    "#c:ores/zinc",
+    "#c:ores/lead",
+    "#c:ores/nickel",
+    "#c:ores/silver",
     "#c:raw_materials/copper",
-    "#c:raw_materials/tin"
+    "#c:raw_materials/tin",
+    "#c:raw_materials/zinc",
+    "#c:raw_materials/lead",
+    "#c:raw_materials/nickel",
+    "#c:raw_materials/silver",
+    "#material_progression:carbon_sources",
+    "#c:rocks/sulfur"
   ]
 }

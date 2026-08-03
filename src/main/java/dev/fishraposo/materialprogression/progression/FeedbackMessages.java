@@ -40,4 +40,21 @@ public final class FeedbackMessages {
                 family.displayName()
         );
     }
+
+    public static Component prospectingHint(String material, String direction) {
+        return Component.translatable(
+                "message.material_progression.prospecting.hint",
+                Component.translatable("material.material_progression." + material),
+                Component.translatable("message.material_progression.direction." + direction)
+        );
+    }
+
+    public static Component oreToolRequired(String material, boolean gravel) {
+        return Component.translatable(
+                gravel
+                        ? "message.material_progression.ore.shovel_required"
+                        : "message.material_progression.ore.pickaxe_required",
+                Component.translatable("material.material_progression." + material)
+        );
+    }
 }

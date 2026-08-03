@@ -65,4 +65,26 @@ public final class ModTags {
                 Identifier.fromNamespaceAndPath("c", path)
         );
     }
+
+    /** Shared material tags are the public compatibility surface. */
+    public static TagKey<Item> ingot(String material) {
+        return commonItemTag("ingots/" + material);
+    }
+
+    public static TagKey<Item> dust(String material) {
+        return commonItemTag("dusts/" + material);
+    }
+
+    public static TagKey<Item> rawMaterial(String material) {
+        return commonItemTag("raw_materials/" + material);
+    }
+
+    public static TagKey<Item> ore(String material) {
+        return commonItemTag("ores/" + material);
+    }
+
+    /** Exposes an established common tag for public profile definitions. */
+    public static TagKey<Item> commonItemTagForPublicUse(String path) {
+        return commonItemTag(path);
+    }
 }

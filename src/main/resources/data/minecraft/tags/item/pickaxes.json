@@ -1,8 +1,31 @@
 {
+  "replace": false,
   "values": [
-    "material_progression:flint_hammer",
-    "material_progression:tin_pickaxe",
+    "material_progression:brass_hammer",
+    "material_progression:brass_pickaxe",
+    "material_progression:bronze_hammer",
     "material_progression:bronze_pickaxe",
-    "material_progression:bronze_hammer"
+    "material_progression:copper_hammer",
+    "material_progression:copper_pickaxe",
+    "material_progression:flint_hammer",
+    "material_progression:flint_pickaxe",
+    "material_progression:invar_hammer",
+    "material_progression:invar_pickaxe",
+    "material_progression:lead_hammer",
+    "material_progression:lead_pickaxe",
+    "material_progression:nickel_hammer",
+    "material_progression:nickel_pickaxe",
+    "material_progression:rose_gold_hammer",
+    "material_progression:rose_gold_pickaxe",
+    "material_progression:silver_hammer",
+    "material_progression:silver_pickaxe",
+    "material_progression:steel_hammer",
+    "material_progression:steel_pickaxe",
+    "material_progression:stone_hammer",
+    "material_progression:tin_hammer",
+    "material_progression:tin_pickaxe",
+    "material_progression:wood_hammer",
+    "material_progression:zinc_hammer",
+    "material_progression:zinc_pickaxe"
   ]
 }

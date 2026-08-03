@@ -1,7 +1,18 @@
 {
-  "replace": false,
   "values": [
+    "material_progression:wood_saw",
+    "material_progression:stone_saw",
     "material_progression:flint_saw",
-    "material_progression:bronze_saw"
+    "material_progression:copper_saw",
+    "material_progression:tin_saw",
+    "material_progression:bronze_saw",
+    "material_progression:zinc_saw",
+    "material_progression:lead_saw",
+    "material_progression:steel_saw",
+    "material_progression:brass_saw",
+    "material_progression:nickel_saw",
+    "material_progression:invar_saw",
+    "material_progression:silver_saw",
+    "material_progression:rose_gold_saw"
   ]
 }

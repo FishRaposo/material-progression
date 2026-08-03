@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/invar",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "III",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "id": "material_progression:invar_pickaxe"
+  },
+  "type": "minecraft:crafting_shaped"
+}

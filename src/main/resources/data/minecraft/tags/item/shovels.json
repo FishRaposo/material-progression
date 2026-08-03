@@ -1,6 +1,17 @@
 {
+  "replace": false,
   "values": [
+    "material_progression:brass_shovel",
+    "material_progression:bronze_shovel",
+    "material_progression:copper_shovel",
+    "material_progression:flint_shovel",
+    "material_progression:invar_shovel",
+    "material_progression:lead_shovel",
+    "material_progression:nickel_shovel",
+    "material_progression:rose_gold_shovel",
+    "material_progression:silver_shovel",
+    "material_progression:steel_shovel",
     "material_progression:tin_shovel",
-    "material_progression:bronze_shovel"
+    "material_progression:zinc_shovel"
   ]
 }

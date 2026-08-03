@@ -1,0 +1,10 @@
+{
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": "#c:dusts/brass",
+  "result": {
+    "id": "material_progression:brass_ingot"
+  },
+  "type": "minecraft:smelting"
+}

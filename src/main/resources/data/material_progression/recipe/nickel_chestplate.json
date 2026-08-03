@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/nickel"
+  },
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "result": {
+    "id": "material_progression:nickel_chestplate"
+  },
+  "type": "minecraft:crafting_shaped"
+}

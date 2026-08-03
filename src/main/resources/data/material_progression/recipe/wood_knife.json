@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#minecraft:planks",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:wood_knife"
+  },
+  "type": "minecraft:crafting_shaped"
+}

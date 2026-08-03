@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/zinc",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "IS",
+    " S"
+  ],
+  "result": {
+    "id": "material_progression:zinc_hatchet"
+  },
+  "type": "minecraft:crafting_shaped"
+}

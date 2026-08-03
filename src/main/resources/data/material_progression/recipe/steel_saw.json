@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/steel",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "III",
+    "S S"
+  ],
+  "result": {
+    "id": "material_progression:steel_saw"
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#minecraft:planks",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "IS",
+    " S"
+  ],
+  "result": {
+    "id": "material_progression:wood_hatchet"
+  },
+  "type": "minecraft:crafting_shaped"
+}

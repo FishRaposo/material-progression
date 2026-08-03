@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#minecraft:planks"
+  },
+  "pattern": [
+    "I I",
+    "III",
+    "III"
+  ],
+  "result": {
+    "id": "material_progression:wood_chestplate"
+  },
+  "type": "minecraft:crafting_shaped"
+}

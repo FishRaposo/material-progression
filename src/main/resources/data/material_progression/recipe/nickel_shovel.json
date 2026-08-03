@@ -1,0 +1,16 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/nickel",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "I",
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "material_progression:nickel_shovel"
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,6 @@
+{
+  "biomes": "#minecraft:is_nether",
+  "features": "material_progression:nickel_gravel_ore",
+  "step": "underground_ores",
+  "type": "neoforge:add_features"
+}

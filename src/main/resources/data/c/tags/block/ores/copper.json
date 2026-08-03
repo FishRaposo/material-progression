@@ -1,0 +1,17 @@
+{
+  "values": [
+    "material_progression:copper_ore",
+    "material_progression:granite_copper_ore",
+    "material_progression:diorite_copper_ore",
+    "material_progression:andesite_copper_ore",
+    "material_progression:deepslate_copper_ore",
+    "material_progression:tuff_copper_ore",
+    "material_progression:calcite_copper_ore",
+    "material_progression:dripstone_copper_ore",
+    "material_progression:sulfur_copper_ore",
+    "material_progression:cinnabar_copper_ore",
+    "material_progression:sandstone_copper_ore",
+    "material_progression:red_sandstone_copper_ore",
+    "material_progression:gravel_copper_ore"
+  ]
+}

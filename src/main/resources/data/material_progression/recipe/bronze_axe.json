@@ -1,16 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": "#c:rods/wooden",
-    "X": "#c:ingots/bronze"
+    "I": "#c:ingots/bronze",
+    "S": "#c:rods/wooden"
   },
   "pattern": [
-    "XX",
-    "X#",
-    " #"
+    "II",
+    "IS",
+    " S"
   ],
   "result": {
     "id": "material_progression:bronze_axe"
-  }
+  },
+  "type": "minecraft:crafting_shaped"
 }

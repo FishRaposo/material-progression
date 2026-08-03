@@ -1,1 +1,1 @@
-{"parent":"material_progression:block/loose_rocks","textures":{"particle":"minecraft:block/andesite","rock":"minecraft:block/andesite"}}
+{"parent":"material_progression:block/loose_rocks","textures":{"particle":"material_progression:block/loose_rock_andesite","rock":"material_progression:block/loose_rock_andesite"}}

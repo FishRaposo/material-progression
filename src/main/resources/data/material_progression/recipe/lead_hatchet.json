@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:ingots/lead",
+    "S": "#c:rods/wooden"
+  },
+  "pattern": [
+    "IS",
+    " S"
+  ],
+  "result": {
+    "id": "material_progression:lead_hatchet"
+  },
+  "type": "minecraft:crafting_shaped"
+}

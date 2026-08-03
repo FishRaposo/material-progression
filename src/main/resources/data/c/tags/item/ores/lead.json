@@ -1,0 +1,17 @@
+{
+  "values": [
+    "material_progression:lead_ore",
+    "material_progression:granite_lead_ore",
+    "material_progression:diorite_lead_ore",
+    "material_progression:andesite_lead_ore",
+    "material_progression:deepslate_lead_ore",
+    "material_progression:tuff_lead_ore",
+    "material_progression:calcite_lead_ore",
+    "material_progression:dripstone_lead_ore",
+    "material_progression:sulfur_lead_ore",
+    "material_progression:cinnabar_lead_ore",
+    "material_progression:sandstone_lead_ore",
+    "material_progression:red_sandstone_lead_ore",
+    "material_progression:gravel_lead_ore"
+  ]
+}

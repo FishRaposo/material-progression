@@ -1,0 +1,15 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#minecraft:planks"
+  },
+  "pattern": [
+    "III",
+    "I I",
+    "I I"
+  ],
+  "result": {
+    "id": "material_progression:wood_leggings"
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,0 +1,14 @@
+{
+  "category": "equipment",
+  "key": {
+    "I": "#c:flint_shards"
+  },
+  "pattern": [
+    "III",
+    "I I"
+  ],
+  "result": {
+    "id": "material_progression:flint_helmet"
+  },
+  "type": "minecraft:crafting_shaped"
+}

@@ -1,16 +1,16 @@
 {
-  "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": "#c:rods/wooden",
-    "X": "#c:ingots/tin"
+    "I": "#c:ingots/tin",
+    "S": "#c:rods/wooden"
   },
   "pattern": [
-    "XXX",
-    " # ",
-    " # "
+    "III",
+    " S ",
+    " S "
   ],
   "result": {
     "id": "material_progression:tin_pickaxe"
-  }
+  },
+  "type": "minecraft:crafting_shaped"
 }
